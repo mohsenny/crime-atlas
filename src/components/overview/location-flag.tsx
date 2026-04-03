@@ -13,6 +13,10 @@ const flagByLocationSlug: Record<string, { src: string; alt: string }> = {
     src: "/flags/germany.png",
     alt: "Flag of Germany",
   },
+  hamburg: {
+    src: "/flags/germany.png",
+    alt: "Flag of Germany",
+  },
   london: {
     src: "/flags/united-kingdom.png",
     alt: "Flag of the United Kingdom",
