@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "npm run data:prepare && next dev",
     "build": "next build",
-    "start": "HOSTNAME=0.0.0.0 node .next/standalone/server.js",
+    "start": "next start -H 0.0.0.0 -p ${PORT:-3000}",
     "lint": "eslint .",
     "data:prepare": "tsx scripts/prepare-data.ts"
   },
