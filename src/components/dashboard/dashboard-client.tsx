@@ -138,23 +138,25 @@ export function DashboardClient({
                 values={selectedDistricts}
               />
             ) : null}
-            <button
-              className="inline-flex h-12 items-center gap-1.5 px-1 text-sm font-semibold leading-none tracking-[-0.01em] text-slate-400 transition hover:text-slate-100"
-              onClick={() => {
-                setSelectedDistricts(meta.defaultDistrictSlugs);
-                setHiddenCategorySlugs(
-                  meta.categories
-                    .filter((category) => !meta.defaultCategorySlugs.includes(category.value))
-                    .map((category) => category.value),
-                );
-                setFocusedDistrictSlug(null);
-                setMetric("count");
-              }}
-              type="button"
-            >
-              <RefreshCw className="size-4" strokeWidth={2.1} />
-              Reset
-            </button>
+            {meta.districts.length > 1 ? (
+              <button
+                className="inline-flex h-12 items-center gap-1.5 px-1 text-sm font-semibold leading-none tracking-[-0.01em] text-slate-400 transition hover:text-slate-100"
+                onClick={() => {
+                  setSelectedDistricts(meta.defaultDistrictSlugs);
+                  setHiddenCategorySlugs(
+                    meta.categories
+                      .filter((category) => !meta.defaultCategorySlugs.includes(category.value))
+                      .map((category) => category.value),
+                  );
+                  setFocusedDistrictSlug(null);
+                  setMetric("count");
+                }}
+                type="button"
+              >
+                <RefreshCw className="size-4" strokeWidth={2.1} />
+                Reset
+              </button>
+            ) : null}
           </div>
         </div>
 
