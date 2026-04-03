@@ -38,8 +38,10 @@ function pointsEqual(left: Point[], right: Point[]) {
   );
 }
 
-const CHART_HEIGHT = 520;
-const AXIS_WIDTH = 88;
+const DESKTOP_CHART_HEIGHT = 520;
+const MOBILE_CHART_HEIGHT = 420;
+const DESKTOP_AXIS_WIDTH = 88;
+const MOBILE_AXIS_WIDTH = 64;
 
 export function CrimeChart({
   data,
@@ -61,13 +63,19 @@ export function CrimeChart({
     () => data.categories.filter((category) => !hiddenCategorySlugs.includes(category.value)),
     [data.categories, hiddenCategorySlugs],
   );
-  const groupWidth = Math.max(50, data.districts.length * 18 + 18);
-  const minChartWidth = Math.max(760, data.years.length * groupWidth);
+  const isMobileViewport = viewportWidth > 0 && viewportWidth < 640;
+  const chartHeight = isMobileViewport ? MOBILE_CHART_HEIGHT : DESKTOP_CHART_HEIGHT;
+  const axisWidth = isMobileViewport ? MOBILE_AXIS_WIDTH : DESKTOP_AXIS_WIDTH;
+  const groupWidth = Math.max(
+    isMobileViewport ? 42 : 50,
+    data.districts.length * (isMobileViewport ? 16 : 18) + (isMobileViewport ? 12 : 18),
+  );
+  const minChartWidth = Math.max(isMobileViewport ? 520 : 760, data.years.length * groupWidth);
   const chartWidth = Math.max(minChartWidth, viewportWidth);
-  const showDistrictMarkers = data.districts.length > 1 && data.districts.length <= 16;
+  const showDistrictMarkers = !isMobileViewport && data.districts.length > 1 && data.districts.length <= 16;
   const chartTopMargin = showDistrictMarkers ? 24 : 10;
   const chartBottomMargin = 34;
-  const chartPlotHeight = CHART_HEIGHT - chartTopMargin - chartBottomMargin;
+  const chartPlotHeight = chartHeight - chartTopMargin - chartBottomMargin;
   const districtIndexBySlug = useMemo(
     () => new Map(data.districts.map((district, index) => [district.value, index + 1])),
     [data.districts],
@@ -226,6 +234,7 @@ export function CrimeChart({
       window.removeEventListener("resize", measurePoints);
     };
   }, [
+    chartHeight,
     chartWidth,
     chartPlotHeight,
     chartTopMargin,
@@ -252,7 +261,7 @@ export function CrimeChart({
   }
 
   return (
-    <div className="card-panel chart-panel flex min-h-[34rem] flex-col rounded-none p-4 sm:p-5">
+    <div className="card-panel chart-panel flex min-h-[29rem] flex-col rounded-none p-4 sm:min-h-[34rem] sm:p-5">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <p className="text-sm font-semibold text-slate-200">{title}</p>
         <div className="flex flex-wrap justify-end gap-1.5">
@@ -273,15 +282,18 @@ export function CrimeChart({
       </div>
 
       <div className="mt-3 flex min-h-0 flex-1">
-        <div className="relative shrink-0" style={{ width: AXIS_WIDTH }}>
-          <div className="relative h-[520px]">
+        <div className="relative shrink-0" style={{ width: axisWidth }}>
+          <div className="relative" style={{ height: chartHeight }}>
             {axisTicks.map((tick) => {
               const ratio = yAxisMax === 0 ? 0 : tick / yAxisMax;
               const top = chartTopMargin + (1 - ratio) * chartPlotHeight;
 
               return (
                 <div
-                  className="absolute right-4 -translate-y-1/2 text-xs text-slate-400"
+                  className={cn(
+                    "absolute -translate-y-1/2 text-slate-400",
+                    isMobileViewport ? "right-2 text-[11px]" : "right-4 text-xs",
+                  )}
                   key={tick}
                   style={{ top }}
                 >
@@ -293,9 +305,9 @@ export function CrimeChart({
         </div>
 
         <div className="chart-scroll-shell min-h-0 flex-1 overflow-x-auto" ref={scrollContainerRef}>
-          <div className="relative" ref={chartContentRef} style={{ width: `${chartWidth}px`, minWidth: `${minChartWidth}px`, height: CHART_HEIGHT }}>
+          <div className="relative" ref={chartContentRef} style={{ width: `${chartWidth}px`, minWidth: `${minChartWidth}px`, height: chartHeight }}>
             {focusedDistrictSlug && focusLinePoints.length > 1 ? (
-              <svg className="pointer-events-none absolute inset-0" height={CHART_HEIGHT} width={chartWidth}>
+              <svg className="pointer-events-none absolute inset-0" height={chartHeight} width={chartWidth}>
                 <polyline
                   fill="none"
                   points={focusLinePoints.map((point) => `${point.x},${point.y}`).join(" ")}
@@ -321,7 +333,7 @@ export function CrimeChart({
             {mounted ? (
               <ResponsiveContainer height="100%" width="100%">
                 <BarChart
-                  barCategoryGap={14}
+                  barCategoryGap={isMobileViewport ? 10 : 14}
                   barGap={2}
                   data={data.chartRows}
                   margin={{ top: chartTopMargin, right: 12, left: 0, bottom: 4 }}
@@ -330,25 +342,27 @@ export function CrimeChart({
                   <XAxis
                     axisLine={false}
                     dataKey="year"
-                    tick={{ fontSize: 12, fill: "var(--chart-axis-dark)" }}
+                    tick={{ fontSize: isMobileViewport ? 11 : 12, fill: "var(--chart-axis-dark)" }}
                     tickLine={false}
                     tickMargin={12}
                   />
                   <YAxis domain={[0, yAxisMax]} hide ticks={axisTicks} type="number" />
-                  <Tooltip
-                    content={
-                      <ChartTooltip
-                        labelFormatter={(label) => String(label ?? "")}
-                        nameFormatter={(name) => formatSeriesName(name, data)}
-                        valueFormatter={(value) => formatMetricValue(Number(value ?? 0), data.metric)}
-                      />
-                    }
-                    cursor={{ fill: "rgba(148, 163, 184, 0.06)" }}
-                  />
+                  {!isMobileViewport ? (
+                    <Tooltip
+                      content={
+                        <ChartTooltip
+                          labelFormatter={(label) => String(label ?? "")}
+                          nameFormatter={(name) => formatSeriesName(name, data)}
+                          valueFormatter={(value) => formatMetricValue(Number(value ?? 0), data.metric)}
+                        />
+                      }
+                      cursor={{ fill: "rgba(148, 163, 184, 0.06)" }}
+                    />
+                  ) : null}
                   {data.districts.map((district) =>
                     visibleCategories.map((category) => (
                       <Bar
-                        barSize={8}
+                        barSize={isMobileViewport ? 7 : 8}
                         dataKey={buildSeriesKey(district.value, category.value)}
                         fill={category.color}
                         isAnimationActive={false}
@@ -381,7 +395,7 @@ export function CrimeChart({
       </div>
 
       <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex flex-wrap gap-2 text-xs text-slate-400">
+        <div className="flex gap-2 overflow-x-auto pb-1 text-xs text-slate-400 sm:flex-wrap sm:overflow-visible sm:pb-0">
           {data.districts.map((district, index) => (
             <button
               className={cn(
