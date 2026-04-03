@@ -97,13 +97,17 @@ type LocationsIndex = typeof locationsIndex;
 const locationLoaders: Record<string, () => Promise<LocationDataset>> = {
   berlin: async () => (await import("@/generated/locations/berlin.json")).default as LocationDataset,
   barcelona: async () => (await import("@/generated/locations/barcelona.json")).default as LocationDataset,
+  chicago: async () => (await import("@/generated/locations/chicago.json")).default as LocationDataset,
   frankfurt: async () => (await import("@/generated/locations/frankfurt.json")).default as LocationDataset,
   hamburg: async () => (await import("@/generated/locations/hamburg.json")).default as LocationDataset,
   london: async () => (await import("@/generated/locations/london.json")).default as LocationDataset,
+  "los-angeles": async () => (await import("@/generated/locations/los-angeles.json")).default as LocationDataset,
   luton: async () => (await import("@/generated/locations/luton.json")).default as LocationDataset,
   milan: async () => (await import("@/generated/locations/milan.json")).default as LocationDataset,
+  "new-york-city": async () => (await import("@/generated/locations/new-york-city.json")).default as LocationDataset,
   paris: async () => (await import("@/generated/locations/paris.json")).default as LocationDataset,
   rome: async () => (await import("@/generated/locations/rome.json")).default as LocationDataset,
+  "san-francisco": async () => (await import("@/generated/locations/san-francisco.json")).default as LocationDataset,
   valencia: async () => (await import("@/generated/locations/valencia.json")).default as LocationDataset,
 };
 

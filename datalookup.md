@@ -105,6 +105,30 @@ Missing older-category detail is better than fake continuity.
 - Current app coverage: `2004–2023`
 - Area breakdown in app: no verified time-series area layer wired yet
 
+### New York City
+- Official source family: NYC Open Data / NYPD complaint datasets
+- Current app coverage: `2006–2025`
+- Borough breakdown: yes
+- Important caveat: the raw NYPD offense catalog is much broader than the dashboard. The app maps a stable major-offense subset from the official catalog rather than claiming to show every NYPD offense row.
+
+### Chicago
+- Official source family: Chicago Data Portal crime dataset
+- Current app coverage: `2001–2025`
+- District breakdown: yes
+- Important caveat: the source is incident-level and very broad. The app maps the major offense groups directly from the official `primary_type` values and leaves the rest out rather than inventing a fake all-crime total.
+
+### Los Angeles
+- Official source family: Los Angeles Open Data / LAPD crime datasets
+- Current app coverage: `2010–2024`
+- Area breakdown: yes
+- Important caveat: LAPD publishes very granular raw offense descriptions. The app groups those official labels into broader major-offense buckets, so future extensions must keep that grouping logic explicit and defensible.
+
+### San Francisco
+- Official source family: San Francisco Open Data / SFPD incident reports
+- Current app coverage: `2018–2025`
+- Police-district breakdown: yes
+- Important caveat: some source categories are administrative or non-crime rows. The app intentionally maps only the defensible offense categories and ignores blank / non-offense buckets.
+
 ### Rome
 - Official source family: Roma Capitale safety/statistics workbooks
 - Current app coverage: `2016–2023`
@@ -184,6 +208,7 @@ Use wording that is technically correct across all cities.
 
 Safe wording:
 - official dashboards built from police-recorded crime data published by public authorities
+- official dashboards built from police-recorded crime data published in public-authority datasets
 
 Avoid wording that implies:
 - all data comes directly from city authorities

@@ -13,14 +13,18 @@ import { normalizeSourceLabel, slugify } from "../src/lib/crime-taxonomy";
 import {
   BARCELONA_LOCATION,
   BERLIN_LOCATION,
+  CHICAGO_LOCATION,
   FRANKFURT_LOCATION,
   HAMBURG_LOCATION,
   LONDON_LOCATION,
+  LOS_ANGELES_LOCATION,
   LUTON_LOCATION,
   MILAN_LOCATION,
+  NEW_YORK_CITY_LOCATION,
   MUNICH_LOCATION,
   PARIS_LOCATION,
   ROME_LOCATION,
+  SAN_FRANCISCO_LOCATION,
   VALENCIA_LOCATION,
   type LocationDefinition,
 } from "../src/lib/location-config";
@@ -73,6 +77,30 @@ type SpainAnnualSource = {
   type: "pdf" | "zip-pdf" | "xls";
   url: string;
   zipEntryContains?: string;
+};
+type NewYorkCrimeRow = {
+  year: string;
+  boro_nm: string;
+  ofns_desc: string;
+  count: string;
+};
+type ChicagoCrimeRow = {
+  year: string;
+  district: string;
+  primary_type: string;
+  count: string;
+};
+type LosAngelesCrimeRow = {
+  year: string;
+  area_name: string;
+  crm_cd_desc: string;
+  count: string;
+};
+type SanFranciscoCrimeRow = {
+  incident_year: string;
+  police_district: string;
+  incident_category?: string;
+  count: string;
 };
 
 const ROOT = process.cwd();
@@ -157,6 +185,12 @@ const SOURCE_URLS = {
     "https://estadisticasdecriminalidad.ses.mir.es/publico/portalestadistico/dam/jcr%3A3e7b5499-8efd-45f5-8cfc-92a00dd0cd2e/informes2017.zip",
   spanishArchive2016:
     "https://estadisticasdecriminalidad.ses.mir.es/publico/portalestadistico/dam/jcr%3A88cb5588-9ee7-4614-a7bd-06e8e59658db/informes2016.zip",
+  newYorkCrimeHistoricApi: "https://data.cityofnewyork.us/resource/qgea-i56i.json",
+  newYorkCrimeCurrentApi: "https://data.cityofnewyork.us/resource/5uac-w243.json",
+  chicagoCrimeApi: "https://data.cityofchicago.org/resource/ijzp-q8t2.json",
+  losAngelesCrimeHistoricApi: "https://data.lacity.org/resource/63jg-8b9z.json",
+  losAngelesCrimeCurrentApi: "https://data.lacity.org/resource/2nrs-mtv8.json",
+  sanFranciscoCrimeApi: "https://data.sfgov.org/resource/wg3w-h783.json",
 };
 
 function buildCategoryLookup(definition: LocationDefinition) {
@@ -236,6 +270,45 @@ async function ensureFile(filePath: string, url: string) {
   throw lastError instanceof Error ? lastError : new Error(`Failed to download ${url}`);
 }
 
+async function fetchJsonWithRetry<T>(url: string): Promise<T> {
+  let lastError: unknown;
+  for (let attempt = 1; attempt <= 3; attempt += 1) {
+    try {
+      const response = await fetch(url, {
+        headers: {
+          "user-agent": "Mozilla/5.0",
+        },
+        signal: AbortSignal.timeout(90_000),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch ${url}: ${response.status} ${response.statusText}`);
+      }
+
+      return (await response.json()) as T;
+    } catch (error) {
+      lastError = error;
+      if (attempt < 3) {
+        await new Promise((resolve) => setTimeout(resolve, attempt * 1_500));
+      }
+    }
+  }
+
+  throw lastError instanceof Error ? lastError : new Error(`Failed to fetch ${url}`);
+}
+
+function buildSocrataUrl(baseUrl: string, params: Record<string, string>) {
+  const url = new URL(baseUrl);
+  for (const [key, value] of Object.entries(params)) {
+    url.searchParams.set(key, value);
+  }
+  return url.toString();
+}
+
+async function fetchSocrataRows<T>(baseUrl: string, params: Record<string, string>) {
+  return fetchJsonWithRetry<T[]>(buildSocrataUrl(baseUrl, params));
+}
+
 async function parseSemicolonCsv(filePath: string) {
   const text = await fs.readFile(filePath, "utf8");
   const [headerLine, ...lines] = text.split(/\r?\n/).filter(Boolean);
@@ -305,6 +378,14 @@ function parseDecimalLike(value: string | number | null | undefined) {
   return Number(String(value ?? "0").replace(/\./g, "").replace(",", ".")) || 0;
 }
 
+function toTitleCase(value: string) {
+  return value
+    .toLowerCase()
+    .replace(/\b([a-z])/g, (match) => match.toUpperCase())
+    .replace(/\bNypd\b/g, "NYPD")
+    .replace(/\bLapd\b/g, "LAPD");
+}
+
 function addOrMergeRecord(
   recordsByKey: Map<string, CrimeRecord>,
   input: Omit<CrimeRecord, "count" | "ratePer100k"> & {
@@ -326,6 +407,33 @@ function addOrMergeRecord(
     ratePer100k:
       existing.ratePer100k !== null && input.ratePer100k !== null ? existing.ratePer100k + input.ratePer100k : existing.ratePer100k,
   });
+}
+
+function buildDenseCountRecords(input: {
+  years: number[];
+  districts: FilterOption[];
+  categories: FilterOption[];
+  countsByKey: Map<string, number>;
+}) {
+  const records: CrimeRecord[] = [];
+
+  for (const district of input.districts) {
+    for (const category of input.categories) {
+      for (const year of input.years) {
+        records.push({
+          year,
+          districtLabel: district.label,
+          districtSlug: district.value,
+          categoryLabel: category.label,
+          categorySlug: category.value,
+          count: input.countsByKey.get(`${year}__${district.value}__${category.value}`) ?? 0,
+          ratePer100k: null,
+        });
+      }
+    }
+  }
+
+  return records;
 }
 
 function findSheetName(sheetNames: string[], patterns: RegExp[]) {
@@ -1889,6 +1997,230 @@ async function buildParisLocation(): Promise<LocationPayload> {
   };
 }
 
+async function buildNewYorkCityLocation(): Promise<LocationPayload> {
+  const { options: categories, lookup: categoryLookup } = buildCategoryLookup(NEW_YORK_CITY_LOCATION);
+  const [historicalRows, currentRows] = await Promise.all([
+    fetchSocrataRows<NewYorkCrimeRow>(SOURCE_URLS.newYorkCrimeHistoricApi, {
+      $select: "date_extract_y(cmplnt_fr_dt) as year,boro_nm,ofns_desc,count(*) as count",
+      $where: "cmplnt_fr_dt between '2006-01-01T00:00:00' and '2020-12-31T23:59:59' and boro_nm is not null",
+      $group: "year,boro_nm,ofns_desc",
+      $order: "year,boro_nm,ofns_desc",
+      $limit: "50000",
+    }),
+    fetchSocrataRows<NewYorkCrimeRow>(SOURCE_URLS.newYorkCrimeCurrentApi, {
+      $select: "date_extract_y(cmplnt_fr_dt) as year,boro_nm,ofns_desc,count(*) as count",
+      $where: "cmplnt_fr_dt between '2021-01-01T00:00:00' and '2025-12-31T23:59:59' and boro_nm is not null",
+      $group: "year,boro_nm,ofns_desc",
+      $order: "year,boro_nm,ofns_desc",
+      $limit: "50000",
+    }),
+  ]);
+
+  const years = Array.from({ length: 20 }, (_, index) => 2006 + index);
+  const boroughOrder = ["Bronx", "Brooklyn", "Manhattan", "Queens", "Staten Island"];
+  const countsByKey = new Map<string, number>();
+  const districtsByLabel = new Map<string, FilterOption>();
+
+  for (const row of [...historicalRows, ...currentRows]) {
+    const year = Number(row.year);
+    const boroughName = toTitleCase(String(row.boro_nm ?? "").trim());
+    const category = categoryLookup.get(normalizeSourceLabel(String(row.ofns_desc ?? "")));
+
+    if (!boroughName || boroughName === "(Null)" || !category || !years.includes(year)) {
+      continue;
+    }
+
+    const districtSlug = slugify(boroughName);
+    districtsByLabel.set(boroughName, { label: boroughName, value: districtSlug });
+    countsByKey.set(
+      `${year}__${districtSlug}__${category.slug}`,
+      (countsByKey.get(`${year}__${districtSlug}__${category.slug}`) ?? 0) + parseCountLike(row.count),
+    );
+  }
+
+  const districts = [...districtsByLabel.values()].sort(
+    (left, right) => boroughOrder.indexOf(left.label) - boroughOrder.indexOf(right.label),
+  );
+
+  return {
+    slug: NEW_YORK_CITY_LOCATION.slug,
+    label: NEW_YORK_CITY_LOCATION.label,
+    country: NEW_YORK_CITY_LOCATION.country,
+    areaLabelSingular: NEW_YORK_CITY_LOCATION.areaLabelSingular,
+    areaLabelPlural: NEW_YORK_CITY_LOCATION.areaLabelPlural,
+    chartTitle: NEW_YORK_CITY_LOCATION.chartTitle,
+    note: NEW_YORK_CITY_LOCATION.note,
+    sources: NEW_YORK_CITY_LOCATION.sources,
+    years,
+    districts,
+    categories,
+    defaultCategorySlugs: categories.filter((category) => category.isDefault).map((category) => category.value),
+    records: buildDenseCountRecords({ years, districts, categories, countsByKey }),
+  };
+}
+
+async function buildChicagoLocation(): Promise<LocationPayload> {
+  const { options: categories, lookup: categoryLookup } = buildCategoryLookup(CHICAGO_LOCATION);
+  const rows = await fetchSocrataRows<ChicagoCrimeRow>(SOURCE_URLS.chicagoCrimeApi, {
+    $select: "year,district,primary_type,count(*) as count",
+    $where: "year between 2001 and 2025 and district is not null",
+    $group: "year,district,primary_type",
+    $order: "year,district,primary_type",
+    $limit: "100000",
+  });
+
+  const years = Array.from({ length: 25 }, (_, index) => 2001 + index);
+  const countsByKey = new Map<string, number>();
+  const districtsByCode = new Map<string, FilterOption>();
+
+  for (const row of rows) {
+    const year = Number(row.year);
+    const districtCode = String(row.district ?? "").trim();
+    const category = categoryLookup.get(normalizeSourceLabel(String(row.primary_type ?? "")));
+
+    if (!districtCode || !category || !years.includes(year)) {
+      continue;
+    }
+
+    const districtLabel = `District ${districtCode}`;
+    const districtSlug = slugify(districtLabel);
+    districtsByCode.set(districtCode, { label: districtLabel, value: districtSlug });
+    countsByKey.set(
+      `${year}__${districtSlug}__${category.slug}`,
+      (countsByKey.get(`${year}__${districtSlug}__${category.slug}`) ?? 0) + parseCountLike(row.count),
+    );
+  }
+
+  const districts = [...districtsByCode.entries()]
+    .sort((left, right) => Number(left[0]) - Number(right[0]))
+    .map(([, district]) => district);
+
+  return {
+    slug: CHICAGO_LOCATION.slug,
+    label: CHICAGO_LOCATION.label,
+    country: CHICAGO_LOCATION.country,
+    areaLabelSingular: CHICAGO_LOCATION.areaLabelSingular,
+    areaLabelPlural: CHICAGO_LOCATION.areaLabelPlural,
+    chartTitle: CHICAGO_LOCATION.chartTitle,
+    note: CHICAGO_LOCATION.note,
+    sources: CHICAGO_LOCATION.sources,
+    years,
+    districts,
+    categories,
+    defaultCategorySlugs: categories.filter((category) => category.isDefault).map((category) => category.value),
+    records: buildDenseCountRecords({ years, districts, categories, countsByKey }),
+  };
+}
+
+async function buildLosAngelesLocation(): Promise<LocationPayload> {
+  const { options: categories, lookup: categoryLookup } = buildCategoryLookup(LOS_ANGELES_LOCATION);
+  const [historicalRows, currentRows] = await Promise.all([
+    fetchSocrataRows<LosAngelesCrimeRow>(SOURCE_URLS.losAngelesCrimeHistoricApi, {
+      $select: "date_extract_y(date_occ) as year,area_name,crm_cd_desc,count(*) as count",
+      $where: "date_occ between '2010-01-01T00:00:00.000' and '2019-12-31T23:59:59.999' and area_name is not null",
+      $group: "year,area_name,crm_cd_desc",
+      $order: "year,area_name,crm_cd_desc",
+      $limit: "100000",
+    }),
+    fetchSocrataRows<LosAngelesCrimeRow>(SOURCE_URLS.losAngelesCrimeCurrentApi, {
+      $select: "date_extract_y(date_occ) as year,area_name,crm_cd_desc,count(*) as count",
+      $where: "date_occ between '2020-01-01T00:00:00.000' and '2024-12-31T23:59:59.999' and area_name is not null",
+      $group: "year,area_name,crm_cd_desc",
+      $order: "year,area_name,crm_cd_desc",
+      $limit: "100000",
+    }),
+  ]);
+
+  const years = Array.from({ length: 15 }, (_, index) => 2010 + index);
+  const countsByKey = new Map<string, number>();
+  const districtsByLabel = new Map<string, FilterOption>();
+
+  for (const row of [...historicalRows, ...currentRows]) {
+    const year = Number(row.year);
+    const areaLabel = String(row.area_name ?? "").trim();
+    const category = categoryLookup.get(normalizeSourceLabel(String(row.crm_cd_desc ?? "")));
+
+    if (!areaLabel || !category || !years.includes(year)) {
+      continue;
+    }
+
+    const districtSlug = slugify(areaLabel);
+    districtsByLabel.set(areaLabel, { label: areaLabel, value: districtSlug });
+    countsByKey.set(
+      `${year}__${districtSlug}__${category.slug}`,
+      (countsByKey.get(`${year}__${districtSlug}__${category.slug}`) ?? 0) + parseCountLike(row.count),
+    );
+  }
+
+  const districts = [...districtsByLabel.values()].sort((left, right) => left.label.localeCompare(right.label));
+
+  return {
+    slug: LOS_ANGELES_LOCATION.slug,
+    label: LOS_ANGELES_LOCATION.label,
+    country: LOS_ANGELES_LOCATION.country,
+    areaLabelSingular: LOS_ANGELES_LOCATION.areaLabelSingular,
+    areaLabelPlural: LOS_ANGELES_LOCATION.areaLabelPlural,
+    chartTitle: LOS_ANGELES_LOCATION.chartTitle,
+    note: LOS_ANGELES_LOCATION.note,
+    sources: LOS_ANGELES_LOCATION.sources,
+    years,
+    districts,
+    categories,
+    defaultCategorySlugs: categories.filter((category) => category.isDefault).map((category) => category.value),
+    records: buildDenseCountRecords({ years, districts, categories, countsByKey }),
+  };
+}
+
+async function buildSanFranciscoLocation(): Promise<LocationPayload> {
+  const { options: categories, lookup: categoryLookup } = buildCategoryLookup(SAN_FRANCISCO_LOCATION);
+  const rows = await fetchSocrataRows<SanFranciscoCrimeRow>(SOURCE_URLS.sanFranciscoCrimeApi, {
+    $select: "incident_year,police_district,incident_category,count(*) as count",
+    $where: "incident_year between '2018' and '2025' and police_district is not null",
+    $group: "incident_year,police_district,incident_category",
+    $order: "incident_year,police_district,incident_category",
+    $limit: "50000",
+  });
+
+  const years = Array.from({ length: 8 }, (_, index) => 2018 + index);
+  const countsByKey = new Map<string, number>();
+  const districtsByLabel = new Map<string, FilterOption>();
+
+  for (const row of rows) {
+    const year = Number(row.incident_year);
+    const districtLabel = String(row.police_district ?? "").trim();
+    const category = categoryLookup.get(normalizeSourceLabel(String(row.incident_category ?? "")));
+
+    if (!districtLabel || !category || !years.includes(year)) {
+      continue;
+    }
+
+    const districtSlug = slugify(districtLabel);
+    districtsByLabel.set(districtLabel, { label: districtLabel, value: districtSlug });
+    countsByKey.set(
+      `${year}__${districtSlug}__${category.slug}`,
+      (countsByKey.get(`${year}__${districtSlug}__${category.slug}`) ?? 0) + parseCountLike(row.count),
+    );
+  }
+
+  const districts = [...districtsByLabel.values()].sort((left, right) => left.label.localeCompare(right.label));
+
+  return {
+    slug: SAN_FRANCISCO_LOCATION.slug,
+    label: SAN_FRANCISCO_LOCATION.label,
+    country: SAN_FRANCISCO_LOCATION.country,
+    areaLabelSingular: SAN_FRANCISCO_LOCATION.areaLabelSingular,
+    areaLabelPlural: SAN_FRANCISCO_LOCATION.areaLabelPlural,
+    chartTitle: SAN_FRANCISCO_LOCATION.chartTitle,
+    note: SAN_FRANCISCO_LOCATION.note,
+    sources: SAN_FRANCISCO_LOCATION.sources,
+    years,
+    districts,
+    categories,
+    defaultCategorySlugs: categories.filter((category) => category.isDefault).map((category) => category.value),
+    records: buildDenseCountRecords({ years, districts, categories, countsByKey }),
+  };
+}
+
 async function main() {
   const spainAnnualSources: SpainAnnualSource[] = [
     { year: 2014, type: "xls", url: SOURCE_URLS.spanishBalance2014Workbook },
@@ -1908,21 +2240,39 @@ async function main() {
   const barcelona = await buildSpainLocation(BARCELONA_LOCATION, "Barcelona", spainAnnualSources);
   const valencia = await buildSpainLocation(VALENCIA_LOCATION, "Valencia", spainAnnualSources);
 
-  const [berlin, frankfurt, hamburg, london, luton, milan, paris, rome] = await Promise.all([
+  const [berlin, chicago, frankfurt, hamburg, london, losAngeles, luton, milan, newYorkCity, paris, rome, sanFrancisco] =
+    await Promise.all([
     buildBerlinLocation(),
+    buildChicagoLocation(),
     buildFrankfurtLocation(),
     buildHamburgLocation(),
     buildLondonLocation(),
+    buildLosAngelesLocation(),
     buildLutonLocation(),
     buildMilanLocation(),
+    buildNewYorkCityLocation(),
     buildParisLocation(),
     buildRomeLocation(),
+    buildSanFranciscoLocation(),
   ]);
   const payload = {
     generatedAt: new Date().toISOString(),
-    locations: [barcelona, berlin, frankfurt, hamburg, london, luton, milan, paris, rome, valencia].sort((left, right) =>
-      left.label.localeCompare(right.label),
-    ),
+    locations: [
+      barcelona,
+      berlin,
+      chicago,
+      frankfurt,
+      hamburg,
+      london,
+      losAngeles,
+      luton,
+      milan,
+      newYorkCity,
+      paris,
+      rome,
+      sanFrancisco,
+      valencia,
+    ].sort((left, right) => left.label.localeCompare(right.label)),
   };
 
   const outputDir = path.join(ROOT, "src", "generated");

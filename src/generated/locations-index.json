@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-03T16:35:10.457Z",
+  "generatedAt": "2026-04-03T18:11:32.698Z",
   "locations": [
     {
       "slug": "barcelona",
@@ -84,6 +84,51 @@
       "districtCount": 12,
       "categoryCount": 17,
       "supportsRate": true
+    },
+    {
+      "slug": "chicago",
+      "label": "Chicago",
+      "country": "United States",
+      "areaLabelSingular": "District",
+      "areaLabelPlural": "Districts",
+      "chartTitle": "Chicago Crime by District",
+      "note": "Chicago uses the official city open-data crime feed. The dashboard aggregates official district-level incident records to calendar years and maps the major offense groups published in the city dataset.",
+      "sources": [
+        {
+          "label": "Chicago Data Portal: Crimes 2001 to Present",
+          "url": "https://data.cityofchicago.org/Public-Safety/Crimes-2001-to-Present/ijzp-q8t2"
+        }
+      ],
+      "years": [
+        2001,
+        2002,
+        2003,
+        2004,
+        2005,
+        2006,
+        2007,
+        2008,
+        2009,
+        2010,
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "districtCount": 25,
+      "categoryCount": 14,
+      "supportsRate": false
     },
     {
       "slug": "frankfurt",
@@ -195,6 +240,45 @@
       "supportsRate": true
     },
     {
+      "slug": "los-angeles",
+      "label": "Los Angeles",
+      "country": "United States",
+      "areaLabelSingular": "Area",
+      "areaLabelPlural": "Areas",
+      "chartTitle": "Los Angeles Crime by Area",
+      "note": "Los Angeles uses the official LAPD crime open-data feeds. The dashboard aggregates area-level incident records to calendar years and groups the official raw offense descriptions into stable major offense buckets.",
+      "sources": [
+        {
+          "label": "Los Angeles Open Data: Crime Data from 2010 to 2019",
+          "url": "https://data.lacity.org/Public-Safety/Crime-Data-from-2010-to-2019/63jg-8b9z"
+        },
+        {
+          "label": "Los Angeles Open Data: Crime Data from 2020 to Present",
+          "url": "https://data.lacity.org/Public-Safety/Crime-Data-from-2020-to-Present/2nrs-mtv8"
+        }
+      ],
+      "years": [
+        2010,
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024
+      ],
+      "districtCount": 21,
+      "categoryCount": 11,
+      "supportsRate": false
+    },
+    {
       "slug": "luton",
       "label": "Luton",
       "country": "United Kingdom",
@@ -279,6 +363,50 @@
       "supportsRate": true
     },
     {
+      "slug": "new-york-city",
+      "label": "New York City",
+      "country": "United States",
+      "areaLabelSingular": "Borough",
+      "areaLabelPlural": "Boroughs",
+      "chartTitle": "New York City Crime by Borough",
+      "note": "New York City uses the official NYPD complaint open-data feeds. The dashboard aggregates official borough-level complaint records to calendar years and shows a mapped set of major offense groups from the NYPD catalog.",
+      "sources": [
+        {
+          "label": "NYC Open Data: NYPD Complaint Data Historic",
+          "url": "https://data.cityofnewyork.us/Public-Safety/NYPD-Complaint-Data-Historic/qgea-i56i"
+        },
+        {
+          "label": "NYC Open Data: NYPD Complaint Data Current",
+          "url": "https://data.cityofnewyork.us/Public-Safety/NYPD-Complaint-Data-Current-2025-/5uac-w243"
+        }
+      ],
+      "years": [
+        2006,
+        2007,
+        2008,
+        2009,
+        2010,
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "districtCount": 5,
+      "categoryCount": 13,
+      "supportsRate": false
+    },
+    {
       "slug": "paris",
       "label": "Paris",
       "country": "France",
@@ -335,6 +463,34 @@
       "districtCount": 1,
       "categoryCount": 14,
       "supportsRate": true
+    },
+    {
+      "slug": "san-francisco",
+      "label": "San Francisco",
+      "country": "United States",
+      "areaLabelSingular": "Police District",
+      "areaLabelPlural": "Police Districts",
+      "chartTitle": "San Francisco Crime by Police District",
+      "note": "San Francisco uses the official Police Department incident-reports open-data feed. The dashboard aggregates police-district records to calendar years and shows the major incident categories published in the city dataset.",
+      "sources": [
+        {
+          "label": "San Francisco Open Data: Police Department Incident Reports 2018 to Present",
+          "url": "https://data.sfgov.org/Public-Safety/Police-Department-Incident-Reports-2018-to-Present/wg3w-h783"
+        }
+      ],
+      "years": [
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "districtCount": 11,
+      "categoryCount": 12,
+      "supportsRate": false
     },
     {
       "slug": "valencia",

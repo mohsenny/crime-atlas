@@ -9,6 +9,10 @@ const flagByLocationSlug: Record<string, { src: string; alt: string }> = {
     src: "/flags/spain.png",
     alt: "Flag of Spain",
   },
+  chicago: {
+    src: "/flags/united-states.png",
+    alt: "Flag of the United States",
+  },
   frankfurt: {
     src: "/flags/germany.png",
     alt: "Flag of Germany",
@@ -21,6 +25,10 @@ const flagByLocationSlug: Record<string, { src: string; alt: string }> = {
     src: "/flags/united-kingdom.png",
     alt: "Flag of the United Kingdom",
   },
+  "los-angeles": {
+    src: "/flags/united-states.png",
+    alt: "Flag of the United States",
+  },
   luton: {
     src: "/flags/united-kingdom.png",
     alt: "Flag of the United Kingdom",
@@ -29,6 +37,10 @@ const flagByLocationSlug: Record<string, { src: string; alt: string }> = {
     src: "/flags/italy.png",
     alt: "Flag of Italy",
   },
+  "new-york-city": {
+    src: "/flags/united-states.png",
+    alt: "Flag of the United States",
+  },
   paris: {
     src: "/flags/france.png",
     alt: "Flag of France",
@@ -36,6 +48,10 @@ const flagByLocationSlug: Record<string, { src: string; alt: string }> = {
   rome: {
     src: "/flags/italy.png",
     alt: "Flag of Italy",
+  },
+  "san-francisco": {
+    src: "/flags/united-states.png",
+    alt: "Flag of the United States",
   },
   valencia: {
     src: "/flags/spain.png",
