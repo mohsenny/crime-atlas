@@ -52,7 +52,8 @@ export function OverviewPageClient({ locations }: OverviewPageClientProps) {
               Crime Atlas
             </h1>
             <p className="max-w-2xl text-sm leading-6 text-slate-300/85 sm:text-base">
-              Official dashboards built from police-recorded crime data published by public authorities for each location.
+              Official dashboards built from police-recorded crime data published by public authorities for{" "}
+              <span className="whitespace-nowrap">each location.</span>
             </p>
           </div>
 

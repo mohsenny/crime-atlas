@@ -6,10 +6,10 @@ import { LocationFlag } from "@/components/overview/location-flag";
 
 export function OverviewLocationList({ locations }: { locations: LocationOverview[] }) {
   return (
-    <div className="card-panel overflow-hidden rounded-none">
+    <div className="mx-auto max-w-4xl">
       {locations.map((location, index) => (
         <Link
-          className="group relative flex items-center gap-4 px-4 py-3 transition hover:bg-white/6 sm:px-5"
+          className="group relative flex items-center gap-4 px-0 py-3 transition sm:py-3.5"
           href={`/${location.slug}`}
           key={location.slug}
         >
@@ -18,7 +18,7 @@ export function OverviewLocationList({ locations }: { locations: LocationOvervie
             {location.label}
           </span>
           {index < locations.length - 1 ? (
-            <span className="pointer-events-none absolute inset-x-4 bottom-0 h-px bg-white/6 sm:inset-x-5" />
+            <span className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-white/8" />
           ) : null}
         </Link>
       ))}
