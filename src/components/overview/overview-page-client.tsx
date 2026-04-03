@@ -1,9 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 
 import type { LocationOverview } from "@/lib/dashboard-data";
 
+import { CompareCityPicker } from "@/components/comparison/compare-city-picker";
 import { SingleSelectDropdown } from "@/components/dashboard/expandable-dropdown";
 import { LocationOverviewCard } from "@/components/overview/location-overview-card";
 import { OverviewLocationList } from "@/components/overview/overview-location-list";
@@ -15,8 +17,11 @@ type OverviewPageClientProps = {
 };
 
 export function OverviewPageClient({ locations }: OverviewPageClientProps) {
+  const router = useRouter();
   const [selectedCountry, setSelectedCountry] = useState("all");
   const [viewPreference, setViewPreference] = useState<"card" | "list">("card");
+  const [compareMode, setCompareMode] = useState(false);
+  const [selectedCompareSlugs, setSelectedCompareSlugs] = useState<string[]>([]);
 
   const countryOptions = useMemo(
     () => [
@@ -33,6 +38,46 @@ export function OverviewPageClient({ locations }: OverviewPageClientProps) {
     [locations, selectedCountry],
   );
 
+  useEffect(() => {
+    if (!compareMode) {
+      return;
+    }
+
+    const visibleSlugs = new Set(filteredLocations.map((location) => location.slug));
+    setSelectedCompareSlugs((current) => current.filter((slug) => visibleSlugs.has(slug)));
+  }, [compareMode, filteredLocations]);
+
+  function toggleCompareSelection(slug: string) {
+    setSelectedCompareSlugs((current) => {
+      if (current.includes(slug)) {
+        return current.filter((value) => value !== slug);
+      }
+
+      if (current.length >= 2) {
+        return current;
+      }
+
+      return [...current, slug];
+    });
+  }
+
+  function cancelCompareMode() {
+    setCompareMode(false);
+    setSelectedCompareSlugs([]);
+  }
+
+  function handleDesktopCompareButton() {
+    if (!compareMode) {
+      setCompareMode(true);
+      setSelectedCompareSlugs([]);
+      return;
+    }
+
+    if (selectedCompareSlugs.length === 2) {
+      router.push(`/compare?cities=${selectedCompareSlugs.join(",")}`);
+    }
+  }
+
   return (
     <main className="min-h-screen px-4 py-7 sm:px-6 sm:py-8 lg:px-8">
       <div className="mx-auto max-w-[83rem]">
@@ -47,11 +92,42 @@ export function OverviewPageClient({ locations }: OverviewPageClientProps) {
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3 xl:shrink-0">
-            <div className="hidden md:flex md:flex-none">
+            <div className="hidden md:flex md:flex-none md:items-center md:gap-2">
+              <button
+                className={cn(
+                  "inline-flex h-10 items-center border border-slate-700 bg-slate-900/70 px-3.5 text-slate-300 transition",
+                  "text-[10px] font-semibold uppercase tracking-[0.18em] leading-none",
+                  compareMode
+                    ? selectedCompareSlugs.length === 2
+                      ? "hover:text-slate-50"
+                      : "cursor-default text-slate-500"
+                    : "hover:text-slate-50",
+                )}
+                onClick={handleDesktopCompareButton}
+                type="button"
+              >
+                {compareMode
+                  ? selectedCompareSlugs.length === 2
+                    ? "Compare 2 Cities"
+                    : "Select 2 Cities"
+                  : "Compare"}
+              </button>
+              {compareMode ? (
+                <button
+                  className="inline-flex h-10 items-center px-1 text-sm font-medium text-slate-400 transition hover:text-slate-100"
+                  onClick={cancelCompareMode}
+                  type="button"
+                >
+                  Cancel
+                </button>
+              ) : null}
               <OverviewViewToggle
                 onChange={(value) => setViewPreference(value)}
                 value={viewPreference}
               />
+            </div>
+            <div className="md:hidden">
+              <CompareCityPicker locations={locations} triggerLabel="Compare" />
             </div>
             <SingleSelectDropdown
               fullWidth
@@ -73,7 +149,14 @@ export function OverviewPageClient({ locations }: OverviewPageClientProps) {
           )}
         >
           {filteredLocations.map((location) => (
-            <LocationOverviewCard key={location.slug} location={location} />
+            <LocationOverviewCard
+              compareMode={compareMode}
+              disabled={compareMode && selectedCompareSlugs.length === 2 && !selectedCompareSlugs.includes(location.slug)}
+              key={location.slug}
+              location={location}
+              onSelect={toggleCompareSelection}
+              selected={selectedCompareSlugs.includes(location.slug)}
+            />
           ))}
         </div>
 
@@ -83,7 +166,19 @@ export function OverviewPageClient({ locations }: OverviewPageClientProps) {
             viewPreference === "list" ? "md:block" : null,
           )}
         >
-          <OverviewLocationList locations={filteredLocations} />
+          <OverviewLocationList
+            compareMode={compareMode}
+            disabledSlugs={
+              compareMode && selectedCompareSlugs.length === 2
+                ? filteredLocations
+                    .map((location) => location.slug)
+                    .filter((slug) => !selectedCompareSlugs.includes(slug))
+                : []
+            }
+            locations={filteredLocations}
+            onSelect={toggleCompareSelection}
+            selectedSlugs={selectedCompareSlugs}
+          />
         </div>
       </div>
     </main>

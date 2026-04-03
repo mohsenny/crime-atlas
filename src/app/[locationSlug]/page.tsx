@@ -16,11 +16,11 @@ export async function generateStaticParams() {
 
 export default async function LocationPage({ params }: LocationPageProps) {
   const { locationSlug } = await params;
-  const meta = await getFilterMetadata(locationSlug);
+  const [meta, locations] = await Promise.all([getFilterMetadata(locationSlug), getLocationSummaries()]);
 
   if (!meta) {
     notFound();
   }
 
-  return <DashboardClient backHref="/" backLabel="All locations" meta={meta} />;
+  return <DashboardClient backHref="/" backLabel="All locations" locations={locations} meta={meta} />;
 }

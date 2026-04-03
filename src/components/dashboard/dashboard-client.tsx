@@ -5,22 +5,25 @@ import { ArrowLeft, LoaderCircle, RefreshCw } from "lucide-react";
 import type { Route } from "next";
 import Link from "next/link";
 
+import { CompareCityPicker } from "@/components/comparison/compare-city-picker";
 import { CrimeChart } from "@/components/dashboard/crime-chart";
 import { DashboardSkeleton } from "@/components/dashboard/dashboard-skeleton";
 import { DashboardSources } from "@/components/dashboard/dashboard-sources";
 import { ExpandableDropdown } from "@/components/dashboard/expandable-dropdown";
 import { MetricToggle } from "@/components/dashboard/metric-toggle";
-import type { ChartResponse, FilterMetadata } from "@/lib/dashboard-data";
+import type { ChartResponse, FilterMetadata, LocationOverview } from "@/lib/dashboard-data";
 import { cn } from "@/lib/utils";
 
 type DashboardClientProps = {
   meta: FilterMetadata;
+  locations: LocationOverview[];
   backHref?: string;
   backLabel?: string;
 };
 
 export function DashboardClient({
   meta,
+  locations,
   backHref = "/",
   backLabel = "All locations",
 }: DashboardClientProps) {
@@ -143,6 +146,12 @@ export function DashboardClient({
             </Link>
 
             <div className="flex items-center justify-end gap-2 sm:gap-3">
+              <CompareCityPicker
+                initialSelectedSlugs={[meta.slug]}
+                locations={locations}
+                lockedSlugs={[meta.slug]}
+                triggerLabel="Compare"
+              />
               {meta.supportsRate ? <MetricToggle value={metric} onChange={setMetric} /> : null}
               {meta.districts.length > 1 && !isMobileViewport ? (
                 <ExpandableDropdown
@@ -152,7 +161,7 @@ export function DashboardClient({
                   values={selectedDistricts}
                 />
               ) : null}
-              {meta.districts.length > 1 ? (
+              {meta.districts.length > 1 && !isMobileViewport ? (
                 <button
                   aria-label="Reset dashboard filters"
                   className="inline-flex h-10 items-center gap-1.5 px-1 text-sm font-semibold leading-none tracking-[-0.01em] text-slate-400 transition hover:text-slate-100"

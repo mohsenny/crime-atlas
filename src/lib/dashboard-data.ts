@@ -1,5 +1,6 @@
 import { cache } from "react";
 import locationsIndex from "@/generated/locations-index.json";
+import { slugify } from "@/lib/crime-taxonomy";
 
 export type Metric = "count" | "rate";
 
@@ -41,6 +42,39 @@ export type ChartResponse = {
   districts: FilterOption[];
   categories: FilterOption[];
   summary: ChartSummary;
+};
+
+export type ComparisonCategory = FilterOption & {
+  sharedAcrossAll: true;
+};
+
+export type ComparisonSeriesRecord = {
+  year: number;
+  locationSlug: string;
+  count: number;
+  ratePer100k: number | null;
+};
+
+export type ComparisonLocation = {
+  slug: string;
+  label: string;
+  country: string;
+  years: number[];
+  areaLabelSingular: string;
+  areaLabelPlural: string;
+  districtCount: number;
+  supportsRate: boolean;
+  sources: SourceItem[];
+};
+
+export type ComparisonData = {
+  locations: ComparisonLocation[];
+  categories: ComparisonCategory[];
+  defaultCategorySlug: string | null;
+  years: number[];
+  supportsRate: boolean;
+  note: string;
+  seriesByCategory: Record<string, ComparisonSeriesRecord[]>;
 };
 
 export type LocationOverview = {
@@ -131,6 +165,12 @@ export function buildSeriesKey(districtSlug: string, categorySlug: string) {
 export const getLocationSummaries = cache(async (): Promise<LocationOverview[]> => {
   return locationsIndex.locations as LocationsIndex["locations"];
 });
+
+async function getLocationsBySlugs(locationSlugs: string[]) {
+  const uniqueSlugs = [...new Set(locationSlugs)].filter(Boolean);
+  const loaded = await Promise.all(uniqueSlugs.map((slug) => loadLocation(slug)));
+  return loaded.filter((location): location is LocationDataset => Boolean(location));
+}
 
 function buildDefaultDistrictSlugs(location: LocationDataset) {
   const latestYear = location.years.at(-1);
@@ -268,5 +308,108 @@ export async function getChartData(input: {
       percentChange: startTotal === 0 ? 0 : ((latestTotal - startTotal) / startTotal) * 100,
       strongestDistrict,
     },
+  };
+}
+
+export async function getComparisonData(locationSlugs: string[]): Promise<ComparisonData | null> {
+  const locations = await getLocationsBySlugs(locationSlugs);
+
+  if (locations.length !== 2) {
+    return null;
+  }
+
+  const [left, right] = locations;
+  const rightCategoriesByLabel = new Map(right.categories.map((category) => [category.label, category]));
+  const sharedCategories = left.categories
+    .filter((category) => rightCategoriesByLabel.has(category.label))
+    .map((category) => {
+      const rightCategory = rightCategoriesByLabel.get(category.label)!;
+      return {
+        label: category.label,
+        value: slugify(category.label),
+        shortLabel: category.shortLabel ?? rightCategory.shortLabel ?? category.label,
+        color: category.color ?? rightCategory.color,
+        isDefault: Boolean(category.isDefault && rightCategory.isDefault),
+        sharedAcrossAll: true as const,
+      };
+    });
+
+  const supportsRate = locations.every(
+    (location) => location.districts.length === 1 && location.records.some((record) => record.ratePer100k !== null),
+  );
+
+  const years = [...new Set(locations.flatMap((location) => location.years))].sort((leftYear, rightYear) => leftYear - rightYear);
+  const seriesByCategory: Record<string, ComparisonSeriesRecord[]> = {};
+
+  for (const category of sharedCategories) {
+    const records: ComparisonSeriesRecord[] = [];
+
+    for (const location of locations) {
+      const matchingCategory = location.categories.find((item) => item.label === category.label);
+      if (!matchingCategory) {
+        continue;
+      }
+
+      const totalsByYear = new Map<number, { count: number; ratePer100k: number | null }>();
+
+      for (const year of location.years) {
+        totalsByYear.set(year, { count: 0, ratePer100k: null });
+      }
+
+      for (const record of location.records) {
+        if (record.categorySlug !== matchingCategory.value) {
+          continue;
+        }
+
+        const current = totalsByYear.get(record.year) ?? { count: 0, ratePer100k: null };
+        totalsByYear.set(record.year, {
+          count: current.count + record.count,
+          ratePer100k:
+            location.districts.length === 1 && record.ratePer100k !== null
+              ? record.ratePer100k
+              : current.ratePer100k,
+        });
+      }
+
+      for (const year of location.years) {
+        const totals = totalsByYear.get(year) ?? { count: 0, ratePer100k: null };
+        records.push({
+          year,
+          locationSlug: location.slug,
+          count: totals.count,
+          ratePer100k: supportsRate ? totals.ratePer100k : null,
+        });
+      }
+    }
+
+    seriesByCategory[category.value] = records.sort((leftRecord, rightRecord) =>
+      leftRecord.year === rightRecord.year
+        ? leftRecord.locationSlug.localeCompare(rightRecord.locationSlug)
+        : leftRecord.year - rightRecord.year,
+    );
+  }
+
+  const defaultCategorySlug =
+    sharedCategories.find((category) => category.isDefault)?.value ?? sharedCategories[0]?.value ?? null;
+
+  return {
+    locations: locations.map((location) => ({
+      slug: location.slug,
+      label: location.label,
+      country: location.country,
+      years: location.years,
+      areaLabelSingular: location.areaLabelSingular,
+      areaLabelPlural: location.areaLabelPlural,
+      districtCount: location.districts.length,
+      supportsRate: location.records.some((record) => record.ratePer100k !== null),
+      sources: location.sources,
+    })),
+    categories: sharedCategories,
+    defaultCategorySlug,
+    years,
+    supportsRate,
+    note:
+      "Only categories with the same mapped canonical label in both selected cities are included. Rate per 100k is only enabled when both cities currently use citywide datasets.",
+    seriesByCategory,
   };
 }
