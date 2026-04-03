@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-03T13:14:34.522Z",
+  "generatedAt": "2026-04-03T14:15:57.854Z",
   "locations": [
     {
       "slug": "barcelona",
@@ -8,14 +8,26 @@
       "areaLabelSingular": "Area",
       "areaLabelPlural": "Areas",
       "chartTitle": "Barcelona Crime Overview",
-      "note": "Barcelona uses the official Spanish Interior Ministry fourth-quarter crime balance PDFs. The app uses annual municipal counts from those balance tables; rate-per-100k is not shown because this source path does not bundle a comparable municipal population series in the same extract.",
+      "note": "Barcelona uses official Spanish Interior Ministry annual crime-balance releases for the municipality of Barcelona. The app combines the verified year-end municipal tables published by the ministry; rate-per-100k is not shown because this source path does not bundle a comparable municipal population series in the same extract.",
       "sources": [
         {
           "label": "Spanish Interior Ministry balances and reports archive",
           "url": "https://www.interior.gob.es/opencms/es/prensa/balances-e-informes/"
+        },
+        {
+          "label": "Spanish Interior Ministry crime statistics portal publications",
+          "url": "https://estadisticasdecriminalidad.ses.mir.es/publico/portalestadistico/publicaciones.html"
         }
       ],
       "years": [
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
         2021,
         2022,
         2023,
@@ -301,14 +313,26 @@
       "areaLabelSingular": "Area",
       "areaLabelPlural": "Areas",
       "chartTitle": "Valencia Crime Overview",
-      "note": "Barcelona uses the official Spanish Interior Ministry fourth-quarter crime balance PDFs. The app uses annual municipal counts from those balance tables; rate-per-100k is not shown because this source path does not bundle a comparable municipal population series in the same extract.",
+      "note": "Barcelona uses official Spanish Interior Ministry annual crime-balance releases for the municipality of Barcelona. The app combines the verified year-end municipal tables published by the ministry; rate-per-100k is not shown because this source path does not bundle a comparable municipal population series in the same extract.",
       "sources": [
         {
           "label": "Spanish Interior Ministry balances and reports archive",
           "url": "https://www.interior.gob.es/opencms/es/prensa/balances-e-informes/"
+        },
+        {
+          "label": "Spanish Interior Ministry crime statistics portal publications",
+          "url": "https://estadisticasdecriminalidad.ses.mir.es/publico/portalestadistico/publicaciones.html"
         }
       ],
       "years": [
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
         2021,
         2022,
         2023,

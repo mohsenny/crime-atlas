@@ -1,283 +1,157 @@
-# Berlin Crime Data Lookup Notes
+# Crime Atlas Data Lookup Notes
 
 ## Purpose
-This note explains how the Berlin crime workbook was sourced, interpreted, transformed, and what to watch out for if another agent needs to extend it later.
+This note is the handoff for future agents extending the data layer in this repo.
 
-The generated deliverables were:
-- `berlin_kriminalitaetsatlas_2015_2024.xlsx`: the original official source workbook downloaded from Berlin open data / Kriminalitätsatlas
-- `berlin_crime_by_district_2015_2024.xlsx`: a cleaned workbook focused on district-level analysis
+The rule is:
+- prefer official public-authority sources only
+- do not stop at the first year range already wired in the app
+- do not assume an archive page year tab means there is a clean city-level series for that year
+- verify the actual downloadable file structure before concluding a city has no more usable data
 
-## Primary sources used
+## Current ingestion model
+The app does **not** read spreadsheets or PDFs at runtime.
 
-### 1) Berlin Open Data / Kriminalitätsatlas Berlin
-Primary public source for district-level crime counts and rates.
+Runtime data comes from committed generated JSON:
+- `src/generated/locations-index.json`
+- `src/generated/crime-data.json`
+- `src/generated/locations/*.json`
 
-Relevant endpoints/pages:
-- Berlin Open Data dataset page: https://daten.berlin.de/datensaetze/kriminalitatsatlas-berlin
-- Kriminalitätsatlas Berlin district view: https://www.kriminalitaetsatlas.berlin.de/K-Atlas/bezirke/atlasbez.html
-- Kriminalitätsatlas Berlin notes/method page: https://www.kriminalitaetsatlas.berlin.de/K-Atlas/hinweise.htm
+The generator is:
+- `scripts/prepare-data.ts`
 
-What this source provides:
-- official Berlin police crime atlas data
-- 12 administrative districts (`Bezirke`)
-- also smaller spatial units, but those were not used in the cleaned workbook
-- 17 offense groups (`Straftaten(-gruppen)`)
-- both:
-  - absolute counts (`Fälle`)
-  - frequency/rate values (`Häufigkeitszahl`, usually referred to as `HZ`), i.e. cases per 100,000 residents
-- time coverage currently described by the atlas notes as 2015–2024
+Production builds intentionally use the committed generated data. If you refresh source data, run:
+- `npm run data:prepare`
 
-Why this was the main source:
-- it already exposes exactly the district-by-offense-by-year structure needed
-- it is more convenient for district breakdowns than using only the annual PKS PDFs
-- it contains both counts and normalized rates
+## Project-wide sourcing rules
 
-### 2) Polizei Berlin PKS pages and PDFs
-Used for methodology context and caveats, not as the main extraction source.
+### 1) Archive year lists are not enough
+Many official archive pages list years going far back, but that does **not** prove:
+- city-level rows exist for those years
+- the same geography exists for those years
+- the category taxonomy is comparable
+- the file is still downloadable
+- the file is machine-parseable
 
-Relevant pages:
-- PKS landing page: https://www.berlin.de/polizei/verschiedenes/polizeiliche-kriminalstatistik/
-- example annual reports / PDFs for methodology and definitions
+Always inspect the actual attachment or workbook before claiming a year is usable.
 
-Why this source matters:
-- confirms that the data is based on police-recorded crime (`Polizeiliche Kriminalstatistik`, PKS)
-- clarifies scope and exclusions
-- useful if you later want richer category definitions, offense-key mapping, suspect counts, or citywide series beyond the atlas tables
+### 2) “No area breakdown” must be a verified conclusion
+Do not infer this from the current app alone.
 
-## What the data actually is
-This is **police-recorded crime data**, not a perfect measurement of all crime that actually happened.
+You must check whether the official source family includes:
+- district / borough / arrondissement / municipio slices
+- separate geography IDs in CSV/XLS/PDF tables
+- another official public-authority dataset for the same city that has smaller-area crime data
 
-Important meaning:
-- counts are cases known to and processed by police
-- not all crimes are reported to police
-- some offense types are more reporting-sensitive than others
-- year-to-year changes can reflect behavior, policing, reporting intensity, legal changes, recording changes, or real crime changes
+Only after checking those paths should you conclude there is no usable area breakdown.
 
-Typical PKS caveats from the Berlin / German methodology:
-- not directly comparable with court conviction data
-- certain offense domains are excluded or handled separately in PKS contexts, such as some traffic and state-security-related areas
-- the legal/statistical grouping used by police may differ from how a layperson expects categories to be grouped
+### 3) Preserve source-era taxonomy honestly
+If older files use a different official category system:
+- keep the original source label in the mapping layer
+- map only where the relationship is defensible
+- do not invent fine-grained categories that are absent in older files
 
-## What was extracted
-The cleaned workbook was intentionally kept at the **district** level only.
+Missing older-category detail is better than fake continuity.
 
-Core dimensions used:
-- `year`
-- `district`
-- `category`
-- `count`
-- `rate_per_100k`
+## City notes
 
-The cleaned workbook includes:
-- `Long_2015_2024`: tidy/long format table, best for filtering, pivoting, charts, BI tools, or later code ingestion
-- `Last5_2020_2024`: same but only the most recent 5 years
-- `OverallRate`: total offense rate per district/year
-- `OverallCount`: total offense count per district/year
-- `2024_Rate_ByCategory`: district x category matrix for rates
-- `2024_Count_ByCategory`: district x category matrix for counts
+### Berlin
+- Official source family: Polizei Berlin Kriminalitätsatlas + PKS archive
+- Current app coverage: `2006–2024`
+- District breakdown: yes
+- Main caveat: atlas category names are stable enough for the current mapping, but future agents should still re-check new workbook structures and any renamed offense groups
 
-## High-level extraction logic used
-The exact source workbook layout may change over time, so do not assume stable cell references forever.
+### London
+- Official source family: MPS geographic breakdown + ONS population files
+- Current app coverage: `2010–2024`
+- Borough breakdown: yes
+- Main caveat: some category names change over time and are merged in the mapping layer
 
-The general logic was:
-1. Download the official workbook from the Berlin open data / atlas source.
-2. Inspect workbook tabs and identify the district-level sheets or the sheets containing district values for:
-   - total counts
-   - total rates
-   - category-level counts
-   - category-level rates
-3. Normalize the district-level content into a tidy long table with one row per:
-   - year
-   - district
-   - category
-4. Preserve both raw count and HZ/rate when possible.
-5. Build a few convenience sheets for quick Excel use.
+### Frankfurt
+- Official source family currently wired: Frankfurt open-data citywide offense-type CSV
+- Current app coverage: `2013–2024`
+- Area breakdown in app: no
+- Important caveat: this is a citywide source with broad offense groups only; richer official detail may exist in other official Hessen / police statistical releases
 
-## Assumptions / interpretation choices
-A few interpretation choices were made while cleaning the file:
+### Paris
+- Official source family currently wired: French Interior / SSMSI communal base
+- Current app coverage: `2016–2025`
+- Area breakdown in app: no
+- Important caveat: the raw source includes arrondissement rows for Paris; the app currently keeps only commune-wide Paris `75056`
 
-### 1) District-level only
-The atlas also has smaller-area geographies. Those were intentionally left out to keep the workbook focused and manageable.
+### Luton
+- Official source family currently wired: ONS / Home Office local-authority annual crime tables
+- Current app coverage: `2003–2018`
+- Area breakdown in app: no
+- Important caveat: smaller-area official crime data exists in other UK police datasets, but not in the same clean annual local-authority series currently used here
 
-### 2) Category naming was kept close to source naming
-Category labels should remain as close as possible to the official wording. If you later want English labels or merged groups, do that in a mapping layer rather than replacing the original labels.
+### Milan
+- Official source family: Comune di Milano crime and population CSVs
+- Current app coverage: `2004–2023`
+- Area breakdown in app: no verified time-series area layer wired yet
 
-Recommended approach:
-- keep `category_source` with the original German label
-- add `category_en` or `category_grouped` as extra derived columns
+### Rome
+- Official source family: Roma Capitale safety/statistics workbooks
+- Current app coverage: `2016–2023`
+- Area breakdown in app: no verified city-subarea time series wired yet
+- Important caveat: the workbook structure changes before and across some years; do not hardcode one sheet layout forever
 
-### 3) HZ was treated as rate per 100,000 residents
-This is the standard interpretation for Berlin crime atlas HZ values.
+### Barcelona and Valencia
+- Official source family: Spanish Interior Ministry annual crime-balance releases
+- Current app coverage: `2013–2025`
+- Area breakdown in app: no
 
-### 4) The cleaned workbook favors usability over preserving every source formatting nuance
-No attempt was made to preserve source colors, merged cells, visual formatting logic, or every auxiliary sheet from the official workbook.
+Important caveats:
+- The ministry archive page lists years back to `2000`, but that does **not** mean there is a continuous clean municipality-level annual category series back to `2000`
+- The archive year tabs mix many Interior Ministry report types; do not assume every listed year contains the same municipality-level annual crime table
+- The currently verified clean city-level annual span is derived from:
+  - the official `2014` year-end workbook, which contains municipality rows for both `2013` and `2014`
+  - official year-end `2015` PDF tables
+  - official annual `2016–2020` ZIP bundles
+  - official annual `2021–2025` PDFs
+- `2015–2016` use the older EU-style offense groups
+- `2017–2020` use the pre-cybercrime richer municipal grouping
+- `2021+` use the newer official grouping with conventional crime / cybercrime splits
+- `2022` is a special case: the official table is a three-year comparison (`2019 / 2021 / 2022`), so parser logic must not assume two-count rows
+- If you extend Spain further back, verify municipality rows in the actual official download before claiming success
 
-## Ifs / hows / caveats another agent should know
+Official source paths already verified for Spain:
+- archive page: `https://www.interior.gob.es/opencms/es/prensa/balances-e-informes/`
+- publications portal: `https://estadisticasdecriminalidad.ses.mir.es/publico/portalestadistico/publicaciones.html`
+- 2014 year-end workbook: `https://www.interior.gob.es/opencms/pdf/prensa/balances-e-informes/2014/Balance-criminalidad-diciembre-2014.xls`
+- 2015 year-end PDF attachment: `https://www.interior.gob.es/opencms/pdf/informe-balance-2015_ene_dic_5607112.pdf`
+- grouped annual ZIPs already used in the importer for `2016–2020`
 
-### If the official workbook structure changes
-This is the main risk.
+## Validation checklist for future data work
+Every data extension should verify:
 
-What to do:
-- inspect the source workbook sheet names first
-- avoid hardcoded row/column references unless confirmed in the latest file
-- prefer pattern-based parsing where possible
-- verify a few spot values manually against the published atlas webpage or source sheets
+1. Year completeness
+- confirm the app is not arbitrarily truncating a city where more official years exist
 
-### If new years are added later
-The atlas notes suggest this dataset is maintained annually.
+2. Geography completeness
+- confirm whether official sub-city rows exist before leaving `No Area Breakdown`
 
-Recommended update flow:
-1. redownload the newest source workbook
-2. confirm the latest year exists in the district-level sheets
-3. append only the new year into the long table
-4. rerun validation checks for duplicates and missing district-category combinations
-5. regenerate convenience tabs
+3. Taxonomy drift
+- compare old and new source labels and note where categories split, merge, or disappear
 
-### If new crime categories are added or renamed
-Possible issues:
-- category names may change slightly
-- categories may split or merge
-- offense definitions can evolve
+4. Sanity checks
+- no negative counts
+- expected years present
+- spot-check at least a few rows against the official source
 
-Recommended handling:
-- do not assume category list is permanently fixed
-- build a category dictionary from the latest workbook each run
-- compare against prior years and log additions/removals/renames
-- preserve the original source label even if you create grouped analytical labels
+5. Production compatibility
+- after any source refresh, run:
+  - `npm run data:prepare`
+  - `npm run lint`
+  - `npm run build`
 
-### If you want more geographic breakdowns
-The atlas includes smaller-area breakdowns beyond the 12 districts.
+## Current principle for the homepage copy
+Use wording that is technically correct across all cities.
 
-Possible extension paths:
-- district (`Bezirk`) only; easiest and most stable
-- smaller planning/administrative areas; more granular but more fragile and harder to compare over time
+Safe wording:
+- official dashboards built from police-recorded crime data published by public authorities
 
-If you add smaller areas:
-- include a `geo_level` column
-- include `geo_name`
-- include a stable geographic identifier if one exists in source
-- do not mix district and sub-district rows in one flat table without explicit level tagging
-
-### If you want offense-key granularity rather than broad groups
-The atlas is category-group oriented.
-
-If you want deeper offense detail, you may need to combine in other Berlin PKS resources, possibly annual PDF tables or other official tabular sources. That is a different extraction problem from the district atlas.
-
-## Validation checks that should always be done
-Any future update should include at least these checks:
-
-1. **District completeness**
-   - expect the 12 Berlin administrative districts
-   - check for missing or renamed districts
-
-2. **Year completeness**
-   - confirm all intended years are present
-   - confirm no accidental duplicate year/category/district combinations
-
-3. **Category completeness**
-   - compare category list across years
-   - flag unexpected additions/removals/renames
-
-4. **Count/rate sanity**
-   - rates should not be negative
-   - counts should be integers or integer-like values
-   - large jumps should be manually spot-checked
-
-5. **Spot-check against source**
-   - manually verify at least a few random cells from the cleaned workbook against the original workbook or atlas page
-
-## Tips for making this future-proof
-
-### Best practice 1: keep three layers
-Use three separate artifacts/layers:
-- `raw/`: untouched official download
-- `intermediate/`: parsed but still close to source structure
-- `final/`: user-friendly workbook / CSV / parquet / BI-ready tables
-
-### Best practice 2: keep a data dictionary
-Maintain a separate small file such as `crime_category_dictionary.csv` with:
-- `category_source`
-- `category_en`
-- `category_group`
-- `notes`
-- `first_seen_year`
-- `last_seen_year`
-
-### Best practice 3: add a metadata sheet
-If rebuilding the workbook again, add a `README` or `Metadata` sheet with:
-- source URL
-- download date
-- years included
-- geography level
-- transformation version
-- known caveats
-
-### Best practice 4: prefer long format as the source of truth
-Pivot tables and pretty matrices are useful for humans, but the real canonical dataset should be long/tidy format.
-
-Suggested canonical schema:
-- `source_name`
-- `source_url`
-- `download_date`
-- `year`
-- `geo_level`
-- `district`
-- `category_source`
-- `count`
-- `rate_per_100k`
-
-### Best practice 5: save to CSV or parquet too
-Excel is convenient, but for updates and automation, also export:
-- `berlin_crime_long.csv`
-- `berlin_crime_long.parquet`
-
-That makes diffing, loading, and scripting much easier.
-
-## Suggested next extensions
-If you want to evolve this dataset later, the most practical additions would be:
-
-1. **Automated yearly refresh script**
-   - downloads latest workbook
-   - detects latest year
-   - updates cleaned outputs
-   - writes a change log
-
-2. **Category mapping file**
-   - adds English names
-   - groups categories into broader themes like violent crime, property crime, sexual offenses, etc.
-
-3. **District ranking sheets**
-   - top/bottom districts by category per year
-   - change over time
-   - year-over-year deltas
-
-4. **Smaller-area breakdowns**
-   - only if needed; more complexity and more room for boundary/consistency issues
-
-5. **Dashboard-ready exports**
-   - Power BI / Tableau / Looker / Python-ready files
-
-## What not to overclaim with this data
-Avoid statements like:
-- “this is the real crime rate”
-- “district X is objectively the most dangerous in every sense”
-- “increase in police-recorded cases always means more actual crime happened”
-
-Safer framing:
-- “police-recorded offenses”
-- “recorded case counts”
-- “HZ per 100,000 residents”
-- “within the limitations of PKS reporting and recording practices”
-
-## Handoff summary for another agent
-If another agent needs to continue this work, the shortest accurate handoff is:
-
-- Use the **Berlin Open Data / Kriminalitätsatlas Berlin** workbook as the primary source for district-level crime counts and HZ rates.
-- Treat it as **police-recorded crime**, not all real crime.
-- Keep the original workbook untouched.
-- Build a **long-format canonical table** with `year`, `district`, `category`, `count`, `rate_per_100k`.
-- Do not hardcode workbook cell positions without checking the latest source structure.
-- Validate district/year/category completeness every refresh.
-- Keep source German category names; add translation/grouping as a separate layer.
-- If you need more detail than the atlas categories, you will probably need to supplement with annual PKS materials or other official tables.
-
+Avoid wording that implies:
+- all data comes directly from city authorities
+- all data is directly comparable across countries
+- the dashboard measures all crime that happened rather than officially recorded crime

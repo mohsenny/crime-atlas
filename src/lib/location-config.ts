@@ -810,16 +810,20 @@ export const BARCELONA_LOCATION: LocationDefinition = {
   areaLabelPlural: "Areas",
   chartTitle: "Barcelona Crime Overview",
   note:
-    "Barcelona uses the official Spanish Interior Ministry fourth-quarter crime balance PDFs. The app uses annual municipal counts from those balance tables; rate-per-100k is not shown because this source path does not bundle a comparable municipal population series in the same extract.",
+    "Barcelona uses official Spanish Interior Ministry annual crime-balance releases for the municipality of Barcelona. The app combines the verified year-end municipal tables published by the ministry; rate-per-100k is not shown because this source path does not bundle a comparable municipal population series in the same extract.",
   sources: [
     {
       label: "Spanish Interior Ministry balances and reports archive",
       url: "https://www.interior.gob.es/opencms/es/prensa/balances-e-informes/",
     },
+    {
+      label: "Spanish Interior Ministry crime statistics portal publications",
+      url: "https://estadisticasdecriminalidad.ses.mir.es/publico/portalestadistico/publicaciones.html",
+    },
   ],
   categories: [
     {
-      sourceLabels: ["III. TOTAL CRIMINALIDAD"],
+      sourceLabels: ["III. TOTAL CRIMINALIDAD", "TOTAL INFRACCIONES PENALES", "1.-DELITOS Y FALTAS (EU)"],
       label: "All recorded offenses",
       shortLabel: "All offenses",
       color: "#7dd3fc",
@@ -835,7 +839,7 @@ export const BARCELONA_LOCATION: LocationDefinition = {
       sortOrder: 2,
     },
     {
-      sourceLabels: ["3. Delitos graves y menos graves de lesiones y riña tumultuaria"],
+      sourceLabels: ["3. Delitos graves y menos graves de lesiones y riña tumultuaria", "3.-Delitos graves y menos graves de lesiones y riña tumultuaria"],
       label: "Assaults and disorder",
       shortLabel: "Assaults",
       color: "#f97316",
@@ -843,7 +847,7 @@ export const BARCELONA_LOCATION: LocationDefinition = {
       sortOrder: 3,
     },
     {
-      sourceLabels: ["5. Delitos contra la libertad sexual"],
+      sourceLabels: ["5. Delitos contra la libertad sexual", "5.-Delitos contra la libertad e indemnidad sexual"],
       label: "Sexual offenses",
       shortLabel: "Sexual offenses",
       color: "#ec4899",
@@ -851,7 +855,7 @@ export const BARCELONA_LOCATION: LocationDefinition = {
       sortOrder: 4,
     },
     {
-      sourceLabels: ["5.1.-Agresión sexual con penetración"],
+      sourceLabels: ["5.1.-Agresión sexual con penetración", "5.1.-Agresion sexual con penetracion"],
       label: "Penetrative sexual assault",
       shortLabel: "Penetrative assault",
       color: "#f472b6",
@@ -859,7 +863,10 @@ export const BARCELONA_LOCATION: LocationDefinition = {
       sortOrder: 5,
     },
     {
-      sourceLabels: ["5.2.-Resto de delitos contra la libertad sexual"],
+      sourceLabels: [
+        "5.2.-Resto de delitos contra la libertad sexual",
+        "5.2.-Resto de delitos contra la libertad e indemnidad sexual",
+      ],
       label: "Other sexual offenses",
       shortLabel: "Other sexual",
       color: "#a78bfa",
@@ -867,7 +874,7 @@ export const BARCELONA_LOCATION: LocationDefinition = {
       sortOrder: 6,
     },
     {
-      sourceLabels: ["6. Robos con violencia e intimidación"],
+      sourceLabels: ["6. Robos con violencia e intimidación", "6.-Robos con violencia e intimidacion", "3.-ROBO CON VIOLENCIA E INTIMIDACION (EU)"],
       label: "Robbery with violence or intimidation",
       shortLabel: "Robbery",
       color: "#fb923c",
@@ -875,7 +882,11 @@ export const BARCELONA_LOCATION: LocationDefinition = {
       sortOrder: 7,
     },
     {
-      sourceLabels: ["7. Robos con fuerza en domicilios, establecimientos y otras instalaciones"],
+      sourceLabels: [
+        "7. Robos con fuerza en domicilios, establecimientos y otras instalaciones",
+        "7.- Robos con fuerza en domicilios, establecimientos y otras instalaciones",
+        "4.-ROBOS CON FUERZA EN DOMICILIOS (EU)",
+      ],
       label: "Burglary and forced-entry theft",
       shortLabel: "Burglary",
       color: "#ef4444",
@@ -891,7 +902,7 @@ export const BARCELONA_LOCATION: LocationDefinition = {
       sortOrder: 9,
     },
     {
-      sourceLabels: ["8. Hurtos"],
+      sourceLabels: ["8. Hurtos", "8.-Hurtos"],
       label: "Theft",
       shortLabel: "Theft",
       color: "#facc15",
@@ -899,7 +910,7 @@ export const BARCELONA_LOCATION: LocationDefinition = {
       sortOrder: 10,
     },
     {
-      sourceLabels: ["9. Sustracciones de vehículos"],
+      sourceLabels: ["9. Sustracciones de vehículos", "9.-Sustracciones de vehiculos", "5.-SUSTRACCION VEHICULOS A MOTOR (EU)"],
       label: "Vehicle theft",
       shortLabel: "Vehicle theft",
       color: "#4f46e5",
@@ -907,7 +918,7 @@ export const BARCELONA_LOCATION: LocationDefinition = {
       sortOrder: 11,
     },
     {
-      sourceLabels: ["10. Tráfico de drogas"],
+      sourceLabels: ["10. Tráfico de drogas", "10.-Trafico de drogas", "6.-TRAFICO DE DROGAS (EU)"],
       label: "Drug trafficking",
       shortLabel: "Drug trafficking",
       color: "#22c55e",

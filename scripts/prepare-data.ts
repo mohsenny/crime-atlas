@@ -66,6 +66,12 @@ type FrankfurtRow = Record<string, string>;
 type LutonCrimeRow = Record<string, string | number>;
 type ParisCrimeRow = Record<string, string>;
 type MilanCrimeRow = Record<string, string | number>;
+type SpainAnnualSource = {
+  year: number;
+  type: "pdf" | "zip-pdf" | "xls";
+  url: string;
+  zipEntryContains?: string;
+};
 
 const ROOT = process.cwd();
 const TMP_DIR = path.join(ROOT, "tmp_sources");
@@ -124,6 +130,20 @@ const SOURCE_URLS = {
     "https://www.interior.gob.es/opencms/export/sites/default/.galleries/galeria-de-prensa/documentos-y-multimedia/balances-e-informes/2022/Balance-de-Criminalidad-Cuarto-Trimestre-2022.pdf",
   spanishBalance2021:
     "https://www.interior.gob.es/opencms/pdf/prensa/balances-e-informes/2021/Balance-de-Criminalidad.-Cuarto-Trimestre-2021.pdf",
+  spanishBalance2014Workbook:
+    "https://www.interior.gob.es/opencms/pdf/prensa/balances-e-informes/2014/Balance-criminalidad-diciembre-2014.xls",
+  spanishBalance2015:
+    "https://www.interior.gob.es/opencms/pdf/informe-balance-2015_ene_dic_5607112.pdf",
+  spanishArchive2020:
+    "https://estadisticasdecriminalidad.ses.mir.es/publico/portalestadistico/dam/jcr%3A8b65244f-3428-46fd-8896-221c32b96d43/informes2020.zip",
+  spanishArchive2019:
+    "https://estadisticasdecriminalidad.ses.mir.es/publico/portalestadistico/dam/jcr%3A4f3bae25-ea03-409a-b0e4-7230378d6ba1/informes2019.zip",
+  spanishArchive2018:
+    "https://estadisticasdecriminalidad.ses.mir.es/publico/portalestadistico/dam/jcr%3Aed645370-ead8-4ba9-b217-a2544fe6da7b/informes2018.zip",
+  spanishArchive2017:
+    "https://estadisticasdecriminalidad.ses.mir.es/publico/portalestadistico/dam/jcr%3A3e7b5499-8efd-45f5-8cfc-92a00dd0cd2e/informes2017.zip",
+  spanishArchive2016:
+    "https://estadisticasdecriminalidad.ses.mir.es/publico/portalestadistico/dam/jcr%3A88cb5588-9ee7-4614-a7bd-06e8e59658db/informes2016.zip",
 };
 
 function buildCategoryLookup(definition: LocationDefinition) {
@@ -426,84 +446,272 @@ function parseRomeWorkbook(filePath: string, year: number) {
   };
 }
 
-function parseSpainMunicipalitySection(text: string, municipality: string) {
+function normalizeSpainText(value: string) {
+  return normalizeSourceLabel(value)
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
+const SPAIN_COUNT_TOKEN_PATTERN = /^\d+(?:\.\d{3})*$/;
+
+function parseSpainMunicipalityWorkbook(filePath: string, municipality: string, expectedYear: number) {
+  const workbook = XLSX.readFile(filePath);
+  const firstSheet = workbook.SheetNames[0];
+  const rows = XLSX.utils.sheet_to_json<Array<string | number | null>>(workbook.Sheets[firstSheet], {
+    header: 1,
+    defval: null,
+  });
+
+  const headerRow = rows.find(
+    (row) =>
+      normalizeSpainText(String(row?.[0] ?? "")) === "TERRITORIO" &&
+      normalizeSpainText(String(row?.[1] ?? "")) === "TIPOLOGIA PENAL",
+  );
+
+  if (!headerRow) {
+    throw new Error(`Could not find Spain workbook header for ${municipality}`);
+  }
+
+  const numericYears = headerRow
+    .slice(2)
+    .map((cell) => Number(cell))
+    .filter((year) => Number.isInteger(year) && year >= 2000 && year <= expectedYear);
+  const currentYear = numericYears.includes(expectedYear) ? expectedYear : numericYears.at(-1);
+  const previousYear = numericYears.length > 1 ? numericYears.at(-2) ?? null : null;
+
+  if (!currentYear) {
+    throw new Error(`Could not determine Spain workbook years for ${municipality}`);
+  }
+
+  const territoryLabel = normalizeSpainText(`Municipio de ${municipality}`);
+  const territoryColumnIndex = 0;
+  const labelColumnIndex = 1;
+  const currentYearColumnIndex = headerRow.findIndex((cell) => Number(cell) === currentYear);
+  const previousYearColumnIndex = previousYear ? headerRow.findIndex((cell) => Number(cell) === previousYear) : -1;
+
+  const rowsByYear = new Map<number, Map<string, number>>();
+  rowsByYear.set(currentYear, new Map());
+  if (previousYear) {
+    rowsByYear.set(previousYear, new Map());
+  }
+
+  for (const row of rows) {
+    if (normalizeSpainText(String(row?.[territoryColumnIndex] ?? "")) !== territoryLabel) {
+      continue;
+    }
+
+    const sourceLabel = normalizeSpainText(String(row?.[labelColumnIndex] ?? ""));
+    if (!sourceLabel) {
+      continue;
+    }
+
+    const currentCount = parseCountLike(row?.[currentYearColumnIndex]);
+    rowsByYear.get(currentYear)?.set(sourceLabel, currentCount);
+
+    if (previousYear && previousYearColumnIndex !== -1) {
+      const previousCount = parseCountLike(row?.[previousYearColumnIndex]);
+      rowsByYear.get(previousYear)?.set(sourceLabel, previousCount);
+    }
+  }
+
+  return { currentYear, previousYear, rowsByYear };
+}
+
+function parseSpainMunicipalitySection(text: string, municipality: string, expectedYear: number) {
   const lines = text
     .split(/\r?\n/)
-    .map((line) => normalizeSourceLabel(line))
+    .map((line) => normalizeSpainText(line))
     .filter(Boolean);
-  const startIndex = lines.findIndex((line) => line === `Municipio de ${municipality} Acumulado enero a diciembre`);
+  const municipalityHeader = normalizeSpainText(`Municipio de ${municipality}`);
+  const municipalityHeaderWithPeriod = normalizeSpainText(`Municipio de ${municipality}.`);
+  const startIndex = lines.findIndex(
+    (line) =>
+      line === `${municipalityHeader} Acumulado enero a diciembre` ||
+      line === municipalityHeader ||
+      line === municipalityHeaderWithPeriod,
+  );
 
   if (startIndex === -1) {
     throw new Error(`Could not find Spain municipality block for ${municipality}`);
   }
 
-  const headerLine = lines[startIndex + 1] ?? "";
+  const block: string[] = [];
+  for (let index = startIndex; index < lines.length; index += 1) {
+    const line = lines[index];
+    if (line.startsWith("Municipio de ") && index > startIndex) {
+      break;
+    }
+    block.push(line);
+  }
+
+  const headerLine =
+    block.find((line) => /\b20\d{2}\b/.test(line) && /(Var|TIPOLOGIA|INDICADORES|Tipologia)/i.test(line)) ??
+    block.find((line) => /\b20\d{2}\b/.test(line)) ??
+    "";
   const years = [...headerLine.matchAll(/\b(20\d{2})\b/g)].map((match) => Number(match[1]));
-  const currentYear = years.at(-1);
+  const currentYear = years.includes(expectedYear) ? expectedYear : years.at(-1);
+  const previousYear = years.length > 1 ? years.at(-2) ?? null : null;
 
   if (!currentYear) {
     throw new Error(`Could not determine Spain balance year for ${municipality}`);
   }
 
-  const rows = new Map<string, number>();
-
-  for (let index = startIndex + 2; index < lines.length; index += 1) {
-    const line = lines[index];
-    if (line.startsWith("Municipio de ") && index > startIndex + 2) {
-      break;
-    }
-    if (line.startsWith("Página ") || line.startsWith("-- ")) {
-      continue;
-    }
-
-    const match = line.match(/^(.*?)\s+([\d.]+)\s+([\d.]+)\s+[-\d,]+$/);
-    if (!match) {
-      continue;
-    }
-
-    rows.set(normalizeSourceLabel(match[1]), parseCountLike(match[3]));
-    if (normalizeSourceLabel(match[1]) === "III. TOTAL CRIMINALIDAD") {
-      break;
-    }
+  const rowsByYear = new Map<number, Map<string, number>>();
+  rowsByYear.set(currentYear, new Map());
+  if (previousYear) {
+    rowsByYear.set(previousYear, new Map());
   }
 
-  return { year: currentYear, rows };
+  const storeSpainCounts = (sourceLabel: string, countsByHeaderYear: number[]) => {
+    const currentIndex = years.lastIndexOf(currentYear);
+    if (currentIndex !== -1 && countsByHeaderYear[currentIndex] !== undefined) {
+      rowsByYear.get(currentYear)?.set(sourceLabel, countsByHeaderYear[currentIndex]!);
+    }
+
+    if (previousYear) {
+      const previousIndex = years.lastIndexOf(previousYear);
+      if (previousIndex !== -1 && countsByHeaderYear[previousIndex] !== undefined) {
+        rowsByYear.get(previousYear)?.set(sourceLabel, countsByHeaderYear[previousIndex]!);
+      }
+    }
+  };
+
+  const parseSpainInlineCounts = (line: string) => {
+    const tokens = line.split(/\s+/).filter(Boolean);
+    const countTokenIndices = tokens
+      .map((token, index) => (SPAIN_COUNT_TOKEN_PATTERN.test(token) ? index : -1))
+      .filter((index) => index !== -1);
+
+    if (countTokenIndices.length < years.length) {
+      return null;
+    }
+
+    const valueIndices = countTokenIndices.slice(-years.length);
+    const sourceLabel = normalizeSpainText(tokens.slice(0, valueIndices[0]).join(" "));
+    if (!sourceLabel) {
+      return null;
+    }
+
+    return {
+      sourceLabel,
+      countsByHeaderYear: valueIndices.map((index) => parseCountLike(tokens[index])),
+    };
+  };
+
+  const labelQueue: string[] = [];
+  const headerIndex = block.indexOf(headerLine);
+
+  for (let index = headerIndex + 1; index < block.length; index += 1) {
+    const line = block[index];
+    if (
+      line.startsWith("Pagina ") ||
+      line.startsWith("-- ") ||
+      line.startsWith("INFRACCIONES ") ||
+      line.startsWith("LOCALIDADES ") ||
+      line.startsWith("(Datos") ||
+      line.startsWith("Datos pendientes")
+    ) {
+      continue;
+    }
+
+    const inlineCounts = parseSpainInlineCounts(line);
+    if (inlineCounts) {
+      storeSpainCounts(inlineCounts.sourceLabel, inlineCounts.countsByHeaderYear);
+      continue;
+    }
+
+    const splitLineCounts = parseSpainInlineCounts(`__LABEL__ ${line}`);
+    if (splitLineCounts && labelQueue.length > 0) {
+      const sourceLabel = labelQueue.shift()!;
+      storeSpainCounts(sourceLabel, splitLineCounts.countsByHeaderYear);
+      continue;
+    }
+
+    if (/^\d+ de \d+$/.test(line)) {
+      continue;
+    }
+
+    labelQueue.push(normalizeSpainText(line));
+  }
+
+  return { currentYear, previousYear, rowsByYear };
 }
 
 async function buildSpainLocation(
   definition: LocationDefinition,
   municipality: string,
-  balanceUrls: string[],
+  annualSources: SpainAnnualSource[],
 ): Promise<LocationPayload> {
   await fs.mkdir(TMP_DIR, { recursive: true });
 
   const { options: categories, lookup: categoryLookup } = buildCategoryLookup(definition);
   const districtLabel = definition.label;
   const districtSlug = slugify(districtLabel);
-  const records: CrimeRecord[] = [];
+  const recordsByKey = new Map<string, CrimeRecord>();
   const years = new Set<number>();
 
-  for (const [index, url] of balanceUrls.entries()) {
-    const targetPath = path.join(TMP_DIR, `spain_balance_${index + 1}.pdf`);
-    await ensureFile(targetPath, url);
-    const text = await extractPdfText(targetPath);
-    const parsed = parseSpainMunicipalitySection(text, municipality);
-    years.add(parsed.year);
+  const earliestSourceYear = Math.min(...annualSources.map((source) => source.year));
 
-    parsed.rows.forEach((count, sourceLabel) => {
-      const category = categoryLookup.get(normalizeSourceLabel(sourceLabel));
-      if (!category) {
+  for (const source of annualSources) {
+    let targetPath = path.join(TMP_DIR, "spain", `source_${source.year}.pdf`);
+    await fs.mkdir(path.dirname(targetPath), { recursive: true });
+
+    if (source.type === "xls") {
+      targetPath = path.join(TMP_DIR, "spain", `source_${source.year}.xls`);
+      await ensureFile(targetPath, source.url);
+    } else if (source.type === "pdf") {
+      await ensureFile(targetPath, source.url);
+    } else {
+      const zipPath = path.join(TMP_DIR, "spain", `source_${source.year}.zip`);
+      await ensureFile(zipPath, source.url);
+      const pythonCode = [
+        "import sys, zipfile, pathlib",
+        "zip_path, needle, out_path = sys.argv[1:]",
+        "with zipfile.ZipFile(zip_path) as zf:",
+        "    name = next((n for n in zf.namelist() if needle.lower() in n.lower() and n.lower().endswith('.pdf')), None)",
+        "    if name is None:",
+        "        raise SystemExit(f'No PDF entry found for {needle} in {zip_path}')",
+        "    pathlib.Path(out_path).write_bytes(zf.read(name))",
+      ].join("\n");
+      execFileSync("python3", ["-c", pythonCode, zipPath, source.zipEntryContains ?? "", targetPath], {
+        cwd: ROOT,
+        maxBuffer: 64 * 1024 * 1024,
+      });
+    }
+
+    let parsed;
+    try {
+      if (source.type === "xls") {
+        parsed = parseSpainMunicipalityWorkbook(targetPath, municipality, source.year);
+      } else {
+        const text = await extractPdfText(targetPath);
+        parsed = parseSpainMunicipalitySection(text, municipality, source.year);
+      }
+    } catch (error) {
+      throw new Error(`Spain parse failed for ${definition.slug} ${source.year}: ${error instanceof Error ? error.message : String(error)}`);
+    }
+
+    parsed.rowsByYear.forEach((rowsForYear, year) => {
+      if (year !== source.year && source.year !== earliestSourceYear) {
         return;
       }
 
-      records.push({
-        year: parsed.year,
-        districtLabel,
-        districtSlug,
-        categoryLabel: category.label,
-        categorySlug: category.slug,
-        count,
-        ratePer100k: null,
+      years.add(year);
+      rowsForYear.forEach((count, sourceLabel) => {
+        const category = categoryLookup.get(normalizeSpainText(sourceLabel));
+        if (!category) {
+          return;
+        }
+
+        addOrMergeRecord(recordsByKey, {
+          year,
+          districtLabel,
+          districtSlug,
+          categoryLabel: category.label,
+          categorySlug: category.slug,
+          count,
+          ratePer100k: null,
+        });
       });
     });
   }
@@ -521,7 +729,7 @@ async function buildSpainLocation(
     districts: [{ label: districtLabel, value: districtSlug }],
     categories,
     defaultCategorySlugs: categories.filter((category) => category.isDefault).map((category) => category.value),
-    records,
+    records: [...recordsByKey.values()].sort((left, right) => left.year - right.year),
   };
 }
 
@@ -1217,14 +1425,25 @@ async function buildParisLocation(): Promise<LocationPayload> {
 }
 
 async function main() {
-  const [barcelona, berlin, frankfurt, london, luton, milan, paris, rome, valencia] = await Promise.all([
-    buildSpainLocation(BARCELONA_LOCATION, "Barcelona", [
-      SOURCE_URLS.spanishBalance2021,
-      SOURCE_URLS.spanishBalance2022,
-      SOURCE_URLS.spanishBalance2023,
-      SOURCE_URLS.spanishBalance2024,
-      SOURCE_URLS.spanishBalance2025,
-    ]),
+  const spainAnnualSources: SpainAnnualSource[] = [
+    { year: 2014, type: "xls", url: SOURCE_URLS.spanishBalance2014Workbook },
+    { year: 2015, type: "pdf", url: SOURCE_URLS.spanishBalance2015 },
+    { year: 2016, type: "zip-pdf", url: SOURCE_URLS.spanishArchive2016, zipEntryContains: "cuarto trimestre" },
+    { year: 2017, type: "zip-pdf", url: SOURCE_URLS.spanishArchive2017, zipEntryContains: "cuarto trimestre" },
+    { year: 2018, type: "zip-pdf", url: SOURCE_URLS.spanishArchive2018, zipEntryContains: "4º trimestre" },
+    { year: 2019, type: "zip-pdf", url: SOURCE_URLS.spanishArchive2019, zipEntryContains: "cuarto trimestre" },
+    { year: 2020, type: "zip-pdf", url: SOURCE_URLS.spanishArchive2020, zipEntryContains: "cuarto trimestre" },
+    { year: 2021, type: "pdf", url: SOURCE_URLS.spanishBalance2021 },
+    { year: 2022, type: "pdf", url: SOURCE_URLS.spanishBalance2022 },
+    { year: 2023, type: "pdf", url: SOURCE_URLS.spanishBalance2023 },
+    { year: 2024, type: "pdf", url: SOURCE_URLS.spanishBalance2024 },
+    { year: 2025, type: "pdf", url: SOURCE_URLS.spanishBalance2025 },
+  ];
+
+  const barcelona = await buildSpainLocation(BARCELONA_LOCATION, "Barcelona", spainAnnualSources);
+  const valencia = await buildSpainLocation(VALENCIA_LOCATION, "Valencia", spainAnnualSources);
+
+  const [berlin, frankfurt, london, luton, milan, paris, rome] = await Promise.all([
     buildBerlinLocation(),
     buildFrankfurtLocation(),
     buildLondonLocation(),
@@ -1232,13 +1451,6 @@ async function main() {
     buildMilanLocation(),
     buildParisLocation(),
     buildRomeLocation(),
-    buildSpainLocation(VALENCIA_LOCATION, "Valencia", [
-      SOURCE_URLS.spanishBalance2021,
-      SOURCE_URLS.spanishBalance2022,
-      SOURCE_URLS.spanishBalance2023,
-      SOURCE_URLS.spanishBalance2024,
-      SOURCE_URLS.spanishBalance2025,
-    ]),
   ]);
   const payload = {
     generatedAt: new Date().toISOString(),
