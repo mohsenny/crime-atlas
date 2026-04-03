@@ -231,8 +231,10 @@ function parseSemicolonCell(value: string) {
 
 async function extractZipFile(zipPath: string, entryName: string, outputPath: string) {
   try {
-    await fs.access(outputPath);
-    return outputPath;
+    const existing = await fs.stat(outputPath);
+    if (existing.size > 0) {
+      return outputPath;
+    }
   } catch {}
 
   const buffer = execFileSync("unzip", ["-p", zipPath, entryName], {
@@ -320,8 +322,8 @@ function findZipEntry(zipPath: string, matcher: (entry: string) => boolean) {
 
 function parseRomeWorkbook(filePath: string, year: number) {
   const workbook = XLSX.readFile(filePath);
-  const totalSheetName = findSheetName(workbook.SheetNames, [/tab\.?\s*15\.1/i, /tav_?14\.1/i]);
-  const categorySheetName = findSheetName(workbook.SheetNames, [/tab\.?\s*15\.2/i, /tav_?14\.2/i]);
+  const totalSheetName = findSheetName(workbook.SheetNames, [/graf_?14\.1/i, /^graf1\b/i, /tab\.?\s*15\.1/i, /tav_?14\.1/i]);
+  const categorySheetName = findSheetName(workbook.SheetNames, [/graf_?14\.2/i, /^graf2\b/i, /tab\.?\s*15\.2/i, /tav_?14\.2/i]);
 
   if (!totalSheetName || !categorySheetName) {
     throw new Error(`Missing Rome workbook sheets for ${year}`);
@@ -336,22 +338,90 @@ function parseRomeWorkbook(filePath: string, year: number) {
     defval: null,
   });
 
-  const totalRow = totalRows.find((row) => Number(row?.[0] ?? 0) === year);
-  if (!totalRow) {
+  let totalCount = 0;
+  let population: number | null = null;
+
+  for (const row of totalRows) {
+    for (let index = 0; index < row.length; index += 1) {
+      if (Number(row[index] ?? 0) !== year) {
+        continue;
+      }
+
+      for (let nextIndex = index + 1; nextIndex < row.length; nextIndex += 1) {
+        const candidate = parseCountLike(row[nextIndex]);
+        if (candidate > 0) {
+          totalCount = candidate;
+          break;
+        }
+      }
+    }
+
+    if (totalCount > 0) {
+      break;
+    }
+  }
+
+  const directTotalRow = totalRows.find((row) => Number(row?.[0] ?? 0) === year);
+  if (directTotalRow) {
+    population = parseCountLike(directTotalRow[2]) || null;
+  }
+
+  let fallbackPopulation: number | null = null;
+  for (const sheetName of workbook.SheetNames) {
+    const rows = XLSX.utils.sheet_to_json<Array<string | number | null>>(workbook.Sheets[sheetName], {
+      header: 1,
+      defval: null,
+    });
+
+    for (const row of rows) {
+      if (normalizeSourceLabel(String(row?.[0] ?? "")) !== "Roma") {
+        continue;
+      }
+
+      const numericValues = row
+        .map((cell) => parseCountLike(cell))
+        .filter((value) => Number.isFinite(value) && value > 500_000);
+      if (numericValues.length > 0) {
+        fallbackPopulation = Math.max(...numericValues);
+        break;
+      }
+    }
+
+    if (fallbackPopulation) {
+      break;
+    }
+  }
+
+  const headerRowIndex = categoryRows.findIndex((row) =>
+    row.some((cell) => /tipo di delitto/i.test(String(cell ?? ""))),
+  );
+  if (headerRowIndex === -1) {
+    throw new Error(`Missing Rome category header row for ${year}`);
+  }
+
+  const headerRow = categoryRows[headerRowIndex];
+  const categoryColumnIndex = headerRow.findIndex((cell) => /tipo di delitto/i.test(String(cell ?? "")));
+  const detectedCountColumnIndex = headerRow.findIndex(
+    (cell, index) => index > categoryColumnIndex && /delitti/i.test(String(cell ?? "")),
+  );
+  const countColumnIndex = detectedCountColumnIndex === -1 ? categoryColumnIndex + 1 : detectedCountColumnIndex;
+
+  const categoryCounts = categoryRows
+    .slice(headerRowIndex + 1)
+    .map((row) => ({
+      category: normalizeSourceLabel(String(row?.[categoryColumnIndex] ?? "")),
+      count: parseCountLike(row?.[countColumnIndex]),
+    }))
+    .filter((row) => row.category.length > 0 && row.count > 0);
+
+  population = population || fallbackPopulation || null;
+  if (!totalCount) {
     throw new Error(`Missing Rome total row for ${year}`);
   }
 
-  const categoryCounts = categoryRows
-    .slice(2)
-    .map((row) => ({
-      category: normalizeSourceLabel(String(row?.[0] ?? "")),
-      count: parseCountLike(row?.[1]),
-    }))
-    .filter((row) => row.category.length > 0);
-
   return {
-    totalCount: parseCountLike(totalRow[1]),
-    population: parseCountLike(totalRow[2]) || null,
+    totalCount,
+    population,
     categoryCounts,
   };
 }
@@ -458,7 +528,7 @@ async function buildSpainLocation(
 async function buildRomeLocation(): Promise<LocationPayload> {
   await fs.mkdir(path.join(TMP_DIR, "italy"), { recursive: true });
 
-  const years = Array.from({ length: 6 }, (_, index) => 2018 + index);
+  const years = Array.from({ length: 8 }, (_, index) => 2016 + index);
   const districtLabel = "Rome";
   const districtSlug = slugify(districtLabel);
   const { options: categories, lookup: categoryLookup } = buildCategoryLookup(ROME_LOCATION);
