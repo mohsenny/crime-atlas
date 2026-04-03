@@ -1,0 +1,33 @@
+node_modules
+.next
+.DS_Store
+*.log
+coverage
+tmp_sources/
+.env
+.env.*
+
+# Local data inputs and exports
+/*.xlsx
+/*.xls
+/*.csv
+/*.tsv
+/*.parquet
+/*.pdf
+/*.zip
+/*.gz
+/*.ods
+/*.xlsm
+/*.xlsb
+
+# Generated app data
+src/generated/
+
+# Suggested future data folders
+raw/
+intermediate/
+final/
+
+# Editor and OS noise
+.idea/
+.vscode/
