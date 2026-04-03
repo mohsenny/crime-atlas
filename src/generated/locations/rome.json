@@ -1,0 +1,895 @@
+{
+  "slug": "rome",
+  "label": "Rome",
+  "country": "Italy",
+  "areaLabelSingular": "Area",
+  "areaLabelPlural": "Areas",
+  "chartTitle": "Rome Crime Overview",
+  "note": "Rome uses official Roma Capitale urban-security workbooks. These are annual citywide totals rather than neighborhood slices, with yearly offense-type tables and resident population used for the rate view.",
+  "sources": [
+    {
+      "label": "Roma Capitale statistics: legality and public safety",
+      "url": "https://www.comune.roma.it/web/it/roma-statistica-legalita-e-sicurezza1.page"
+    }
+  ],
+  "years": [
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023
+  ],
+  "districts": [
+    {
+      "label": "Rome",
+      "value": "rome"
+    }
+  ],
+  "categories": [
+    {
+      "label": "All recorded offenses",
+      "value": "all-recorded-offenses",
+      "shortLabel": "All offenses",
+      "color": "#7dd3fc",
+      "isDefault": false
+    },
+    {
+      "label": "Theft",
+      "value": "theft",
+      "shortLabel": "Theft",
+      "color": "#facc15",
+      "isDefault": true
+    },
+    {
+      "label": "Robbery",
+      "value": "robbery",
+      "shortLabel": "Robbery",
+      "color": "#f97316",
+      "isDefault": true
+    },
+    {
+      "label": "Sexual violence",
+      "value": "sexual-violence",
+      "shortLabel": "Sexual violence",
+      "color": "#ec4899",
+      "isDefault": true
+    },
+    {
+      "label": "Other sexual offenses",
+      "value": "other-sexual-offenses",
+      "shortLabel": "Other sexual",
+      "color": "#a78bfa",
+      "isDefault": false
+    },
+    {
+      "label": "Drug offenses",
+      "value": "drug-offenses",
+      "shortLabel": "Drug offenses",
+      "color": "#22c55e",
+      "isDefault": true
+    },
+    {
+      "label": "Cyber fraud",
+      "value": "cyber-fraud",
+      "shortLabel": "Cyber fraud",
+      "color": "#38bdf8",
+      "isDefault": true
+    },
+    {
+      "label": "Criminal damage",
+      "value": "criminal-damage",
+      "shortLabel": "Criminal damage",
+      "color": "#fb7185",
+      "isDefault": true
+    },
+    {
+      "label": "Assaults",
+      "value": "assaults",
+      "shortLabel": "Assaults",
+      "color": "#fde047",
+      "isDefault": false
+    },
+    {
+      "label": "Threats and insults",
+      "value": "threats-and-insults",
+      "shortLabel": "Threats",
+      "color": "#c084fc",
+      "isDefault": false
+    },
+    {
+      "label": "Counterfeit, fencing and laundering",
+      "value": "counterfeit-fencing-and-laundering",
+      "shortLabel": "Counterfeit & laundering",
+      "color": "#94a3b8",
+      "isDefault": false
+    },
+    {
+      "label": "Usury and extortion",
+      "value": "usury-and-extortion",
+      "shortLabel": "Extortion",
+      "color": "#f59e0b",
+      "isDefault": false
+    },
+    {
+      "label": "Homicide",
+      "value": "homicide",
+      "shortLabel": "Homicide",
+      "color": "#be123c",
+      "isDefault": false
+    },
+    {
+      "label": "Attempted homicide",
+      "value": "attempted-homicide",
+      "shortLabel": "Attempted homicide",
+      "color": "#fda4af",
+      "isDefault": false
+    }
+  ],
+  "defaultCategorySlugs": [
+    "theft",
+    "robbery",
+    "sexual-violence",
+    "drug-offenses",
+    "cyber-fraud",
+    "criminal-damage"
+  ],
+  "records": [
+    {
+      "year": 2018,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "All recorded offenses",
+      "categorySlug": "all-recorded-offenses",
+      "count": 174924,
+      "ratePer100k": 6124.504706188402
+    },
+    {
+      "year": 2018,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Theft",
+      "categorySlug": "theft",
+      "count": 110984,
+      "ratePer100k": 3885.8134407606367
+    },
+    {
+      "year": 2018,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Criminal damage",
+      "categorySlug": "criminal-damage",
+      "count": 14289,
+      "ratePer100k": 500.2918281466585
+    },
+    {
+      "year": 2018,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Cyber fraud",
+      "categorySlug": "cyber-fraud",
+      "count": 11860,
+      "ratePer100k": 415.2467689704926
+    },
+    {
+      "year": 2018,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Drug offenses",
+      "categorySlug": "drug-offenses",
+      "count": 3661,
+      "ratePer100k": 128.1803053289185
+    },
+    {
+      "year": 2018,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Assaults",
+      "categorySlug": "assaults",
+      "count": 3176,
+      "ratePer100k": 111.19930339378453
+    },
+    {
+      "year": 2018,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Robbery",
+      "categorySlug": "robbery",
+      "count": 2721,
+      "ratePer100k": 95.26867271237019
+    },
+    {
+      "year": 2018,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Threats and insults",
+      "categorySlug": "threats-and-insults",
+      "count": 2294,
+      "ratePer100k": 80.3183885344275
+    },
+    {
+      "year": 2018,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Counterfeit, fencing and laundering",
+      "categorySlug": "counterfeit-fencing-and-laundering",
+      "count": 2223,
+      "ratePer100k": 77.83250990062439
+    },
+    {
+      "year": 2018,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Usury and extortion",
+      "categorySlug": "usury-and-extortion",
+      "count": 489,
+      "ratePer100k": 17.121051435629923
+    },
+    {
+      "year": 2018,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Sexual violence",
+      "categorySlug": "sexual-violence",
+      "count": 291,
+      "ratePer100k": 10.188601161080383
+    },
+    {
+      "year": 2018,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Homicide",
+      "categorySlug": "homicide",
+      "count": 118,
+      "ratePer100k": 4.131460264630533
+    },
+    {
+      "year": 2018,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Other sexual offenses",
+      "categorySlug": "other-sexual-offenses",
+      "count": 90,
+      "ratePer100k": 3.1511137611588813
+    },
+    {
+      "year": 2018,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Attempted homicide",
+      "categorySlug": "attempted-homicide",
+      "count": 71,
+      "ratePer100k": 2.4858786338031176
+    },
+    {
+      "year": 2019,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "All recorded offenses",
+      "categorySlug": "all-recorded-offenses",
+      "count": 170849,
+      "ratePer100k": 6021.466645426055
+    },
+    {
+      "year": 2019,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Theft",
+      "categorySlug": "theft",
+      "count": 101594.99999999999,
+      "ratePer100k": 3580.6525285021276
+    },
+    {
+      "year": 2019,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Criminal damage",
+      "categorySlug": "criminal-damage",
+      "count": 15834,
+      "ratePer100k": 558.0594727723086
+    },
+    {
+      "year": 2019,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Cyber fraud",
+      "categorySlug": "cyber-fraud",
+      "count": 12714,
+      "ratePer100k": 448.09701508318375
+    },
+    {
+      "year": 2019,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Drug offenses",
+      "categorySlug": "drug-offenses",
+      "count": 3475,
+      "ratePer100k": 122.47421168900925
+    },
+    {
+      "year": 2019,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Assaults",
+      "categorySlug": "assaults",
+      "count": 3314,
+      "ratePer100k": 116.79986691723069
+    },
+    {
+      "year": 2019,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Threats and insults",
+      "categorySlug": "threats-and-insults",
+      "count": 2488,
+      "ratePer100k": 87.68801113158418
+    },
+    {
+      "year": 2019,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Robbery",
+      "categorySlug": "robbery",
+      "count": 2225,
+      "ratePer100k": 78.41873985843038
+    },
+    {
+      "year": 2019,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Counterfeit, fencing and laundering",
+      "categorySlug": "counterfeit-fencing-and-laundering",
+      "count": 1997.0000000000002,
+      "ratePer100k": 70.38302179653282
+    },
+    {
+      "year": 2019,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Usury and extortion",
+      "categorySlug": "usury-and-extortion",
+      "count": 511,
+      "ratePer100k": 18.009876884340642
+    },
+    {
+      "year": 2019,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Sexual violence",
+      "categorySlug": "sexual-violence",
+      "count": 297,
+      "ratePer100k": 10.46758010694554
+    },
+    {
+      "year": 2019,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Other sexual offenses",
+      "categorySlug": "other-sexual-offenses",
+      "count": 103,
+      "ratePer100k": 3.630170878839699
+    },
+    {
+      "year": 2019,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Homicide",
+      "categorySlug": "homicide",
+      "count": 95,
+      "ratePer100k": 3.3482158591239943
+    },
+    {
+      "year": 2019,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Attempted homicide",
+      "categorySlug": "attempted-homicide",
+      "count": 88,
+      "ratePer100k": 3.101505216872752
+    },
+    {
+      "year": 2020,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "All recorded offenses",
+      "categorySlug": "all-recorded-offenses",
+      "count": 135033,
+      "ratePer100k": 4874.4398471460445
+    },
+    {
+      "year": 2020,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Theft",
+      "categorySlug": "theft",
+      "count": 69547,
+      "ratePer100k": 2510.5171924601095
+    },
+    {
+      "year": 2020,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Criminal damage",
+      "categorySlug": "criminal-damage",
+      "count": 14288,
+      "ratePer100k": 515.7701934787992
+    },
+    {
+      "year": 2020,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Cyber fraud",
+      "categorySlug": "cyber-fraud",
+      "count": 13501,
+      "ratePer100k": 487.3609589975692
+    },
+    {
+      "year": 2020,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Assaults",
+      "categorySlug": "assaults",
+      "count": 2884,
+      "ratePer100k": 104.10702953477441
+    },
+    {
+      "year": 2020,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Drug offenses",
+      "categorySlug": "drug-offenses",
+      "count": 2668,
+      "ratePer100k": 96.30983176101877
+    },
+    {
+      "year": 2020,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Threats and insults",
+      "categorySlug": "threats-and-insults",
+      "count": 2424,
+      "ratePer100k": 87.5018861277022
+    },
+    {
+      "year": 2020,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Robbery",
+      "categorySlug": "robbery",
+      "count": 1854.9999999999998,
+      "ratePer100k": 66.96204569591073
+    },
+    {
+      "year": 2020,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Counterfeit, fencing and laundering",
+      "categorySlug": "counterfeit-fencing-and-laundering",
+      "count": 1019.9999999999999,
+      "ratePer100k": 36.82010059829053
+    },
+    {
+      "year": 2020,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Usury and extortion",
+      "categorySlug": "usury-and-extortion",
+      "count": 488,
+      "ratePer100k": 17.61589126663312
+    },
+    {
+      "year": 2020,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Sexual violence",
+      "categorySlug": "sexual-violence",
+      "count": 227,
+      "ratePer100k": 8.194277290011717
+    },
+    {
+      "year": 2020,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Homicide",
+      "categorySlug": "homicide",
+      "count": 108,
+      "ratePer100k": 3.8985988868778216
+    },
+    {
+      "year": 2020,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Other sexual offenses",
+      "categorySlug": "other-sexual-offenses",
+      "count": 104,
+      "ratePer100k": 3.7542063355119764
+    },
+    {
+      "year": 2020,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Attempted homicide",
+      "categorySlug": "attempted-homicide",
+      "count": 47,
+      "ratePer100k": 1.6966124785486818
+    },
+    {
+      "year": 2021,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "All recorded offenses",
+      "categorySlug": "all-recorded-offenses",
+      "count": 157690,
+      "ratePer100k": 5710.029431872168
+    },
+    {
+      "year": 2021,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Theft",
+      "categorySlug": "theft",
+      "count": 85964,
+      "ratePer100k": 3112.797070717605
+    },
+    {
+      "year": 2021,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Criminal damage",
+      "categorySlug": "criminal-damage",
+      "count": 16316,
+      "ratePer100k": 590.8100717257042
+    },
+    {
+      "year": 2021,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Cyber fraud",
+      "categorySlug": "cyber-fraud",
+      "count": 13746,
+      "ratePer100k": 497.7491570201968
+    },
+    {
+      "year": 2021,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Assaults",
+      "categorySlug": "assaults",
+      "count": 3228,
+      "ratePer100k": 116.88740570792923
+    },
+    {
+      "year": 2021,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Threats and insults",
+      "categorySlug": "threats-and-insults",
+      "count": 2653,
+      "ratePer100k": 96.06638393529623
+    },
+    {
+      "year": 2021,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Drug offenses",
+      "categorySlug": "drug-offenses",
+      "count": 2624,
+      "ratePer100k": 95.01628022850257
+    },
+    {
+      "year": 2021,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Robbery",
+      "categorySlug": "robbery",
+      "count": 2215,
+      "ratePer100k": 80.2061969154471
+    },
+    {
+      "year": 2021,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Counterfeit, fencing and laundering",
+      "categorySlug": "counterfeit-fencing-and-laundering",
+      "count": 1107,
+      "ratePer100k": 40.084993221399515
+    },
+    {
+      "year": 2021,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Usury and extortion",
+      "categorySlug": "usury-and-extortion",
+      "count": 626,
+      "ratePer100k": 22.66775587768392
+    },
+    {
+      "year": 2021,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Sexual violence",
+      "categorySlug": "sexual-violence",
+      "count": 275,
+      "ratePer100k": 9.957879978215779
+    },
+    {
+      "year": 2021,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Homicide",
+      "categorySlug": "homicide",
+      "count": 113,
+      "ratePer100k": 4.091783409230485
+    },
+    {
+      "year": 2021,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Other sexual offenses",
+      "categorySlug": "other-sexual-offenses",
+      "count": 97,
+      "ratePer100k": 3.512415846861566
+    },
+    {
+      "year": 2021,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Attempted homicide",
+      "categorySlug": "attempted-homicide",
+      "count": 60,
+      "ratePer100k": 2.1726283588834425
+    },
+    {
+      "year": 2022,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "All recorded offenses",
+      "categorySlug": "all-recorded-offenses",
+      "count": 182377,
+      "ratePer100k": 6636.454376445768
+    },
+    {
+      "year": 2022,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Theft",
+      "categorySlug": "theft",
+      "count": 107272,
+      "ratePer100k": 3903.484177665442
+    },
+    {
+      "year": 2022,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Criminal damage",
+      "categorySlug": "criminal-damage",
+      "count": 17616,
+      "ratePer100k": 641.0226086374304
+    },
+    {
+      "year": 2022,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Cyber fraud",
+      "categorySlug": "cyber-fraud",
+      "count": 15589,
+      "ratePer100k": 567.2627978002328
+    },
+    {
+      "year": 2022,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Assaults",
+      "categorySlug": "assaults",
+      "count": 3294,
+      "ratePer100k": 119.86424119276201
+    },
+    {
+      "year": 2022,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Drug offenses",
+      "categorySlug": "drug-offenses",
+      "count": 2733,
+      "ratePer100k": 99.45020375829344
+    },
+    {
+      "year": 2022,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Threats and insults",
+      "categorySlug": "threats-and-insults",
+      "count": 2466,
+      "ratePer100k": 89.73443193119341
+    },
+    {
+      "year": 2022,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Robbery",
+      "categorySlug": "robbery",
+      "count": 2058,
+      "ratePer100k": 74.8878592515799
+    },
+    {
+      "year": 2022,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Counterfeit, fencing and laundering",
+      "categorySlug": "counterfeit-fencing-and-laundering",
+      "count": 1133,
+      "ratePer100k": 41.22835011275026
+    },
+    {
+      "year": 2022,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Usury and extortion",
+      "categorySlug": "usury-and-extortion",
+      "count": 1088,
+      "ratePer100k": 39.59086047896936
+    },
+    {
+      "year": 2022,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Sexual violence",
+      "categorySlug": "sexual-violence",
+      "count": 365,
+      "ratePer100k": 13.281860362889537
+    },
+    {
+      "year": 2022,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Other sexual offenses",
+      "categorySlug": "other-sexual-offenses",
+      "count": 123,
+      "ratePer100k": 4.475804999001131
+    },
+    {
+      "year": 2022,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Homicide",
+      "categorySlug": "homicide",
+      "count": 114,
+      "ratePer100k": 4.148307072244951
+    },
+    {
+      "year": 2022,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Attempted homicide",
+      "categorySlug": "attempted-homicide",
+      "count": 76,
+      "ratePer100k": 2.7655380481633007
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "All recorded offenses",
+      "categorySlug": "all-recorded-offenses",
+      "count": 205918,
+      "ratePer100k": 7475.100001125341
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Theft",
+      "categorySlug": "theft",
+      "count": 126498,
+      "ratePer100k": 4592.047319526964
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Cyber fraud",
+      "categorySlug": "cyber-fraud",
+      "count": 18640,
+      "ratePer100k": 676.6570383403897
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Criminal damage",
+      "categorySlug": "criminal-damage",
+      "count": 18071,
+      "ratePer100k": 656.0015740262437
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Assaults",
+      "categorySlug": "assaults",
+      "count": 3308,
+      "ratePer100k": 120.08484349946401
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Drug offenses",
+      "categorySlug": "drug-offenses",
+      "count": 3078,
+      "ratePer100k": 111.73553454998495
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Robbery",
+      "categorySlug": "robbery",
+      "count": 2676,
+      "ratePer100k": 97.1423945600259
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Threats and insults",
+      "categorySlug": "threats-and-insults",
+      "count": 2493,
+      "ratePer100k": 90.49924874370126
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Counterfeit, fencing and laundering",
+      "categorySlug": "counterfeit-fencing-and-laundering",
+      "count": 1266,
+      "ratePer100k": 45.957500565393424
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Usury and extortion",
+      "categorySlug": "usury-and-extortion",
+      "count": 1006,
+      "ratePer100k": 36.519151318156226
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Sexual violence",
+      "categorySlug": "sexual-violence",
+      "count": 349,
+      "ratePer100k": 12.669168797253006
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Homicide",
+      "categorySlug": "homicide",
+      "count": 136,
+      "ratePer100k": 4.936982683170226
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Other sexual offenses",
+      "categorySlug": "other-sexual-offenses",
+      "count": 85,
+      "ratePer100k": 3.085614176981391
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Rome",
+      "districtSlug": "rome",
+      "categoryLabel": "Attempted homicide",
+      "categorySlug": "attempted-homicide",
+      "count": 68,
+      "ratePer100k": 2.468491341585113
+    }
+  ]
+}

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "npm run data:prepare && next dev",
-    "build": "npm run data:prepare && next build",
+    "build": "next build",
     "start": "HOSTNAME=0.0.0.0 node .next/standalone/server.js",
     "lint": "eslint .",
     "data:prepare": "tsx scripts/prepare-data.ts"

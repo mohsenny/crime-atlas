@@ -1,0 +1,603 @@
+{
+  "slug": "valencia",
+  "label": "Valencia",
+  "country": "Spain",
+  "areaLabelSingular": "Area",
+  "areaLabelPlural": "Areas",
+  "chartTitle": "Valencia Crime Overview",
+  "note": "Barcelona uses the official Spanish Interior Ministry fourth-quarter crime balance PDFs. The app uses annual municipal counts from those balance tables; rate-per-100k is not shown because this source path does not bundle a comparable municipal population series in the same extract.",
+  "sources": [
+    {
+      "label": "Spanish Interior Ministry balances and reports archive",
+      "url": "https://www.interior.gob.es/opencms/es/prensa/balances-e-informes/"
+    }
+  ],
+  "years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "districts": [
+    {
+      "label": "Valencia",
+      "value": "valencia"
+    }
+  ],
+  "categories": [
+    {
+      "label": "All recorded offenses",
+      "value": "all-recorded-offenses",
+      "shortLabel": "All offenses",
+      "color": "#7dd3fc",
+      "isDefault": false
+    },
+    {
+      "label": "Conventional crime",
+      "value": "conventional-crime",
+      "shortLabel": "Conventional",
+      "color": "#93c5fd",
+      "isDefault": false
+    },
+    {
+      "label": "Assaults and disorder",
+      "value": "assaults-and-disorder",
+      "shortLabel": "Assaults",
+      "color": "#f97316",
+      "isDefault": false
+    },
+    {
+      "label": "Sexual offenses",
+      "value": "sexual-offenses",
+      "shortLabel": "Sexual offenses",
+      "color": "#ec4899",
+      "isDefault": true
+    },
+    {
+      "label": "Penetrative sexual assault",
+      "value": "penetrative-sexual-assault",
+      "shortLabel": "Penetrative assault",
+      "color": "#f472b6",
+      "isDefault": false
+    },
+    {
+      "label": "Other sexual offenses",
+      "value": "other-sexual-offenses",
+      "shortLabel": "Other sexual",
+      "color": "#a78bfa",
+      "isDefault": false
+    },
+    {
+      "label": "Robbery with violence or intimidation",
+      "value": "robbery-with-violence-or-intimidation",
+      "shortLabel": "Robbery",
+      "color": "#fb923c",
+      "isDefault": true
+    },
+    {
+      "label": "Burglary and forced-entry theft",
+      "value": "burglary-and-forced-entry-theft",
+      "shortLabel": "Burglary",
+      "color": "#ef4444",
+      "isDefault": true
+    },
+    {
+      "label": "Residential burglary",
+      "value": "residential-burglary",
+      "shortLabel": "Res. burglary",
+      "color": "#f87171",
+      "isDefault": false
+    },
+    {
+      "label": "Theft",
+      "value": "theft",
+      "shortLabel": "Theft",
+      "color": "#facc15",
+      "isDefault": true
+    },
+    {
+      "label": "Vehicle theft",
+      "value": "vehicle-theft",
+      "shortLabel": "Vehicle theft",
+      "color": "#4f46e5",
+      "isDefault": true
+    },
+    {
+      "label": "Drug trafficking",
+      "value": "drug-trafficking",
+      "shortLabel": "Drug trafficking",
+      "color": "#22c55e",
+      "isDefault": true
+    },
+    {
+      "label": "Other conventional crime",
+      "value": "other-conventional-crime",
+      "shortLabel": "Other conventional",
+      "color": "#94a3b8",
+      "isDefault": false
+    },
+    {
+      "label": "Cybercrime",
+      "value": "cybercrime",
+      "shortLabel": "Cybercrime",
+      "color": "#38bdf8",
+      "isDefault": false
+    },
+    {
+      "label": "Online fraud",
+      "value": "online-fraud",
+      "shortLabel": "Online fraud",
+      "color": "#67e8f9",
+      "isDefault": true
+    },
+    {
+      "label": "Other cybercrime",
+      "value": "other-cybercrime",
+      "shortLabel": "Other cyber",
+      "color": "#60a5fa",
+      "isDefault": false
+    }
+  ],
+  "defaultCategorySlugs": [
+    "sexual-offenses",
+    "robbery-with-violence-or-intimidation",
+    "burglary-and-forced-entry-theft",
+    "theft",
+    "vehicle-theft",
+    "drug-trafficking",
+    "online-fraud"
+  ],
+  "records": [
+    {
+      "year": 2021,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Penetrative sexual assault",
+      "categorySlug": "penetrative-sexual-assault",
+      "count": 22,
+      "ratePer100k": null
+    },
+    {
+      "year": 2021,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Residential burglary",
+      "categorySlug": "residential-burglary",
+      "count": 715,
+      "ratePer100k": null
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Conventional crime",
+      "categorySlug": "conventional-crime",
+      "count": 54101,
+      "ratePer100k": null
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Assaults and disorder",
+      "categorySlug": "assaults-and-disorder",
+      "count": 590,
+      "ratePer100k": null
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Sexual offenses",
+      "categorySlug": "sexual-offenses",
+      "count": 466,
+      "ratePer100k": null
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Penetrative sexual assault",
+      "categorySlug": "penetrative-sexual-assault",
+      "count": 98,
+      "ratePer100k": null
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Other sexual offenses",
+      "categorySlug": "other-sexual-offenses",
+      "count": 368,
+      "ratePer100k": null
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Robbery with violence or intimidation",
+      "categorySlug": "robbery-with-violence-or-intimidation",
+      "count": 2267,
+      "ratePer100k": null
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Burglary and forced-entry theft",
+      "categorySlug": "burglary-and-forced-entry-theft",
+      "count": 2380,
+      "ratePer100k": null
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Residential burglary",
+      "categorySlug": "residential-burglary",
+      "count": 1626,
+      "ratePer100k": null
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Theft",
+      "categorySlug": "theft",
+      "count": 24234,
+      "ratePer100k": null
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Vehicle theft",
+      "categorySlug": "vehicle-theft",
+      "count": 598,
+      "ratePer100k": null
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Drug trafficking",
+      "categorySlug": "drug-trafficking",
+      "count": 579,
+      "ratePer100k": null
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Other conventional crime",
+      "categorySlug": "other-conventional-crime",
+      "count": 22941,
+      "ratePer100k": null
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Cybercrime",
+      "categorySlug": "cybercrime",
+      "count": 8292,
+      "ratePer100k": null
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Online fraud",
+      "categorySlug": "online-fraud",
+      "count": 7480,
+      "ratePer100k": null
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Other cybercrime",
+      "categorySlug": "other-cybercrime",
+      "count": 812,
+      "ratePer100k": null
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "All recorded offenses",
+      "categorySlug": "all-recorded-offenses",
+      "count": 62393,
+      "ratePer100k": null
+    },
+    {
+      "year": 2024,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Conventional crime",
+      "categorySlug": "conventional-crime",
+      "count": 53961,
+      "ratePer100k": null
+    },
+    {
+      "year": 2024,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Assaults and disorder",
+      "categorySlug": "assaults-and-disorder",
+      "count": 664,
+      "ratePer100k": null
+    },
+    {
+      "year": 2024,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Sexual offenses",
+      "categorySlug": "sexual-offenses",
+      "count": 453,
+      "ratePer100k": null
+    },
+    {
+      "year": 2024,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Penetrative sexual assault",
+      "categorySlug": "penetrative-sexual-assault",
+      "count": 102,
+      "ratePer100k": null
+    },
+    {
+      "year": 2024,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Other sexual offenses",
+      "categorySlug": "other-sexual-offenses",
+      "count": 351,
+      "ratePer100k": null
+    },
+    {
+      "year": 2024,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Robbery with violence or intimidation",
+      "categorySlug": "robbery-with-violence-or-intimidation",
+      "count": 2212,
+      "ratePer100k": null
+    },
+    {
+      "year": 2024,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Burglary and forced-entry theft",
+      "categorySlug": "burglary-and-forced-entry-theft",
+      "count": 2220,
+      "ratePer100k": null
+    },
+    {
+      "year": 2024,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Residential burglary",
+      "categorySlug": "residential-burglary",
+      "count": 1766,
+      "ratePer100k": null
+    },
+    {
+      "year": 2024,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Theft",
+      "categorySlug": "theft",
+      "count": 23755,
+      "ratePer100k": null
+    },
+    {
+      "year": 2024,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Vehicle theft",
+      "categorySlug": "vehicle-theft",
+      "count": 836,
+      "ratePer100k": null
+    },
+    {
+      "year": 2024,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Drug trafficking",
+      "categorySlug": "drug-trafficking",
+      "count": 812,
+      "ratePer100k": null
+    },
+    {
+      "year": 2024,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Other conventional crime",
+      "categorySlug": "other-conventional-crime",
+      "count": 22970,
+      "ratePer100k": null
+    },
+    {
+      "year": 2024,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Cybercrime",
+      "categorySlug": "cybercrime",
+      "count": 8748,
+      "ratePer100k": null
+    },
+    {
+      "year": 2024,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Online fraud",
+      "categorySlug": "online-fraud",
+      "count": 7753,
+      "ratePer100k": null
+    },
+    {
+      "year": 2024,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Other cybercrime",
+      "categorySlug": "other-cybercrime",
+      "count": 995,
+      "ratePer100k": null
+    },
+    {
+      "year": 2024,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "All recorded offenses",
+      "categorySlug": "all-recorded-offenses",
+      "count": 62709,
+      "ratePer100k": null
+    },
+    {
+      "year": 2025,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Conventional crime",
+      "categorySlug": "conventional-crime",
+      "count": 52354,
+      "ratePer100k": null
+    },
+    {
+      "year": 2025,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Assaults and disorder",
+      "categorySlug": "assaults-and-disorder",
+      "count": 681,
+      "ratePer100k": null
+    },
+    {
+      "year": 2025,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Sexual offenses",
+      "categorySlug": "sexual-offenses",
+      "count": 518,
+      "ratePer100k": null
+    },
+    {
+      "year": 2025,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Penetrative sexual assault",
+      "categorySlug": "penetrative-sexual-assault",
+      "count": 124,
+      "ratePer100k": null
+    },
+    {
+      "year": 2025,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Other sexual offenses",
+      "categorySlug": "other-sexual-offenses",
+      "count": 394,
+      "ratePer100k": null
+    },
+    {
+      "year": 2025,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Robbery with violence or intimidation",
+      "categorySlug": "robbery-with-violence-or-intimidation",
+      "count": 2088,
+      "ratePer100k": null
+    },
+    {
+      "year": 2025,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Burglary and forced-entry theft",
+      "categorySlug": "burglary-and-forced-entry-theft",
+      "count": 2038,
+      "ratePer100k": null
+    },
+    {
+      "year": 2025,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Residential burglary",
+      "categorySlug": "residential-burglary",
+      "count": 1584,
+      "ratePer100k": null
+    },
+    {
+      "year": 2025,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Theft",
+      "categorySlug": "theft",
+      "count": 23635,
+      "ratePer100k": null
+    },
+    {
+      "year": 2025,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Vehicle theft",
+      "categorySlug": "vehicle-theft",
+      "count": 700,
+      "ratePer100k": null
+    },
+    {
+      "year": 2025,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Drug trafficking",
+      "categorySlug": "drug-trafficking",
+      "count": 797,
+      "ratePer100k": null
+    },
+    {
+      "year": 2025,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Other conventional crime",
+      "categorySlug": "other-conventional-crime",
+      "count": 21861,
+      "ratePer100k": null
+    },
+    {
+      "year": 2025,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Cybercrime",
+      "categorySlug": "cybercrime",
+      "count": 10130,
+      "ratePer100k": null
+    },
+    {
+      "year": 2025,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Online fraud",
+      "categorySlug": "online-fraud",
+      "count": 9062,
+      "ratePer100k": null
+    },
+    {
+      "year": 2025,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "Other cybercrime",
+      "categorySlug": "other-cybercrime",
+      "count": 1068,
+      "ratePer100k": null
+    },
+    {
+      "year": 2025,
+      "districtLabel": "Valencia",
+      "districtSlug": "valencia",
+      "categoryLabel": "All recorded offenses",
+      "categorySlug": "all-recorded-offenses",
+      "count": 62484,
+      "ratePer100k": null
+    }
+  ]
+}

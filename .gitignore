@@ -20,9 +20,6 @@ tmp_sources/
 /*.xlsm
 /*.xlsb
 
-# Generated app data
-src/generated/
-
 # Suggested future data folders
 raw/
 intermediate/

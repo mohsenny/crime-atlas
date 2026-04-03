@@ -1,0 +1,1200 @@
+{
+  "slug": "frankfurt",
+  "label": "Frankfurt",
+  "country": "Germany",
+  "areaLabelSingular": "Area",
+  "areaLabelPlural": "Areas",
+  "chartTitle": "Frankfurt Crime Overview",
+  "note": "Frankfurt currently uses official citywide open-data crime series from the City of Frankfurt and the Hessisches Landeskriminalamt. These categories are annual city totals rather than district-level atlas slices.",
+  "sources": [
+    {
+      "label": "City of Frankfurt open data: crimes by offense type",
+      "url": "https://offenedaten.frankfurt.de/dcat/dataset/de-he-frankfurtam-straftaten_nach_art_der_straftat.html"
+    },
+    {
+      "label": "City of Frankfurt open data: citywide demographic indicators",
+      "url": "https://offenedaten.frankfurt.de/dcat/dataset/de-he-frankfurtam-demographische_kennzahlen_gesamtstaedtisch.html"
+    }
+  ],
+  "years": [
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+  ],
+  "districts": [
+    {
+      "label": "Frankfurt am Main",
+      "value": "frankfurt-am-main"
+    }
+  ],
+  "categories": [
+    {
+      "label": "All recorded offenses",
+      "value": "all-recorded-offenses",
+      "shortLabel": "All offenses",
+      "color": "#7dd3fc",
+      "isDefault": false
+    },
+    {
+      "label": "Offenses against life",
+      "value": "offenses-against-life",
+      "shortLabel": "Against life",
+      "color": "#fb7185",
+      "isDefault": false
+    },
+    {
+      "label": "Sexual offenses",
+      "value": "sexual-offenses",
+      "shortLabel": "Sexual offenses",
+      "color": "#ec4899",
+      "isDefault": true
+    },
+    {
+      "label": "Violence and personal freedom",
+      "value": "violence-and-personal-freedom",
+      "shortLabel": "Violence & freedom",
+      "color": "#f97316",
+      "isDefault": true
+    },
+    {
+      "label": "Property offenses",
+      "value": "property-offenses",
+      "shortLabel": "Property",
+      "color": "#38bdf8",
+      "isDefault": false
+    },
+    {
+      "label": "Simple theft and related offenses",
+      "value": "simple-theft-and-related-offenses",
+      "shortLabel": "Simple theft",
+      "color": "#0ea5e9",
+      "isDefault": true
+    },
+    {
+      "label": "Aggravated theft and related offenses",
+      "value": "aggravated-theft-and-related-offenses",
+      "shortLabel": "Aggr. theft",
+      "color": "#4f46e5",
+      "isDefault": true
+    },
+    {
+      "label": "Financial and forgery offenses",
+      "value": "financial-and-forgery-offenses",
+      "shortLabel": "Financial & forgery",
+      "color": "#a78bfa",
+      "isDefault": true
+    },
+    {
+      "label": "Other criminal code offenses",
+      "value": "other-criminal-code-offenses",
+      "shortLabel": "Other criminal code",
+      "color": "#f59e0b",
+      "isDefault": false
+    },
+    {
+      "label": "Ancillary criminal-law offenses",
+      "value": "ancillary-criminal-law-offenses",
+      "shortLabel": "Ancillary laws",
+      "color": "#22c55e",
+      "isDefault": false
+    }
+  ],
+  "defaultCategorySlugs": [
+    "sexual-offenses",
+    "violence-and-personal-freedom",
+    "simple-theft-and-related-offenses",
+    "aggravated-theft-and-related-offenses",
+    "financial-and-forgery-offenses"
+  ],
+  "records": [
+    {
+      "year": 2013,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Offenses against life",
+      "categorySlug": "offenses-against-life",
+      "count": 44,
+      "ratePer100k": 6.346074520222343
+    },
+    {
+      "year": 2013,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Sexual offenses",
+      "categorySlug": "sexual-offenses",
+      "count": 508,
+      "ratePer100k": 73.26831491529433
+    },
+    {
+      "year": 2013,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Violence and personal freedom",
+      "categorySlug": "violence-and-personal-freedom",
+      "count": 8903,
+      "ratePer100k": 1284.0704875804438
+    },
+    {
+      "year": 2013,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Property offenses",
+      "categorySlug": "property-offenses",
+      "count": 40702,
+      "ratePer100k": 5870.407389138405
+    },
+    {
+      "year": 2013,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Simple theft and related offenses",
+      "categorySlug": "simple-theft-and-related-offenses",
+      "count": 23251,
+      "ratePer100k": 3353.467697038402
+    },
+    {
+      "year": 2013,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Aggravated theft and related offenses",
+      "categorySlug": "aggravated-theft-and-related-offenses",
+      "count": 17451,
+      "ratePer100k": 2516.9396921000025
+    },
+    {
+      "year": 2013,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Financial and forgery offenses",
+      "categorySlug": "financial-and-forgery-offenses",
+      "count": 24084,
+      "ratePer100k": 3473.6104260235206
+    },
+    {
+      "year": 2013,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Other criminal code offenses",
+      "categorySlug": "other-criminal-code-offenses",
+      "count": 13066,
+      "ratePer100k": 1884.4956745732986
+    },
+    {
+      "year": 2013,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Ancillary criminal-law offenses",
+      "categorySlug": "ancillary-criminal-law-offenses",
+      "count": 24742,
+      "ratePer100k": 3568.5130858941184
+    },
+    {
+      "year": 2013,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "All recorded offenses",
+      "categorySlug": "all-recorded-offenses",
+      "count": 112049,
+      "ratePer100k": 16160.711452645304
+    },
+    {
+      "year": 2014,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Offenses against life",
+      "categorySlug": "offenses-against-life",
+      "count": 31,
+      "ratePer100k": 4.375175536276556
+    },
+    {
+      "year": 2014,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Sexual offenses",
+      "categorySlug": "sexual-offenses",
+      "count": 515,
+      "ratePer100k": 72.68436778007828
+    },
+    {
+      "year": 2014,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Violence and personal freedom",
+      "categorySlug": "violence-and-personal-freedom",
+      "count": 9153,
+      "ratePer100k": 1291.805860759333
+    },
+    {
+      "year": 2014,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Property offenses",
+      "categorySlug": "property-offenses",
+      "count": 43388,
+      "ratePer100k": 6123.552134450556
+    },
+    {
+      "year": 2014,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Simple theft and related offenses",
+      "categorySlug": "simple-theft-and-related-offenses",
+      "count": 25704,
+      "ratePer100k": 3627.726193046858
+    },
+    {
+      "year": 2014,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Aggravated theft and related offenses",
+      "categorySlug": "aggravated-theft-and-related-offenses",
+      "count": 17684,
+      "ratePer100k": 2495.8259414036975
+    },
+    {
+      "year": 2014,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Financial and forgery offenses",
+      "categorySlug": "financial-and-forgery-offenses",
+      "count": 25504,
+      "ratePer100k": 3599.4992541031384
+    },
+    {
+      "year": 2014,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Other criminal code offenses",
+      "categorySlug": "other-criminal-code-offenses",
+      "count": 14201,
+      "ratePer100k": 2004.2537996988185
+    },
+    {
+      "year": 2014,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Ancillary criminal-law offenses",
+      "categorySlug": "ancillary-criminal-law-offenses",
+      "count": 26004,
+      "ratePer100k": 3670.0666014624376
+    },
+    {
+      "year": 2014,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "All recorded offenses",
+      "categorySlug": "all-recorded-offenses",
+      "count": 118796,
+      "ratePer100k": 16766.237193790636
+    },
+    {
+      "year": 2015,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Offenses against life",
+      "categorySlug": "offenses-against-life",
+      "count": 49,
+      "ratePer100k": 6.763415718178129
+    },
+    {
+      "year": 2015,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Sexual offenses",
+      "categorySlug": "sexual-offenses",
+      "count": 436,
+      "ratePer100k": 60.18059700256458
+    },
+    {
+      "year": 2015,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Violence and personal freedom",
+      "categorySlug": "violence-and-personal-freedom",
+      "count": 9115,
+      "ratePer100k": 1258.1333524733398
+    },
+    {
+      "year": 2015,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Property offenses",
+      "categorySlug": "property-offenses",
+      "count": 44002,
+      "ratePer100k": 6073.54731492396
+    },
+    {
+      "year": 2015,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Simple theft and related offenses",
+      "categorySlug": "simple-theft-and-related-offenses",
+      "count": 26062,
+      "ratePer100k": 3597.308988717518
+    },
+    {
+      "year": 2015,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Aggravated theft and related offenses",
+      "categorySlug": "aggravated-theft-and-related-offenses",
+      "count": 17940,
+      "ratePer100k": 2476.2383262064413
+    },
+    {
+      "year": 2015,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Financial and forgery offenses",
+      "categorySlug": "financial-and-forgery-offenses",
+      "count": 24023,
+      "ratePer100k": 3315.868077505984
+    },
+    {
+      "year": 2015,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Other criminal code offenses",
+      "categorySlug": "other-criminal-code-offenses",
+      "count": 12917,
+      "ratePer100k": 1782.9192006470794
+    },
+    {
+      "year": 2015,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Ancillary criminal-law offenses",
+      "categorySlug": "ancillary-criminal-law-offenses",
+      "count": 28215,
+      "ratePer100k": 3894.485193640733
+    },
+    {
+      "year": 2015,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "All recorded offenses",
+      "categorySlug": "all-recorded-offenses",
+      "count": 118766,
+      "ratePer100k": 16393.139411941705
+    },
+    {
+      "year": 2016,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Offenses against life",
+      "categorySlug": "offenses-against-life",
+      "count": 47,
+      "ratePer100k": 6.441674067739
+    },
+    {
+      "year": 2016,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Sexual offenses",
+      "categorySlug": "sexual-offenses",
+      "count": 449,
+      "ratePer100k": 61.53854588116619
+    },
+    {
+      "year": 2016,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Violence and personal freedom",
+      "categorySlug": "violence-and-personal-freedom",
+      "count": 9244,
+      "ratePer100k": 1266.9539379187088
+    },
+    {
+      "year": 2016,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Property offenses",
+      "categorySlug": "property-offenses",
+      "count": 42217,
+      "ratePer100k": 5786.130938675263
+    },
+    {
+      "year": 2016,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Simple theft and related offenses",
+      "categorySlug": "simple-theft-and-related-offenses",
+      "count": 24758,
+      "ratePer100k": 3393.2546078528117
+    },
+    {
+      "year": 2016,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Aggravated theft and related offenses",
+      "categorySlug": "aggravated-theft-and-related-offenses",
+      "count": 17459,
+      "ratePer100k": 2392.876330822451
+    },
+    {
+      "year": 2016,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Financial and forgery offenses",
+      "categorySlug": "financial-and-forgery-offenses",
+      "count": 23271,
+      "ratePer100k": 3189.4510049011546
+    },
+    {
+      "year": 2016,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Other criminal code offenses",
+      "categorySlug": "other-criminal-code-offenses",
+      "count": 12520,
+      "ratePer100k": 1715.952326129623
+    },
+    {
+      "year": 2016,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Ancillary criminal-law offenses",
+      "categorySlug": "ancillary-criminal-law-offenses",
+      "count": 27071,
+      "ratePer100k": 3710.2672061226053
+    },
+    {
+      "year": 2016,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "All recorded offenses",
+      "categorySlug": "all-recorded-offenses",
+      "count": 114819,
+      "ratePer100k": 15736.73563369626
+    },
+    {
+      "year": 2017,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Offenses against life",
+      "categorySlug": "offenses-against-life",
+      "count": 61,
+      "ratePer100k": 8.231085707191944
+    },
+    {
+      "year": 2017,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Sexual offenses",
+      "categorySlug": "sexual-offenses",
+      "count": 548,
+      "ratePer100k": 73.94483553346207
+    },
+    {
+      "year": 2017,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Violence and personal freedom",
+      "categorySlug": "violence-and-personal-freedom",
+      "count": 9479,
+      "ratePer100k": 1279.056744565122
+    },
+    {
+      "year": 2017,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Property offenses",
+      "categorySlug": "property-offenses",
+      "count": 35809,
+      "ratePer100k": 4831.9171817842025
+    },
+    {
+      "year": 2017,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Simple theft and related offenses",
+      "categorySlug": "simple-theft-and-related-offenses",
+      "count": 20912,
+      "ratePer100k": 2821.7781034229174
+    },
+    {
+      "year": 2017,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Aggravated theft and related offenses",
+      "categorySlug": "aggravated-theft-and-related-offenses",
+      "count": 14897,
+      "ratePer100k": 2010.139078361285
+    },
+    {
+      "year": 2017,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Financial and forgery offenses",
+      "categorySlug": "financial-and-forgery-offenses",
+      "count": 21936,
+      "ratePer100k": 2959.9523946387294
+    },
+    {
+      "year": 2017,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Other criminal code offenses",
+      "categorySlug": "other-criminal-code-offenses",
+      "count": 12060,
+      "ratePer100k": 1627.3261250612272
+    },
+    {
+      "year": 2017,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Ancillary criminal-law offenses",
+      "categorySlug": "ancillary-criminal-law-offenses",
+      "count": 29565,
+      "ratePer100k": 3989.3778513627844
+    },
+    {
+      "year": 2017,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "All recorded offenses",
+      "categorySlug": "all-recorded-offenses",
+      "count": 109458,
+      "ratePer100k": 14769.80621865272
+    },
+    {
+      "year": 2018,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Offenses against life",
+      "categorySlug": "offenses-against-life",
+      "count": 58,
+      "ratePer100k": 7.755586696761909
+    },
+    {
+      "year": 2018,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Sexual offenses",
+      "categorySlug": "sexual-offenses",
+      "count": 626,
+      "ratePer100k": 83.70684952022337
+    },
+    {
+      "year": 2018,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Violence and personal freedom",
+      "categorySlug": "violence-and-personal-freedom",
+      "count": 9080,
+      "ratePer100k": 1214.150469079278
+    },
+    {
+      "year": 2018,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Property offenses",
+      "categorySlug": "property-offenses",
+      "count": 33325,
+      "ratePer100k": 4456.119425337769
+    },
+    {
+      "year": 2018,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Simple theft and related offenses",
+      "categorySlug": "simple-theft-and-related-offenses",
+      "count": 19747,
+      "ratePer100k": 2640.5098362234035
+    },
+    {
+      "year": 2018,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Aggravated theft and related offenses",
+      "categorySlug": "aggravated-theft-and-related-offenses",
+      "count": 13578,
+      "ratePer100k": 1815.6095891143657
+    },
+    {
+      "year": 2018,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Financial and forgery offenses",
+      "categorySlug": "financial-and-forgery-offenses",
+      "count": 33594,
+      "ratePer100k": 4492.089301569303
+    },
+    {
+      "year": 2018,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Other criminal code offenses",
+      "categorySlug": "other-criminal-code-offenses",
+      "count": 12310,
+      "ratePer100k": 1646.0564178817087
+    },
+    {
+      "year": 2018,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Ancillary criminal-law offenses",
+      "categorySlug": "ancillary-criminal-law-offenses",
+      "count": 28726,
+      "ratePer100k": 3841.154887089355
+    },
+    {
+      "year": 2018,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "All recorded offenses",
+      "categorySlug": "all-recorded-offenses",
+      "count": 117719,
+      "ratePer100k": 15741.0329371744
+    },
+    {
+      "year": 2019,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Offenses against life",
+      "categorySlug": "offenses-against-life",
+      "count": 78,
+      "ratePer100k": 10.282451019940046
+    },
+    {
+      "year": 2019,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Sexual offenses",
+      "categorySlug": "sexual-offenses",
+      "count": 671,
+      "ratePer100k": 88.45544403050988
+    },
+    {
+      "year": 2019,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Violence and personal freedom",
+      "categorySlug": "violence-and-personal-freedom",
+      "count": 9247,
+      "ratePer100k": 1218.9977510434053
+    },
+    {
+      "year": 2019,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Property offenses",
+      "categorySlug": "property-offenses",
+      "count": 30958,
+      "ratePer100k": 4081.0784445551785
+    },
+    {
+      "year": 2019,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Simple theft and related offenses",
+      "categorySlug": "simple-theft-and-related-offenses",
+      "count": 18301,
+      "ratePer100k": 2412.553027127215
+    },
+    {
+      "year": 2019,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Aggravated theft and related offenses",
+      "categorySlug": "aggravated-theft-and-related-offenses",
+      "count": 12657,
+      "ratePer100k": 1668.5254174279637
+    },
+    {
+      "year": 2019,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Financial and forgery offenses",
+      "categorySlug": "financial-and-forgery-offenses",
+      "count": 31754,
+      "ratePer100k": 4186.012175476618
+    },
+    {
+      "year": 2019,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Other criminal code offenses",
+      "categorySlug": "other-criminal-code-offenses",
+      "count": 12893,
+      "ratePer100k": 1699.6364230780384
+    },
+    {
+      "year": 2019,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Ancillary criminal-law offenses",
+      "categorySlug": "ancillary-criminal-law-offenses",
+      "count": 28820,
+      "ratePer100k": 3799.2338255727195
+    },
+    {
+      "year": 2019,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "All recorded offenses",
+      "categorySlug": "all-recorded-offenses",
+      "count": 114421,
+      "ratePer100k": 15083.69651477641
+    },
+    {
+      "year": 2020,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Offenses against life",
+      "categorySlug": "offenses-against-life",
+      "count": 67,
+      "ratePer100k": 8.829184275618141
+    },
+    {
+      "year": 2020,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Sexual offenses",
+      "categorySlug": "sexual-offenses",
+      "count": 758,
+      "ratePer100k": 99.88838329729182
+    },
+    {
+      "year": 2020,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Violence and personal freedom",
+      "categorySlug": "violence-and-personal-freedom",
+      "count": 9750,
+      "ratePer100k": 1284.8439804071177
+    },
+    {
+      "year": 2020,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Property offenses",
+      "categorySlug": "property-offenses",
+      "count": 29647,
+      "ratePer100k": 3906.848152526135
+    },
+    {
+      "year": 2020,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Simple theft and related offenses",
+      "categorySlug": "simple-theft-and-related-offenses",
+      "count": 17168,
+      "ratePer100k": 2262.37963647481
+    },
+    {
+      "year": 2020,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Aggravated theft and related offenses",
+      "categorySlug": "aggravated-theft-and-related-offenses",
+      "count": 12479,
+      "ratePer100k": 1644.4685160513252
+    },
+    {
+      "year": 2020,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Financial and forgery offenses",
+      "categorySlug": "financial-and-forgery-offenses",
+      "count": 23724,
+      "ratePer100k": 3126.321906787534
+    },
+    {
+      "year": 2020,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Other criminal code offenses",
+      "categorySlug": "other-criminal-code-offenses",
+      "count": 12340,
+      "ratePer100k": 1626.151253151162
+    },
+    {
+      "year": 2020,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Ancillary criminal-law offenses",
+      "categorySlug": "ancillary-criminal-law-offenses",
+      "count": 26611,
+      "ratePer100k": 3506.7675038578263
+    },
+    {
+      "year": 2020,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "All recorded offenses",
+      "categorySlug": "all-recorded-offenses",
+      "count": 102897,
+      "ratePer100k": 13559.650364302686
+    },
+    {
+      "year": 2021,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Offenses against life",
+      "categorySlug": "offenses-against-life",
+      "count": 45,
+      "ratePer100k": 5.9711315692399145
+    },
+    {
+      "year": 2021,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Sexual offenses",
+      "categorySlug": "sexual-offenses",
+      "count": 994,
+      "ratePer100k": 131.89566177387724
+    },
+    {
+      "year": 2021,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Violence and personal freedom",
+      "categorySlug": "violence-and-personal-freedom",
+      "count": 9377,
+      "ratePer100k": 1244.2511272169484
+    },
+    {
+      "year": 2021,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Property offenses",
+      "categorySlug": "property-offenses",
+      "count": 28871,
+      "ratePer100k": 3830.945323011679
+    },
+    {
+      "year": 2021,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Simple theft and related offenses",
+      "categorySlug": "simple-theft-and-related-offenses",
+      "count": 15687,
+      "ratePer100k": 2081.5364650370343
+    },
+    {
+      "year": 2021,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Aggravated theft and related offenses",
+      "categorySlug": "aggravated-theft-and-related-offenses",
+      "count": 13184,
+      "ratePer100k": 1749.4088579746453
+    },
+    {
+      "year": 2021,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Financial and forgery offenses",
+      "categorySlug": "financial-and-forgery-offenses",
+      "count": 21503,
+      "ratePer100k": 2853.272047408131
+    },
+    {
+      "year": 2021,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Other criminal code offenses",
+      "categorySlug": "other-criminal-code-offenses",
+      "count": 12420,
+      "ratePer100k": 1648.0323131102166
+    },
+    {
+      "year": 2021,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Ancillary criminal-law offenses",
+      "categorySlug": "ancillary-criminal-law-offenses",
+      "count": 23239,
+      "ratePer100k": 3083.6250341681416
+    },
+    {
+      "year": 2021,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "All recorded offenses",
+      "categorySlug": "all-recorded-offenses",
+      "count": 96449,
+      "ratePer100k": 12797.992638258234
+    },
+    {
+      "year": 2022,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Offenses against life",
+      "categorySlug": "offenses-against-life",
+      "count": 83,
+      "ratePer100k": 10.812796619112074
+    },
+    {
+      "year": 2022,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Sexual offenses",
+      "categorySlug": "sexual-offenses",
+      "count": 1091,
+      "ratePer100k": 142.12965194519606
+    },
+    {
+      "year": 2022,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Violence and personal freedom",
+      "categorySlug": "violence-and-personal-freedom",
+      "count": 11489,
+      "ratePer100k": 1496.725546469622
+    },
+    {
+      "year": 2022,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Property offenses",
+      "categorySlug": "property-offenses",
+      "count": 34288,
+      "ratePer100k": 4466.8574756158405
+    },
+    {
+      "year": 2022,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Simple theft and related offenses",
+      "categorySlug": "simple-theft-and-related-offenses",
+      "count": 19655,
+      "ratePer100k": 2560.548404200576
+    },
+    {
+      "year": 2022,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Aggravated theft and related offenses",
+      "categorySlug": "aggravated-theft-and-related-offenses",
+      "count": 14633,
+      "ratePer100k": 1906.3090714152647
+    },
+    {
+      "year": 2022,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Financial and forgery offenses",
+      "categorySlug": "financial-and-forgery-offenses",
+      "count": 20971,
+      "ratePer100k": 2731.9898542096303
+    },
+    {
+      "year": 2022,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Other criminal code offenses",
+      "categorySlug": "other-criminal-code-offenses",
+      "count": 12702,
+      "ratePer100k": 1654.7487066983322
+    },
+    {
+      "year": 2022,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Ancillary criminal-law offenses",
+      "categorySlug": "ancillary-criminal-law-offenses",
+      "count": 28423,
+      "ratePer100k": 3702.796606084608
+    },
+    {
+      "year": 2022,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "All recorded offenses",
+      "categorySlug": "all-recorded-offenses",
+      "count": 109047,
+      "ratePer100k": 14206.060637642342
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Offenses against life",
+      "categorySlug": "offenses-against-life",
+      "count": 63,
+      "ratePer100k": 8.180054689508497
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Sexual offenses",
+      "categorySlug": "sexual-offenses",
+      "count": 1156,
+      "ratePer100k": 150.09751144558447
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Violence and personal freedom",
+      "categorySlug": "violence-and-personal-freedom",
+      "count": 12530,
+      "ratePer100k": 1626.9219882466896
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Property offenses",
+      "categorySlug": "property-offenses",
+      "count": 33762,
+      "ratePer100k": 4383.730260748982
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Simple theft and related offenses",
+      "categorySlug": "simple-theft-and-related-offenses",
+      "count": 21076,
+      "ratePer100k": 2736.552898985414
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Aggravated theft and related offenses",
+      "categorySlug": "aggravated-theft-and-related-offenses",
+      "count": 12686,
+      "ratePer100k": 1647.1773617635677
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Financial and forgery offenses",
+      "categorySlug": "financial-and-forgery-offenses",
+      "count": 19283,
+      "ratePer100k": 2503.745945679243
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Other criminal code offenses",
+      "categorySlug": "other-criminal-code-offenses",
+      "count": 13764,
+      "ratePer100k": 1787.1471864507132
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Ancillary criminal-law offenses",
+      "categorySlug": "ancillary-criminal-law-offenses",
+      "count": 34411,
+      "ratePer100k": 4467.997808264712
+    },
+    {
+      "year": 2023,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "All recorded offenses",
+      "categorySlug": "all-recorded-offenses",
+      "count": 114969,
+      "ratePer100k": 14927.82075552543
+    },
+    {
+      "year": 2024,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Offenses against life",
+      "categorySlug": "offenses-against-life",
+      "count": 120,
+      "ratePer100k": 15.447136680127128
+    },
+    {
+      "year": 2024,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Sexual offenses",
+      "categorySlug": "sexual-offenses",
+      "count": 1623,
+      "ratePer100k": 208.92252359871944
+    },
+    {
+      "year": 2024,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Violence and personal freedom",
+      "categorySlug": "violence-and-personal-freedom",
+      "count": 14258,
+      "ratePer100k": 1835.377289877105
+    },
+    {
+      "year": 2024,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Property offenses",
+      "categorySlug": "property-offenses",
+      "count": 33555,
+      "ratePer100k": 4319.405594180549
+    },
+    {
+      "year": 2024,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Simple theft and related offenses",
+      "categorySlug": "simple-theft-and-related-offenses",
+      "count": 21187,
+      "ratePer100k": 2727.320707015446
+    },
+    {
+      "year": 2024,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Aggravated theft and related offenses",
+      "categorySlug": "aggravated-theft-and-related-offenses",
+      "count": 12368,
+      "ratePer100k": 1592.0848871651026
+    },
+    {
+      "year": 2024,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Financial and forgery offenses",
+      "categorySlug": "financial-and-forgery-offenses",
+      "count": 19609,
+      "ratePer100k": 2524.190859671774
+    },
+    {
+      "year": 2024,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Other criminal code offenses",
+      "categorySlug": "other-criminal-code-offenses",
+      "count": 14119,
+      "ratePer100k": 1817.484356555958
+    },
+    {
+      "year": 2024,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "Ancillary criminal-law offenses",
+      "categorySlug": "ancillary-criminal-law-offenses",
+      "count": 29983,
+      "ratePer100k": 3859.5958256687645
+    },
+    {
+      "year": 2024,
+      "districtLabel": "Frankfurt am Main",
+      "districtSlug": "frankfurt-am-main",
+      "categoryLabel": "All recorded offenses",
+      "categorySlug": "all-recorded-offenses",
+      "count": 113267,
+      "ratePer100k": 14580.423586232997
+    }
+  ]
+}
