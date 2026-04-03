@@ -73,6 +73,21 @@ Missing older-category detail is better than fake continuity.
 - Area breakdown in app: no
 - Important caveat: this is a citywide source with broad offense groups only; richer official detail may exist in other official Hessen / police statistical releases
 
+### Hamburg
+- Official source family: Polizei Hamburg PKS yearbooks
+- Current app coverage: `2019–2024`
+- Area breakdown in app: no
+- Important caveat: the current Hamburg slice is a stable citywide subset taken from the official yearbook comparison tables
+- Build caveat: direct automated PDF downloads from `polizei.hamburg` can fail in some environments; the repo therefore stores a committed official-source extract in `src/data/hamburg-citywide-records.json`
+
+### Munich
+- Official source family identified: Landeshauptstadt München safety/crime statistics archive
+- App status: not shipped yet
+- Why not shipped yet: the official PDF host currently returns anti-bot / proxy blocks for some years in this environment, so a reproducible end-to-end generator path is not ready
+- Verified source path: `https://stadt.muenchen.de/infos/statistik-sicherheit.html`
+- Verified archive shape: annual `Jahreszahlen` PDFs from `2001–2024`, plus a dedicated `Erfasste und aufgeklärte Straftaten 2024` PDF
+- Important caveat: some early PDFs are structurally inconsistent for fine category extraction; do not assume a clean `2001–2024` category series without validating each year
+
 ### Paris
 - Official source family currently wired: French Interior / SSMSI communal base
 - Current app coverage: `2016–2025`
@@ -122,6 +137,22 @@ Official source paths already verified for Spain:
 - 2015 year-end PDF attachment: `https://www.interior.gob.es/opencms/pdf/informe-balance-2015_ene_dic_5607112.pdf`
 - grouped annual ZIPs already used in the importer for `2016–2020`
 
+### Lisbon
+- Official source family identified: Statistics Portugal (INE) / Direção-Geral da Política de Justiça municipality indicator JSON
+- App status: not shipped yet
+- Verified official count endpoint: `https://www.ine.pt/ine/json_indicador/pindica.jsp?op=2&varcd=0012261&lang=PT`
+- Verified official rate endpoint: `https://www.ine.pt/ine/json_indicador/pindica.jsp?op=2&varcd=0008074&lang=PT`
+- Important caveat: the currently verified clean municipality count feed is only clearly exposed for `2025`, while the verified rate endpoint is only clearly exposed for `2022`; do not claim a continuous comparable Lisbon series until more years are validated
+
+### Lampedusa fallback
+- Best official fallback candidate found so far: Palermo
+- Why Palermo: it is the strongest nearby major-city official-publication path identified so far for Sicilian municipal safety/crime statistics
+- Current status: not shipped yet
+- Important caveat: Palermo’s official open-data portal is verified, but the clean crime time-series layer still needs one more pass; current easily verified Palermo municipal open data is stronger on mobility/safety incidents than on a ready-made annual crime-category series
+- Palermo official portals already verified:
+  - `https://opendata.comune.palermo.it/`
+  - `https://docs.comune.palermo.it/`
+
 ## Validation checklist for future data work
 Every data extension should verify:
 
@@ -138,6 +169,9 @@ Every data extension should verify:
 - no negative counts
 - expected years present
 - spot-check at least a few rows against the official source
+
+6. Reproducibility
+- if an official host is anti-bot or environment-sensitive, prefer checking in a compact official-source extract over leaving a flaky live-download dependency in `data:prepare`
 
 5. Production compatibility
 - after any source refresh, run:

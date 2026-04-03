@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import type { LocationOverview } from "@/lib/dashboard-data";
 
@@ -16,16 +16,7 @@ type OverviewPageClientProps = {
 
 export function OverviewPageClient({ locations }: OverviewPageClientProps) {
   const [selectedCountry, setSelectedCountry] = useState("all");
-  const [viewPreference, setViewPreference] = useState<"auto" | "card" | "list">("auto");
-  const [isMobileViewport, setIsMobileViewport] = useState(false);
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(max-width: 767px)");
-    const sync = () => setIsMobileViewport(mediaQuery.matches);
-    sync();
-    mediaQuery.addEventListener("change", sync);
-    return () => mediaQuery.removeEventListener("change", sync);
-  }, []);
+  const [viewPreference, setViewPreference] = useState<"card" | "list">("card");
 
   const countryOptions = useMemo(
     () => [
@@ -41,32 +32,33 @@ export function OverviewPageClient({ locations }: OverviewPageClientProps) {
     () => locations.filter((location) => selectedCountry === "all" || location.country === selectedCountry),
     [locations, selectedCountry],
   );
-  const effectiveView = viewPreference === "auto" ? (isMobileViewport ? "list" : "card") : viewPreference;
 
   return (
-    <main className="min-h-screen px-4 py-8 sm:px-6 lg:px-8">
+    <main className="min-h-screen px-4 py-7 sm:px-6 sm:py-8 lg:px-8">
       <div className="mx-auto max-w-[83rem]">
-        <div className="mb-8 flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
-          <div className="max-w-3xl space-y-3">
+        <div className="mb-8 flex flex-col gap-4 md:gap-5 xl:flex-row xl:items-start xl:justify-between">
+          <div className="space-y-3 xl:flex-1">
             <h1 className="masthead-title text-5xl leading-[0.94] tracking-[0.01em] text-stone-50 sm:text-6xl md:text-[4.35rem]">
               Crime Atlas
             </h1>
-            <p className="max-w-2xl text-sm leading-6 text-slate-300/85 sm:text-base">
-              Official dashboards built from police-recorded crime data published by public authorities for{" "}
-              <span className="whitespace-nowrap">each location.</span>
+            <p className="text-sm leading-6 text-slate-300/85 sm:text-base xl:whitespace-nowrap">
+              Official dashboards built from police-recorded crime data published by public authorities for each location.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center justify-end gap-3">
-            <OverviewViewToggle
-              onChange={(value) => setViewPreference(value)}
-              value={effectiveView}
-            />
+          <div className="flex items-center gap-2 sm:gap-3 xl:shrink-0">
+            <div className="hidden md:flex md:flex-none">
+              <OverviewViewToggle
+                onChange={(value) => setViewPreference(value)}
+                value={viewPreference}
+              />
+            </div>
             <SingleSelectDropdown
+              fullWidth
               label="Country"
               maxOverlayWidth={320}
               maxWidth={320}
-              minWidth={260}
+              minWidth={160}
               onChange={setSelectedCountry}
               options={countryOptions}
               value={selectedCountry}
@@ -76,8 +68,8 @@ export function OverviewPageClient({ locations }: OverviewPageClientProps) {
 
         <div
           className={cn(
-            "flex flex-wrap justify-center gap-2 md:gap-2",
-            viewPreference === "list" ? "hidden" : viewPreference === "auto" ? "hidden md:flex" : "flex",
+            "hidden flex-wrap justify-center gap-2 md:gap-2 md:flex",
+            viewPreference === "list" ? "md:hidden" : null,
           )}
         >
           {filteredLocations.map((location) => (
@@ -87,8 +79,8 @@ export function OverviewPageClient({ locations }: OverviewPageClientProps) {
 
         <div
           className={cn(
-            "mx-auto max-w-4xl",
-            viewPreference === "card" ? "hidden" : viewPreference === "auto" ? "block md:hidden" : "block",
+            "mx-auto block max-w-4xl md:hidden",
+            viewPreference === "list" ? "md:block" : null,
           )}
         >
           <OverviewLocationList locations={filteredLocations} />

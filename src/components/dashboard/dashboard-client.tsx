@@ -24,6 +24,7 @@ export function DashboardClient({
   backHref = "/",
   backLabel = "All locations",
 }: DashboardClientProps) {
+  const [isMobileViewport, setIsMobileViewport] = useState(false);
   const [selectedDistricts, setSelectedDistricts] = useState(meta.defaultDistrictSlugs);
   const [metric, setMetric] = useState<"count" | "rate">("count");
   const [hiddenCategorySlugs, setHiddenCategorySlugs] = useState<string[]>(
@@ -43,6 +44,14 @@ export function DashboardClient({
   const isRefreshing = isLoading && hasLoadedOnce;
   const effectiveFocusedDistrictSlug =
     focusedDistrictSlug && selectedDistricts.includes(focusedDistrictSlug) ? focusedDistrictSlug : null;
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 767px)");
+    const sync = () => setIsMobileViewport(mediaQuery.matches);
+    sync();
+    mediaQuery.addEventListener("change", sync);
+    return () => mediaQuery.removeEventListener("change", sync);
+  }, []);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -96,71 +105,88 @@ export function DashboardClient({
 
   if (!data) {
     return (
-      <main className="relative min-h-screen overflow-hidden px-4 py-6 sm:px-6 lg:px-8">
+      <main className="relative min-h-screen overflow-hidden py-5 sm:px-6 sm:py-6 lg:px-8">
         <div className="mx-auto max-w-7xl space-y-4">
-          <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="px-4 sm:px-0">
             <Link
               className="inline-flex items-center gap-2 text-sm font-medium text-slate-400 transition hover:text-slate-100"
               href={backHref as Route}
             >
               <ArrowLeft className="h-4 w-4" />
-              {backLabel}
+              <span className="hidden sm:inline">{backLabel}</span>
+              <span className="sr-only sm:hidden">{backLabel}</span>
             </Link>
           </div>
-          <div className="card-panel chart-panel rounded-none p-6 text-sm text-rose-200">
+          <div className="card-panel chart-panel rounded-none p-6 text-sm text-rose-200 sm:p-6">
             {error ?? "The dashboard data could not be loaded."}
           </div>
-          <DashboardSources sources={meta.sources} />
+          <div className="px-4 sm:px-0">
+            <DashboardSources sources={meta.sources} />
+          </div>
         </div>
       </main>
     );
   }
 
   return (
-    <main className="relative min-h-screen overflow-hidden px-4 py-6 sm:px-6 lg:px-8">
+    <main className="relative min-h-screen overflow-hidden py-5 sm:px-6 sm:py-6 lg:px-8">
       <div className="mx-auto max-w-7xl space-y-4">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <Link
-            className="inline-flex items-center gap-2 text-sm font-medium text-slate-400 transition hover:text-slate-100"
-            href={backHref as Route}
-          >
-            <ArrowLeft className="h-4 w-4" />
-            {backLabel}
-          </Link>
+        <div className="space-y-3 px-4 sm:px-0">
+          <div className="flex items-center justify-between gap-2 sm:flex-wrap sm:gap-3">
+            <Link
+              className="inline-flex h-10 items-center gap-2 text-sm font-medium text-slate-400 transition hover:text-slate-100"
+              href={backHref as Route}
+            >
+              <ArrowLeft className="h-4 w-4" />
+              <span className="hidden sm:inline">{backLabel}</span>
+              <span className="sr-only sm:hidden">{backLabel}</span>
+            </Link>
 
-          <div className="flex flex-wrap items-center justify-end gap-3">
-            {meta.supportsRate ? <MetricToggle value={metric} onChange={setMetric} /> : null}
-            {meta.districts.length > 1 ? (
-              <ExpandableDropdown
-                label={meta.areaLabelPlural}
-                onChange={setSelectedDistricts}
-                options={meta.districts}
-                values={selectedDistricts}
-              />
-            ) : null}
-            {meta.districts.length > 1 ? (
-              <button
-                className="inline-flex h-12 items-center gap-1.5 px-1 text-sm font-semibold leading-none tracking-[-0.01em] text-slate-400 transition hover:text-slate-100"
-                onClick={() => {
-                  setSelectedDistricts(meta.defaultDistrictSlugs);
-                  setHiddenCategorySlugs(
-                    meta.categories
-                      .filter((category) => !meta.defaultCategorySlugs.includes(category.value))
-                      .map((category) => category.value),
-                  );
-                  setFocusedDistrictSlug(null);
-                  setMetric("count");
-                }}
-                type="button"
-              >
-                <RefreshCw className="size-4" strokeWidth={2.1} />
-                Reset
-              </button>
-            ) : null}
+            <div className="flex items-center justify-end gap-2 sm:gap-3">
+              {meta.supportsRate ? <MetricToggle value={metric} onChange={setMetric} /> : null}
+              {meta.districts.length > 1 && !isMobileViewport ? (
+                <ExpandableDropdown
+                  label={meta.areaLabelPlural}
+                  onChange={setSelectedDistricts}
+                  options={meta.districts}
+                  values={selectedDistricts}
+                />
+              ) : null}
+              {meta.districts.length > 1 ? (
+                <button
+                  aria-label="Reset dashboard filters"
+                  className="inline-flex h-10 items-center gap-1.5 px-1 text-sm font-semibold leading-none tracking-[-0.01em] text-slate-400 transition hover:text-slate-100"
+                  onClick={() => {
+                    setSelectedDistricts(meta.defaultDistrictSlugs);
+                    setHiddenCategorySlugs(
+                      meta.categories
+                        .filter((category) => !meta.defaultCategorySlugs.includes(category.value))
+                        .map((category) => category.value),
+                    );
+                    setFocusedDistrictSlug(null);
+                    setMetric("count");
+                  }}
+                  type="button"
+                >
+                  <RefreshCw className="size-4" strokeWidth={2.1} />
+                  <span className="hidden sm:inline">Reset</span>
+                </button>
+              ) : null}
+            </div>
           </div>
+
+          {meta.districts.length > 1 && isMobileViewport ? (
+            <ExpandableDropdown
+              fullWidth
+              label={meta.areaLabelPlural}
+              onChange={setSelectedDistricts}
+              options={meta.districts}
+              values={selectedDistricts}
+            />
+          ) : null}
         </div>
 
-        {error ? <div className="text-right text-sm text-rose-300">{error}</div> : null}
+        {error ? <div className="px-4 text-right text-sm text-rose-300 sm:px-0">{error}</div> : null}
 
         <div className="relative">
           {isRefreshing ? (
@@ -183,7 +209,9 @@ export function DashboardClient({
           </div>
         </div>
 
-        <DashboardSources sources={meta.sources} />
+        <div className="px-4 sm:px-0">
+          <DashboardSources sources={meta.sources} />
+        </div>
       </div>
     </main>
   );

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-03T14:15:57.854Z",
+  "generatedAt": "2026-04-03T16:35:10.457Z",
   "locations": [
     {
       "slug": "barcelona",
@@ -120,6 +120,36 @@
       "districtCount": 1,
       "categoryCount": 10,
       "supportsRate": true
+    },
+    {
+      "slug": "hamburg",
+      "label": "Hamburg",
+      "country": "Germany",
+      "areaLabelSingular": "Area",
+      "areaLabelPlural": "Areas",
+      "chartTitle": "Hamburg Crime Overview",
+      "note": "Hamburg uses official Polizeiliche Kriminalstatistik yearbooks published by the Hamburg police. The app currently shows a stable citywide subset of annual recorded-crime counts from the official PKS comparison tables.",
+      "sources": [
+        {
+          "label": "Polizei Hamburg: Polizeiliche Kriminalstatistik service page",
+          "url": "https://www.polizei.hamburg/services/polizeiliche-kriminalstatistik"
+        },
+        {
+          "label": "Polizei Hamburg PKS yearbook 2024",
+          "url": "https://www.polizei.hamburg/resource/blob/1053710/30efad000cc60586a22280031dad1ea0/pks-2024-jahrbuch-do-data.pdf"
+        }
+      ],
+      "years": [
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024
+      ],
+      "districtCount": 1,
+      "categoryCount": 14,
+      "supportsRate": false
     },
     {
       "slug": "london",

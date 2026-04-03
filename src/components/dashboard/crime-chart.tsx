@@ -58,12 +58,14 @@ export function CrimeChart({
   const [canScrollRight, setCanScrollRight] = useState(false);
   const [focusLinePoints, setFocusLinePoints] = useState<Point[]>([]);
   const [viewportWidth, setViewportWidth] = useState(0);
+  const [hasCoarsePointer, setHasCoarsePointer] = useState(false);
 
   const visibleCategories = useMemo(
     () => data.categories.filter((category) => !hiddenCategorySlugs.includes(category.value)),
     [data.categories, hiddenCategorySlugs],
   );
   const isMobileViewport = viewportWidth > 0 && viewportWidth < 640;
+  const disableInteractiveTooltip = isMobileViewport || hasCoarsePointer;
   const chartHeight = isMobileViewport ? MOBILE_CHART_HEIGHT : DESKTOP_CHART_HEIGHT;
   const axisWidth = isMobileViewport ? MOBILE_AXIS_WIDTH : DESKTOP_AXIS_WIDTH;
   const groupWidth = Math.max(
@@ -116,6 +118,14 @@ export function CrimeChart({
   useEffect(() => {
     const id = window.requestAnimationFrame(() => setMounted(true));
     return () => window.cancelAnimationFrame(id);
+  }, []);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(hover: none), (pointer: coarse)");
+    const sync = () => setHasCoarsePointer(mediaQuery.matches);
+    sync();
+    mediaQuery.addEventListener("change", sync);
+    return () => mediaQuery.removeEventListener("change", sync);
   }, []);
 
   useEffect(() => {
@@ -261,8 +271,8 @@ export function CrimeChart({
   }
 
   return (
-    <div className="card-panel chart-panel flex min-h-[29rem] flex-col rounded-none p-4 sm:min-h-[34rem] sm:p-5">
-      <div className="flex flex-wrap items-start justify-between gap-3">
+    <div className="card-panel chart-panel flex min-h-[26rem] flex-col rounded-none p-0 sm:min-h-[34rem] sm:p-5">
+      <div className="flex flex-wrap items-start justify-between gap-3 px-4 pt-4 sm:px-0 sm:pt-0">
         <p className="text-sm font-semibold text-slate-200">{title}</p>
         <div className="flex flex-wrap justify-end gap-1.5">
           {data.categories.map((category) => {
@@ -347,7 +357,7 @@ export function CrimeChart({
                     tickMargin={12}
                   />
                   <YAxis domain={[0, yAxisMax]} hide ticks={axisTicks} type="number" />
-                  {!isMobileViewport ? (
+                  {!disableInteractiveTooltip ? (
                     <Tooltip
                       content={
                         <ChartTooltip
@@ -394,7 +404,7 @@ export function CrimeChart({
         </div>
       </div>
 
-      <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mt-4 flex flex-col gap-3 px-4 pb-4 sm:flex-row sm:items-center sm:justify-between sm:px-0 sm:pb-0">
         <div className="flex gap-2 overflow-x-auto pb-1 text-xs text-slate-400 sm:flex-wrap sm:overflow-visible sm:pb-0">
           {data.districts.map((district, index) => (
             <button

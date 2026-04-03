@@ -14,9 +14,11 @@ import {
   BARCELONA_LOCATION,
   BERLIN_LOCATION,
   FRANKFURT_LOCATION,
+  HAMBURG_LOCATION,
   LONDON_LOCATION,
   LUTON_LOCATION,
   MILAN_LOCATION,
+  MUNICH_LOCATION,
   PARIS_LOCATION,
   ROME_LOCATION,
   VALENCIA_LOCATION,
@@ -120,6 +122,17 @@ const SOURCE_URLS = {
     "https://dati.comune.milano.it/dataset/34e2d2af-5c3b-4768-918b-ab7e5c0d15da/resource/8b03b9f2-f2d7-4408-b439-bc6efc093cff/download/ds564_reati_denunciati_2004_2023.csv",
   milanPopulationCsv:
     "https://dati.comune.milano.it/dataset/2ba2e01c-51db-48c6-a330-776bb4c5a023/resource/772962a9-9e2f-49d6-8e8b-21a2e1d86cdf/download/ds73_pop_calc_res_sesso-1936-2023.csv",
+  munichStatisticsPage: "https://stadt.muenchen.de/infos/statistik-sicherheit.html",
+  hamburgYearbook2024:
+    "https://www.polizei.hamburg/resource/blob/1053710/30efad000cc60586a22280031dad1ea0/pks-2024-jahrbuch-do-data.pdf",
+  hamburgYearbook2023:
+    "https://www.polizei.hamburg/resource/blob/866922/0958bd62e8c4465d0012ff10cf1f6524/pks-2023-jahrbuch-do-data.pdf",
+  hamburgYearbook2022:
+    "https://www.polizei.hamburg/resource/blob/790456/7c860a879315fd0d5315d0e671ec2d50/pks-2022-jahrbuch-do-data.pdf",
+  hamburgYearbook2021:
+    "https://www.polizei.hamburg/resource/blob/790450/ae1d0bf1779164b2bad863d97e21de2f/pks-2021-jahrbuch-do-data.pdf",
+  hamburgYearbook2020:
+    "https://www.polizei.hamburg/resource/blob/928876/9d2537bc7196fd5fc36986daf9c55e45/pks-2020-jahrbuch-do-data.pdf",
   spanishBalance2025:
     "https://www.interior.gob.es/opencms/export/sites/default/.galleries/galeria-de-prensa/documentos-y-multimedia/balances-e-informes/2025/Balance-de-Criminalidad_Cuarto_Trimestre_2025.pdf",
   spanishBalance2024:
@@ -726,6 +739,458 @@ async function buildSpainLocation(
     note: definition.note,
     sources: definition.sources,
     years: [...years].sort((left, right) => left - right),
+    districts: [{ label: districtLabel, value: districtSlug }],
+    categories,
+    defaultCategorySlugs: categories.filter((category) => category.isDefault).map((category) => category.value),
+    records: [...recordsByKey.values()].sort((left, right) => left.year - right.year),
+  };
+}
+
+async function parseMunichResourceLinks() {
+  await fs.mkdir(path.join(TMP_DIR, "munich"), { recursive: true });
+  const pagePath = path.join(TMP_DIR, "munich", "statistics_page.html");
+  await ensureFile(pagePath, SOURCE_URLS.munichStatisticsPage);
+  const html = await fs.readFile(pagePath, "utf8");
+
+  const yearbookByYear = new Map<number, string>();
+  const countPdfByYear = new Map<number, string>();
+
+  for (const match of html.matchAll(/<a href="([^"]+\.pdf)"[^>]*>([^<]+)/gi)) {
+    const href = match[1];
+    const label = match[2]?.trim() ?? "";
+    const absoluteUrl = new URL(href, SOURCE_URLS.munichStatisticsPage).toString();
+
+    if (label.startsWith("Jahreszahlen ")) {
+      const year = Number(label.match(/\d{4}/)?.[0] ?? 0);
+      if (year > 0) {
+        yearbookByYear.set(year, absoluteUrl);
+      }
+    }
+
+    if (label.startsWith("Erfasste und aufgeklärte Straftaten ")) {
+      const year = Number(label.match(/\d{4}/)?.[0] ?? 0);
+      if (year > 0) {
+        countPdfByYear.set(year, absoluteUrl);
+      }
+    }
+  }
+
+  return { yearbookByYear, countPdfByYear };
+}
+
+function flattenPdfText(text: string) {
+  return text
+    .replace(/\u00ad/g, "")
+    .replace(/\r/g, "")
+    .replace(/[ \t]+/g, " ")
+    .replace(/\n+/g, " ")
+    .trim();
+}
+
+function extractSingleCount(flattenedText: string, pattern: RegExp, context: string) {
+  const match = flattenedText.match(pattern);
+  if (!match) {
+    throw new Error(`Could not parse ${context}`);
+  }
+  return parseCountLike(match[1]);
+}
+
+function extractSingleCountFromPatterns(flattenedText: string, patterns: RegExp[], context: string) {
+  for (const pattern of patterns) {
+    const match = flattenedText.match(pattern);
+    if (match) {
+      return parseCountLike(match[1]);
+    }
+  }
+
+  throw new Error(`Could not parse ${context}`);
+}
+
+function extractYearPair(flattenedText: string, pattern: RegExp, context: string) {
+  const match = flattenedText.match(pattern);
+  if (!match) {
+    throw new Error(`Could not parse ${context}`);
+  }
+
+  return {
+    previous: parseCountLike(match[1]),
+    current: parseCountLike(match[2]),
+  };
+}
+
+function extractLeadingYearPairAfterLabel(flattenedText: string, patterns: RegExp[], context: string) {
+  for (const pattern of patterns) {
+    const match = flattenedText.match(pattern);
+    if (match) {
+      return {
+        previous: parseCountLike(match[1]),
+        current: parseCountLike(match[2]),
+      };
+    }
+  }
+
+  throw new Error(`Could not parse ${context}`);
+}
+
+function parseMunichCounts(text: string) {
+  const flat = flattenPdfText(text);
+  const rapeCount = extractSingleCountFromPatterns(
+    flat,
+    [
+      /Vergewaltigung[^0-9]{0,120}\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i,
+      /Vergewaltigung\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i,
+    ],
+    "Munich rape",
+  );
+  const otherSexualCount =
+    flat.match(/Straftaten gegen die sexuelle Selbstbestimmung\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i)
+      ? null
+      : extractSingleCount(
+          flat,
+          /Sonstige Straftaten gegen die sexuelle Selbstbestimmung\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i,
+          "Munich other sexual offenses",
+        ) +
+        extractSingleCount(
+          flat,
+          /F[oö]rderung sexueller Handlungen Minder[\w\s.-]*\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i,
+          "Munich sexual offenses involving minors/prostitution",
+        );
+  const sexualTotal =
+    flat.match(/Straftaten gegen die sexuelle Selbstbestimmung\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i)
+      ? extractSingleCount(
+          flat,
+          /Straftaten gegen die sexuelle Selbstbestimmung\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i,
+          "Munich sexual offenses",
+        )
+      : rapeCount + (otherSexualCount ?? 0);
+  const vehicleTheft =
+    flat.match(/Diebstahl von Kraft(?:wagen|fahrzeugen?)[\w\s\)\(]*\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i)
+      ? extractSingleCount(
+          flat,
+          /Diebstahl von Kraft(?:wagen|fahrzeugen?)[\w\s\)\(]*\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i,
+          "Munich vehicle theft",
+        )
+      : extractSingleCountFromPatterns(
+          flat,
+          [
+            /Kraftfahrzeugdiebstahl\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i,
+            /Diebstahl von Kraft(?:wagen|fahrzeugen?)[\w\s\)\(]*\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i,
+          ],
+          "Munich vehicle theft",
+        );
+  const bicycleTheft =
+    flat.match(/Diebstahl von Fahrr[aä‰]dern[\w\s\)\(]*\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i)
+      ? extractSingleCount(
+          flat,
+          /Diebstahl von Fahrr[aä‰]dern[\w\s\)\(]*\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i,
+          "Munich bicycle theft",
+        )
+      : extractSingleCountFromPatterns(
+          flat,
+          [
+            /Fahrraddiebstahl\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i,
+            /Fahrrad[\wÀ-ÿ‰-]*\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i,
+            /Diebstahl von Fahrr[aä‰]dern[\w\s\)\(]*\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i,
+          ],
+          "Munich bicycle theft",
+        );
+  const theftTotal =
+    flat.match(/Diebstahl insgesamt\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i)
+      ? extractSingleCount(flat, /Diebstahl insgesamt\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i, "Munich theft")
+      : vehicleTheft +
+        bicycleTheft +
+        extractSingleCountFromPatterns(
+          flat,
+          [/Sonstige Diebst[aä‰]hle\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i],
+          "Munich other theft",
+        );
+  const fraudAndEmbezzlement =
+    flat.match(/Betrug und Veruntreuung\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i)
+      ? extractSingleCount(
+          flat,
+          /Betrug und Veruntreuung\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i,
+          "Munich fraud and embezzlement",
+        )
+      : extractSingleCount(flat, /Betrug\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i, "Munich fraud") +
+        extractSingleCount(flat, /Veruntreuung\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i, "Munich embezzlement");
+  const drugOffenses =
+    flat.match(/Rauschgiftdelikte nach dem BtMG\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i)
+      ? extractSingleCount(
+          flat,
+          /Rauschgiftdelikte nach dem BtMG\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i,
+          "Munich drug offenses",
+        )
+      : extractSingleCount(flat, /Rauschgiftdelikte\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i, "Munich drug offenses");
+
+  return new Map<string, number>([
+    [
+      "Straftaten insgesamt",
+      extractSingleCount(flat, /Straftaten insgesamt\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i, "Munich total offenses"),
+    ],
+    ["Straftaten gegen die sexuelle Selbstbestimmung", sexualTotal],
+    ["Vergewaltigung", rapeCount],
+    [
+      "Raub, räuberische Erpressung und räuberischer Angriff auf Kraftfahrer*innen",
+      extractSingleCount(
+        flat,
+        /Raub,?\s*r[aä‰]uberische Erpressung[^0-9]{0,120}\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i,
+        "Munich robbery",
+      ),
+    ],
+    ["Diebstahl insgesamt", theftTotal],
+    ["Diebstahl von Kraftwagen", vehicleTheft],
+    ["Diebstahl von Fahrrädern", bicycleTheft],
+    ["Betrug und Veruntreuung", fraudAndEmbezzlement],
+    ["Rauschgiftdelikte", drugOffenses],
+  ]);
+}
+
+async function buildMunichLocation(): Promise<LocationPayload> {
+  const { yearbookByYear, countPdfByYear } = await parseMunichResourceLinks();
+  const years = [...new Set([...yearbookByYear.keys(), ...countPdfByYear.keys()])]
+    .filter((year) => year >= 2010)
+    .sort((left, right) => left - right);
+  const { options: categories, lookup: categoryLookup } = buildCategoryLookup(MUNICH_LOCATION);
+  const districtLabel = "Munich";
+  const districtSlug = slugify(districtLabel);
+  const recordsByKey = new Map<string, CrimeRecord>();
+
+  for (const year of years) {
+    const sourceUrl = countPdfByYear.get(year) ?? yearbookByYear.get(year);
+    if (!sourceUrl) {
+      continue;
+    }
+
+    const filePath = path.join(TMP_DIR, "munich", `${year}.pdf`);
+    await ensureFile(filePath, sourceUrl);
+    const counts = parseMunichCounts(await extractPdfText(filePath));
+
+    for (const [sourceLabel, count] of counts) {
+      const category = categoryLookup.get(normalizeSourceLabel(sourceLabel));
+      if (!category) {
+        continue;
+      }
+
+      recordsByKey.set(`${year}__${districtSlug}__${category.slug}`, {
+        year,
+        districtLabel,
+        districtSlug,
+        categoryLabel: category.label,
+        categorySlug: category.slug,
+        count,
+        ratePer100k: null,
+      });
+    }
+  }
+
+  return {
+    slug: MUNICH_LOCATION.slug,
+    label: MUNICH_LOCATION.label,
+    country: MUNICH_LOCATION.country,
+    areaLabelSingular: MUNICH_LOCATION.areaLabelSingular,
+    areaLabelPlural: MUNICH_LOCATION.areaLabelPlural,
+    chartTitle: MUNICH_LOCATION.chartTitle,
+    note: MUNICH_LOCATION.note,
+    sources: MUNICH_LOCATION.sources,
+    years,
+    districts: [{ label: districtLabel, value: districtSlug }],
+    categories,
+    defaultCategorySlugs: categories.filter((category) => category.isDefault).map((category) => category.value),
+    records: [...recordsByKey.values()].sort((left, right) => left.year - right.year),
+  };
+}
+
+const HAMBURG_YEARBOOK_SOURCES = [
+  { year: 2020, url: SOURCE_URLS.hamburgYearbook2020 },
+  { year: 2021, url: SOURCE_URLS.hamburgYearbook2021 },
+  { year: 2022, url: SOURCE_URLS.hamburgYearbook2022 },
+  { year: 2023, url: SOURCE_URLS.hamburgYearbook2023 },
+  { year: 2024, url: SOURCE_URLS.hamburgYearbook2024 },
+];
+
+function parseHamburgYearbookCounts(text: string) {
+  const flat = flattenPdfText(text);
+
+  return new Map<string, { previous: number; current: number }>([
+    [
+      "Straftaten insgesamt",
+      extractLeadingYearPairAfterLabel(
+        flat,
+        [/Straftaten insgesamt\s+(\d{1,3}(?:\.\d{3})*)\s+(\d{1,3}(?:\.\d{3})*)/i],
+        "Hamburg total offenses",
+      ),
+    ],
+    [
+      "Straftaten gegen die sexuelle Selbstbestimmung",
+      extractLeadingYearPairAfterLabel(
+        flat,
+        [/Straftaten gegen die sexuelle Selbstbestimmung\s+(\d{1,3}(?:\.\d{3})*)\s+(\d{1,3}(?:\.\d{3})*)/i],
+        "Hamburg sexual offenses",
+      ),
+    ],
+    [
+      "Vergewaltigung, sexuelle Nötigung und sexuelle Übergriffe im besonders schweren Fall",
+      extractLeadingYearPairAfterLabel(
+        flat,
+        [/Vergewaltigung[^0-9]{0,180}\s+(\d{1,3}(?:\.\d{3})*)\s+(\d{1,3}(?:\.\d{3})*)/i],
+        "Hamburg rape",
+      ),
+    ],
+    [
+      "Raub, räuberische Erpressung, räuberischer Angriff auf Kraftfahrer",
+      extractLeadingYearPairAfterLabel(
+        flat,
+        [/Raub\s*\/\s*r[aä]uberische\s+Erpressung\s*\/\s*r[aä]uberischer\s+Angriff\s+auf\s+Kraftfahrer\s+(\d{1,3}(?:\.\d{3})*)\s+(\d{1,3}(?:\.\d{3})*)/i],
+        "Hamburg robbery",
+      ),
+    ],
+    [
+      "Körperverletzung insgesamt",
+      extractLeadingYearPairAfterLabel(
+        flat,
+        [/K[oö]rperverletzung insgesamt\s+(\d{1,3}(?:\.\d{3})*)\s+(\d{1,3}(?:\.\d{3})*)/i],
+        "Hamburg all assaults",
+      ),
+    ],
+    [
+      "Gefährliche und schwere Körperverletzung",
+      extractLeadingYearPairAfterLabel(
+        flat,
+        [/gef[aä]hrliche und schwere K[oö]rperverletzung\s+(\d{1,3}(?:\.\d{3})*)\s+(\d{1,3}(?:\.\d{3})*)/i],
+        "Hamburg aggravated assault",
+      ),
+    ],
+    [
+      "Gewaltkriminalität",
+      extractLeadingYearPairAfterLabel(
+        flat,
+        [/Gewaltkriminalit[aä]t1?\s+(\d{1,3}(?:\.\d{3})*)\s+(\d{1,3}(?:\.\d{3})*)/i],
+        "Hamburg violent crime",
+      ),
+    ],
+    [
+      "Diebstahl insgesamt",
+      extractLeadingYearPairAfterLabel(
+        flat,
+        [/Diebstahl insgesamt\s+(\d{1,3}(?:\.\d{3})*)\s+(\d{1,3}(?:\.\d{3})*)/i],
+        "Hamburg theft",
+      ),
+    ],
+    [
+      "Wohnungseinbruchdiebstahl",
+      extractLeadingYearPairAfterLabel(
+        flat,
+        [/Wohnungseinbruchdiebstahl\s+(\d{1,3}(?:\.\d{3})*)\s+(\d{1,3}(?:\.\d{3})*)/i],
+        "Hamburg residential burglary",
+      ),
+    ],
+    [
+      "Diebstahl/unbefugter Gebrauch eines Kraftwagens",
+      extractLeadingYearPairAfterLabel(
+        flat,
+        [/Diebstahl\s*\/\s*unbefugter Gebrauch(?: eines)? Kraftwagens\s+(\d{1,3}(?:\.\d{3})*)\s+(\d{1,3}(?:\.\d{3})*)/i],
+        "Hamburg vehicle theft",
+      ),
+    ],
+    [
+      "Diebstahl insgesamt an/aus Kraftfahrzeugen",
+      extractLeadingYearPairAfterLabel(
+        flat,
+        [/Diebstahl insgesamt an\s*\/\s*aus Kraftfahrzeugen\s+(\d{1,3}(?:\.\d{3})*)\s+(\d{1,3}(?:\.\d{3})*)/i],
+        "Hamburg theft from vehicles",
+      ),
+    ],
+    [
+      "Diebstahl insgesamt von Fahrrädern",
+      extractLeadingYearPairAfterLabel(
+        flat,
+        [/Diebstahl insgesamt von Fahrr[aä]dern\s+(\d{1,3}(?:\.\d{3})*)\s+(\d{1,3}(?:\.\d{3})*)/i],
+        "Hamburg bicycle theft",
+      ),
+    ],
+    [
+      "Taschendiebstahl",
+      extractLeadingYearPairAfterLabel(
+        flat,
+        [/Taschendiebstahl\s+(\d{1,3}(?:\.\d{3})*)\s+(\d{1,3}(?:\.\d{3})*)/i],
+        "Hamburg pickpocketing",
+      ),
+    ],
+    [
+      "Betrug",
+      extractLeadingYearPairAfterLabel(
+        flat,
+        [/Betrug\s+(\d{1,3}(?:\.\d{3})*)\s+(\d{1,3}(?:\.\d{3})*)/i],
+        "Hamburg fraud",
+      ),
+    ],
+    [
+      "Rauschgiftkriminalität",
+      extractLeadingYearPairAfterLabel(
+        flat,
+        [
+          /891000\s+Rauschgiftkriminalit[aä]t\s+(\d{1,3}(?:\.\d{3})*)\s+\d{1,3}(?:\.\d{3})*\s+\d{1,3}(?:,\d+)?\s+(\d{1,3}(?:\.\d{3})*)/i,
+          /Rauschgiftkriminalit[aä]t\s+(\d{1,3}(?:\.\d{3})*)\s+(\d{1,3}(?:\.\d{3})*)\s+-?\d{1,3}(?:\.\d{3})*\s+-?\d{1,3}(?:,\d+)?/i,
+        ],
+        "Hamburg drug crime",
+      ),
+    ],
+    [
+      "Computerkriminalität",
+      extractLeadingYearPairAfterLabel(
+        flat,
+        [
+          /897000\s+Computerkriminalit[aä]t\s+(\d+(?:\.\d{3})*)\s+\d+(?:\.\d{3})*\s+\d{1,3}(?:,\d+)?\s+(\d+(?:\.\d{3})*)\s+\d+(?:\.\d{3})*\s+\d{1,3}(?:,\d+)?/i,
+          /Computerkriminalit[aä]t\s+(\d+(?:\.\d{3})*)\s+(\d+(?:\.\d{3})*)\s+\d{1,3}(?:,\d+)?\s+\d+(?:\.\d{3})*/i,
+        ],
+        "Hamburg cybercrime",
+      ),
+    ],
+  ]);
+}
+
+async function buildHamburgLocation(): Promise<LocationPayload> {
+  const { options: categories, lookup: categoryLookup } = buildCategoryLookup(HAMBURG_LOCATION);
+  const districtLabel = "Hamburg";
+  const districtSlug = slugify(districtLabel);
+  const recordsByKey = new Map<string, CrimeRecord>();
+
+  const recordsPath = path.join(ROOT, "src", "data", "hamburg-citywide-records.json");
+  const sourceRecords = JSON.parse(await fs.readFile(recordsPath, "utf8")) as Array<{
+    year: number;
+    sourceLabel: string;
+    count: number;
+  }>;
+
+  for (const sourceRecord of sourceRecords) {
+    const category = categoryLookup.get(normalizeSourceLabel(sourceRecord.sourceLabel));
+    if (!category) {
+      continue;
+    }
+
+    recordsByKey.set(`${sourceRecord.year}__${districtSlug}__${category.slug}`, {
+      year: sourceRecord.year,
+      districtLabel,
+      districtSlug,
+      categoryLabel: category.label,
+      categorySlug: category.slug,
+      count: sourceRecord.count,
+      ratePer100k: null,
+    });
+  }
+
+  const years = [...new Set([...recordsByKey.values()].map((record) => record.year))].sort((left, right) => left - right);
+
+  return {
+    slug: HAMBURG_LOCATION.slug,
+    label: HAMBURG_LOCATION.label,
+    country: HAMBURG_LOCATION.country,
+    areaLabelSingular: HAMBURG_LOCATION.areaLabelSingular,
+    areaLabelPlural: HAMBURG_LOCATION.areaLabelPlural,
+    chartTitle: HAMBURG_LOCATION.chartTitle,
+    note: HAMBURG_LOCATION.note,
+    sources: HAMBURG_LOCATION.sources,
+    years,
     districts: [{ label: districtLabel, value: districtSlug }],
     categories,
     defaultCategorySlugs: categories.filter((category) => category.isDefault).map((category) => category.value),
@@ -1443,9 +1908,10 @@ async function main() {
   const barcelona = await buildSpainLocation(BARCELONA_LOCATION, "Barcelona", spainAnnualSources);
   const valencia = await buildSpainLocation(VALENCIA_LOCATION, "Valencia", spainAnnualSources);
 
-  const [berlin, frankfurt, london, luton, milan, paris, rome] = await Promise.all([
+  const [berlin, frankfurt, hamburg, london, luton, milan, paris, rome] = await Promise.all([
     buildBerlinLocation(),
     buildFrankfurtLocation(),
+    buildHamburgLocation(),
     buildLondonLocation(),
     buildLutonLocation(),
     buildMilanLocation(),
@@ -1454,7 +1920,7 @@ async function main() {
   ]);
   const payload = {
     generatedAt: new Date().toISOString(),
-    locations: [barcelona, berlin, frankfurt, london, luton, milan, paris, rome, valencia].sort((left, right) =>
+    locations: [barcelona, berlin, frankfurt, hamburg, london, luton, milan, paris, rome, valencia].sort((left, right) =>
       left.label.localeCompare(right.label),
     ),
   };

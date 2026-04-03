@@ -98,6 +98,7 @@ const locationLoaders: Record<string, () => Promise<LocationDataset>> = {
   berlin: async () => (await import("@/generated/locations/berlin.json")).default as LocationDataset,
   barcelona: async () => (await import("@/generated/locations/barcelona.json")).default as LocationDataset,
   frankfurt: async () => (await import("@/generated/locations/frankfurt.json")).default as LocationDataset,
+  hamburg: async () => (await import("@/generated/locations/hamburg.json")).default as LocationDataset,
   london: async () => (await import("@/generated/locations/london.json")).default as LocationDataset,
   luton: async () => (await import("@/generated/locations/luton.json")).default as LocationDataset,
   milan: async () => (await import("@/generated/locations/milan.json")).default as LocationDataset,
