@@ -409,7 +409,7 @@ export function CrimeChart({
           {data.districts.map((district, index) => (
             <button
               className={cn(
-                "inline-flex cursor-pointer items-center gap-2 rounded-full border px-3 py-1.5 transition",
+                "inline-flex cursor-pointer items-start gap-2 rounded-full border px-3 py-1.5 text-left transition sm:items-center",
                 focusedDistrictSlug === null
                   ? "border-slate-700 text-slate-400 hover:border-slate-600 hover:text-slate-200"
                   : focusedDistrictSlug === district.value
@@ -420,10 +420,10 @@ export function CrimeChart({
               onClick={() => onToggleDistrict(district.value)}
               type="button"
             >
-              <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-slate-100 text-[11px] font-semibold text-slate-900">
+              <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[11px] font-semibold leading-none text-slate-900">
                 {index + 1}
               </span>
-              <span>{district.label}</span>
+              <span className="min-w-0 leading-tight">{district.label}</span>
             </button>
           ))}
         </div>
