@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 
 type LocationOverviewStatProps = {
   label: string;
-  value: string;
+  value?: string;
   footer?: string;
 };
 
@@ -12,13 +12,15 @@ export function LocationOverviewStat({ label, value, footer }: LocationOverviewS
       <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500 transition-colors duration-500 group-hover:text-slate-500">
         {label}
       </p>
-      <p className="mt-2 text-lg font-semibold text-slate-100 transition-colors duration-500 group-hover:text-slate-950">
-        {value}
-      </p>
+      {value ? (
+        <p className="mt-2 text-lg font-semibold text-slate-100 transition-colors duration-500 group-hover:text-slate-950">
+          {value}
+        </p>
+      ) : null}
       {footer ? (
         <p
           className={cn(
-            "mt-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500 transition-colors duration-500 group-hover:text-slate-500",
+            `${value ? "mt-3" : "mt-2"} text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500 transition-colors duration-500 group-hover:text-slate-500`,
           )}
         >
           {footer}

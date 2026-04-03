@@ -55,6 +55,7 @@ export type LocationOverview = {
   districtCount: number;
   categoryCount: number;
   sources: SourceItem[];
+  supportsRate: boolean;
 };
 
 export type FilterMetadata = LocationOverview & {
@@ -95,10 +96,14 @@ type LocationsIndex = typeof locationsIndex;
 
 const locationLoaders: Record<string, () => Promise<LocationDataset>> = {
   berlin: async () => (await import("@/generated/locations/berlin.json")).default as LocationDataset,
+  barcelona: async () => (await import("@/generated/locations/barcelona.json")).default as LocationDataset,
   frankfurt: async () => (await import("@/generated/locations/frankfurt.json")).default as LocationDataset,
   london: async () => (await import("@/generated/locations/london.json")).default as LocationDataset,
   luton: async () => (await import("@/generated/locations/luton.json")).default as LocationDataset,
+  milan: async () => (await import("@/generated/locations/milan.json")).default as LocationDataset,
   paris: async () => (await import("@/generated/locations/paris.json")).default as LocationDataset,
+  rome: async () => (await import("@/generated/locations/rome.json")).default as LocationDataset,
+  valencia: async () => (await import("@/generated/locations/valencia.json")).default as LocationDataset,
 };
 
 function buildValue(record: LocationRecord, metric: Metric) {
@@ -155,6 +160,7 @@ export const getFilterMetadata = cache(async (locationSlug: string): Promise<Fil
   if (!location) {
     return null;
   }
+  const supportsRate = location.records.some((record) => record.ratePer100k !== null);
 
   return {
     slug: location.slug,
@@ -168,6 +174,7 @@ export const getFilterMetadata = cache(async (locationSlug: string): Promise<Fil
     areaLabelPlural: location.areaLabelPlural,
     districtCount: location.districts.length,
     categoryCount: location.categories.length,
+    supportsRate,
     districts: location.districts,
     categories: location.categories,
     defaultDistrictSlugs: buildDefaultDistrictSlugs(location),
@@ -188,7 +195,8 @@ export async function getChartData(input: {
     return null;
   }
 
-  const metric = input.metric ?? "count";
+  const supportsRate = location.records.some((record) => record.ratePer100k !== null);
+  const metric = input.metric === "rate" && supportsRate ? "rate" : "count";
   const validDistrictSlugs = input.districtSlugs?.filter((slug) => location.districts.some((item) => item.value === slug)) ?? [];
   const validCategorySlugs =
     input.categorySlugs?.filter((slug) => location.categories.some((item) => item.value === slug)) ?? [];

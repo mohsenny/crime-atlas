@@ -129,7 +129,7 @@ export function DashboardClient({
           </Link>
 
           <div className="flex flex-wrap items-center justify-end gap-3">
-            <MetricToggle value={metric} onChange={setMetric} />
+            {meta.supportsRate ? <MetricToggle value={metric} onChange={setMetric} /> : null}
             {meta.districts.length > 1 ? (
               <ExpandableDropdown
                 label={meta.areaLabelPlural}

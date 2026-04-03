@@ -10,6 +10,10 @@ const flagByLocationSlug: Record<string, { src: string; alt: string }> = {
     src: "/flags/germany.png",
     alt: "Flag of Germany",
   },
+  barcelona: {
+    src: "/flags/spain.png",
+    alt: "Flag of Spain",
+  },
   frankfurt: {
     src: "/flags/germany.png",
     alt: "Flag of Germany",
@@ -22,9 +26,21 @@ const flagByLocationSlug: Record<string, { src: string; alt: string }> = {
     src: "/flags/united-kingdom.png",
     alt: "Flag of the United Kingdom",
   },
+  milan: {
+    src: "/flags/italy.png",
+    alt: "Flag of Italy",
+  },
   paris: {
     src: "/flags/france.png",
     alt: "Flag of France",
+  },
+  rome: {
+    src: "/flags/italy.png",
+    alt: "Flag of Italy",
+  },
+  valencia: {
+    src: "/flags/spain.png",
+    alt: "Flag of Spain",
   },
 };
 
@@ -37,7 +53,7 @@ export function LocationOverviewCard({ location }: { location: LocationOverview 
       href={`/${location.slug}`}
     >
       {flag ? (
-        <div className="pointer-events-none absolute right-5 top-5 z-0 h-[28%] min-h-[4.75rem] w-[30%] min-w-[6.75rem] opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-95">
+        <div className="pointer-events-none absolute right-5 top-5 z-0 h-[24%] min-h-[4.15rem] w-[26%] min-w-[5.9rem] opacity-45 transition-all duration-500 group-hover:opacity-95">
           <div className="relative h-full w-full overflow-hidden border border-white/10 bg-white/[0.04] shadow-[0_10px_30px_rgba(15,23,42,0.18)] transition-colors duration-500 group-hover:border-slate-300/80 group-hover:bg-white/80">
             <Image
               alt={flag.alt}
@@ -71,8 +87,8 @@ export function LocationOverviewCard({ location }: { location: LocationOverview 
             value={`${location.years.at(-1)! - location.years[0] + 1} years`}
           />
           <LocationOverviewStat
-            label={location.districtCount > 1 ? location.areaLabelPlural : "Area breakdown"}
-            value={location.districtCount > 1 ? String(location.districtCount) : "No Area Breakdown"}
+            label={location.districtCount > 1 ? location.areaLabelPlural : "No Area Breakdown"}
+            value={location.districtCount > 1 ? String(location.districtCount) : undefined}
           />
           <LocationOverviewStat label="Categories" value={String(location.categoryCount)} />
         </div>

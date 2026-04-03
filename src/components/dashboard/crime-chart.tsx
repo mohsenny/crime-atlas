@@ -55,6 +55,7 @@ export function CrimeChart({
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
   const [focusLinePoints, setFocusLinePoints] = useState<Point[]>([]);
+  const [viewportWidth, setViewportWidth] = useState(0);
 
   const visibleCategories = useMemo(
     () => data.categories.filter((category) => !hiddenCategorySlugs.includes(category.value)),
@@ -62,6 +63,7 @@ export function CrimeChart({
   );
   const groupWidth = Math.max(50, data.districts.length * 18 + 18);
   const minChartWidth = Math.max(760, data.years.length * groupWidth);
+  const chartWidth = Math.max(minChartWidth, viewportWidth);
   const showDistrictMarkers = data.districts.length > 1 && data.districts.length <= 16;
   const chartTopMargin = showDistrictMarkers ? 24 : 10;
   const chartBottomMargin = 34;
@@ -115,17 +117,24 @@ export function CrimeChart({
     }
 
     const onScroll = () => syncScrollState();
-    const id = window.requestAnimationFrame(syncScrollState);
+    const syncViewport = () => {
+      setViewportWidth(element.clientWidth);
+      syncScrollState();
+    };
+    const id = window.requestAnimationFrame(syncViewport);
+    const resizeObserver = new ResizeObserver(syncViewport);
 
     element.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
+    resizeObserver.observe(element);
 
     return () => {
       window.cancelAnimationFrame(id);
       element.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
+      resizeObserver.disconnect();
     };
-  }, [minChartWidth, syncScrollState]);
+  }, [syncScrollState]);
 
   useEffect(() => {
     if (!mounted || !focusedDistrictSlug || focusedDistrictIndex < 0) {
@@ -217,6 +226,7 @@ export function CrimeChart({
       window.removeEventListener("resize", measurePoints);
     };
   }, [
+    chartWidth,
     chartPlotHeight,
     chartTopMargin,
     data.chartRows,
@@ -283,9 +293,9 @@ export function CrimeChart({
         </div>
 
         <div className="chart-scroll-shell min-h-0 flex-1 overflow-x-auto" ref={scrollContainerRef}>
-          <div className="relative" ref={chartContentRef} style={{ width: `${minChartWidth}px`, minWidth: `${minChartWidth}px`, height: CHART_HEIGHT }}>
+          <div className="relative" ref={chartContentRef} style={{ width: `${chartWidth}px`, minWidth: `${minChartWidth}px`, height: CHART_HEIGHT }}>
             {focusedDistrictSlug && focusLinePoints.length > 1 ? (
-              <svg className="pointer-events-none absolute inset-0" height={CHART_HEIGHT} width={minChartWidth}>
+              <svg className="pointer-events-none absolute inset-0" height={CHART_HEIGHT} width={chartWidth}>
                 <polyline
                   fill="none"
                   points={focusLinePoints.map((point) => `${point.x},${point.y}`).join(" ")}
