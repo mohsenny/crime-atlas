@@ -105,12 +105,13 @@ export function ComparisonPageClient({ data, locations }: ComparisonPageClientPr
           </div>
         )}
 
-        <ComparisonMethodology
-          category={selectedCategory}
-          methodology={selectedCategory ? data.methodologyByCategory[selectedCategory.value] ?? null : null}
-        />
-
-        <DashboardSources sources={combinedSources} />
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:items-start">
+          <DashboardSources sources={combinedSources} />
+          <ComparisonMethodology
+            category={selectedCategory}
+            methodology={selectedCategory ? data.methodologyByCategory[selectedCategory.value] ?? null : null}
+          />
+        </div>
       </div>
     </main>
   );

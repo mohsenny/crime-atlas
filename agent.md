@@ -211,6 +211,53 @@ At minimum, check for:
 
 Do not assume the source parser is correct because the build passed.
 
+## Current unresolved data-quality findings
+
+As of April 2026, the current generated data still has several source-cleaning issues that future agents must treat as open work before expanding comparison aggressively.
+
+### Berlin
+
+- `2006–2015` remains the riskiest source path because it is PDF-extracted.
+- A real parser bug previously produced a fake `2008` residential-burglary spike.
+- That specific case was identified, but additional suspicious historical rows still remain in early Berlin years.
+- Known examples from anomaly scans include:
+  - Reinickendorf `All recorded offenses` collapsing to very small counts and then jumping back
+  - Spandau / Treptow-Köpenick `All theft` with impossible `ratePer100k` values in `2008`
+  - isolated categories where one year appears truncated or columns shift
+
+### Barcelona / Valencia
+
+- The Spanish source path is official, but the currently shipped extracted series appears to mix incompatible publication structures across some earlier and later years.
+- Example: Barcelona `All recorded offenses` drops from `154,830` in `2014` to `2,941` in `2015`, then jumps back to six-figure values in `2020+`.
+- Similar discontinuities appear in robbery, theft, vehicle theft, and drug-trafficking rows.
+- Treat this as an extraction / source-structure alignment problem, not a real crime collapse.
+
+### Los Angeles
+
+- Several LAPD area-level categories show clear one-year truncation in `2015`, then rebound in `2016`.
+- Examples appeared in `Southeast` and `Olympic` for robbery, burglary, theft, theft-from-vehicles, assaults, and fraud.
+- This likely indicates a schema/field interpretation issue in the transition year rather than a real crime crash.
+
+### New York City
+
+- Borough-level rows show obvious discontinuities around `2021` and `2025` in several mapped categories.
+- Example pattern:
+  - normal 2020 value
+  - implausibly tiny 2021 value
+  - then a later jump back to normal magnitude
+- This strongly suggests partial-year ingestion, grouping mismatch, or source-window mixing.
+
+### Rule for future agents
+
+Do not add more cities into the comparison layer as if the current dataset were fully clean.
+
+First:
+
+1. anomaly-scan every shipped city
+2. isolate source-path failures
+3. patch parser / transform logic
+4. only then trust comparison behavior as broadly representative
+
 ## Berlin historical warning
 
 Berlin `2006–2015` history is extracted from archived atlas PDFs via:
@@ -345,6 +392,85 @@ If a source host is flaky or anti-bot:
 Important caveat:
 
 - the archive page goes further back, but that does not prove a clean, continuous city-level municipal series exists for every year in the same usable structure
+
+### Candidate research backlog
+
+These are official-source candidates that have been partially verified but not yet shipped.
+
+#### São Paulo
+
+- official path verified:
+  - São Paulo State Public Security Secretariat transparency / statistics pages
+  - official quarterly HTML tables with `Capital` / regional crime counts
+- promising because:
+  - reproducible official download surface exists
+  - long span appears available on the archive pattern
+  - category labels such as homicide, robbery, theft, vehicle theft, rape, and extortion are visible in the tables
+- caution:
+  - verify whether `Capital` is the right city-level unit to represent São Paulo consistently across years
+  - confirm which archive files are annual / quarter-end and avoid mixing partial-year snapshots with full-year counts
+
+#### Tokyo
+
+- official path verified:
+  - Tokyo Metropolitan Police (警視庁) annual crime statistics pages
+  - Tokyo Statistical Yearbook table `20-10 Criminal Offenses Known to the Police by Type of Crime and Police Station`
+- promising because:
+  - reproducible CSV surface exists for at least `2018–2023`
+  - police-station-level geography is already present
+  - category breakdown is rich and machine-readable
+- caution:
+  - must decide whether product unit is Tokyo prefecture-wide, 23 wards, or a smaller city-centered interpretation
+
+#### Kyoto
+
+- official path verified:
+  - Kyoto City statistical monthly reports
+  - Kyoto Prefecture statistics / police materials
+- promising because:
+  - official city-level crime recognition counts are visible in Kyoto city statistical reports
+  - police/prefecture layers may help with category depth
+- caution:
+  - needs a clean reproducible yearly series, not just scattered annual report PDFs
+
+#### Bangkok
+
+- official path partially verified:
+  - Bangkok open-data / KPI datasets exist
+- caution:
+  - currently verified material appears too narrow or too short in coverage
+  - not yet enough for a trustworthy long crime-category series
+
+#### San Salvador
+
+- official path partially verified:
+  - Ministry of Justice and Security / DIA statistics pages
+  - PNC transparency materials and municipality-level homicide examples
+- caution:
+  - current verified surface is mostly homicide / partial transparency outputs
+  - not yet a robust municipal multi-category crime series
+
+#### Mexico City
+
+- official path verified:
+  - CDMX open-data portal
+  - FGJ crime-investigation datasets
+  - official “delitos de alto impacto” monitor resources
+- promising because:
+  - official city source family is rich
+  - alcaldía-level geography appears available
+  - long updated series exists from `2016+`
+- caution:
+  - there was a documented official reclassification break around `2020`
+  - any ingestion must respect the equivalence / reclassification notes, not blindly stitch pre/post series together
+
+#### Tampa
+
+- official path partially verified:
+  - Tampa Police annual reports page
+- caution:
+  - the annual reports are official, but I have not yet verified a reproducible structured download path
+  - if only PDF annual reports are available, this becomes a lower-priority source than Tokyo / São Paulo / CDMX
 
 ## When adding a new city
 
