@@ -304,7 +304,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
-      "count": 0,
+      "count": 143,
       "ratePer100k": null
     },
     {
@@ -313,7 +313,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
-      "count": 0,
+      "count": 137,
       "ratePer100k": null
     },
     {
@@ -322,7 +322,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
-      "count": 0,
+      "count": 116,
       "ratePer100k": null
     },
     {
@@ -331,7 +331,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
-      "count": 5,
+      "count": 113,
       "ratePer100k": null
     },
     {
@@ -484,7 +484,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Rape",
       "categorySlug": "rape",
-      "count": 4,
+      "count": 307,
       "ratePer100k": null
     },
     {
@@ -493,7 +493,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Rape",
       "categorySlug": "rape",
-      "count": 7,
+      "count": 337,
       "ratePer100k": null
     },
     {
@@ -502,7 +502,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Rape",
       "categorySlug": "rape",
-      "count": 10,
+      "count": 334,
       "ratePer100k": null
     },
     {
@@ -511,7 +511,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Rape",
       "categorySlug": "rape",
-      "count": 37,
+      "count": 333,
       "ratePer100k": null
     },
     {
@@ -664,7 +664,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Other sexual offenses",
       "categorySlug": "other-sexual-offenses",
-      "count": 17,
+      "count": 1305,
       "ratePer100k": null
     },
     {
@@ -673,7 +673,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Other sexual offenses",
       "categorySlug": "other-sexual-offenses",
-      "count": 11,
+      "count": 1473,
       "ratePer100k": null
     },
     {
@@ -682,7 +682,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Other sexual offenses",
       "categorySlug": "other-sexual-offenses",
-      "count": 30,
+      "count": 1867,
       "ratePer100k": null
     },
     {
@@ -691,7 +691,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Other sexual offenses",
       "categorySlug": "other-sexual-offenses",
-      "count": 99,
+      "count": 1809,
       "ratePer100k": null
     },
     {
@@ -844,7 +844,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
-      "count": 1,
+      "count": 4040,
       "ratePer100k": null
     },
     {
@@ -853,7 +853,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
-      "count": 0,
+      "count": 5161,
       "ratePer100k": null
     },
     {
@@ -862,7 +862,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
-      "count": 1,
+      "count": 4990,
       "ratePer100k": null
     },
     {
@@ -871,7 +871,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
-      "count": 20,
+      "count": 4947,
       "ratePer100k": null
     },
     {
@@ -1024,7 +1024,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
-      "count": 0,
+      "count": 2257,
       "ratePer100k": null
     },
     {
@@ -1033,7 +1033,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
-      "count": 0,
+      "count": 2898,
       "ratePer100k": null
     },
     {
@@ -1042,7 +1042,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
-      "count": 0,
+      "count": 2888,
       "ratePer100k": null
     },
     {
@@ -1051,7 +1051,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
-      "count": 29,
+      "count": 2908,
       "ratePer100k": null
     },
     {
@@ -1204,7 +1204,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Felony assault",
       "categorySlug": "felony-assault",
-      "count": 0,
+      "count": 6380,
       "ratePer100k": null
     },
     {
@@ -1213,7 +1213,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Felony assault",
       "categorySlug": "felony-assault",
-      "count": 2,
+      "count": 7530,
       "ratePer100k": null
     },
     {
@@ -1222,7 +1222,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Felony assault",
       "categorySlug": "felony-assault",
-      "count": 5,
+      "count": 8245,
       "ratePer100k": null
     },
     {
@@ -1231,7 +1231,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Felony assault",
       "categorySlug": "felony-assault",
-      "count": 84,
+      "count": 8465,
       "ratePer100k": null
     },
     {
@@ -1384,7 +1384,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Petit larceny",
       "categorySlug": "petit-larceny",
-      "count": 2,
+      "count": 13736,
       "ratePer100k": null
     },
     {
@@ -1393,7 +1393,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Petit larceny",
       "categorySlug": "petit-larceny",
-      "count": 11,
+      "count": 18712,
       "ratePer100k": null
     },
     {
@@ -1402,7 +1402,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Petit larceny",
       "categorySlug": "petit-larceny",
-      "count": 26,
+      "count": 17931,
       "ratePer100k": null
     },
     {
@@ -1411,7 +1411,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Petit larceny",
       "categorySlug": "petit-larceny",
-      "count": 428,
+      "count": 16198,
       "ratePer100k": null
     },
     {
@@ -1564,7 +1564,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Grand larceny",
       "categorySlug": "grand-larceny",
-      "count": 13,
+      "count": 7197,
       "ratePer100k": null
     },
     {
@@ -1573,7 +1573,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Grand larceny",
       "categorySlug": "grand-larceny",
-      "count": 27,
+      "count": 7937,
       "ratePer100k": null
     },
     {
@@ -1582,7 +1582,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Grand larceny",
       "categorySlug": "grand-larceny",
-      "count": 35,
+      "count": 8021,
       "ratePer100k": null
     },
     {
@@ -1591,7 +1591,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Grand larceny",
       "categorySlug": "grand-larceny",
-      "count": 347,
+      "count": 8753,
       "ratePer100k": null
     },
     {
@@ -1744,7 +1744,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
-      "count": 0,
+      "count": 3109,
       "ratePer100k": null
     },
     {
@@ -1753,7 +1753,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
-      "count": 0,
+      "count": 4020,
       "ratePer100k": null
     },
     {
@@ -1762,7 +1762,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
-      "count": 4,
+      "count": 5097,
       "ratePer100k": null
     },
     {
@@ -1771,7 +1771,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
-      "count": 51,
+      "count": 4147,
       "ratePer100k": null
     },
     {
@@ -1924,7 +1924,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Drug offenses",
       "categorySlug": "drug-offenses",
-      "count": 0,
+      "count": 1960,
       "ratePer100k": null
     },
     {
@@ -1933,7 +1933,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Drug offenses",
       "categorySlug": "drug-offenses",
-      "count": 0,
+      "count": 1972,
       "ratePer100k": null
     },
     {
@@ -1942,7 +1942,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Drug offenses",
       "categorySlug": "drug-offenses",
-      "count": 2,
+      "count": 2523,
       "ratePer100k": null
     },
     {
@@ -1951,7 +1951,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Drug offenses",
       "categorySlug": "drug-offenses",
-      "count": 14,
+      "count": 3099,
       "ratePer100k": null
     },
     {
@@ -2104,7 +2104,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Weapons offenses",
       "categorySlug": "weapons-offenses",
-      "count": 0,
+      "count": 1346,
       "ratePer100k": null
     },
     {
@@ -2113,7 +2113,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Weapons offenses",
       "categorySlug": "weapons-offenses",
-      "count": 0,
+      "count": 1685,
       "ratePer100k": null
     },
     {
@@ -2122,7 +2122,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Weapons offenses",
       "categorySlug": "weapons-offenses",
-      "count": 0,
+      "count": 1727,
       "ratePer100k": null
     },
     {
@@ -2131,7 +2131,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Weapons offenses",
       "categorySlug": "weapons-offenses",
-      "count": 4,
+      "count": 2031,
       "ratePer100k": null
     },
     {
@@ -2284,7 +2284,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Criminal mischief",
       "categorySlug": "criminal-mischief",
-      "count": 1,
+      "count": 9164,
       "ratePer100k": null
     },
     {
@@ -2293,7 +2293,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Criminal mischief",
       "categorySlug": "criminal-mischief",
-      "count": 1,
+      "count": 8866,
       "ratePer100k": null
     },
     {
@@ -2302,7 +2302,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Criminal mischief",
       "categorySlug": "criminal-mischief",
-      "count": 9,
+      "count": 8964,
       "ratePer100k": null
     },
     {
@@ -2311,7 +2311,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Criminal mischief",
       "categorySlug": "criminal-mischief",
-      "count": 73,
+      "count": 9061,
       "ratePer100k": null
     },
     {
@@ -2464,7 +2464,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
-      "count": 5,
+      "count": 2009,
       "ratePer100k": null
     },
     {
@@ -2473,7 +2473,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
-      "count": 8,
+      "count": 3210,
       "ratePer100k": null
     },
     {
@@ -2482,7 +2482,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
-      "count": 25,
+      "count": 3499,
       "ratePer100k": null
     },
     {
@@ -2491,7 +2491,7 @@
       "districtSlug": "bronx",
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
-      "count": 100,
+      "count": 2580,
       "ratePer100k": null
     },
     {
@@ -2644,7 +2644,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
-      "count": 0,
+      "count": 150,
       "ratePer100k": null
     },
     {
@@ -2653,7 +2653,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
-      "count": 0,
+      "count": 132,
       "ratePer100k": null
     },
     {
@@ -2662,7 +2662,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
-      "count": 0,
+      "count": 124,
       "ratePer100k": null
     },
     {
@@ -2671,7 +2671,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
-      "count": 3,
+      "count": 113,
       "ratePer100k": null
     },
     {
@@ -2824,7 +2824,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Rape",
       "categorySlug": "rape",
-      "count": 6,
+      "count": 370,
       "ratePer100k": null
     },
     {
@@ -2833,7 +2833,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Rape",
       "categorySlug": "rape",
-      "count": 3,
+      "count": 394,
       "ratePer100k": null
     },
     {
@@ -2842,7 +2842,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Rape",
       "categorySlug": "rape",
-      "count": 9,
+      "count": 383,
       "ratePer100k": null
     },
     {
@@ -2851,7 +2851,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Rape",
       "categorySlug": "rape",
-      "count": 58,
+      "count": 355,
       "ratePer100k": null
     },
     {
@@ -3004,7 +3004,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Other sexual offenses",
       "categorySlug": "other-sexual-offenses",
-      "count": 14,
+      "count": 1598,
       "ratePer100k": null
     },
     {
@@ -3013,7 +3013,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Other sexual offenses",
       "categorySlug": "other-sexual-offenses",
-      "count": 21,
+      "count": 1788,
       "ratePer100k": null
     },
     {
@@ -3022,7 +3022,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Other sexual offenses",
       "categorySlug": "other-sexual-offenses",
-      "count": 38,
+      "count": 1976,
       "ratePer100k": null
     },
     {
@@ -3031,7 +3031,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Other sexual offenses",
       "categorySlug": "other-sexual-offenses",
-      "count": 131,
+      "count": 1993,
       "ratePer100k": null
     },
     {
@@ -3184,7 +3184,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
-      "count": 0,
+      "count": 3594,
       "ratePer100k": null
     },
     {
@@ -3193,7 +3193,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
-      "count": 0,
+      "count": 4475,
       "ratePer100k": null
     },
     {
@@ -3202,7 +3202,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
-      "count": 1,
+      "count": 4330,
       "ratePer100k": null
     },
     {
@@ -3211,7 +3211,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
-      "count": 10,
+      "count": 4045,
       "ratePer100k": null
     },
     {
@@ -3364,7 +3364,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
-      "count": 0,
+      "count": 3972,
       "ratePer100k": null
     },
     {
@@ -3373,7 +3373,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
-      "count": 0,
+      "count": 4539,
       "ratePer100k": null
     },
     {
@@ -3382,7 +3382,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
-      "count": 0,
+      "count": 3711,
       "ratePer100k": null
     },
     {
@@ -3391,7 +3391,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
-      "count": 35,
+      "count": 3381,
       "ratePer100k": null
     },
     {
@@ -3544,7 +3544,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Felony assault",
       "categorySlug": "felony-assault",
-      "count": 2,
+      "count": 6754,
       "ratePer100k": null
     },
     {
@@ -3553,7 +3553,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Felony assault",
       "categorySlug": "felony-assault",
-      "count": 6,
+      "count": 7549,
       "ratePer100k": null
     },
     {
@@ -3562,7 +3562,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Felony assault",
       "categorySlug": "felony-assault",
-      "count": 10,
+      "count": 7751,
       "ratePer100k": null
     },
     {
@@ -3571,7 +3571,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Felony assault",
       "categorySlug": "felony-assault",
-      "count": 72,
+      "count": 7870,
       "ratePer100k": null
     },
     {
@@ -3724,7 +3724,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Petit larceny",
       "categorySlug": "petit-larceny",
-      "count": 7,
+      "count": 23042,
       "ratePer100k": null
     },
     {
@@ -3733,7 +3733,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Petit larceny",
       "categorySlug": "petit-larceny",
-      "count": 6,
+      "count": 29992,
       "ratePer100k": null
     },
     {
@@ -3742,7 +3742,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Petit larceny",
       "categorySlug": "petit-larceny",
-      "count": 39,
+      "count": 27798,
       "ratePer100k": null
     },
     {
@@ -3751,7 +3751,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Petit larceny",
       "categorySlug": "petit-larceny",
-      "count": 562,
+      "count": 26908,
       "ratePer100k": null
     },
     {
@@ -3904,7 +3904,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Grand larceny",
       "categorySlug": "grand-larceny",
-      "count": 13,
+      "count": 10668,
       "ratePer100k": null
     },
     {
@@ -3913,7 +3913,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Grand larceny",
       "categorySlug": "grand-larceny",
-      "count": 38,
+      "count": 12987,
       "ratePer100k": null
     },
     {
@@ -3922,7 +3922,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Grand larceny",
       "categorySlug": "grand-larceny",
-      "count": 68,
+      "count": 12082,
       "ratePer100k": null
     },
     {
@@ -3931,7 +3931,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Grand larceny",
       "categorySlug": "grand-larceny",
-      "count": 535,
+      "count": 10230,
       "ratePer100k": null
     },
     {
@@ -4084,7 +4084,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
-      "count": 0,
+      "count": 2882,
       "ratePer100k": null
     },
     {
@@ -4093,7 +4093,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
-      "count": 1,
+      "count": 3675,
       "ratePer100k": null
     },
     {
@@ -4102,7 +4102,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
-      "count": 0,
+      "count": 3740,
       "ratePer100k": null
     },
     {
@@ -4111,7 +4111,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
-      "count": 28,
+      "count": 3711,
       "ratePer100k": null
     },
     {
@@ -4264,7 +4264,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Drug offenses",
       "categorySlug": "drug-offenses",
-      "count": 0,
+      "count": 1698,
       "ratePer100k": null
     },
     {
@@ -4273,7 +4273,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Drug offenses",
       "categorySlug": "drug-offenses",
-      "count": 2,
+      "count": 1913,
       "ratePer100k": null
     },
     {
@@ -4282,7 +4282,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Drug offenses",
       "categorySlug": "drug-offenses",
-      "count": 3,
+      "count": 3438,
       "ratePer100k": null
     },
     {
@@ -4291,7 +4291,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Drug offenses",
       "categorySlug": "drug-offenses",
-      "count": 28,
+      "count": 4564,
       "ratePer100k": null
     },
     {
@@ -4444,7 +4444,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Weapons offenses",
       "categorySlug": "weapons-offenses",
-      "count": 0,
+      "count": 1897,
       "ratePer100k": null
     },
     {
@@ -4453,7 +4453,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Weapons offenses",
       "categorySlug": "weapons-offenses",
-      "count": 0,
+      "count": 2353,
       "ratePer100k": null
     },
     {
@@ -4462,7 +4462,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Weapons offenses",
       "categorySlug": "weapons-offenses",
-      "count": 0,
+      "count": 2969,
       "ratePer100k": null
     },
     {
@@ -4471,7 +4471,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Weapons offenses",
       "categorySlug": "weapons-offenses",
-      "count": 1,
+      "count": 3338,
       "ratePer100k": null
     },
     {
@@ -4624,7 +4624,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Criminal mischief",
       "categorySlug": "criminal-mischief",
-      "count": 1,
+      "count": 12904,
       "ratePer100k": null
     },
     {
@@ -4633,7 +4633,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Criminal mischief",
       "categorySlug": "criminal-mischief",
-      "count": 2,
+      "count": 12750,
       "ratePer100k": null
     },
     {
@@ -4642,7 +4642,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Criminal mischief",
       "categorySlug": "criminal-mischief",
-      "count": 2,
+      "count": 12247,
       "ratePer100k": null
     },
     {
@@ -4651,7 +4651,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Criminal mischief",
       "categorySlug": "criminal-mischief",
-      "count": 103,
+      "count": 11242,
       "ratePer100k": null
     },
     {
@@ -4804,7 +4804,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
-      "count": 16,
+      "count": 3795,
       "ratePer100k": null
     },
     {
@@ -4813,7 +4813,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
-      "count": 24,
+      "count": 3500,
       "ratePer100k": null
     },
     {
@@ -4822,7 +4822,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
-      "count": 32,
+      "count": 4355,
       "ratePer100k": null
     },
     {
@@ -4831,7 +4831,7 @@
       "districtSlug": "brooklyn",
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
-      "count": 162,
+      "count": 3704,
       "ratePer100k": null
     },
     {
@@ -4984,7 +4984,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
-      "count": 0,
+      "count": 88,
       "ratePer100k": null
     },
     {
@@ -4993,7 +4993,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
-      "count": 0,
+      "count": 78,
       "ratePer100k": null
     },
     {
@@ -5002,7 +5002,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
-      "count": 0,
+      "count": 73,
       "ratePer100k": null
     },
     {
@@ -5011,7 +5011,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
-      "count": 8,
+      "count": 63,
       "ratePer100k": null
     },
     {
@@ -5164,7 +5164,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Rape",
       "categorySlug": "rape",
-      "count": 0,
+      "count": 287,
       "ratePer100k": null
     },
     {
@@ -5173,7 +5173,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Rape",
       "categorySlug": "rape",
-      "count": 7,
+      "count": 291,
       "ratePer100k": null
     },
     {
@@ -5182,7 +5182,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Rape",
       "categorySlug": "rape",
-      "count": 7,
+      "count": 216,
       "ratePer100k": null
     },
     {
@@ -5191,7 +5191,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Rape",
       "categorySlug": "rape",
-      "count": 37,
+      "count": 284,
       "ratePer100k": null
     },
     {
@@ -5344,7 +5344,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Other sexual offenses",
       "categorySlug": "other-sexual-offenses",
-      "count": 5,
+      "count": 1574,
       "ratePer100k": null
     },
     {
@@ -5353,7 +5353,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Other sexual offenses",
       "categorySlug": "other-sexual-offenses",
-      "count": 15,
+      "count": 1821,
       "ratePer100k": null
     },
     {
@@ -5362,7 +5362,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Other sexual offenses",
       "categorySlug": "other-sexual-offenses",
-      "count": 24,
+      "count": 1885,
       "ratePer100k": null
     },
     {
@@ -5371,7 +5371,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Other sexual offenses",
       "categorySlug": "other-sexual-offenses",
-      "count": 70,
+      "count": 1848,
       "ratePer100k": null
     },
     {
@@ -5524,7 +5524,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
-      "count": 0,
+      "count": 3549,
       "ratePer100k": null
     },
     {
@@ -5533,7 +5533,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
-      "count": 1,
+      "count": 4188,
       "ratePer100k": null
     },
     {
@@ -5542,7 +5542,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
-      "count": 5,
+      "count": 3835,
       "ratePer100k": null
     },
     {
@@ -5551,7 +5551,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
-      "count": 13,
+      "count": 3707,
       "ratePer100k": null
     },
     {
@@ -5704,7 +5704,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
-      "count": 1,
+      "count": 3654,
       "ratePer100k": null
     },
     {
@@ -5713,7 +5713,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
-      "count": 0,
+      "count": 4709,
       "ratePer100k": null
     },
     {
@@ -5722,7 +5722,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
-      "count": 2,
+      "count": 3640,
       "ratePer100k": null
     },
     {
@@ -5731,7 +5731,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
-      "count": 29,
+      "count": 3175,
       "ratePer100k": null
     },
     {
@@ -5884,7 +5884,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Felony assault",
       "categorySlug": "felony-assault",
-      "count": 0,
+      "count": 4824,
       "ratePer100k": null
     },
     {
@@ -5893,7 +5893,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Felony assault",
       "categorySlug": "felony-assault",
-      "count": 2,
+      "count": 5169,
       "ratePer100k": null
     },
     {
@@ -5902,7 +5902,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Felony assault",
       "categorySlug": "felony-assault",
-      "count": 5,
+      "count": 5117,
       "ratePer100k": null
     },
     {
@@ -5911,7 +5911,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Felony assault",
       "categorySlug": "felony-assault",
-      "count": 43,
+      "count": 5574,
       "ratePer100k": null
     },
     {
@@ -6064,7 +6064,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Petit larceny",
       "categorySlug": "petit-larceny",
-      "count": 6,
+      "count": 27310,
       "ratePer100k": null
     },
     {
@@ -6073,7 +6073,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Petit larceny",
       "categorySlug": "petit-larceny",
-      "count": 10,
+      "count": 36815,
       "ratePer100k": null
     },
     {
@@ -6082,7 +6082,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Petit larceny",
       "categorySlug": "petit-larceny",
-      "count": 36,
+      "count": 33889,
       "ratePer100k": null
     },
     {
@@ -6091,7 +6091,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Petit larceny",
       "categorySlug": "petit-larceny",
-      "count": 458,
+      "count": 34897,
       "ratePer100k": null
     },
     {
@@ -6244,7 +6244,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Grand larceny",
       "categorySlug": "grand-larceny",
-      "count": 11,
+      "count": 13963,
       "ratePer100k": null
     },
     {
@@ -6253,7 +6253,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Grand larceny",
       "categorySlug": "grand-larceny",
-      "count": 24,
+      "count": 18497,
       "ratePer100k": null
     },
     {
@@ -6262,7 +6262,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Grand larceny",
       "categorySlug": "grand-larceny",
-      "count": 71,
+      "count": 18213,
       "ratePer100k": null
     },
     {
@@ -6271,7 +6271,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Grand larceny",
       "categorySlug": "grand-larceny",
-      "count": 650,
+      "count": 16297,
       "ratePer100k": null
     },
     {
@@ -6424,7 +6424,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
-      "count": 0,
+      "count": 1586,
       "ratePer100k": null
     },
     {
@@ -6433,7 +6433,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
-      "count": 0,
+      "count": 1943,
       "ratePer100k": null
     },
     {
@@ -6442,7 +6442,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
-      "count": 1,
+      "count": 1950,
       "ratePer100k": null
     },
     {
@@ -6451,7 +6451,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
-      "count": 14,
+      "count": 1355,
       "ratePer100k": null
     },
     {
@@ -6604,7 +6604,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Drug offenses",
       "categorySlug": "drug-offenses",
-      "count": 0,
+      "count": 2749,
       "ratePer100k": null
     },
     {
@@ -6613,7 +6613,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Drug offenses",
       "categorySlug": "drug-offenses",
-      "count": 3,
+      "count": 3207,
       "ratePer100k": null
     },
     {
@@ -6622,7 +6622,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Drug offenses",
       "categorySlug": "drug-offenses",
-      "count": 8,
+      "count": 4332,
       "ratePer100k": null
     },
     {
@@ -6631,7 +6631,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Drug offenses",
       "categorySlug": "drug-offenses",
-      "count": 50,
+      "count": 4242,
       "ratePer100k": null
     },
     {
@@ -6784,7 +6784,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Weapons offenses",
       "categorySlug": "weapons-offenses",
-      "count": 0,
+      "count": 993,
       "ratePer100k": null
     },
     {
@@ -6793,7 +6793,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Weapons offenses",
       "categorySlug": "weapons-offenses",
-      "count": 0,
+      "count": 1194,
       "ratePer100k": null
     },
     {
@@ -6802,7 +6802,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Weapons offenses",
       "categorySlug": "weapons-offenses",
-      "count": 0,
+      "count": 1477,
       "ratePer100k": null
     },
     {
@@ -6811,7 +6811,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Weapons offenses",
       "categorySlug": "weapons-offenses",
-      "count": 6,
+      "count": 1755,
       "ratePer100k": null
     },
     {
@@ -6964,7 +6964,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Criminal mischief",
       "categorySlug": "criminal-mischief",
-      "count": 0,
+      "count": 9665,
       "ratePer100k": null
     },
     {
@@ -6973,7 +6973,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Criminal mischief",
       "categorySlug": "criminal-mischief",
-      "count": 0,
+      "count": 9976,
       "ratePer100k": null
     },
     {
@@ -6982,7 +6982,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Criminal mischief",
       "categorySlug": "criminal-mischief",
-      "count": 5,
+      "count": 8939,
       "ratePer100k": null
     },
     {
@@ -6991,7 +6991,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Criminal mischief",
       "categorySlug": "criminal-mischief",
-      "count": 121,
+      "count": 8152,
       "ratePer100k": null
     },
     {
@@ -7144,7 +7144,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
-      "count": 4,
+      "count": 2946,
       "ratePer100k": null
     },
     {
@@ -7153,7 +7153,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
-      "count": 17,
+      "count": 3194,
       "ratePer100k": null
     },
     {
@@ -7162,7 +7162,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
-      "count": 19,
+      "count": 3947,
       "ratePer100k": null
     },
     {
@@ -7171,7 +7171,7 @@
       "districtSlug": "manhattan",
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
-      "count": 121,
+      "count": 4474,
       "ratePer100k": null
     },
     {
@@ -7324,7 +7324,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
-      "count": 0,
+      "count": 81,
       "ratePer100k": null
     },
     {
@@ -7333,7 +7333,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
-      "count": 0,
+      "count": 74,
       "ratePer100k": null
     },
     {
@@ -7342,7 +7342,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
-      "count": 2,
+      "count": 51,
       "ratePer100k": null
     },
     {
@@ -7351,7 +7351,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
-      "count": 4,
+      "count": 47,
       "ratePer100k": null
     },
     {
@@ -7504,7 +7504,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Rape",
       "categorySlug": "rape",
-      "count": 2,
+      "count": 305,
       "ratePer100k": null
     },
     {
@@ -7513,7 +7513,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Rape",
       "categorySlug": "rape",
-      "count": 10,
+      "count": 337,
       "ratePer100k": null
     },
     {
@@ -7522,7 +7522,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Rape",
       "categorySlug": "rape",
-      "count": 11,
+      "count": 309,
       "ratePer100k": null
     },
     {
@@ -7531,7 +7531,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Rape",
       "categorySlug": "rape",
-      "count": 54,
+      "count": 328,
       "ratePer100k": null
     },
     {
@@ -7684,7 +7684,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Other sexual offenses",
       "categorySlug": "other-sexual-offenses",
-      "count": 13,
+      "count": 1575,
       "ratePer100k": null
     },
     {
@@ -7693,7 +7693,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Other sexual offenses",
       "categorySlug": "other-sexual-offenses",
-      "count": 16,
+      "count": 1971,
       "ratePer100k": null
     },
     {
@@ -7702,7 +7702,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Other sexual offenses",
       "categorySlug": "other-sexual-offenses",
-      "count": 22,
+      "count": 2320,
       "ratePer100k": null
     },
     {
@@ -7711,7 +7711,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Other sexual offenses",
       "categorySlug": "other-sexual-offenses",
-      "count": 112,
+      "count": 2619,
       "ratePer100k": null
     },
     {
@@ -7864,7 +7864,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
-      "count": 0,
+      "count": 2466,
       "ratePer100k": null
     },
     {
@@ -7873,7 +7873,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
-      "count": 0,
+      "count": 3323,
       "ratePer100k": null
     },
     {
@@ -7882,7 +7882,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
-      "count": 2,
+      "count": 3441,
       "ratePer100k": null
     },
     {
@@ -7891,7 +7891,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
-      "count": 11,
+      "count": 3518,
       "ratePer100k": null
     },
     {
@@ -8044,7 +8044,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
-      "count": 1,
+      "count": 2781,
       "ratePer100k": null
     },
     {
@@ -8053,7 +8053,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
-      "count": 1,
+      "count": 3319,
       "ratePer100k": null
     },
     {
@@ -8062,7 +8062,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
-      "count": 3,
+      "count": 3134,
       "ratePer100k": null
     },
     {
@@ -8071,7 +8071,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
-      "count": 29,
+      "count": 3095,
       "ratePer100k": null
     },
     {
@@ -8224,7 +8224,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Felony assault",
       "categorySlug": "felony-assault",
-      "count": 2,
+      "count": 4533,
       "ratePer100k": null
     },
     {
@@ -8233,7 +8233,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Felony assault",
       "categorySlug": "felony-assault",
-      "count": 6,
+      "count": 5173,
       "ratePer100k": null
     },
     {
@@ -8242,7 +8242,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Felony assault",
       "categorySlug": "felony-assault",
-      "count": 9,
+      "count": 5744,
       "ratePer100k": null
     },
     {
@@ -8251,7 +8251,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Felony assault",
       "categorySlug": "felony-assault",
-      "count": 81,
+      "count": 6350,
       "ratePer100k": null
     },
     {
@@ -8404,7 +8404,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Petit larceny",
       "categorySlug": "petit-larceny",
-      "count": 6,
+      "count": 19879,
       "ratePer100k": null
     },
     {
@@ -8413,7 +8413,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Petit larceny",
       "categorySlug": "petit-larceny",
-      "count": 16,
+      "count": 25488,
       "ratePer100k": null
     },
     {
@@ -8422,7 +8422,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Petit larceny",
       "categorySlug": "petit-larceny",
-      "count": 23,
+      "count": 24874,
       "ratePer100k": null
     },
     {
@@ -8431,7 +8431,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Petit larceny",
       "categorySlug": "petit-larceny",
-      "count": 400,
+      "count": 24656,
       "ratePer100k": null
     },
     {
@@ -8584,7 +8584,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Grand larceny",
       "categorySlug": "grand-larceny",
-      "count": 16,
+      "count": 9197,
       "ratePer100k": null
     },
     {
@@ -8593,7 +8593,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Grand larceny",
       "categorySlug": "grand-larceny",
-      "count": 28,
+      "count": 10451,
       "ratePer100k": null
     },
     {
@@ -8602,7 +8602,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Grand larceny",
       "categorySlug": "grand-larceny",
-      "count": 52,
+      "count": 10173,
       "ratePer100k": null
     },
     {
@@ -8611,7 +8611,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Grand larceny",
       "categorySlug": "grand-larceny",
-      "count": 429,
+      "count": 9139,
       "ratePer100k": null
     },
     {
@@ -8764,7 +8764,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
-      "count": 0,
+      "count": 2568,
       "ratePer100k": null
     },
     {
@@ -8773,7 +8773,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
-      "count": 0,
+      "count": 3640,
       "ratePer100k": null
     },
     {
@@ -8782,7 +8782,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
-      "count": 2,
+      "count": 4527,
       "ratePer100k": null
     },
     {
@@ -8791,7 +8791,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
-      "count": 51,
+      "count": 4476,
       "ratePer100k": null
     },
     {
@@ -8944,7 +8944,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Drug offenses",
       "categorySlug": "drug-offenses",
-      "count": 0,
+      "count": 902,
       "ratePer100k": null
     },
     {
@@ -8953,7 +8953,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Drug offenses",
       "categorySlug": "drug-offenses",
-      "count": 4,
+      "count": 1071,
       "ratePer100k": null
     },
     {
@@ -8962,7 +8962,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Drug offenses",
       "categorySlug": "drug-offenses",
-      "count": 9,
+      "count": 2148,
       "ratePer100k": null
     },
     {
@@ -8971,7 +8971,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Drug offenses",
       "categorySlug": "drug-offenses",
-      "count": 23,
+      "count": 2437,
       "ratePer100k": null
     },
     {
@@ -9124,7 +9124,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Weapons offenses",
       "categorySlug": "weapons-offenses",
-      "count": 0,
+      "count": 1013,
       "ratePer100k": null
     },
     {
@@ -9133,7 +9133,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Weapons offenses",
       "categorySlug": "weapons-offenses",
-      "count": 1,
+      "count": 1356,
       "ratePer100k": null
     },
     {
@@ -9142,7 +9142,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Weapons offenses",
       "categorySlug": "weapons-offenses",
-      "count": 0,
+      "count": 1740,
       "ratePer100k": null
     },
     {
@@ -9151,7 +9151,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Weapons offenses",
       "categorySlug": "weapons-offenses",
-      "count": 4,
+      "count": 1702,
       "ratePer100k": null
     },
     {
@@ -9304,7 +9304,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Criminal mischief",
       "categorySlug": "criminal-mischief",
-      "count": 0,
+      "count": 10494,
       "ratePer100k": null
     },
     {
@@ -9313,7 +9313,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Criminal mischief",
       "categorySlug": "criminal-mischief",
-      "count": 0,
+      "count": 10663,
       "ratePer100k": null
     },
     {
@@ -9322,7 +9322,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Criminal mischief",
       "categorySlug": "criminal-mischief",
-      "count": 6,
+      "count": 10068,
       "ratePer100k": null
     },
     {
@@ -9331,7 +9331,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Criminal mischief",
       "categorySlug": "criminal-mischief",
-      "count": 67,
+      "count": 8812,
       "ratePer100k": null
     },
     {
@@ -9484,7 +9484,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
-      "count": 14,
+      "count": 3022,
       "ratePer100k": null
     },
     {
@@ -9493,7 +9493,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
-      "count": 19,
+      "count": 3122,
       "ratePer100k": null
     },
     {
@@ -9502,7 +9502,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
-      "count": 34,
+      "count": 3075,
       "ratePer100k": null
     },
     {
@@ -9511,7 +9511,7 @@
       "districtSlug": "queens",
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
-      "count": 160,
+      "count": 2909,
       "ratePer100k": null
     },
     {
@@ -9664,7 +9664,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
-      "count": 0,
+      "count": 14,
       "ratePer100k": null
     },
     {
@@ -9673,7 +9673,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
-      "count": 0,
+      "count": 12,
       "ratePer100k": null
     },
     {
@@ -9682,7 +9682,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
-      "count": 0,
+      "count": 19,
       "ratePer100k": null
     },
     {
@@ -9691,7 +9691,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
-      "count": 0,
+      "count": 7,
       "ratePer100k": null
     },
     {
@@ -9844,7 +9844,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Rape",
       "categorySlug": "rape",
-      "count": 0,
+      "count": 41,
       "ratePer100k": null
     },
     {
@@ -9853,7 +9853,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Rape",
       "categorySlug": "rape",
-      "count": 2,
+      "count": 38,
       "ratePer100k": null
     },
     {
@@ -9862,7 +9862,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Rape",
       "categorySlug": "rape",
-      "count": 2,
+      "count": 41,
       "ratePer100k": null
     },
     {
@@ -9871,7 +9871,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Rape",
       "categorySlug": "rape",
-      "count": 7,
+      "count": 41,
       "ratePer100k": null
     },
     {
@@ -10024,7 +10024,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Other sexual offenses",
       "categorySlug": "other-sexual-offenses",
-      "count": 2,
+      "count": 244,
       "ratePer100k": null
     },
     {
@@ -10033,7 +10033,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Other sexual offenses",
       "categorySlug": "other-sexual-offenses",
-      "count": 5,
+      "count": 263,
       "ratePer100k": null
     },
     {
@@ -10042,7 +10042,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Other sexual offenses",
       "categorySlug": "other-sexual-offenses",
-      "count": 8,
+      "count": 334,
       "ratePer100k": null
     },
     {
@@ -10051,7 +10051,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Other sexual offenses",
       "categorySlug": "other-sexual-offenses",
-      "count": 24,
+      "count": 343,
       "ratePer100k": null
     },
     {
@@ -10204,7 +10204,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
-      "count": 0,
+      "count": 207,
       "ratePer100k": null
     },
     {
@@ -10213,7 +10213,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
-      "count": 0,
+      "count": 288,
       "ratePer100k": null
     },
     {
@@ -10222,7 +10222,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
-      "count": 0,
+      "count": 314,
       "ratePer100k": null
     },
     {
@@ -10231,7 +10231,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
-      "count": 2,
+      "count": 294,
       "ratePer100k": null
     },
     {
@@ -10384,7 +10384,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
-      "count": 0,
+      "count": 238,
       "ratePer100k": null
     },
     {
@@ -10393,7 +10393,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
-      "count": 0,
+      "count": 350,
       "ratePer100k": null
     },
     {
@@ -10402,7 +10402,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
-      "count": 0,
+      "count": 367,
       "ratePer100k": null
     },
     {
@@ -10411,7 +10411,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
-      "count": 6,
+      "count": 343,
       "ratePer100k": null
     },
     {
@@ -10564,7 +10564,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Felony assault",
       "categorySlug": "felony-assault",
-      "count": 0,
+      "count": 610,
       "ratePer100k": null
     },
     {
@@ -10573,7 +10573,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Felony assault",
       "categorySlug": "felony-assault",
-      "count": 1,
+      "count": 790,
       "ratePer100k": null
     },
     {
@@ -10582,7 +10582,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Felony assault",
       "categorySlug": "felony-assault",
-      "count": 2,
+      "count": 981,
       "ratePer100k": null
     },
     {
@@ -10591,7 +10591,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Felony assault",
       "categorySlug": "felony-assault",
-      "count": 19,
+      "count": 937,
       "ratePer100k": null
     },
     {
@@ -10744,7 +10744,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Petit larceny",
       "categorySlug": "petit-larceny",
-      "count": 1,
+      "count": 2702,
       "ratePer100k": null
     },
     {
@@ -10753,7 +10753,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Petit larceny",
       "categorySlug": "petit-larceny",
-      "count": 2,
+      "count": 3997,
       "ratePer100k": null
     },
     {
@@ -10762,7 +10762,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Petit larceny",
       "categorySlug": "petit-larceny",
-      "count": 5,
+      "count": 4385,
       "ratePer100k": null
     },
     {
@@ -10771,7 +10771,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Petit larceny",
       "categorySlug": "petit-larceny",
-      "count": 85,
+      "count": 3963,
       "ratePer100k": null
     },
     {
@@ -10924,7 +10924,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Grand larceny",
       "categorySlug": "grand-larceny",
-      "count": 5,
+      "count": 1221,
       "ratePer100k": null
     },
     {
@@ -10933,7 +10933,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Grand larceny",
       "categorySlug": "grand-larceny",
-      "count": 10,
+      "count": 1398,
       "ratePer100k": null
     },
     {
@@ -10942,7 +10942,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Grand larceny",
       "categorySlug": "grand-larceny",
-      "count": 16,
+      "count": 1569,
       "ratePer100k": null
     },
     {
@@ -10951,7 +10951,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Grand larceny",
       "categorySlug": "grand-larceny",
-      "count": 82,
+      "count": 1336,
       "ratePer100k": null
     },
     {
@@ -11104,7 +11104,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
-      "count": 0,
+      "count": 281,
       "ratePer100k": null
     },
     {
@@ -11113,7 +11113,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
-      "count": 0,
+      "count": 512,
       "ratePer100k": null
     },
     {
@@ -11122,7 +11122,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
-      "count": 1,
+      "count": 458,
       "ratePer100k": null
     },
     {
@@ -11131,7 +11131,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
-      "count": 3,
+      "count": 329,
       "ratePer100k": null
     },
     {
@@ -11284,7 +11284,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Drug offenses",
       "categorySlug": "drug-offenses",
-      "count": 0,
+      "count": 465,
       "ratePer100k": null
     },
     {
@@ -11293,7 +11293,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Drug offenses",
       "categorySlug": "drug-offenses",
-      "count": 0,
+      "count": 507,
       "ratePer100k": null
     },
     {
@@ -11302,7 +11302,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Drug offenses",
       "categorySlug": "drug-offenses",
-      "count": 0,
+      "count": 631,
       "ratePer100k": null
     },
     {
@@ -11311,7 +11311,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Drug offenses",
       "categorySlug": "drug-offenses",
-      "count": 5,
+      "count": 786,
       "ratePer100k": null
     },
     {
@@ -11464,7 +11464,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Weapons offenses",
       "categorySlug": "weapons-offenses",
-      "count": 0,
+      "count": 196,
       "ratePer100k": null
     },
     {
@@ -11473,7 +11473,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Weapons offenses",
       "categorySlug": "weapons-offenses",
-      "count": 0,
+      "count": 224,
       "ratePer100k": null
     },
     {
@@ -11482,7 +11482,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Weapons offenses",
       "categorySlug": "weapons-offenses",
-      "count": 0,
+      "count": 242,
       "ratePer100k": null
     },
     {
@@ -11491,7 +11491,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Weapons offenses",
       "categorySlug": "weapons-offenses",
-      "count": 1,
+      "count": 307,
       "ratePer100k": null
     },
     {
@@ -11644,7 +11644,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Criminal mischief",
       "categorySlug": "criminal-mischief",
-      "count": 0,
+      "count": 2388,
       "ratePer100k": null
     },
     {
@@ -11653,7 +11653,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Criminal mischief",
       "categorySlug": "criminal-mischief",
-      "count": 0,
+      "count": 2373,
       "ratePer100k": null
     },
     {
@@ -11662,7 +11662,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Criminal mischief",
       "categorySlug": "criminal-mischief",
-      "count": 1,
+      "count": 2044,
       "ratePer100k": null
     },
     {
@@ -11671,7 +11671,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Criminal mischief",
       "categorySlug": "criminal-mischief",
-      "count": 11,
+      "count": 1818,
       "ratePer100k": null
     },
     {
@@ -11824,7 +11824,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
-      "count": 6,
+      "count": 1280,
       "ratePer100k": null
     },
     {
@@ -11833,7 +11833,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
-      "count": 9,
+      "count": 805,
       "ratePer100k": null
     },
     {
@@ -11842,7 +11842,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
-      "count": 7,
+      "count": 741,
       "ratePer100k": null
     },
     {
@@ -11851,7 +11851,7 @@
       "districtSlug": "staten-island",
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
-      "count": 38,
+      "count": 685,
       "ratePer100k": null
     },
     {

@@ -22,7 +22,6 @@
     2012,
     2013,
     2014,
-    2015,
     2016,
     2017,
     2018,
@@ -30,8 +29,7 @@
     2020,
     2021,
     2022,
-    2023,
-    2024
+    2023
   ],
   "districts": [
     {
@@ -254,15 +252,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2015,
-      "districtLabel": "77th Street",
-      "districtSlug": "77th-street",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 53,
-      "ratePer100k": null
-    },
-    {
       "year": 2016,
       "districtLabel": "77th Street",
       "districtSlug": "77th-street",
@@ -335,15 +324,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "77th Street",
-      "districtSlug": "77th-street",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 18,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "77th Street",
       "districtSlug": "77th-street",
@@ -386,15 +366,6 @@
       "categoryLabel": "Sexual offenses",
       "categorySlug": "sexual-offenses",
       "count": 279,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "77th Street",
-      "districtSlug": "77th-street",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 210,
       "ratePer100k": null
     },
     {
@@ -470,15 +441,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "77th Street",
-      "districtSlug": "77th-street",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 55,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "77th Street",
       "districtSlug": "77th-street",
@@ -521,15 +483,6 @@
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
       "count": 1015,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "77th Street",
-      "districtSlug": "77th-street",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 1038,
       "ratePer100k": null
     },
     {
@@ -605,15 +558,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "77th Street",
-      "districtSlug": "77th-street",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 332,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "77th Street",
       "districtSlug": "77th-street",
@@ -656,15 +600,6 @@
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
       "count": 1029,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "77th Street",
-      "districtSlug": "77th-street",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 942,
       "ratePer100k": null
     },
     {
@@ -740,15 +675,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "77th Street",
-      "districtSlug": "77th-street",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 233,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "77th Street",
       "districtSlug": "77th-street",
@@ -791,15 +717,6 @@
       "categoryLabel": "Theft",
       "categorySlug": "theft",
       "count": 1290,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "77th Street",
-      "districtSlug": "77th-street",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 1226,
       "ratePer100k": null
     },
     {
@@ -875,15 +792,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "77th Street",
-      "districtSlug": "77th-street",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 600,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "77th Street",
       "districtSlug": "77th-street",
@@ -926,15 +834,6 @@
       "categoryLabel": "Theft from vehicles",
       "categorySlug": "theft-from-vehicles",
       "count": 1258,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "77th Street",
-      "districtSlug": "77th-street",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 1269,
       "ratePer100k": null
     },
     {
@@ -1010,15 +909,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "77th Street",
-      "districtSlug": "77th-street",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 868,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "77th Street",
       "districtSlug": "77th-street",
@@ -1061,15 +951,6 @@
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
       "count": 1078,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "77th Street",
-      "districtSlug": "77th-street",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 1386,
       "ratePer100k": null
     },
     {
@@ -1145,15 +1026,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "77th Street",
-      "districtSlug": "77th-street",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 1575,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "77th Street",
       "districtSlug": "77th-street",
@@ -1196,15 +1068,6 @@
       "categoryLabel": "Assaults",
       "categorySlug": "assaults",
       "count": 3998,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "77th Street",
-      "districtSlug": "77th-street",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 4104,
       "ratePer100k": null
     },
     {
@@ -1280,15 +1143,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "77th Street",
-      "districtSlug": "77th-street",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 1378,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "77th Street",
       "districtSlug": "77th-street",
@@ -1331,15 +1185,6 @@
       "categoryLabel": "Criminal damage",
       "categorySlug": "criminal-damage",
       "count": 1476,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "77th Street",
-      "districtSlug": "77th-street",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 1427,
       "ratePer100k": null
     },
     {
@@ -1415,15 +1260,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "77th Street",
-      "districtSlug": "77th-street",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 574,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "77th Street",
       "districtSlug": "77th-street",
@@ -1466,15 +1302,6 @@
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
       "count": 895,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "77th Street",
-      "districtSlug": "77th-street",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 760,
       "ratePer100k": null
     },
     {
@@ -1550,15 +1377,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "77th Street",
-      "districtSlug": "77th-street",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 401,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "77th Street",
       "districtSlug": "77th-street",
@@ -1601,15 +1419,6 @@
       "categoryLabel": "Weapons incidents",
       "categorySlug": "weapons-incidents",
       "count": 147,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "77th Street",
-      "districtSlug": "77th-street",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 205,
       "ratePer100k": null
     },
     {
@@ -1685,15 +1494,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "77th Street",
-      "districtSlug": "77th-street",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 159,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Central",
       "districtSlug": "central",
@@ -1736,15 +1536,6 @@
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
       "count": 6,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Central",
-      "districtSlug": "central",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 11,
       "ratePer100k": null
     },
     {
@@ -1820,15 +1611,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Central",
-      "districtSlug": "central",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 1,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Central",
       "districtSlug": "central",
@@ -1871,15 +1653,6 @@
       "categoryLabel": "Sexual offenses",
       "categorySlug": "sexual-offenses",
       "count": 198,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Central",
-      "districtSlug": "central",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 239,
       "ratePer100k": null
     },
     {
@@ -1955,15 +1728,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Central",
-      "districtSlug": "central",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 51,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Central",
       "districtSlug": "central",
@@ -2006,15 +1770,6 @@
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
       "count": 479,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Central",
-      "districtSlug": "central",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 680,
       "ratePer100k": null
     },
     {
@@ -2090,15 +1845,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Central",
-      "districtSlug": "central",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 160,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Central",
       "districtSlug": "central",
@@ -2141,15 +1887,6 @@
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
       "count": 244,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Central",
-      "districtSlug": "central",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 342,
       "ratePer100k": null
     },
     {
@@ -2225,15 +1962,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Central",
-      "districtSlug": "central",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 112,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Central",
       "districtSlug": "central",
@@ -2276,15 +2004,6 @@
       "categoryLabel": "Theft",
       "categorySlug": "theft",
       "count": 1998,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Central",
-      "districtSlug": "central",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 2454,
       "ratePer100k": null
     },
     {
@@ -2360,15 +2079,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Central",
-      "districtSlug": "central",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 2115,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Central",
       "districtSlug": "central",
@@ -2411,15 +2121,6 @@
       "categoryLabel": "Theft from vehicles",
       "categorySlug": "theft-from-vehicles",
       "count": 756,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Central",
-      "districtSlug": "central",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 901,
       "ratePer100k": null
     },
     {
@@ -2495,15 +2196,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Central",
-      "districtSlug": "central",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 1895,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Central",
       "districtSlug": "central",
@@ -2546,15 +2238,6 @@
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
       "count": 246,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Central",
-      "districtSlug": "central",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 417,
       "ratePer100k": null
     },
     {
@@ -2630,15 +2313,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Central",
-      "districtSlug": "central",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 1193,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Central",
       "districtSlug": "central",
@@ -2681,15 +2355,6 @@
       "categoryLabel": "Assaults",
       "categorySlug": "assaults",
       "count": 2300,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Central",
-      "districtSlug": "central",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 2760,
       "ratePer100k": null
     },
     {
@@ -2765,15 +2430,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Central",
-      "districtSlug": "central",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 728,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Central",
       "districtSlug": "central",
@@ -2816,15 +2472,6 @@
       "categoryLabel": "Criminal damage",
       "categorySlug": "criminal-damage",
       "count": 731,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Central",
-      "districtSlug": "central",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 819,
       "ratePer100k": null
     },
     {
@@ -2900,15 +2547,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Central",
-      "districtSlug": "central",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 954,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Central",
       "districtSlug": "central",
@@ -2951,15 +2589,6 @@
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
       "count": 388,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Central",
-      "districtSlug": "central",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 345,
       "ratePer100k": null
     },
     {
@@ -3035,15 +2664,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Central",
-      "districtSlug": "central",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 260,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Central",
       "districtSlug": "central",
@@ -3086,15 +2706,6 @@
       "categoryLabel": "Weapons incidents",
       "categorySlug": "weapons-incidents",
       "count": 67,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Central",
-      "districtSlug": "central",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 85,
       "ratePer100k": null
     },
     {
@@ -3170,15 +2781,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Central",
-      "districtSlug": "central",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 77,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Devonshire",
       "districtSlug": "devonshire",
@@ -3221,15 +2823,6 @@
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
       "count": 2,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Devonshire",
-      "districtSlug": "devonshire",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 3,
       "ratePer100k": null
     },
     {
@@ -3305,15 +2898,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Devonshire",
-      "districtSlug": "devonshire",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 6,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Devonshire",
       "districtSlug": "devonshire",
@@ -3356,15 +2940,6 @@
       "categoryLabel": "Sexual offenses",
       "categorySlug": "sexual-offenses",
       "count": 159,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Devonshire",
-      "districtSlug": "devonshire",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 129,
       "ratePer100k": null
     },
     {
@@ -3440,15 +3015,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Devonshire",
-      "districtSlug": "devonshire",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 37,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Devonshire",
       "districtSlug": "devonshire",
@@ -3491,15 +3057,6 @@
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
       "count": 138,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Devonshire",
-      "districtSlug": "devonshire",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 181,
       "ratePer100k": null
     },
     {
@@ -3575,15 +3132,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Devonshire",
-      "districtSlug": "devonshire",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 78,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Devonshire",
       "districtSlug": "devonshire",
@@ -3626,15 +3174,6 @@
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
       "count": 908,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Devonshire",
-      "districtSlug": "devonshire",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 1156,
       "ratePer100k": null
     },
     {
@@ -3710,15 +3249,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Devonshire",
-      "districtSlug": "devonshire",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 350,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Devonshire",
       "districtSlug": "devonshire",
@@ -3761,15 +3291,6 @@
       "categoryLabel": "Theft",
       "categorySlug": "theft",
       "count": 1678,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Devonshire",
-      "districtSlug": "devonshire",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 1737,
       "ratePer100k": null
     },
     {
@@ -3845,15 +3366,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Devonshire",
-      "districtSlug": "devonshire",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 1384,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Devonshire",
       "districtSlug": "devonshire",
@@ -3896,15 +3408,6 @@
       "categoryLabel": "Theft from vehicles",
       "categorySlug": "theft-from-vehicles",
       "count": 1139,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Devonshire",
-      "districtSlug": "devonshire",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 1536,
       "ratePer100k": null
     },
     {
@@ -3980,15 +3483,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Devonshire",
-      "districtSlug": "devonshire",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 1209,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Devonshire",
       "districtSlug": "devonshire",
@@ -4031,15 +3525,6 @@
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
       "count": 489,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Devonshire",
-      "districtSlug": "devonshire",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 516,
       "ratePer100k": null
     },
     {
@@ -4115,15 +3600,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Devonshire",
-      "districtSlug": "devonshire",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 780,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Devonshire",
       "districtSlug": "devonshire",
@@ -4166,15 +3642,6 @@
       "categoryLabel": "Assaults",
       "categorySlug": "assaults",
       "count": 1323,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Devonshire",
-      "districtSlug": "devonshire",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 1399,
       "ratePer100k": null
     },
     {
@@ -4250,15 +3717,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Devonshire",
-      "districtSlug": "devonshire",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 564,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Devonshire",
       "districtSlug": "devonshire",
@@ -4301,15 +3759,6 @@
       "categoryLabel": "Criminal damage",
       "categorySlug": "criminal-damage",
       "count": 741,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Devonshire",
-      "districtSlug": "devonshire",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 803,
       "ratePer100k": null
     },
     {
@@ -4385,15 +3834,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Devonshire",
-      "districtSlug": "devonshire",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 441,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Devonshire",
       "districtSlug": "devonshire",
@@ -4436,15 +3876,6 @@
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
       "count": 1113,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Devonshire",
-      "districtSlug": "devonshire",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 1077,
       "ratePer100k": null
     },
     {
@@ -4520,15 +3951,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Devonshire",
-      "districtSlug": "devonshire",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 502,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Devonshire",
       "districtSlug": "devonshire",
@@ -4571,15 +3993,6 @@
       "categoryLabel": "Weapons incidents",
       "categorySlug": "weapons-incidents",
       "count": 43,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Devonshire",
-      "districtSlug": "devonshire",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 57,
       "ratePer100k": null
     },
     {
@@ -4655,15 +4068,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Devonshire",
-      "districtSlug": "devonshire",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 39,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Foothill",
       "districtSlug": "foothill",
@@ -4706,15 +4110,6 @@
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
       "count": 14,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Foothill",
-      "districtSlug": "foothill",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 13,
       "ratePer100k": null
     },
     {
@@ -4790,15 +4185,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Foothill",
-      "districtSlug": "foothill",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 4,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Foothill",
       "districtSlug": "foothill",
@@ -4841,15 +4227,6 @@
       "categoryLabel": "Sexual offenses",
       "categorySlug": "sexual-offenses",
       "count": 189,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Foothill",
-      "districtSlug": "foothill",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 121,
       "ratePer100k": null
     },
     {
@@ -4925,15 +4302,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Foothill",
-      "districtSlug": "foothill",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 46,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Foothill",
       "districtSlug": "foothill",
@@ -4976,15 +4344,6 @@
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
       "count": 190,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Foothill",
-      "districtSlug": "foothill",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 193,
       "ratePer100k": null
     },
     {
@@ -5060,15 +4419,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Foothill",
-      "districtSlug": "foothill",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 88,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Foothill",
       "districtSlug": "foothill",
@@ -5111,15 +4461,6 @@
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
       "count": 473,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Foothill",
-      "districtSlug": "foothill",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 559,
       "ratePer100k": null
     },
     {
@@ -5195,15 +4536,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Foothill",
-      "districtSlug": "foothill",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 167,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Foothill",
       "districtSlug": "foothill",
@@ -5246,15 +4578,6 @@
       "categoryLabel": "Theft",
       "categorySlug": "theft",
       "count": 748,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Foothill",
-      "districtSlug": "foothill",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 837,
       "ratePer100k": null
     },
     {
@@ -5330,15 +4653,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Foothill",
-      "districtSlug": "foothill",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 554,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Foothill",
       "districtSlug": "foothill",
@@ -5381,15 +4695,6 @@
       "categoryLabel": "Theft from vehicles",
       "categorySlug": "theft-from-vehicles",
       "count": 916,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Foothill",
-      "districtSlug": "foothill",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 1075,
       "ratePer100k": null
     },
     {
@@ -5465,15 +4770,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Foothill",
-      "districtSlug": "foothill",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 644,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Foothill",
       "districtSlug": "foothill",
@@ -5516,15 +4812,6 @@
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
       "count": 723,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Foothill",
-      "districtSlug": "foothill",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 765,
       "ratePer100k": null
     },
     {
@@ -5600,15 +4887,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Foothill",
-      "districtSlug": "foothill",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 895,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Foothill",
       "districtSlug": "foothill",
@@ -5651,15 +4929,6 @@
       "categoryLabel": "Assaults",
       "categorySlug": "assaults",
       "count": 1346,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Foothill",
-      "districtSlug": "foothill",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 1450,
       "ratePer100k": null
     },
     {
@@ -5735,15 +5004,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Foothill",
-      "districtSlug": "foothill",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 539,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Foothill",
       "districtSlug": "foothill",
@@ -5786,15 +5046,6 @@
       "categoryLabel": "Criminal damage",
       "categorySlug": "criminal-damage",
       "count": 762,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Foothill",
-      "districtSlug": "foothill",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 796,
       "ratePer100k": null
     },
     {
@@ -5870,15 +5121,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Foothill",
-      "districtSlug": "foothill",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 354,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Foothill",
       "districtSlug": "foothill",
@@ -5921,15 +5163,6 @@
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
       "count": 858,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Foothill",
-      "districtSlug": "foothill",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 677,
       "ratePer100k": null
     },
     {
@@ -6005,15 +5238,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Foothill",
-      "districtSlug": "foothill",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 302,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Foothill",
       "districtSlug": "foothill",
@@ -6056,15 +5280,6 @@
       "categoryLabel": "Weapons incidents",
       "categorySlug": "weapons-incidents",
       "count": 48,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Foothill",
-      "districtSlug": "foothill",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 61,
       "ratePer100k": null
     },
     {
@@ -6140,15 +5355,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Foothill",
-      "districtSlug": "foothill",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 34,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Harbor",
       "districtSlug": "harbor",
@@ -6191,15 +5397,6 @@
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
       "count": 5,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Harbor",
-      "districtSlug": "harbor",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 10,
       "ratePer100k": null
     },
     {
@@ -6275,15 +5472,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Harbor",
-      "districtSlug": "harbor",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 7,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Harbor",
       "districtSlug": "harbor",
@@ -6326,15 +5514,6 @@
       "categoryLabel": "Sexual offenses",
       "categorySlug": "sexual-offenses",
       "count": 163,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Harbor",
-      "districtSlug": "harbor",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 109,
       "ratePer100k": null
     },
     {
@@ -6410,15 +5589,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Harbor",
-      "districtSlug": "harbor",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 42,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Harbor",
       "districtSlug": "harbor",
@@ -6461,15 +5631,6 @@
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
       "count": 232,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Harbor",
-      "districtSlug": "harbor",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 308,
       "ratePer100k": null
     },
     {
@@ -6545,15 +5706,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Harbor",
-      "districtSlug": "harbor",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 103,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Harbor",
       "districtSlug": "harbor",
@@ -6596,15 +5748,6 @@
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
       "count": 740,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Harbor",
-      "districtSlug": "harbor",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 886,
       "ratePer100k": null
     },
     {
@@ -6680,15 +5823,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Harbor",
-      "districtSlug": "harbor",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 234,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Harbor",
       "districtSlug": "harbor",
@@ -6731,15 +5865,6 @@
       "categoryLabel": "Theft",
       "categorySlug": "theft",
       "count": 1088,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Harbor",
-      "districtSlug": "harbor",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 1120,
       "ratePer100k": null
     },
     {
@@ -6815,15 +5940,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Harbor",
-      "districtSlug": "harbor",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 839,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Harbor",
       "districtSlug": "harbor",
@@ -6866,15 +5982,6 @@
       "categoryLabel": "Theft from vehicles",
       "categorySlug": "theft-from-vehicles",
       "count": 1046,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Harbor",
-      "districtSlug": "harbor",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 1262,
       "ratePer100k": null
     },
     {
@@ -6950,15 +6057,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Harbor",
-      "districtSlug": "harbor",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 789,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Harbor",
       "districtSlug": "harbor",
@@ -7001,15 +6099,6 @@
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
       "count": 835,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Harbor",
-      "districtSlug": "harbor",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 1065,
       "ratePer100k": null
     },
     {
@@ -7085,15 +6174,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Harbor",
-      "districtSlug": "harbor",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 1189,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Harbor",
       "districtSlug": "harbor",
@@ -7136,15 +6216,6 @@
       "categoryLabel": "Assaults",
       "categorySlug": "assaults",
       "count": 1658,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Harbor",
-      "districtSlug": "harbor",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 1737,
       "ratePer100k": null
     },
     {
@@ -7220,15 +6291,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Harbor",
-      "districtSlug": "harbor",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 727,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Harbor",
       "districtSlug": "harbor",
@@ -7271,15 +6333,6 @@
       "categoryLabel": "Criminal damage",
       "categorySlug": "criminal-damage",
       "count": 904,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Harbor",
-      "districtSlug": "harbor",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 1025,
       "ratePer100k": null
     },
     {
@@ -7355,15 +6408,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Harbor",
-      "districtSlug": "harbor",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 545,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Harbor",
       "districtSlug": "harbor",
@@ -7406,15 +6450,6 @@
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
       "count": 614,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Harbor",
-      "districtSlug": "harbor",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 681,
       "ratePer100k": null
     },
     {
@@ -7490,15 +6525,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Harbor",
-      "districtSlug": "harbor",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 279,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Harbor",
       "districtSlug": "harbor",
@@ -7541,15 +6567,6 @@
       "categoryLabel": "Weapons incidents",
       "categorySlug": "weapons-incidents",
       "count": 72,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Harbor",
-      "districtSlug": "harbor",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 100,
       "ratePer100k": null
     },
     {
@@ -7625,15 +6642,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Harbor",
-      "districtSlug": "harbor",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 77,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Hollenbeck",
       "districtSlug": "hollenbeck",
@@ -7676,15 +6684,6 @@
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
       "count": 16,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Hollenbeck",
-      "districtSlug": "hollenbeck",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 12,
       "ratePer100k": null
     },
     {
@@ -7760,15 +6759,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Hollenbeck",
-      "districtSlug": "hollenbeck",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 3,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Hollenbeck",
       "districtSlug": "hollenbeck",
@@ -7811,15 +6801,6 @@
       "categoryLabel": "Sexual offenses",
       "categorySlug": "sexual-offenses",
       "count": 159,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Hollenbeck",
-      "districtSlug": "hollenbeck",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 133,
       "ratePer100k": null
     },
     {
@@ -7895,15 +6876,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Hollenbeck",
-      "districtSlug": "hollenbeck",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 20,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Hollenbeck",
       "districtSlug": "hollenbeck",
@@ -7946,15 +6918,6 @@
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
       "count": 281,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Hollenbeck",
-      "districtSlug": "hollenbeck",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 296,
       "ratePer100k": null
     },
     {
@@ -8030,15 +6993,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Hollenbeck",
-      "districtSlug": "hollenbeck",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 77,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Hollenbeck",
       "districtSlug": "hollenbeck",
@@ -8081,15 +7035,6 @@
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
       "count": 370,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Hollenbeck",
-      "districtSlug": "hollenbeck",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 396,
       "ratePer100k": null
     },
     {
@@ -8165,15 +7110,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Hollenbeck",
-      "districtSlug": "hollenbeck",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 120,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Hollenbeck",
       "districtSlug": "hollenbeck",
@@ -8216,15 +7152,6 @@
       "categoryLabel": "Theft",
       "categorySlug": "theft",
       "count": 743,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Hollenbeck",
-      "districtSlug": "hollenbeck",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 732,
       "ratePer100k": null
     },
     {
@@ -8300,15 +7227,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Hollenbeck",
-      "districtSlug": "hollenbeck",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 862,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Hollenbeck",
       "districtSlug": "hollenbeck",
@@ -8351,15 +7269,6 @@
       "categoryLabel": "Theft from vehicles",
       "categorySlug": "theft-from-vehicles",
       "count": 721,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Hollenbeck",
-      "districtSlug": "hollenbeck",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 1046,
       "ratePer100k": null
     },
     {
@@ -8435,15 +7344,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Hollenbeck",
-      "districtSlug": "hollenbeck",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 835,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Hollenbeck",
       "districtSlug": "hollenbeck",
@@ -8486,15 +7386,6 @@
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
       "count": 937,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Hollenbeck",
-      "districtSlug": "hollenbeck",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 997,
       "ratePer100k": null
     },
     {
@@ -8570,15 +7461,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Hollenbeck",
-      "districtSlug": "hollenbeck",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 1116,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Hollenbeck",
       "districtSlug": "hollenbeck",
@@ -8621,15 +7503,6 @@
       "categoryLabel": "Assaults",
       "categorySlug": "assaults",
       "count": 1577,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Hollenbeck",
-      "districtSlug": "hollenbeck",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 1957,
       "ratePer100k": null
     },
     {
@@ -8705,15 +7578,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Hollenbeck",
-      "districtSlug": "hollenbeck",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 339,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Hollenbeck",
       "districtSlug": "hollenbeck",
@@ -8756,15 +7620,6 @@
       "categoryLabel": "Criminal damage",
       "categorySlug": "criminal-damage",
       "count": 729,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Hollenbeck",
-      "districtSlug": "hollenbeck",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 854,
       "ratePer100k": null
     },
     {
@@ -8840,15 +7695,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Hollenbeck",
-      "districtSlug": "hollenbeck",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 430,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Hollenbeck",
       "districtSlug": "hollenbeck",
@@ -8891,15 +7737,6 @@
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
       "count": 486,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Hollenbeck",
-      "districtSlug": "hollenbeck",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 451,
       "ratePer100k": null
     },
     {
@@ -8975,15 +7812,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Hollenbeck",
-      "districtSlug": "hollenbeck",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 180,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Hollenbeck",
       "districtSlug": "hollenbeck",
@@ -9026,15 +7854,6 @@
       "categoryLabel": "Weapons incidents",
       "categorySlug": "weapons-incidents",
       "count": 100,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Hollenbeck",
-      "districtSlug": "hollenbeck",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 102,
       "ratePer100k": null
     },
     {
@@ -9110,15 +7929,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Hollenbeck",
-      "districtSlug": "hollenbeck",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 35,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Hollywood",
       "districtSlug": "hollywood",
@@ -9161,15 +7971,6 @@
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
       "count": 7,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Hollywood",
-      "districtSlug": "hollywood",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 8,
       "ratePer100k": null
     },
     {
@@ -9245,15 +8046,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Hollywood",
-      "districtSlug": "hollywood",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 5,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Hollywood",
       "districtSlug": "hollywood",
@@ -9296,15 +8088,6 @@
       "categoryLabel": "Sexual offenses",
       "categorySlug": "sexual-offenses",
       "count": 239,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Hollywood",
-      "districtSlug": "hollywood",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 226,
       "ratePer100k": null
     },
     {
@@ -9380,15 +8163,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Hollywood",
-      "districtSlug": "hollywood",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 40,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Hollywood",
       "districtSlug": "hollywood",
@@ -9431,15 +8205,6 @@
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
       "count": 375,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Hollywood",
-      "districtSlug": "hollywood",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 433,
       "ratePer100k": null
     },
     {
@@ -9515,15 +8280,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Hollywood",
-      "districtSlug": "hollywood",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 118,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Hollywood",
       "districtSlug": "hollywood",
@@ -9566,15 +8322,6 @@
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
       "count": 507,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Hollywood",
-      "districtSlug": "hollywood",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 533,
       "ratePer100k": null
     },
     {
@@ -9650,15 +8397,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Hollywood",
-      "districtSlug": "hollywood",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 177,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Hollywood",
       "districtSlug": "hollywood",
@@ -9701,15 +8439,6 @@
       "categoryLabel": "Theft",
       "categorySlug": "theft",
       "count": 1631,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Hollywood",
-      "districtSlug": "hollywood",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 1756,
       "ratePer100k": null
     },
     {
@@ -9785,15 +8514,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Hollywood",
-      "districtSlug": "hollywood",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 1496,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Hollywood",
       "districtSlug": "hollywood",
@@ -9836,15 +8556,6 @@
       "categoryLabel": "Theft from vehicles",
       "categorySlug": "theft-from-vehicles",
       "count": 1114,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Hollywood",
-      "districtSlug": "hollywood",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 1375,
       "ratePer100k": null
     },
     {
@@ -9920,15 +8631,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Hollywood",
-      "districtSlug": "hollywood",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 1154,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Hollywood",
       "districtSlug": "hollywood",
@@ -9971,15 +8673,6 @@
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
       "count": 435,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Hollywood",
-      "districtSlug": "hollywood",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 544,
       "ratePer100k": null
     },
     {
@@ -10055,15 +8748,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Hollywood",
-      "districtSlug": "hollywood",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 697,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Hollywood",
       "districtSlug": "hollywood",
@@ -10106,15 +8790,6 @@
       "categoryLabel": "Assaults",
       "categorySlug": "assaults",
       "count": 1788,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Hollywood",
-      "districtSlug": "hollywood",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 1889,
       "ratePer100k": null
     },
     {
@@ -10190,15 +8865,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Hollywood",
-      "districtSlug": "hollywood",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 605,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Hollywood",
       "districtSlug": "hollywood",
@@ -10241,15 +8907,6 @@
       "categoryLabel": "Criminal damage",
       "categorySlug": "criminal-damage",
       "count": 854,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Hollywood",
-      "districtSlug": "hollywood",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 975,
       "ratePer100k": null
     },
     {
@@ -10325,15 +8982,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Hollywood",
-      "districtSlug": "hollywood",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 529,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Hollywood",
       "districtSlug": "hollywood",
@@ -10376,15 +9024,6 @@
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
       "count": 697,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Hollywood",
-      "districtSlug": "hollywood",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 639,
       "ratePer100k": null
     },
     {
@@ -10460,15 +9099,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Hollywood",
-      "districtSlug": "hollywood",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 410,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Hollywood",
       "districtSlug": "hollywood",
@@ -10511,15 +9141,6 @@
       "categoryLabel": "Weapons incidents",
       "categorySlug": "weapons-incidents",
       "count": 64,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Hollywood",
-      "districtSlug": "hollywood",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 80,
       "ratePer100k": null
     },
     {
@@ -10595,15 +9216,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Hollywood",
-      "districtSlug": "hollywood",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 51,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Mission",
       "districtSlug": "mission",
@@ -10646,15 +9258,6 @@
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
       "count": 14,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Mission",
-      "districtSlug": "mission",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 0,
       "ratePer100k": null
     },
     {
@@ -10730,15 +9333,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Mission",
-      "districtSlug": "mission",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 2,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Mission",
       "districtSlug": "mission",
@@ -10781,15 +9375,6 @@
       "categoryLabel": "Sexual offenses",
       "categorySlug": "sexual-offenses",
       "count": 243,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Mission",
-      "districtSlug": "mission",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 0,
       "ratePer100k": null
     },
     {
@@ -10865,15 +9450,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Mission",
-      "districtSlug": "mission",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 49,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Mission",
       "districtSlug": "mission",
@@ -10916,15 +9492,6 @@
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
       "count": 292,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Mission",
-      "districtSlug": "mission",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 0,
       "ratePer100k": null
     },
     {
@@ -11000,15 +9567,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Mission",
-      "districtSlug": "mission",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 110,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Mission",
       "districtSlug": "mission",
@@ -11051,15 +9609,6 @@
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
       "count": 636,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Mission",
-      "districtSlug": "mission",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 0,
       "ratePer100k": null
     },
     {
@@ -11135,15 +9684,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Mission",
-      "districtSlug": "mission",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 126,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Mission",
       "districtSlug": "mission",
@@ -11186,15 +9726,6 @@
       "categoryLabel": "Theft",
       "categorySlug": "theft",
       "count": 1269,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Mission",
-      "districtSlug": "mission",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 0,
       "ratePer100k": null
     },
     {
@@ -11270,15 +9801,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Mission",
-      "districtSlug": "mission",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 849,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Mission",
       "districtSlug": "mission",
@@ -11321,15 +9843,6 @@
       "categoryLabel": "Theft from vehicles",
       "categorySlug": "theft-from-vehicles",
       "count": 1316,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Mission",
-      "districtSlug": "mission",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 0,
       "ratePer100k": null
     },
     {
@@ -11405,15 +9918,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Mission",
-      "districtSlug": "mission",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 974,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Mission",
       "districtSlug": "mission",
@@ -11456,15 +9960,6 @@
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
       "count": 886,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Mission",
-      "districtSlug": "mission",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 0,
       "ratePer100k": null
     },
     {
@@ -11540,15 +10035,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Mission",
-      "districtSlug": "mission",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 1303,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Mission",
       "districtSlug": "mission",
@@ -11591,15 +10077,6 @@
       "categoryLabel": "Assaults",
       "categorySlug": "assaults",
       "count": 1931,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Mission",
-      "districtSlug": "mission",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 0,
       "ratePer100k": null
     },
     {
@@ -11675,15 +10152,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Mission",
-      "districtSlug": "mission",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 711,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Mission",
       "districtSlug": "mission",
@@ -11726,15 +10194,6 @@
       "categoryLabel": "Criminal damage",
       "categorySlug": "criminal-damage",
       "count": 980,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Mission",
-      "districtSlug": "mission",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 0,
       "ratePer100k": null
     },
     {
@@ -11810,15 +10269,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Mission",
-      "districtSlug": "mission",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 400,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Mission",
       "districtSlug": "mission",
@@ -11861,15 +10311,6 @@
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
       "count": 1046,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Mission",
-      "districtSlug": "mission",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 0,
       "ratePer100k": null
     },
     {
@@ -11945,15 +10386,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Mission",
-      "districtSlug": "mission",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 358,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Mission",
       "districtSlug": "mission",
@@ -11996,15 +10428,6 @@
       "categoryLabel": "Weapons incidents",
       "categorySlug": "weapons-incidents",
       "count": 52,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Mission",
-      "districtSlug": "mission",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 0,
       "ratePer100k": null
     },
     {
@@ -12080,15 +10503,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Mission",
-      "districtSlug": "mission",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 76,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "N Hollywood",
       "districtSlug": "n-hollywood",
@@ -12126,15 +10540,6 @@
     },
     {
       "year": 2014,
-      "districtLabel": "N Hollywood",
-      "districtSlug": "n-hollywood",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 7,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
       "districtLabel": "N Hollywood",
       "districtSlug": "n-hollywood",
       "categoryLabel": "Homicide",
@@ -12215,15 +10620,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "N Hollywood",
-      "districtSlug": "n-hollywood",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 3,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "N Hollywood",
       "districtSlug": "n-hollywood",
@@ -12266,15 +10662,6 @@
       "categoryLabel": "Sexual offenses",
       "categorySlug": "sexual-offenses",
       "count": 213,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "N Hollywood",
-      "districtSlug": "n-hollywood",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 200,
       "ratePer100k": null
     },
     {
@@ -12350,15 +10737,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "N Hollywood",
-      "districtSlug": "n-hollywood",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 48,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "N Hollywood",
       "districtSlug": "n-hollywood",
@@ -12401,15 +10779,6 @@
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
       "count": 185,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "N Hollywood",
-      "districtSlug": "n-hollywood",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 237,
       "ratePer100k": null
     },
     {
@@ -12485,15 +10854,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "N Hollywood",
-      "districtSlug": "n-hollywood",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 124,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "N Hollywood",
       "districtSlug": "n-hollywood",
@@ -12536,15 +10896,6 @@
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
       "count": 724,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "N Hollywood",
-      "districtSlug": "n-hollywood",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 772,
       "ratePer100k": null
     },
     {
@@ -12620,15 +10971,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "N Hollywood",
-      "districtSlug": "n-hollywood",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 353,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "N Hollywood",
       "districtSlug": "n-hollywood",
@@ -12671,15 +11013,6 @@
       "categoryLabel": "Theft",
       "categorySlug": "theft",
       "count": 1709,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "N Hollywood",
-      "districtSlug": "n-hollywood",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 1749,
       "ratePer100k": null
     },
     {
@@ -12755,15 +11088,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "N Hollywood",
-      "districtSlug": "n-hollywood",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 1473,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "N Hollywood",
       "districtSlug": "n-hollywood",
@@ -12806,15 +11130,6 @@
       "categoryLabel": "Theft from vehicles",
       "categorySlug": "theft-from-vehicles",
       "count": 1868,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "N Hollywood",
-      "districtSlug": "n-hollywood",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 2072,
       "ratePer100k": null
     },
     {
@@ -12890,15 +11205,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "N Hollywood",
-      "districtSlug": "n-hollywood",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 1346,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "N Hollywood",
       "districtSlug": "n-hollywood",
@@ -12941,15 +11247,6 @@
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
       "count": 627,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "N Hollywood",
-      "districtSlug": "n-hollywood",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 734,
       "ratePer100k": null
     },
     {
@@ -13025,15 +11322,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "N Hollywood",
-      "districtSlug": "n-hollywood",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 1103,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "N Hollywood",
       "districtSlug": "n-hollywood",
@@ -13076,15 +11364,6 @@
       "categoryLabel": "Assaults",
       "categorySlug": "assaults",
       "count": 1635,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "N Hollywood",
-      "districtSlug": "n-hollywood",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 1897,
       "ratePer100k": null
     },
     {
@@ -13160,15 +11439,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "N Hollywood",
-      "districtSlug": "n-hollywood",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 739,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "N Hollywood",
       "districtSlug": "n-hollywood",
@@ -13211,15 +11481,6 @@
       "categoryLabel": "Criminal damage",
       "categorySlug": "criminal-damage",
       "count": 1086,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "N Hollywood",
-      "districtSlug": "n-hollywood",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 1102,
       "ratePer100k": null
     },
     {
@@ -13295,15 +11556,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "N Hollywood",
-      "districtSlug": "n-hollywood",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 557,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "N Hollywood",
       "districtSlug": "n-hollywood",
@@ -13346,15 +11598,6 @@
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
       "count": 1203,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "N Hollywood",
-      "districtSlug": "n-hollywood",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 1332,
       "ratePer100k": null
     },
     {
@@ -13430,15 +11673,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "N Hollywood",
-      "districtSlug": "n-hollywood",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 500,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "N Hollywood",
       "districtSlug": "n-hollywood",
@@ -13481,15 +11715,6 @@
       "categoryLabel": "Weapons incidents",
       "categorySlug": "weapons-incidents",
       "count": 47,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "N Hollywood",
-      "districtSlug": "n-hollywood",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 96,
       "ratePer100k": null
     },
     {
@@ -13565,15 +11790,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "N Hollywood",
-      "districtSlug": "n-hollywood",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 67,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Newton",
       "districtSlug": "newton",
@@ -13616,15 +11832,6 @@
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
       "count": 16,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Newton",
-      "districtSlug": "newton",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 26,
       "ratePer100k": null
     },
     {
@@ -13700,15 +11907,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Newton",
-      "districtSlug": "newton",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 5,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Newton",
       "districtSlug": "newton",
@@ -13751,15 +11949,6 @@
       "categoryLabel": "Sexual offenses",
       "categorySlug": "sexual-offenses",
       "count": 174,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Newton",
-      "districtSlug": "newton",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 137,
       "ratePer100k": null
     },
     {
@@ -13835,15 +12024,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Newton",
-      "districtSlug": "newton",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 27,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Newton",
       "districtSlug": "newton",
@@ -13886,15 +12066,6 @@
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
       "count": 627,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Newton",
-      "districtSlug": "newton",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 687,
       "ratePer100k": null
     },
     {
@@ -13970,15 +12141,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Newton",
-      "districtSlug": "newton",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 203,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Newton",
       "districtSlug": "newton",
@@ -14021,15 +12183,6 @@
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
       "count": 529,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Newton",
-      "districtSlug": "newton",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 426,
       "ratePer100k": null
     },
     {
@@ -14105,15 +12258,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Newton",
-      "districtSlug": "newton",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 153,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Newton",
       "districtSlug": "newton",
@@ -14156,15 +12300,6 @@
       "categoryLabel": "Theft",
       "categorySlug": "theft",
       "count": 1004,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Newton",
-      "districtSlug": "newton",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 1008,
       "ratePer100k": null
     },
     {
@@ -14240,15 +12375,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Newton",
-      "districtSlug": "newton",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 808,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Newton",
       "districtSlug": "newton",
@@ -14291,15 +12417,6 @@
       "categoryLabel": "Theft from vehicles",
       "categorySlug": "theft-from-vehicles",
       "count": 1067,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Newton",
-      "districtSlug": "newton",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 1165,
       "ratePer100k": null
     },
     {
@@ -14375,15 +12492,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Newton",
-      "districtSlug": "newton",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 916,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Newton",
       "districtSlug": "newton",
@@ -14426,15 +12534,6 @@
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
       "count": 1029,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Newton",
-      "districtSlug": "newton",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 998,
       "ratePer100k": null
     },
     {
@@ -14510,15 +12609,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Newton",
-      "districtSlug": "newton",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 1452,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Newton",
       "districtSlug": "newton",
@@ -14561,15 +12651,6 @@
       "categoryLabel": "Assaults",
       "categorySlug": "assaults",
       "count": 2302,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Newton",
-      "districtSlug": "newton",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 2546,
       "ratePer100k": null
     },
     {
@@ -14645,15 +12726,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Newton",
-      "districtSlug": "newton",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 530,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Newton",
       "districtSlug": "newton",
@@ -14696,15 +12768,6 @@
       "categoryLabel": "Criminal damage",
       "categorySlug": "criminal-damage",
       "count": 872,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Newton",
-      "districtSlug": "newton",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 907,
       "ratePer100k": null
     },
     {
@@ -14780,15 +12843,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Newton",
-      "districtSlug": "newton",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 408,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Newton",
       "districtSlug": "newton",
@@ -14831,15 +12885,6 @@
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
       "count": 474,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Newton",
-      "districtSlug": "newton",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 383,
       "ratePer100k": null
     },
     {
@@ -14915,15 +12960,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Newton",
-      "districtSlug": "newton",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 232,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Newton",
       "districtSlug": "newton",
@@ -14966,15 +13002,6 @@
       "categoryLabel": "Weapons incidents",
       "categorySlug": "weapons-incidents",
       "count": 82,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Newton",
-      "districtSlug": "newton",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 171,
       "ratePer100k": null
     },
     {
@@ -15050,15 +13077,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Newton",
-      "districtSlug": "newton",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 53,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Northeast",
       "districtSlug": "northeast",
@@ -15101,15 +13119,6 @@
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
       "count": 7,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Northeast",
-      "districtSlug": "northeast",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 13,
       "ratePer100k": null
     },
     {
@@ -15185,15 +13194,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Northeast",
-      "districtSlug": "northeast",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 4,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Northeast",
       "districtSlug": "northeast",
@@ -15236,15 +13236,6 @@
       "categoryLabel": "Sexual offenses",
       "categorySlug": "sexual-offenses",
       "count": 180,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Northeast",
-      "districtSlug": "northeast",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 146,
       "ratePer100k": null
     },
     {
@@ -15320,15 +13311,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Northeast",
-      "districtSlug": "northeast",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 33,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Northeast",
       "districtSlug": "northeast",
@@ -15371,15 +13353,6 @@
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
       "count": 299,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Northeast",
-      "districtSlug": "northeast",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 317,
       "ratePer100k": null
     },
     {
@@ -15455,15 +13428,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Northeast",
-      "districtSlug": "northeast",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 72,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Northeast",
       "districtSlug": "northeast",
@@ -15506,15 +13470,6 @@
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
       "count": 721,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Northeast",
-      "districtSlug": "northeast",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 814,
       "ratePer100k": null
     },
     {
@@ -15590,15 +13545,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Northeast",
-      "districtSlug": "northeast",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 151,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Northeast",
       "districtSlug": "northeast",
@@ -15641,15 +13587,6 @@
       "categoryLabel": "Theft",
       "categorySlug": "theft",
       "count": 1349,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Northeast",
-      "districtSlug": "northeast",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 1365,
       "ratePer100k": null
     },
     {
@@ -15725,15 +13662,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Northeast",
-      "districtSlug": "northeast",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 1253,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Northeast",
       "districtSlug": "northeast",
@@ -15776,15 +13704,6 @@
       "categoryLabel": "Theft from vehicles",
       "categorySlug": "theft-from-vehicles",
       "count": 1581,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Northeast",
-      "districtSlug": "northeast",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 1544,
       "ratePer100k": null
     },
     {
@@ -15860,15 +13779,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Northeast",
-      "districtSlug": "northeast",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 1221,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Northeast",
       "districtSlug": "northeast",
@@ -15911,15 +13821,6 @@
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
       "count": 776,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Northeast",
-      "districtSlug": "northeast",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 848,
       "ratePer100k": null
     },
     {
@@ -15995,15 +13896,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Northeast",
-      "districtSlug": "northeast",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 930,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Northeast",
       "districtSlug": "northeast",
@@ -16046,15 +13938,6 @@
       "categoryLabel": "Assaults",
       "categorySlug": "assaults",
       "count": 1657,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Northeast",
-      "districtSlug": "northeast",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 1709,
       "ratePer100k": null
     },
     {
@@ -16130,15 +14013,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Northeast",
-      "districtSlug": "northeast",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 267,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Northeast",
       "districtSlug": "northeast",
@@ -16181,15 +14055,6 @@
       "categoryLabel": "Criminal damage",
       "categorySlug": "criminal-damage",
       "count": 1141,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Northeast",
-      "districtSlug": "northeast",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 1167,
       "ratePer100k": null
     },
     {
@@ -16265,15 +14130,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Northeast",
-      "districtSlug": "northeast",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 459,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Northeast",
       "districtSlug": "northeast",
@@ -16316,15 +14172,6 @@
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
       "count": 850,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Northeast",
-      "districtSlug": "northeast",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 856,
       "ratePer100k": null
     },
     {
@@ -16400,15 +14247,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Northeast",
-      "districtSlug": "northeast",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 301,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Northeast",
       "districtSlug": "northeast",
@@ -16451,15 +14289,6 @@
       "categoryLabel": "Weapons incidents",
       "categorySlug": "weapons-incidents",
       "count": 38,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Northeast",
-      "districtSlug": "northeast",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 62,
       "ratePer100k": null
     },
     {
@@ -16535,15 +14364,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Northeast",
-      "districtSlug": "northeast",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 26,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Olympic",
       "districtSlug": "olympic",
@@ -16586,15 +14406,6 @@
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
       "count": 10,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Olympic",
-      "districtSlug": "olympic",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 0,
       "ratePer100k": null
     },
     {
@@ -16670,15 +14481,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Olympic",
-      "districtSlug": "olympic",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 4,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Olympic",
       "districtSlug": "olympic",
@@ -16721,15 +14523,6 @@
       "categoryLabel": "Sexual offenses",
       "categorySlug": "sexual-offenses",
       "count": 212,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Olympic",
-      "districtSlug": "olympic",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 0,
       "ratePer100k": null
     },
     {
@@ -16805,15 +14598,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Olympic",
-      "districtSlug": "olympic",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 45,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Olympic",
       "districtSlug": "olympic",
@@ -16856,15 +14640,6 @@
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
       "count": 529,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Olympic",
-      "districtSlug": "olympic",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 0,
       "ratePer100k": null
     },
     {
@@ -16940,15 +14715,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Olympic",
-      "districtSlug": "olympic",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 132,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Olympic",
       "districtSlug": "olympic",
@@ -16991,15 +14757,6 @@
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
       "count": 632,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Olympic",
-      "districtSlug": "olympic",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 0,
       "ratePer100k": null
     },
     {
@@ -17075,15 +14832,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Olympic",
-      "districtSlug": "olympic",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 260,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Olympic",
       "districtSlug": "olympic",
@@ -17126,15 +14874,6 @@
       "categoryLabel": "Theft",
       "categorySlug": "theft",
       "count": 1084,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Olympic",
-      "districtSlug": "olympic",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 0,
       "ratePer100k": null
     },
     {
@@ -17210,15 +14949,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Olympic",
-      "districtSlug": "olympic",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 893,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Olympic",
       "districtSlug": "olympic",
@@ -17261,15 +14991,6 @@
       "categoryLabel": "Theft from vehicles",
       "categorySlug": "theft-from-vehicles",
       "count": 1139,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Olympic",
-      "districtSlug": "olympic",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 0,
       "ratePer100k": null
     },
     {
@@ -17345,15 +15066,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Olympic",
-      "districtSlug": "olympic",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 1291,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Olympic",
       "districtSlug": "olympic",
@@ -17396,15 +15108,6 @@
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
       "count": 513,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Olympic",
-      "districtSlug": "olympic",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 0,
       "ratePer100k": null
     },
     {
@@ -17480,15 +15183,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Olympic",
-      "districtSlug": "olympic",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 980,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Olympic",
       "districtSlug": "olympic",
@@ -17531,15 +15225,6 @@
       "categoryLabel": "Assaults",
       "categorySlug": "assaults",
       "count": 2354,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Olympic",
-      "districtSlug": "olympic",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 0,
       "ratePer100k": null
     },
     {
@@ -17615,15 +15300,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Olympic",
-      "districtSlug": "olympic",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 618,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Olympic",
       "districtSlug": "olympic",
@@ -17666,15 +15342,6 @@
       "categoryLabel": "Criminal damage",
       "categorySlug": "criminal-damage",
       "count": 870,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Olympic",
-      "districtSlug": "olympic",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 0,
       "ratePer100k": null
     },
     {
@@ -17750,15 +15417,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Olympic",
-      "districtSlug": "olympic",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 519,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Olympic",
       "districtSlug": "olympic",
@@ -17801,15 +15459,6 @@
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
       "count": 813,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Olympic",
-      "districtSlug": "olympic",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 1,
       "ratePer100k": null
     },
     {
@@ -17885,15 +15534,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Olympic",
-      "districtSlug": "olympic",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 264,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Olympic",
       "districtSlug": "olympic",
@@ -17936,15 +15576,6 @@
       "categoryLabel": "Weapons incidents",
       "categorySlug": "weapons-incidents",
       "count": 54,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Olympic",
-      "districtSlug": "olympic",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 0,
       "ratePer100k": null
     },
     {
@@ -18020,15 +15651,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Olympic",
-      "districtSlug": "olympic",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 66,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Pacific",
       "districtSlug": "pacific",
@@ -18071,15 +15693,6 @@
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
       "count": 1,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Pacific",
-      "districtSlug": "pacific",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 9,
       "ratePer100k": null
     },
     {
@@ -18155,15 +15768,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Pacific",
-      "districtSlug": "pacific",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 1,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Pacific",
       "districtSlug": "pacific",
@@ -18206,15 +15810,6 @@
       "categoryLabel": "Sexual offenses",
       "categorySlug": "sexual-offenses",
       "count": 176,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Pacific",
-      "districtSlug": "pacific",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 174,
       "ratePer100k": null
     },
     {
@@ -18290,15 +15885,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Pacific",
-      "districtSlug": "pacific",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 43,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Pacific",
       "districtSlug": "pacific",
@@ -18341,15 +15927,6 @@
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
       "count": 247,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Pacific",
-      "districtSlug": "pacific",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 263,
       "ratePer100k": null
     },
     {
@@ -18425,15 +16002,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Pacific",
-      "districtSlug": "pacific",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 90,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Pacific",
       "districtSlug": "pacific",
@@ -18476,15 +16044,6 @@
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
       "count": 1123,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Pacific",
-      "districtSlug": "pacific",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 1054,
       "ratePer100k": null
     },
     {
@@ -18560,15 +16119,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Pacific",
-      "districtSlug": "pacific",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 348,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Pacific",
       "districtSlug": "pacific",
@@ -18611,15 +16161,6 @@
       "categoryLabel": "Theft",
       "categorySlug": "theft",
       "count": 2274,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Pacific",
-      "districtSlug": "pacific",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 2368,
       "ratePer100k": null
     },
     {
@@ -18695,15 +16236,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Pacific",
-      "districtSlug": "pacific",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 2492,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Pacific",
       "districtSlug": "pacific",
@@ -18746,15 +16278,6 @@
       "categoryLabel": "Theft from vehicles",
       "categorySlug": "theft-from-vehicles",
       "count": 1399,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Pacific",
-      "districtSlug": "pacific",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 1741,
       "ratePer100k": null
     },
     {
@@ -18830,15 +16353,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Pacific",
-      "districtSlug": "pacific",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 1493,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Pacific",
       "districtSlug": "pacific",
@@ -18881,15 +16395,6 @@
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
       "count": 817,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Pacific",
-      "districtSlug": "pacific",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 904,
       "ratePer100k": null
     },
     {
@@ -18965,15 +16470,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Pacific",
-      "districtSlug": "pacific",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 1193,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Pacific",
       "districtSlug": "pacific",
@@ -19016,15 +16512,6 @@
       "categoryLabel": "Assaults",
       "categorySlug": "assaults",
       "count": 1373,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Pacific",
-      "districtSlug": "pacific",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 1523,
       "ratePer100k": null
     },
     {
@@ -19100,15 +16587,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Pacific",
-      "districtSlug": "pacific",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 506,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Pacific",
       "districtSlug": "pacific",
@@ -19151,15 +16629,6 @@
       "categoryLabel": "Criminal damage",
       "categorySlug": "criminal-damage",
       "count": 1036,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Pacific",
-      "districtSlug": "pacific",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 1008,
       "ratePer100k": null
     },
     {
@@ -19235,15 +16704,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Pacific",
-      "districtSlug": "pacific",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 645,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Pacific",
       "districtSlug": "pacific",
@@ -19286,15 +16746,6 @@
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
       "count": 1312,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Pacific",
-      "districtSlug": "pacific",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 1214,
       "ratePer100k": null
     },
     {
@@ -19370,15 +16821,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Pacific",
-      "districtSlug": "pacific",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 581,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Pacific",
       "districtSlug": "pacific",
@@ -19421,15 +16863,6 @@
       "categoryLabel": "Weapons incidents",
       "categorySlug": "weapons-incidents",
       "count": 40,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Pacific",
-      "districtSlug": "pacific",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 31,
       "ratePer100k": null
     },
     {
@@ -19505,15 +16938,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Pacific",
-      "districtSlug": "pacific",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 37,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Rampart",
       "districtSlug": "rampart",
@@ -19556,15 +16980,6 @@
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
       "count": 14,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Rampart",
-      "districtSlug": "rampart",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 11,
       "ratePer100k": null
     },
     {
@@ -19640,15 +17055,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Rampart",
-      "districtSlug": "rampart",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 6,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Rampart",
       "districtSlug": "rampart",
@@ -19691,15 +17097,6 @@
       "categoryLabel": "Sexual offenses",
       "categorySlug": "sexual-offenses",
       "count": 192,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Rampart",
-      "districtSlug": "rampart",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 202,
       "ratePer100k": null
     },
     {
@@ -19775,15 +17172,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Rampart",
-      "districtSlug": "rampart",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 31,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Rampart",
       "districtSlug": "rampart",
@@ -19826,15 +17214,6 @@
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
       "count": 499,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Rampart",
-      "districtSlug": "rampart",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 660,
       "ratePer100k": null
     },
     {
@@ -19910,15 +17289,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Rampart",
-      "districtSlug": "rampart",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 162,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Rampart",
       "districtSlug": "rampart",
@@ -19961,15 +17331,6 @@
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
       "count": 448,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Rampart",
-      "districtSlug": "rampart",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 447,
       "ratePer100k": null
     },
     {
@@ -20045,15 +17406,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Rampart",
-      "districtSlug": "rampart",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 138,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Rampart",
       "districtSlug": "rampart",
@@ -20096,15 +17448,6 @@
       "categoryLabel": "Theft",
       "categorySlug": "theft",
       "count": 1054,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Rampart",
-      "districtSlug": "rampart",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 1010,
       "ratePer100k": null
     },
     {
@@ -20180,15 +17523,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Rampart",
-      "districtSlug": "rampart",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 1060,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Rampart",
       "districtSlug": "rampart",
@@ -20231,15 +17565,6 @@
       "categoryLabel": "Theft from vehicles",
       "categorySlug": "theft-from-vehicles",
       "count": 1106,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Rampart",
-      "districtSlug": "rampart",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 1233,
       "ratePer100k": null
     },
     {
@@ -20315,15 +17640,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Rampart",
-      "districtSlug": "rampart",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 1037,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Rampart",
       "districtSlug": "rampart",
@@ -20366,15 +17682,6 @@
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
       "count": 513,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Rampart",
-      "districtSlug": "rampart",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 656,
       "ratePer100k": null
     },
     {
@@ -20450,15 +17757,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Rampart",
-      "districtSlug": "rampart",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 989,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Rampart",
       "districtSlug": "rampart",
@@ -20501,15 +17799,6 @@
       "categoryLabel": "Assaults",
       "categorySlug": "assaults",
       "count": 2288,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Rampart",
-      "districtSlug": "rampart",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 2431,
       "ratePer100k": null
     },
     {
@@ -20585,15 +17874,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Rampart",
-      "districtSlug": "rampart",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 543,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Rampart",
       "districtSlug": "rampart",
@@ -20636,15 +17916,6 @@
       "categoryLabel": "Criminal damage",
       "categorySlug": "criminal-damage",
       "count": 817,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Rampart",
-      "districtSlug": "rampart",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 876,
       "ratePer100k": null
     },
     {
@@ -20720,15 +17991,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Rampart",
-      "districtSlug": "rampart",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 426,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Rampart",
       "districtSlug": "rampart",
@@ -20771,15 +18033,6 @@
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
       "count": 629,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Rampart",
-      "districtSlug": "rampart",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 437,
       "ratePer100k": null
     },
     {
@@ -20855,15 +18108,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Rampart",
-      "districtSlug": "rampart",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 253,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Rampart",
       "districtSlug": "rampart",
@@ -20906,15 +18150,6 @@
       "categoryLabel": "Weapons incidents",
       "categorySlug": "weapons-incidents",
       "count": 62,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Rampart",
-      "districtSlug": "rampart",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 118,
       "ratePer100k": null
     },
     {
@@ -20990,15 +18225,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Rampart",
-      "districtSlug": "rampart",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 43,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Southeast",
       "districtSlug": "southeast",
@@ -21041,15 +18267,6 @@
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
       "count": 41,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Southeast",
-      "districtSlug": "southeast",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 4,
       "ratePer100k": null
     },
     {
@@ -21125,15 +18342,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Southeast",
-      "districtSlug": "southeast",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 16,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Southeast",
       "districtSlug": "southeast",
@@ -21176,15 +18384,6 @@
       "categoryLabel": "Sexual offenses",
       "categorySlug": "sexual-offenses",
       "count": 209,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Southeast",
-      "districtSlug": "southeast",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 24,
       "ratePer100k": null
     },
     {
@@ -21260,15 +18459,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Southeast",
-      "districtSlug": "southeast",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 43,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Southeast",
       "districtSlug": "southeast",
@@ -21311,15 +18501,6 @@
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
       "count": 775,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Southeast",
-      "districtSlug": "southeast",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 62,
       "ratePer100k": null
     },
     {
@@ -21395,15 +18576,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Southeast",
-      "districtSlug": "southeast",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 274,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Southeast",
       "districtSlug": "southeast",
@@ -21446,15 +18618,6 @@
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
       "count": 911,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Southeast",
-      "districtSlug": "southeast",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 86,
       "ratePer100k": null
     },
     {
@@ -21530,15 +18693,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Southeast",
-      "districtSlug": "southeast",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 139,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Southeast",
       "districtSlug": "southeast",
@@ -21581,15 +18735,6 @@
       "categoryLabel": "Theft",
       "categorySlug": "theft",
       "count": 942,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Southeast",
-      "districtSlug": "southeast",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 33,
       "ratePer100k": null
     },
     {
@@ -21665,15 +18810,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Southeast",
-      "districtSlug": "southeast",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 605,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Southeast",
       "districtSlug": "southeast",
@@ -21716,15 +18852,6 @@
       "categoryLabel": "Theft from vehicles",
       "categorySlug": "theft-from-vehicles",
       "count": 858,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Southeast",
-      "districtSlug": "southeast",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 32,
       "ratePer100k": null
     },
     {
@@ -21800,15 +18927,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Southeast",
-      "districtSlug": "southeast",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 619,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Southeast",
       "districtSlug": "southeast",
@@ -21851,15 +18969,6 @@
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
       "count": 999,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Southeast",
-      "districtSlug": "southeast",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 44,
       "ratePer100k": null
     },
     {
@@ -21935,15 +19044,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Southeast",
-      "districtSlug": "southeast",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 1348,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Southeast",
       "districtSlug": "southeast",
@@ -21986,15 +19086,6 @@
       "categoryLabel": "Assaults",
       "categorySlug": "assaults",
       "count": 3100,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Southeast",
-      "districtSlug": "southeast",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 385,
       "ratePer100k": null
     },
     {
@@ -22070,15 +19161,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Southeast",
-      "districtSlug": "southeast",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 1098,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Southeast",
       "districtSlug": "southeast",
@@ -22121,15 +19203,6 @@
       "categoryLabel": "Criminal damage",
       "categorySlug": "criminal-damage",
       "count": 1060,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Southeast",
-      "districtSlug": "southeast",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 97,
       "ratePer100k": null
     },
     {
@@ -22205,15 +19278,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Southeast",
-      "districtSlug": "southeast",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 428,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Southeast",
       "districtSlug": "southeast",
@@ -22256,15 +19320,6 @@
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
       "count": 442,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Southeast",
-      "districtSlug": "southeast",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 8,
       "ratePer100k": null
     },
     {
@@ -22340,15 +19395,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Southeast",
-      "districtSlug": "southeast",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 340,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Southeast",
       "districtSlug": "southeast",
@@ -22391,15 +19437,6 @@
       "categoryLabel": "Weapons incidents",
       "categorySlug": "weapons-incidents",
       "count": 135,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Southeast",
-      "districtSlug": "southeast",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 33,
       "ratePer100k": null
     },
     {
@@ -22475,15 +19512,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Southeast",
-      "districtSlug": "southeast",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 128,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Southwest",
       "districtSlug": "southwest",
@@ -22526,15 +19554,6 @@
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
       "count": 25,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Southwest",
-      "districtSlug": "southwest",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 21,
       "ratePer100k": null
     },
     {
@@ -22610,15 +19629,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Southwest",
-      "districtSlug": "southwest",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 5,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Southwest",
       "districtSlug": "southwest",
@@ -22661,15 +19671,6 @@
       "categoryLabel": "Sexual offenses",
       "categorySlug": "sexual-offenses",
       "count": 277,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Southwest",
-      "districtSlug": "southwest",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 263,
       "ratePer100k": null
     },
     {
@@ -22745,15 +19746,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Southwest",
-      "districtSlug": "southwest",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 70,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Southwest",
       "districtSlug": "southwest",
@@ -22796,15 +19788,6 @@
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
       "count": 744,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Southwest",
-      "districtSlug": "southwest",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 814,
       "ratePer100k": null
     },
     {
@@ -22880,15 +19863,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Southwest",
-      "districtSlug": "southwest",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 269,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Southwest",
       "districtSlug": "southwest",
@@ -22931,15 +19905,6 @@
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
       "count": 962,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Southwest",
-      "districtSlug": "southwest",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 900,
       "ratePer100k": null
     },
     {
@@ -23015,15 +19980,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Southwest",
-      "districtSlug": "southwest",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 242,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Southwest",
       "districtSlug": "southwest",
@@ -23066,15 +20022,6 @@
       "categoryLabel": "Theft",
       "categorySlug": "theft",
       "count": 2307,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Southwest",
-      "districtSlug": "southwest",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 2498,
       "ratePer100k": null
     },
     {
@@ -23150,15 +20097,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Southwest",
-      "districtSlug": "southwest",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 1519,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Southwest",
       "districtSlug": "southwest",
@@ -23201,15 +20139,6 @@
       "categoryLabel": "Theft from vehicles",
       "categorySlug": "theft-from-vehicles",
       "count": 1163,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Southwest",
-      "districtSlug": "southwest",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 1319,
       "ratePer100k": null
     },
     {
@@ -23285,15 +20214,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Southwest",
-      "districtSlug": "southwest",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 1129,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Southwest",
       "districtSlug": "southwest",
@@ -23336,15 +20256,6 @@
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
       "count": 832,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Southwest",
-      "districtSlug": "southwest",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 960,
       "ratePer100k": null
     },
     {
@@ -23420,15 +20331,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Southwest",
-      "districtSlug": "southwest",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 1367,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Southwest",
       "districtSlug": "southwest",
@@ -23471,15 +20373,6 @@
       "categoryLabel": "Assaults",
       "categorySlug": "assaults",
       "count": 3074,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Southwest",
-      "districtSlug": "southwest",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 3153,
       "ratePer100k": null
     },
     {
@@ -23555,15 +20448,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Southwest",
-      "districtSlug": "southwest",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 1072,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Southwest",
       "districtSlug": "southwest",
@@ -23606,15 +20490,6 @@
       "categoryLabel": "Criminal damage",
       "categorySlug": "criminal-damage",
       "count": 1181,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Southwest",
-      "districtSlug": "southwest",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 1180,
       "ratePer100k": null
     },
     {
@@ -23690,15 +20565,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Southwest",
-      "districtSlug": "southwest",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 592,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Southwest",
       "districtSlug": "southwest",
@@ -23741,15 +20607,6 @@
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
       "count": 932,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Southwest",
-      "districtSlug": "southwest",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 783,
       "ratePer100k": null
     },
     {
@@ -23825,15 +20682,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Southwest",
-      "districtSlug": "southwest",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 436,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Southwest",
       "districtSlug": "southwest",
@@ -23876,15 +20724,6 @@
       "categoryLabel": "Weapons incidents",
       "categorySlug": "weapons-incidents",
       "count": 118,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Southwest",
-      "districtSlug": "southwest",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 138,
       "ratePer100k": null
     },
     {
@@ -23960,15 +20799,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Southwest",
-      "districtSlug": "southwest",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 114,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Topanga",
       "districtSlug": "topanga",
@@ -24011,15 +20841,6 @@
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
       "count": 2,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Topanga",
-      "districtSlug": "topanga",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 0,
       "ratePer100k": null
     },
     {
@@ -24095,15 +20916,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Topanga",
-      "districtSlug": "topanga",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 1,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Topanga",
       "districtSlug": "topanga",
@@ -24146,15 +20958,6 @@
       "categoryLabel": "Sexual offenses",
       "categorySlug": "sexual-offenses",
       "count": 137,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Topanga",
-      "districtSlug": "topanga",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 0,
       "ratePer100k": null
     },
     {
@@ -24230,15 +21033,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Topanga",
-      "districtSlug": "topanga",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 35,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Topanga",
       "districtSlug": "topanga",
@@ -24281,15 +21075,6 @@
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
       "count": 194,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Topanga",
-      "districtSlug": "topanga",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 0,
       "ratePer100k": null
     },
     {
@@ -24365,15 +21150,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Topanga",
-      "districtSlug": "topanga",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 80,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Topanga",
       "districtSlug": "topanga",
@@ -24416,15 +21192,6 @@
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
       "count": 903,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Topanga",
-      "districtSlug": "topanga",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 0,
       "ratePer100k": null
     },
     {
@@ -24500,15 +21267,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Topanga",
-      "districtSlug": "topanga",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 278,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Topanga",
       "districtSlug": "topanga",
@@ -24551,15 +21309,6 @@
       "categoryLabel": "Theft",
       "categorySlug": "theft",
       "count": 1958,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Topanga",
-      "districtSlug": "topanga",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 0,
       "ratePer100k": null
     },
     {
@@ -24635,15 +21384,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Topanga",
-      "districtSlug": "topanga",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 1644,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Topanga",
       "districtSlug": "topanga",
@@ -24686,15 +21426,6 @@
       "categoryLabel": "Theft from vehicles",
       "categorySlug": "theft-from-vehicles",
       "count": 958,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Topanga",
-      "districtSlug": "topanga",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 0,
       "ratePer100k": null
     },
     {
@@ -24770,15 +21501,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Topanga",
-      "districtSlug": "topanga",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 945,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Topanga",
       "districtSlug": "topanga",
@@ -24821,15 +21543,6 @@
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
       "count": 400,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Topanga",
-      "districtSlug": "topanga",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 0,
       "ratePer100k": null
     },
     {
@@ -24905,15 +21618,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Topanga",
-      "districtSlug": "topanga",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 710,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Topanga",
       "districtSlug": "topanga",
@@ -24956,15 +21660,6 @@
       "categoryLabel": "Assaults",
       "categorySlug": "assaults",
       "count": 1436,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Topanga",
-      "districtSlug": "topanga",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 0,
       "ratePer100k": null
     },
     {
@@ -25040,15 +21735,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Topanga",
-      "districtSlug": "topanga",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 541,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Topanga",
       "districtSlug": "topanga",
@@ -25091,15 +21777,6 @@
       "categoryLabel": "Criminal damage",
       "categorySlug": "criminal-damage",
       "count": 772,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Topanga",
-      "districtSlug": "topanga",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 0,
       "ratePer100k": null
     },
     {
@@ -25175,15 +21852,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Topanga",
-      "districtSlug": "topanga",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 407,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Topanga",
       "districtSlug": "topanga",
@@ -25226,15 +21894,6 @@
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
       "count": 1049,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Topanga",
-      "districtSlug": "topanga",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 0,
       "ratePer100k": null
     },
     {
@@ -25310,15 +21969,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Topanga",
-      "districtSlug": "topanga",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 426,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Topanga",
       "districtSlug": "topanga",
@@ -25361,15 +22011,6 @@
       "categoryLabel": "Weapons incidents",
       "categorySlug": "weapons-incidents",
       "count": 28,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Topanga",
-      "districtSlug": "topanga",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 0,
       "ratePer100k": null
     },
     {
@@ -25445,15 +22086,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Topanga",
-      "districtSlug": "topanga",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 50,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Van Nuys",
       "districtSlug": "van-nuys",
@@ -25496,15 +22128,6 @@
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
       "count": 7,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Van Nuys",
-      "districtSlug": "van-nuys",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 8,
       "ratePer100k": null
     },
     {
@@ -25580,15 +22203,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Van Nuys",
-      "districtSlug": "van-nuys",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 1,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Van Nuys",
       "districtSlug": "van-nuys",
@@ -25631,15 +22245,6 @@
       "categoryLabel": "Sexual offenses",
       "categorySlug": "sexual-offenses",
       "count": 186,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Van Nuys",
-      "districtSlug": "van-nuys",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 183,
       "ratePer100k": null
     },
     {
@@ -25715,15 +22320,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Van Nuys",
-      "districtSlug": "van-nuys",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 42,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Van Nuys",
       "districtSlug": "van-nuys",
@@ -25766,15 +22362,6 @@
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
       "count": 215,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Van Nuys",
-      "districtSlug": "van-nuys",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 240,
       "ratePer100k": null
     },
     {
@@ -25850,15 +22437,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Van Nuys",
-      "districtSlug": "van-nuys",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 108,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Van Nuys",
       "districtSlug": "van-nuys",
@@ -25901,15 +22479,6 @@
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
       "count": 631,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Van Nuys",
-      "districtSlug": "van-nuys",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 746,
       "ratePer100k": null
     },
     {
@@ -25985,15 +22554,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Van Nuys",
-      "districtSlug": "van-nuys",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 330,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Van Nuys",
       "districtSlug": "van-nuys",
@@ -26036,15 +22596,6 @@
       "categoryLabel": "Theft",
       "categorySlug": "theft",
       "count": 1596,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Van Nuys",
-      "districtSlug": "van-nuys",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 1575,
       "ratePer100k": null
     },
     {
@@ -26120,15 +22671,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Van Nuys",
-      "districtSlug": "van-nuys",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 1248,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Van Nuys",
       "districtSlug": "van-nuys",
@@ -26171,15 +22713,6 @@
       "categoryLabel": "Theft from vehicles",
       "categorySlug": "theft-from-vehicles",
       "count": 1349,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Van Nuys",
-      "districtSlug": "van-nuys",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 1435,
       "ratePer100k": null
     },
     {
@@ -26255,15 +22788,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Van Nuys",
-      "districtSlug": "van-nuys",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 1078,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Van Nuys",
       "districtSlug": "van-nuys",
@@ -26306,15 +22830,6 @@
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
       "count": 512,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Van Nuys",
-      "districtSlug": "van-nuys",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 719,
       "ratePer100k": null
     },
     {
@@ -26390,15 +22905,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Van Nuys",
-      "districtSlug": "van-nuys",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 999,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Van Nuys",
       "districtSlug": "van-nuys",
@@ -26441,15 +22947,6 @@
       "categoryLabel": "Assaults",
       "categorySlug": "assaults",
       "count": 1765,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Van Nuys",
-      "districtSlug": "van-nuys",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 1903,
       "ratePer100k": null
     },
     {
@@ -26525,15 +23022,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Van Nuys",
-      "districtSlug": "van-nuys",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 581,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Van Nuys",
       "districtSlug": "van-nuys",
@@ -26576,15 +23064,6 @@
       "categoryLabel": "Criminal damage",
       "categorySlug": "criminal-damage",
       "count": 919,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Van Nuys",
-      "districtSlug": "van-nuys",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 996,
       "ratePer100k": null
     },
     {
@@ -26660,15 +23139,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Van Nuys",
-      "districtSlug": "van-nuys",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 497,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Van Nuys",
       "districtSlug": "van-nuys",
@@ -26711,15 +23181,6 @@
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
       "count": 1091,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Van Nuys",
-      "districtSlug": "van-nuys",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 1053,
       "ratePer100k": null
     },
     {
@@ -26795,15 +23256,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Van Nuys",
-      "districtSlug": "van-nuys",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 486,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Van Nuys",
       "districtSlug": "van-nuys",
@@ -26846,15 +23298,6 @@
       "categoryLabel": "Weapons incidents",
       "categorySlug": "weapons-incidents",
       "count": 56,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Van Nuys",
-      "districtSlug": "van-nuys",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 105,
       "ratePer100k": null
     },
     {
@@ -26930,15 +23373,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Van Nuys",
-      "districtSlug": "van-nuys",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 32,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "West LA",
       "districtSlug": "west-la",
@@ -26981,15 +23415,6 @@
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
       "count": 4,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "West LA",
-      "districtSlug": "west-la",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 2,
       "ratePer100k": null
     },
     {
@@ -27065,15 +23490,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "West LA",
-      "districtSlug": "west-la",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 0,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "West LA",
       "districtSlug": "west-la",
@@ -27116,15 +23532,6 @@
       "categoryLabel": "Sexual offenses",
       "categorySlug": "sexual-offenses",
       "count": 159,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "West LA",
-      "districtSlug": "west-la",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 140,
       "ratePer100k": null
     },
     {
@@ -27200,15 +23607,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "West LA",
-      "districtSlug": "west-la",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 53,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "West LA",
       "districtSlug": "west-la",
@@ -27251,15 +23649,6 @@
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
       "count": 128,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "West LA",
-      "districtSlug": "west-la",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 175,
       "ratePer100k": null
     },
     {
@@ -27335,15 +23724,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "West LA",
-      "districtSlug": "west-la",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 50,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "West LA",
       "districtSlug": "west-la",
@@ -27386,15 +23766,6 @@
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
       "count": 910,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "West LA",
-      "districtSlug": "west-la",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 970,
       "ratePer100k": null
     },
     {
@@ -27470,15 +23841,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "West LA",
-      "districtSlug": "west-la",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 247,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "West LA",
       "districtSlug": "west-la",
@@ -27521,15 +23883,6 @@
       "categoryLabel": "Theft",
       "categorySlug": "theft",
       "count": 1565,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "West LA",
-      "districtSlug": "west-la",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 1762,
       "ratePer100k": null
     },
     {
@@ -27605,15 +23958,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "West LA",
-      "districtSlug": "west-la",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 1954,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "West LA",
       "districtSlug": "west-la",
@@ -27656,15 +24000,6 @@
       "categoryLabel": "Theft from vehicles",
       "categorySlug": "theft-from-vehicles",
       "count": 1357,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "West LA",
-      "districtSlug": "west-la",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 1500,
       "ratePer100k": null
     },
     {
@@ -27740,15 +24075,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "West LA",
-      "districtSlug": "west-la",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 977,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "West LA",
       "districtSlug": "west-la",
@@ -27791,15 +24117,6 @@
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
       "count": 386,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "West LA",
-      "districtSlug": "west-la",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 364,
       "ratePer100k": null
     },
     {
@@ -27875,15 +24192,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "West LA",
-      "districtSlug": "west-la",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 599,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "West LA",
       "districtSlug": "west-la",
@@ -27926,15 +24234,6 @@
       "categoryLabel": "Assaults",
       "categorySlug": "assaults",
       "count": 1037,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "West LA",
-      "districtSlug": "west-la",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 1320,
       "ratePer100k": null
     },
     {
@@ -28010,15 +24309,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "West LA",
-      "districtSlug": "west-la",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 259,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "West LA",
       "districtSlug": "west-la",
@@ -28061,15 +24351,6 @@
       "categoryLabel": "Criminal damage",
       "categorySlug": "criminal-damage",
       "count": 746,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "West LA",
-      "districtSlug": "west-la",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 802,
       "ratePer100k": null
     },
     {
@@ -28145,15 +24426,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "West LA",
-      "districtSlug": "west-la",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 448,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "West LA",
       "districtSlug": "west-la",
@@ -28196,15 +24468,6 @@
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
       "count": 1079,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "West LA",
-      "districtSlug": "west-la",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 1174,
       "ratePer100k": null
     },
     {
@@ -28280,15 +24543,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "West LA",
-      "districtSlug": "west-la",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 440,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "West LA",
       "districtSlug": "west-la",
@@ -28331,15 +24585,6 @@
       "categoryLabel": "Weapons incidents",
       "categorySlug": "weapons-incidents",
       "count": 32,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "West LA",
-      "districtSlug": "west-la",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 42,
       "ratePer100k": null
     },
     {
@@ -28415,15 +24660,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "West LA",
-      "districtSlug": "west-la",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 14,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "West Valley",
       "districtSlug": "west-valley",
@@ -28466,15 +24702,6 @@
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
       "count": 4,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "West Valley",
-      "districtSlug": "west-valley",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 5,
       "ratePer100k": null
     },
     {
@@ -28550,15 +24777,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "West Valley",
-      "districtSlug": "west-valley",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 2,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "West Valley",
       "districtSlug": "west-valley",
@@ -28601,15 +24819,6 @@
       "categoryLabel": "Sexual offenses",
       "categorySlug": "sexual-offenses",
       "count": 124,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "West Valley",
-      "districtSlug": "west-valley",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 108,
       "ratePer100k": null
     },
     {
@@ -28685,15 +24894,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "West Valley",
-      "districtSlug": "west-valley",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 35,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "West Valley",
       "districtSlug": "west-valley",
@@ -28736,15 +24936,6 @@
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
       "count": 201,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "West Valley",
-      "districtSlug": "west-valley",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 206,
       "ratePer100k": null
     },
     {
@@ -28820,15 +25011,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "West Valley",
-      "districtSlug": "west-valley",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 92,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "West Valley",
       "districtSlug": "west-valley",
@@ -28871,15 +25053,6 @@
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
       "count": 861,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "West Valley",
-      "districtSlug": "west-valley",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 982,
       "ratePer100k": null
     },
     {
@@ -28955,15 +25128,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "West Valley",
-      "districtSlug": "west-valley",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 324,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "West Valley",
       "districtSlug": "west-valley",
@@ -29006,15 +25170,6 @@
       "categoryLabel": "Theft",
       "categorySlug": "theft",
       "count": 1099,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "West Valley",
-      "districtSlug": "west-valley",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 1108,
       "ratePer100k": null
     },
     {
@@ -29090,15 +25245,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "West Valley",
-      "districtSlug": "west-valley",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 820,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "West Valley",
       "districtSlug": "west-valley",
@@ -29141,15 +25287,6 @@
       "categoryLabel": "Theft from vehicles",
       "categorySlug": "theft-from-vehicles",
       "count": 1008,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "West Valley",
-      "districtSlug": "west-valley",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 1218,
       "ratePer100k": null
     },
     {
@@ -29225,15 +25362,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "West Valley",
-      "districtSlug": "west-valley",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 1175,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "West Valley",
       "districtSlug": "west-valley",
@@ -29276,15 +25404,6 @@
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
       "count": 508,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "West Valley",
-      "districtSlug": "west-valley",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 561,
       "ratePer100k": null
     },
     {
@@ -29360,15 +25479,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "West Valley",
-      "districtSlug": "west-valley",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 846,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "West Valley",
       "districtSlug": "west-valley",
@@ -29411,15 +25521,6 @@
       "categoryLabel": "Assaults",
       "categorySlug": "assaults",
       "count": 1325,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "West Valley",
-      "districtSlug": "west-valley",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 1334,
       "ratePer100k": null
     },
     {
@@ -29495,15 +25596,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "West Valley",
-      "districtSlug": "west-valley",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 675,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "West Valley",
       "districtSlug": "west-valley",
@@ -29546,15 +25638,6 @@
       "categoryLabel": "Criminal damage",
       "categorySlug": "criminal-damage",
       "count": 720,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "West Valley",
-      "districtSlug": "west-valley",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 788,
       "ratePer100k": null
     },
     {
@@ -29630,15 +25713,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "West Valley",
-      "districtSlug": "west-valley",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 406,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "West Valley",
       "districtSlug": "west-valley",
@@ -29681,15 +25755,6 @@
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
       "count": 1055,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "West Valley",
-      "districtSlug": "west-valley",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 1001,
       "ratePer100k": null
     },
     {
@@ -29765,15 +25830,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "West Valley",
-      "districtSlug": "west-valley",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 422,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "West Valley",
       "districtSlug": "west-valley",
@@ -29816,15 +25872,6 @@
       "categoryLabel": "Weapons incidents",
       "categorySlug": "weapons-incidents",
       "count": 42,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "West Valley",
-      "districtSlug": "west-valley",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 56,
       "ratePer100k": null
     },
     {
@@ -29900,15 +25947,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "West Valley",
-      "districtSlug": "west-valley",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 55,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Wilshire",
       "districtSlug": "wilshire",
@@ -29951,15 +25989,6 @@
       "categoryLabel": "Homicide",
       "categorySlug": "homicide",
       "count": 8,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Wilshire",
-      "districtSlug": "wilshire",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 4,
       "ratePer100k": null
     },
     {
@@ -30035,15 +26064,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Wilshire",
-      "districtSlug": "wilshire",
-      "categoryLabel": "Homicide",
-      "categorySlug": "homicide",
-      "count": 1,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Wilshire",
       "districtSlug": "wilshire",
@@ -30086,15 +26106,6 @@
       "categoryLabel": "Sexual offenses",
       "categorySlug": "sexual-offenses",
       "count": 145,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Wilshire",
-      "districtSlug": "wilshire",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 127,
       "ratePer100k": null
     },
     {
@@ -30170,15 +26181,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Wilshire",
-      "districtSlug": "wilshire",
-      "categoryLabel": "Sexual offenses",
-      "categorySlug": "sexual-offenses",
-      "count": 36,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Wilshire",
       "districtSlug": "wilshire",
@@ -30221,15 +26223,6 @@
       "categoryLabel": "Robbery",
       "categorySlug": "robbery",
       "count": 297,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Wilshire",
-      "districtSlug": "wilshire",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 296,
       "ratePer100k": null
     },
     {
@@ -30305,15 +26298,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Wilshire",
-      "districtSlug": "wilshire",
-      "categoryLabel": "Robbery",
-      "categorySlug": "robbery",
-      "count": 106,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Wilshire",
       "districtSlug": "wilshire",
@@ -30356,15 +26340,6 @@
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
       "count": 870,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Wilshire",
-      "districtSlug": "wilshire",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 835,
       "ratePer100k": null
     },
     {
@@ -30440,15 +26415,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Wilshire",
-      "districtSlug": "wilshire",
-      "categoryLabel": "Burglary",
-      "categorySlug": "burglary",
-      "count": 270,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Wilshire",
       "districtSlug": "wilshire",
@@ -30491,15 +26457,6 @@
       "categoryLabel": "Theft",
       "categorySlug": "theft",
       "count": 1287,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Wilshire",
-      "districtSlug": "wilshire",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 1543,
       "ratePer100k": null
     },
     {
@@ -30575,15 +26532,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Wilshire",
-      "districtSlug": "wilshire",
-      "categoryLabel": "Theft",
-      "categorySlug": "theft",
-      "count": 2055,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Wilshire",
       "districtSlug": "wilshire",
@@ -30626,15 +26574,6 @@
       "categoryLabel": "Theft from vehicles",
       "categorySlug": "theft-from-vehicles",
       "count": 1179,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Wilshire",
-      "districtSlug": "wilshire",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 1149,
       "ratePer100k": null
     },
     {
@@ -30710,15 +26649,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Wilshire",
-      "districtSlug": "wilshire",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 1252,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Wilshire",
       "districtSlug": "wilshire",
@@ -30761,15 +26691,6 @@
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
       "count": 421,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Wilshire",
-      "districtSlug": "wilshire",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 422,
       "ratePer100k": null
     },
     {
@@ -30845,15 +26766,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Wilshire",
-      "districtSlug": "wilshire",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 819,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Wilshire",
       "districtSlug": "wilshire",
@@ -30896,15 +26808,6 @@
       "categoryLabel": "Assaults",
       "categorySlug": "assaults",
       "count": 1285,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Wilshire",
-      "districtSlug": "wilshire",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 1313,
       "ratePer100k": null
     },
     {
@@ -30980,15 +26883,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Wilshire",
-      "districtSlug": "wilshire",
-      "categoryLabel": "Assaults",
-      "categorySlug": "assaults",
-      "count": 419,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Wilshire",
       "districtSlug": "wilshire",
@@ -31031,15 +26925,6 @@
       "categoryLabel": "Criminal damage",
       "categorySlug": "criminal-damage",
       "count": 708,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Wilshire",
-      "districtSlug": "wilshire",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 740,
       "ratePer100k": null
     },
     {
@@ -31115,15 +27000,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Wilshire",
-      "districtSlug": "wilshire",
-      "categoryLabel": "Criminal damage",
-      "categorySlug": "criminal-damage",
-      "count": 477,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Wilshire",
       "districtSlug": "wilshire",
@@ -31166,15 +27042,6 @@
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
       "count": 889,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Wilshire",
-      "districtSlug": "wilshire",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 794,
       "ratePer100k": null
     },
     {
@@ -31250,15 +27117,6 @@
       "ratePer100k": null
     },
     {
-      "year": 2024,
-      "districtLabel": "Wilshire",
-      "districtSlug": "wilshire",
-      "categoryLabel": "Fraud and forgery",
-      "categorySlug": "fraud-and-forgery",
-      "count": 354,
-      "ratePer100k": null
-    },
-    {
       "year": 2010,
       "districtLabel": "Wilshire",
       "districtSlug": "wilshire",
@@ -31301,15 +27159,6 @@
       "categoryLabel": "Weapons incidents",
       "categorySlug": "weapons-incidents",
       "count": 37,
-      "ratePer100k": null
-    },
-    {
-      "year": 2015,
-      "districtLabel": "Wilshire",
-      "districtSlug": "wilshire",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 49,
       "ratePer100k": null
     },
     {
@@ -31382,15 +27231,6 @@
       "categoryLabel": "Weapons incidents",
       "categorySlug": "weapons-incidents",
       "count": 167,
-      "ratePer100k": null
-    },
-    {
-      "year": 2024,
-      "districtLabel": "Wilshire",
-      "districtSlug": "wilshire",
-      "categoryLabel": "Weapons incidents",
-      "categorySlug": "weapons-incidents",
-      "count": 30,
       "ratePer100k": null
     }
   ]

@@ -51,9 +51,17 @@ const flagByLocationSlug: Record<string, { src: string; alt: string }> = {
     src: "/flags/italy.png",
     alt: "Flag of Italy",
   },
+  "sao-paulo": {
+    src: "/flags/brazil.png",
+    alt: "Flag of Brazil",
+  },
   "san-francisco": {
     src: "/flags/united-states.png",
     alt: "Flag of the United States",
+  },
+  tokyo: {
+    src: "/flags/japan.png",
+    alt: "Flag of Japan",
   },
   valencia: {
     src: "/flags/spain.png",

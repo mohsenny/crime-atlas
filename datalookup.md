@@ -157,6 +157,7 @@ Missing older-category detail is better than fake continuity.
 - Current app coverage: `2006–2025`
 - Borough breakdown: yes
 - Important caveat: the raw NYPD offense catalog is much broader than the dashboard. The app maps a stable major-offense subset from the official catalog rather than claiming to show every NYPD offense row.
+- Ingestion rule: use the historical source for `2006–2024` and the current source only for `2025`; do not merge the two source families across overlapping years without verifying structure equivalence
 
 ### Chicago
 - Official source family: Chicago Data Portal crime dataset
@@ -166,9 +167,10 @@ Missing older-category detail is better than fake continuity.
 
 ### Los Angeles
 - Official source family: Los Angeles Open Data / LAPD crime datasets
-- Current app coverage: `2010–2024`
+- Current app coverage: `2010–2014` and `2016–2023`
 - Area breakdown: yes
 - Important caveat: LAPD publishes very granular raw offense descriptions. The app groups those official labels into broader major-offense buckets, so future extensions must keep that grouping logic explicit and defensible.
+- Important caveat: `2015` and `2024` are intentionally excluded because the currently verified source path produces structurally unsafe year slices
 
 ### San Francisco
 - Official source family: San Francisco Open Data / SFPD incident reports
@@ -184,7 +186,10 @@ Missing older-category detail is better than fake continuity.
 
 ### Barcelona and Valencia
 - Official source family: Spanish Interior Ministry annual crime-balance releases
-- Current app coverage: `2013–2025`
+- Current app coverage:
+  - `2013`
+  - `2014`
+  - `2020–2025`
 - Area breakdown in app: no
 
 Important caveats:
@@ -192,21 +197,30 @@ Important caveats:
 - The archive year tabs mix many Interior Ministry report types; do not assume every listed year contains the same municipality-level annual crime table
 - The currently verified clean city-level annual span is derived from:
   - the official `2014` year-end workbook, which contains municipality rows for both `2013` and `2014`
-  - official year-end `2015` PDF tables
-  - official annual `2016–2020` ZIP bundles
+  - official annual `2020` ZIP bundle
   - official annual `2021–2025` PDFs
-- `2015–2016` use the older EU-style offense groups
-- `2017–2020` use the pre-cybercrime richer municipal grouping
+- The app intentionally skips `2015–2019` because the municipality-level series was not stable enough to stitch honestly into one continuous comparable run
 - `2021+` use the newer official grouping with conventional crime / cybercrime splits
 - `2022` is a special case: the official table is a three-year comparison (`2019 / 2021 / 2022`), so parser logic must not assume two-count rows
-- If you extend Spain further back, verify municipality rows in the actual official download before claiming success
+- If you extend Spain further back or re-enable `2015–2019`, verify municipality rows in the actual official download before claiming success
 
 Official source paths already verified for Spain:
 - archive page: `https://www.interior.gob.es/opencms/es/prensa/balances-e-informes/`
 - publications portal: `https://estadisticasdecriminalidad.ses.mir.es/publico/portalestadistico/publicaciones.html`
 - 2014 year-end workbook: `https://www.interior.gob.es/opencms/pdf/prensa/balances-e-informes/2014/Balance-criminalidad-diciembre-2014.xls`
-- 2015 year-end PDF attachment: `https://www.interior.gob.es/opencms/pdf/informe-balance-2015_ene_dic_5607112.pdf`
-- grouped annual ZIPs already used in the importer for `2016–2020`
+- grouped annual ZIP already used in the importer for `2020`
+
+### Tokyo
+- Official source family: Tokyo Metropolitan Government statistical yearbook CSVs
+- Current app coverage: `2010–2023`
+- Area breakdown: yes
+- Important caveat: source rows are police-station granular and are aggregated into stable district / municipality areas in the app
+
+### São Paulo
+- Official source family: São Paulo state public-security quarterly HTML releases
+- Current app coverage: `2010–2025`
+- Area breakdown in app: no
+- Important caveat: use only year-end (`-04`) files and the `Capital` column for a comparable citywide series
 
 ### Lisbon
 - Official source family identified: Statistics Portugal (INE) / Direção-Geral da Política de Justiça municipality indicator JSON

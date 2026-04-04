@@ -98,45 +98,43 @@ export function OverviewPageClient({ locations }: OverviewPageClientProps) {
             </p>
           </div>
 
-          <div className="flex items-center gap-2 sm:gap-3 xl:pr-1 xl:shrink-0">
+          <div className="flex items-center gap-2 xl:pr-1 xl:shrink-0">
             <div className="hidden md:flex md:items-center md:gap-2">
-              <div className="relative">
-                {compareMode ? (
-                  <button
-                    className="absolute right-full top-1/2 mr-2 inline-flex h-10 -translate-y-1/2 items-center px-1 text-sm font-medium text-slate-400 transition hover:text-slate-100"
-                    onClick={cancelCompareMode}
-                    type="button"
-                  >
-                    Cancel
-                  </button>
-                ) : null}
+              {compareMode ? (
                 <button
-                  className={cn(
-                    "inline-flex h-10 items-center rounded-2xl border border-slate-700 bg-slate-900/70 px-3.5 text-slate-300 transition",
-                    "w-[9.5rem] justify-center text-[10px] font-semibold uppercase tracking-[0.18em] leading-none",
-                    compareMode
-                      ? selectedCompareSlugs.length >= 2 && selectedCompareSlugs.length <= MAX_COMPARE_LOCATIONS
-                        ? "border-slate-200 bg-slate-100 text-slate-950 hover:bg-white"
-                        : "cursor-default text-slate-500"
-                      : "hover:text-slate-50",
-                  )}
-                  onClick={handleDesktopCompareButton}
+                  className="inline-flex h-10 items-center px-1 text-sm font-medium text-slate-400 transition hover:text-slate-100"
+                  onClick={cancelCompareMode}
                   type="button"
                 >
-                  {compareMode
-                    ? selectedCompareSlugs.length >= 2
-                      ? `Compare ${selectedCompareSlugs.length} Cities`
-                      : "Select Cities"
-                    : "Compare"}
+                  Cancel
                 </button>
-              </div>
+              ) : null}
+              <button
+                className={cn(
+                  "inline-flex h-10 items-center rounded-2xl border border-slate-700 bg-slate-900/70 px-3.5 text-slate-300 transition",
+                  "w-[9.5rem] justify-center text-[10px] font-semibold uppercase tracking-[0.18em] leading-none",
+                  compareMode
+                    ? selectedCompareSlugs.length >= 2 && selectedCompareSlugs.length <= MAX_COMPARE_LOCATIONS
+                      ? "border-slate-200 bg-slate-100 text-slate-950 hover:bg-white"
+                      : "cursor-default text-slate-500"
+                    : "hover:text-slate-50",
+                )}
+                onClick={handleDesktopCompareButton}
+                type="button"
+              >
+                {compareMode
+                  ? selectedCompareSlugs.length >= 2
+                    ? `Compare ${selectedCompareSlugs.length} Cities`
+                    : "Select Cities"
+                  : "Compare Cities"}
+              </button>
               <OverviewViewToggle
                 onChange={(value) => setViewPreference(value)}
                 value={viewPreference}
               />
             </div>
             <div className="md:hidden">
-              <CompareCityPicker locations={locations} triggerLabel="Compare" />
+              <CompareCityPicker locations={locations} triggerLabel="Compare Cities" />
             </div>
             <SingleSelectDropdown
               fullWidth

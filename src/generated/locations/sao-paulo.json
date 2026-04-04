@@ -1,0 +1,1780 @@
+{
+  "slug": "sao-paulo",
+  "label": "São Paulo",
+  "country": "Brazil",
+  "areaLabelSingular": "Area",
+  "areaLabelPlural": "Areas",
+  "chartTitle": "São Paulo Crime Overview",
+  "note": "São Paulo uses the official São Paulo state public-security quarterly statistical tables, restricted here to the year-end fourth-quarter releases and the citywide Capital column so the series remains annual and comparable across years. Rate-per-100k is not shown because this source path does not currently bundle a matching city population series in the same extract.",
+  "sources": [
+    {
+      "label": "São Paulo State Public Security Secretariat quarterly statistics archive",
+      "url": "https://www.ssp.sp.gov.br/estatistica/dados-mensais"
+    }
+  ],
+  "years": [
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "districts": [
+    {
+      "label": "São Paulo",
+      "value": "sao-paulo"
+    }
+  ],
+  "categories": [
+    {
+      "label": "All recorded offenses",
+      "value": "all-recorded-offenses",
+      "shortLabel": "All offenses",
+      "color": "#7dd3fc",
+      "isDefault": false
+    },
+    {
+      "label": "Homicide",
+      "value": "homicide",
+      "shortLabel": "Homicide",
+      "color": "#be123c",
+      "isDefault": false
+    },
+    {
+      "label": "Attempted homicide",
+      "value": "attempted-homicide",
+      "shortLabel": "Attempted homicide",
+      "color": "#f97316",
+      "isDefault": false
+    },
+    {
+      "label": "Sexual offenses",
+      "value": "sexual-offenses",
+      "shortLabel": "Sexual offenses",
+      "color": "#ec4899",
+      "isDefault": true
+    },
+    {
+      "label": "Rape",
+      "value": "rape",
+      "shortLabel": "Rape",
+      "color": "#f472b6",
+      "isDefault": false
+    },
+    {
+      "label": "Rape of vulnerable persons",
+      "value": "rape-of-vulnerable-persons",
+      "shortLabel": "Vulnerable rape",
+      "color": "#a78bfa",
+      "isDefault": false
+    },
+    {
+      "label": "Assault",
+      "value": "assault",
+      "shortLabel": "Assault",
+      "color": "#38bdf8",
+      "isDefault": true
+    },
+    {
+      "label": "Kidnapping and extortion",
+      "value": "kidnapping-and-extortion",
+      "shortLabel": "Kidnap/extortion",
+      "color": "#c084fc",
+      "isDefault": false
+    },
+    {
+      "label": "Drug trafficking",
+      "value": "drug-trafficking",
+      "shortLabel": "Drug trafficking",
+      "color": "#22c55e",
+      "isDefault": true
+    },
+    {
+      "label": "Robbery",
+      "value": "robbery",
+      "shortLabel": "Robbery",
+      "color": "#fb923c",
+      "isDefault": true
+    },
+    {
+      "label": "Vehicle robbery",
+      "value": "vehicle-robbery",
+      "shortLabel": "Vehicle robbery",
+      "color": "#6366f1",
+      "isDefault": false
+    },
+    {
+      "label": "Theft",
+      "value": "theft",
+      "shortLabel": "Theft",
+      "color": "#facc15",
+      "isDefault": true
+    },
+    {
+      "label": "Vehicle theft",
+      "value": "vehicle-theft",
+      "shortLabel": "Vehicle theft",
+      "color": "#4f46e5",
+      "isDefault": true
+    }
+  ],
+  "defaultCategorySlugs": [
+    "sexual-offenses",
+    "assault",
+    "drug-trafficking",
+    "robbery",
+    "theft",
+    "vehicle-theft"
+  ],
+  "records": [
+    {
+      "year": 2010,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "All recorded offenses",
+      "categorySlug": "all-recorded-offenses",
+      "count": 145042,
+      "ratePer100k": null
+    },
+    {
+      "year": 2010,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Homicide",
+      "categorySlug": "homicide",
+      "count": 267,
+      "ratePer100k": null
+    },
+    {
+      "year": 2010,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Attempted homicide",
+      "categorySlug": "attempted-homicide",
+      "count": 282,
+      "ratePer100k": null
+    },
+    {
+      "year": 2010,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Assault",
+      "categorySlug": "assault",
+      "count": 9699,
+      "ratePer100k": null
+    },
+    {
+      "year": 2010,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Rape",
+      "categorySlug": "rape",
+      "count": 600,
+      "ratePer100k": null
+    },
+    {
+      "year": 2010,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Drug trafficking",
+      "categorySlug": "drug-trafficking",
+      "count": 1345,
+      "ratePer100k": null
+    },
+    {
+      "year": 2010,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Vehicle robbery",
+      "categorySlug": "vehicle-robbery",
+      "count": 8719,
+      "ratePer100k": null
+    },
+    {
+      "year": 2010,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Theft",
+      "categorySlug": "theft",
+      "count": 44453,
+      "ratePer100k": null
+    },
+    {
+      "year": 2010,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Vehicle theft",
+      "categorySlug": "vehicle-theft",
+      "count": 10562,
+      "ratePer100k": null
+    },
+    {
+      "year": 2011,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "All recorded offenses",
+      "categorySlug": "all-recorded-offenses",
+      "count": 159596,
+      "ratePer100k": null
+    },
+    {
+      "year": 2011,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Homicide",
+      "categorySlug": "homicide",
+      "count": 270,
+      "ratePer100k": null
+    },
+    {
+      "year": 2011,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Attempted homicide",
+      "categorySlug": "attempted-homicide",
+      "count": 324,
+      "ratePer100k": null
+    },
+    {
+      "year": 2011,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Assault",
+      "categorySlug": "assault",
+      "count": 10979,
+      "ratePer100k": null
+    },
+    {
+      "year": 2011,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Rape",
+      "categorySlug": "rape",
+      "count": 592,
+      "ratePer100k": null
+    },
+    {
+      "year": 2011,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Drug trafficking",
+      "categorySlug": "drug-trafficking",
+      "count": 1597,
+      "ratePer100k": null
+    },
+    {
+      "year": 2011,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Vehicle robbery",
+      "categorySlug": "vehicle-robbery",
+      "count": 11025,
+      "ratePer100k": null
+    },
+    {
+      "year": 2011,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Theft",
+      "categorySlug": "theft",
+      "count": 49874,
+      "ratePer100k": null
+    },
+    {
+      "year": 2011,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Vehicle theft",
+      "categorySlug": "vehicle-theft",
+      "count": 10059,
+      "ratePer100k": null
+    },
+    {
+      "year": 2012,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "All recorded offenses",
+      "categorySlug": "all-recorded-offenses",
+      "count": 164821,
+      "ratePer100k": null
+    },
+    {
+      "year": 2012,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Homicide",
+      "categorySlug": "homicide",
+      "count": 450,
+      "ratePer100k": null
+    },
+    {
+      "year": 2012,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Attempted homicide",
+      "categorySlug": "attempted-homicide",
+      "count": 523,
+      "ratePer100k": null
+    },
+    {
+      "year": 2012,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Assault",
+      "categorySlug": "assault",
+      "count": 11050,
+      "ratePer100k": null
+    },
+    {
+      "year": 2012,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Rape",
+      "categorySlug": "rape",
+      "count": 879,
+      "ratePer100k": null
+    },
+    {
+      "year": 2012,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Drug trafficking",
+      "categorySlug": "drug-trafficking",
+      "count": 1793,
+      "ratePer100k": null
+    },
+    {
+      "year": 2012,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Vehicle robbery",
+      "categorySlug": "vehicle-robbery",
+      "count": 10653,
+      "ratePer100k": null
+    },
+    {
+      "year": 2012,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Theft",
+      "categorySlug": "theft",
+      "count": 52421,
+      "ratePer100k": null
+    },
+    {
+      "year": 2012,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Vehicle theft",
+      "categorySlug": "vehicle-theft",
+      "count": 9696,
+      "ratePer100k": null
+    },
+    {
+      "year": 2013,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "All recorded offenses",
+      "categorySlug": "all-recorded-offenses",
+      "count": 164650,
+      "ratePer100k": null
+    },
+    {
+      "year": 2013,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Homicide",
+      "categorySlug": "homicide",
+      "count": 308,
+      "ratePer100k": null
+    },
+    {
+      "year": 2013,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Attempted homicide",
+      "categorySlug": "attempted-homicide",
+      "count": 383,
+      "ratePer100k": null
+    },
+    {
+      "year": 2013,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Assault",
+      "categorySlug": "assault",
+      "count": 8906,
+      "ratePer100k": null
+    },
+    {
+      "year": 2013,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Rape",
+      "categorySlug": "rape",
+      "count": 610,
+      "ratePer100k": null
+    },
+    {
+      "year": 2013,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Drug trafficking",
+      "categorySlug": "drug-trafficking",
+      "count": 1515,
+      "ratePer100k": null
+    },
+    {
+      "year": 2013,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Vehicle robbery",
+      "categorySlug": "vehicle-robbery",
+      "count": 14025,
+      "ratePer100k": null
+    },
+    {
+      "year": 2013,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Theft",
+      "categorySlug": "theft",
+      "count": 50946,
+      "ratePer100k": null
+    },
+    {
+      "year": 2013,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Vehicle theft",
+      "categorySlug": "vehicle-theft",
+      "count": 11575,
+      "ratePer100k": null
+    },
+    {
+      "year": 2014,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "All recorded offenses",
+      "categorySlug": "all-recorded-offenses",
+      "count": 156906,
+      "ratePer100k": null
+    },
+    {
+      "year": 2014,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Homicide",
+      "categorySlug": "homicide",
+      "count": 304,
+      "ratePer100k": null
+    },
+    {
+      "year": 2014,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Attempted homicide",
+      "categorySlug": "attempted-homicide",
+      "count": 352,
+      "ratePer100k": null
+    },
+    {
+      "year": 2014,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Assault",
+      "categorySlug": "assault",
+      "count": 8028,
+      "ratePer100k": null
+    },
+    {
+      "year": 2014,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Rape",
+      "categorySlug": "rape",
+      "count": 536,
+      "ratePer100k": null
+    },
+    {
+      "year": 2014,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Drug trafficking",
+      "categorySlug": "drug-trafficking",
+      "count": 1560,
+      "ratePer100k": null
+    },
+    {
+      "year": 2014,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Vehicle robbery",
+      "categorySlug": "vehicle-robbery",
+      "count": 11826,
+      "ratePer100k": null
+    },
+    {
+      "year": 2014,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Theft",
+      "categorySlug": "theft",
+      "count": 44860,
+      "ratePer100k": null
+    },
+    {
+      "year": 2014,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Vehicle theft",
+      "categorySlug": "vehicle-theft",
+      "count": 11512,
+      "ratePer100k": null
+    },
+    {
+      "year": 2015,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "All recorded offenses",
+      "categorySlug": "all-recorded-offenses",
+      "count": 158127,
+      "ratePer100k": null
+    },
+    {
+      "year": 2015,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Homicide",
+      "categorySlug": "homicide",
+      "count": 247,
+      "ratePer100k": null
+    },
+    {
+      "year": 2015,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Attempted homicide",
+      "categorySlug": "attempted-homicide",
+      "count": 266,
+      "ratePer100k": null
+    },
+    {
+      "year": 2015,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Assault",
+      "categorySlug": "assault",
+      "count": 7685,
+      "ratePer100k": null
+    },
+    {
+      "year": 2015,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Rape",
+      "categorySlug": "rape",
+      "count": 518,
+      "ratePer100k": null
+    },
+    {
+      "year": 2015,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Kidnapping and extortion",
+      "categorySlug": "kidnapping-and-extortion",
+      "count": 5,
+      "ratePer100k": null
+    },
+    {
+      "year": 2015,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Drug trafficking",
+      "categorySlug": "drug-trafficking",
+      "count": 1525,
+      "ratePer100k": null
+    },
+    {
+      "year": 2015,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Vehicle robbery",
+      "categorySlug": "vehicle-robbery",
+      "count": 10720,
+      "ratePer100k": null
+    },
+    {
+      "year": 2015,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Theft",
+      "categorySlug": "theft",
+      "count": 45422,
+      "ratePer100k": null
+    },
+    {
+      "year": 2015,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Vehicle theft",
+      "categorySlug": "vehicle-theft",
+      "count": 10344,
+      "ratePer100k": null
+    },
+    {
+      "year": 2016,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "All recorded offenses",
+      "categorySlug": "all-recorded-offenses",
+      "count": 158230,
+      "ratePer100k": null
+    },
+    {
+      "year": 2016,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Homicide",
+      "categorySlug": "homicide",
+      "count": 208,
+      "ratePer100k": null
+    },
+    {
+      "year": 2016,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Attempted homicide",
+      "categorySlug": "attempted-homicide",
+      "count": 244,
+      "ratePer100k": null
+    },
+    {
+      "year": 2016,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Assault",
+      "categorySlug": "assault",
+      "count": 7771,
+      "ratePer100k": null
+    },
+    {
+      "year": 2016,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Rape of vulnerable persons",
+      "categorySlug": "rape-of-vulnerable-persons",
+      "count": 405,
+      "ratePer100k": null
+    },
+    {
+      "year": 2016,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Kidnapping and extortion",
+      "categorySlug": "kidnapping-and-extortion",
+      "count": 3,
+      "ratePer100k": null
+    },
+    {
+      "year": 2016,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Drug trafficking",
+      "categorySlug": "drug-trafficking",
+      "count": 1951,
+      "ratePer100k": null
+    },
+    {
+      "year": 2016,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Vehicle robbery",
+      "categorySlug": "vehicle-robbery",
+      "count": 10297,
+      "ratePer100k": null
+    },
+    {
+      "year": 2016,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Theft",
+      "categorySlug": "theft",
+      "count": 47412,
+      "ratePer100k": null
+    },
+    {
+      "year": 2016,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Vehicle theft",
+      "categorySlug": "vehicle-theft",
+      "count": 9945,
+      "ratePer100k": null
+    },
+    {
+      "year": 2017,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "All recorded offenses",
+      "categorySlug": "all-recorded-offenses",
+      "count": 149867,
+      "ratePer100k": null
+    },
+    {
+      "year": 2017,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Homicide",
+      "categorySlug": "homicide",
+      "count": 202,
+      "ratePer100k": null
+    },
+    {
+      "year": 2017,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Attempted homicide",
+      "categorySlug": "attempted-homicide",
+      "count": 192,
+      "ratePer100k": null
+    },
+    {
+      "year": 2017,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Assault",
+      "categorySlug": "assault",
+      "count": 7965,
+      "ratePer100k": null
+    },
+    {
+      "year": 2017,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Sexual offenses",
+      "categorySlug": "sexual-offenses",
+      "count": 750,
+      "ratePer100k": null
+    },
+    {
+      "year": 2017,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Rape",
+      "categorySlug": "rape",
+      "count": 295,
+      "ratePer100k": null
+    },
+    {
+      "year": 2017,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Rape of vulnerable persons",
+      "categorySlug": "rape-of-vulnerable-persons",
+      "count": 455,
+      "ratePer100k": null
+    },
+    {
+      "year": 2017,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Kidnapping and extortion",
+      "categorySlug": "kidnapping-and-extortion",
+      "count": 0,
+      "ratePer100k": null
+    },
+    {
+      "year": 2017,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Drug trafficking",
+      "categorySlug": "drug-trafficking",
+      "count": 2321,
+      "ratePer100k": null
+    },
+    {
+      "year": 2017,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Robbery",
+      "categorySlug": "robbery",
+      "count": 35491,
+      "ratePer100k": null
+    },
+    {
+      "year": 2017,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Vehicle robbery",
+      "categorySlug": "vehicle-robbery",
+      "count": 8005,
+      "ratePer100k": null
+    },
+    {
+      "year": 2017,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Theft",
+      "categorySlug": "theft",
+      "count": 48149,
+      "ratePer100k": null
+    },
+    {
+      "year": 2017,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Vehicle theft",
+      "categorySlug": "vehicle-theft",
+      "count": 10337,
+      "ratePer100k": null
+    },
+    {
+      "year": 2018,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "All recorded offenses",
+      "categorySlug": "all-recorded-offenses",
+      "count": 146437,
+      "ratePer100k": null
+    },
+    {
+      "year": 2018,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Homicide",
+      "categorySlug": "homicide",
+      "count": 173,
+      "ratePer100k": null
+    },
+    {
+      "year": 2018,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Attempted homicide",
+      "categorySlug": "attempted-homicide",
+      "count": 187,
+      "ratePer100k": null
+    },
+    {
+      "year": 2018,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Assault",
+      "categorySlug": "assault",
+      "count": 7219,
+      "ratePer100k": null
+    },
+    {
+      "year": 2018,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Sexual offenses",
+      "categorySlug": "sexual-offenses",
+      "count": 636,
+      "ratePer100k": null
+    },
+    {
+      "year": 2018,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Rape",
+      "categorySlug": "rape",
+      "count": 162,
+      "ratePer100k": null
+    },
+    {
+      "year": 2018,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Rape of vulnerable persons",
+      "categorySlug": "rape-of-vulnerable-persons",
+      "count": 474,
+      "ratePer100k": null
+    },
+    {
+      "year": 2018,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Kidnapping and extortion",
+      "categorySlug": "kidnapping-and-extortion",
+      "count": 0,
+      "ratePer100k": null
+    },
+    {
+      "year": 2018,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Drug trafficking",
+      "categorySlug": "drug-trafficking",
+      "count": 1655,
+      "ratePer100k": null
+    },
+    {
+      "year": 2018,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Robbery",
+      "categorySlug": "robbery",
+      "count": 34096,
+      "ratePer100k": null
+    },
+    {
+      "year": 2018,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Vehicle robbery",
+      "categorySlug": "vehicle-robbery",
+      "count": 7365,
+      "ratePer100k": null
+    },
+    {
+      "year": 2018,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Theft",
+      "categorySlug": "theft",
+      "count": 50813,
+      "ratePer100k": null
+    },
+    {
+      "year": 2018,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Vehicle theft",
+      "categorySlug": "vehicle-theft",
+      "count": 9899,
+      "ratePer100k": null
+    },
+    {
+      "year": 2019,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "All recorded offenses",
+      "categorySlug": "all-recorded-offenses",
+      "count": 157948,
+      "ratePer100k": null
+    },
+    {
+      "year": 2019,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Homicide",
+      "categorySlug": "homicide",
+      "count": 177,
+      "ratePer100k": null
+    },
+    {
+      "year": 2019,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Attempted homicide",
+      "categorySlug": "attempted-homicide",
+      "count": 179,
+      "ratePer100k": null
+    },
+    {
+      "year": 2019,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Assault",
+      "categorySlug": "assault",
+      "count": 7673,
+      "ratePer100k": null
+    },
+    {
+      "year": 2019,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Sexual offenses",
+      "categorySlug": "sexual-offenses",
+      "count": 760,
+      "ratePer100k": null
+    },
+    {
+      "year": 2019,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Rape",
+      "categorySlug": "rape",
+      "count": 216,
+      "ratePer100k": null
+    },
+    {
+      "year": 2019,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Rape of vulnerable persons",
+      "categorySlug": "rape-of-vulnerable-persons",
+      "count": 544,
+      "ratePer100k": null
+    },
+    {
+      "year": 2019,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Kidnapping and extortion",
+      "categorySlug": "kidnapping-and-extortion",
+      "count": 0,
+      "ratePer100k": null
+    },
+    {
+      "year": 2019,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Drug trafficking",
+      "categorySlug": "drug-trafficking",
+      "count": 1752,
+      "ratePer100k": null
+    },
+    {
+      "year": 2019,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Robbery",
+      "categorySlug": "robbery",
+      "count": 37147,
+      "ratePer100k": null
+    },
+    {
+      "year": 2019,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Vehicle robbery",
+      "categorySlug": "vehicle-robbery",
+      "count": 5691,
+      "ratePer100k": null
+    },
+    {
+      "year": 2019,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Theft",
+      "categorySlug": "theft",
+      "count": 53854,
+      "ratePer100k": null
+    },
+    {
+      "year": 2019,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Vehicle theft",
+      "categorySlug": "vehicle-theft",
+      "count": 8932,
+      "ratePer100k": null
+    },
+    {
+      "year": 2020,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "All recorded offenses",
+      "categorySlug": "all-recorded-offenses",
+      "count": 143624,
+      "ratePer100k": null
+    },
+    {
+      "year": 2020,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Homicide",
+      "categorySlug": "homicide",
+      "count": 166,
+      "ratePer100k": null
+    },
+    {
+      "year": 2020,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Attempted homicide",
+      "categorySlug": "attempted-homicide",
+      "count": 139,
+      "ratePer100k": null
+    },
+    {
+      "year": 2020,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Assault",
+      "categorySlug": "assault",
+      "count": 7281,
+      "ratePer100k": null
+    },
+    {
+      "year": 2020,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Sexual offenses",
+      "categorySlug": "sexual-offenses",
+      "count": 613,
+      "ratePer100k": null
+    },
+    {
+      "year": 2020,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Rape",
+      "categorySlug": "rape",
+      "count": 167,
+      "ratePer100k": null
+    },
+    {
+      "year": 2020,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Rape of vulnerable persons",
+      "categorySlug": "rape-of-vulnerable-persons",
+      "count": 446,
+      "ratePer100k": null
+    },
+    {
+      "year": 2020,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Kidnapping and extortion",
+      "categorySlug": "kidnapping-and-extortion",
+      "count": 23,
+      "ratePer100k": null
+    },
+    {
+      "year": 2020,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Drug trafficking",
+      "categorySlug": "drug-trafficking",
+      "count": 1674,
+      "ratePer100k": null
+    },
+    {
+      "year": 2020,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Robbery",
+      "categorySlug": "robbery",
+      "count": 31745,
+      "ratePer100k": null
+    },
+    {
+      "year": 2020,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Vehicle robbery",
+      "categorySlug": "vehicle-robbery",
+      "count": 3827,
+      "ratePer100k": null
+    },
+    {
+      "year": 2020,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Theft",
+      "categorySlug": "theft",
+      "count": 40335,
+      "ratePer100k": null
+    },
+    {
+      "year": 2020,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Vehicle theft",
+      "categorySlug": "vehicle-theft",
+      "count": 6632,
+      "ratePer100k": null
+    },
+    {
+      "year": 2021,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "All recorded offenses",
+      "categorySlug": "all-recorded-offenses",
+      "count": 173093,
+      "ratePer100k": null
+    },
+    {
+      "year": 2021,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Homicide",
+      "categorySlug": "homicide",
+      "count": 126,
+      "ratePer100k": null
+    },
+    {
+      "year": 2021,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Attempted homicide",
+      "categorySlug": "attempted-homicide",
+      "count": 150,
+      "ratePer100k": null
+    },
+    {
+      "year": 2021,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Assault",
+      "categorySlug": "assault",
+      "count": 7106,
+      "ratePer100k": null
+    },
+    {
+      "year": 2021,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Sexual offenses",
+      "categorySlug": "sexual-offenses",
+      "count": 569,
+      "ratePer100k": null
+    },
+    {
+      "year": 2021,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Rape",
+      "categorySlug": "rape",
+      "count": 164,
+      "ratePer100k": null
+    },
+    {
+      "year": 2021,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Rape of vulnerable persons",
+      "categorySlug": "rape-of-vulnerable-persons",
+      "count": 405,
+      "ratePer100k": null
+    },
+    {
+      "year": 2021,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Kidnapping and extortion",
+      "categorySlug": "kidnapping-and-extortion",
+      "count": 48,
+      "ratePer100k": null
+    },
+    {
+      "year": 2021,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Drug trafficking",
+      "categorySlug": "drug-trafficking",
+      "count": 1105,
+      "ratePer100k": null
+    },
+    {
+      "year": 2021,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Robbery",
+      "categorySlug": "robbery",
+      "count": 34082,
+      "ratePer100k": null
+    },
+    {
+      "year": 2021,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Vehicle robbery",
+      "categorySlug": "vehicle-robbery",
+      "count": 4015,
+      "ratePer100k": null
+    },
+    {
+      "year": 2021,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Theft",
+      "categorySlug": "theft",
+      "count": 56015,
+      "ratePer100k": null
+    },
+    {
+      "year": 2021,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Vehicle theft",
+      "categorySlug": "vehicle-theft",
+      "count": 8982,
+      "ratePer100k": null
+    },
+    {
+      "year": 2022,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "All recorded offenses",
+      "categorySlug": "all-recorded-offenses",
+      "count": 226885,
+      "ratePer100k": null
+    },
+    {
+      "year": 2022,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Homicide",
+      "categorySlug": "homicide",
+      "count": 173,
+      "ratePer100k": null
+    },
+    {
+      "year": 2022,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Attempted homicide",
+      "categorySlug": "attempted-homicide",
+      "count": 178,
+      "ratePer100k": null
+    },
+    {
+      "year": 2022,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Assault",
+      "categorySlug": "assault",
+      "count": 8109,
+      "ratePer100k": null
+    },
+    {
+      "year": 2022,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Sexual offenses",
+      "categorySlug": "sexual-offenses",
+      "count": 650,
+      "ratePer100k": null
+    },
+    {
+      "year": 2022,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Rape",
+      "categorySlug": "rape",
+      "count": 162,
+      "ratePer100k": null
+    },
+    {
+      "year": 2022,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Rape of vulnerable persons",
+      "categorySlug": "rape-of-vulnerable-persons",
+      "count": 488,
+      "ratePer100k": null
+    },
+    {
+      "year": 2022,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Kidnapping and extortion",
+      "categorySlug": "kidnapping-and-extortion",
+      "count": 32,
+      "ratePer100k": null
+    },
+    {
+      "year": 2022,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Drug trafficking",
+      "categorySlug": "drug-trafficking",
+      "count": 786,
+      "ratePer100k": null
+    },
+    {
+      "year": 2022,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Robbery",
+      "categorySlug": "robbery",
+      "count": 38348,
+      "ratePer100k": null
+    },
+    {
+      "year": 2022,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Vehicle robbery",
+      "categorySlug": "vehicle-robbery",
+      "count": 5051,
+      "ratePer100k": null
+    },
+    {
+      "year": 2022,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Theft",
+      "categorySlug": "theft",
+      "count": 63016,
+      "ratePer100k": null
+    },
+    {
+      "year": 2022,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Vehicle theft",
+      "categorySlug": "vehicle-theft",
+      "count": 11037,
+      "ratePer100k": null
+    },
+    {
+      "year": 2023,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "All recorded offenses",
+      "categorySlug": "all-recorded-offenses",
+      "count": 241019,
+      "ratePer100k": null
+    },
+    {
+      "year": 2023,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Homicide",
+      "categorySlug": "homicide",
+      "count": 140,
+      "ratePer100k": null
+    },
+    {
+      "year": 2023,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Attempted homicide",
+      "categorySlug": "attempted-homicide",
+      "count": 184,
+      "ratePer100k": null
+    },
+    {
+      "year": 2023,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Assault",
+      "categorySlug": "assault",
+      "count": 9703,
+      "ratePer100k": null
+    },
+    {
+      "year": 2023,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Sexual offenses",
+      "categorySlug": "sexual-offenses",
+      "count": 769,
+      "ratePer100k": null
+    },
+    {
+      "year": 2023,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Rape",
+      "categorySlug": "rape",
+      "count": 170,
+      "ratePer100k": null
+    },
+    {
+      "year": 2023,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Rape of vulnerable persons",
+      "categorySlug": "rape-of-vulnerable-persons",
+      "count": 599,
+      "ratePer100k": null
+    },
+    {
+      "year": 2023,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Kidnapping and extortion",
+      "categorySlug": "kidnapping-and-extortion",
+      "count": 19,
+      "ratePer100k": null
+    },
+    {
+      "year": 2023,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Drug trafficking",
+      "categorySlug": "drug-trafficking",
+      "count": 1098,
+      "ratePer100k": null
+    },
+    {
+      "year": 2023,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Robbery",
+      "categorySlug": "robbery",
+      "count": 33204,
+      "ratePer100k": null
+    },
+    {
+      "year": 2023,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Vehicle robbery",
+      "categorySlug": "vehicle-robbery",
+      "count": 4084,
+      "ratePer100k": null
+    },
+    {
+      "year": 2023,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Theft",
+      "categorySlug": "theft",
+      "count": 63563,
+      "ratePer100k": null
+    },
+    {
+      "year": 2023,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Vehicle theft",
+      "categorySlug": "vehicle-theft",
+      "count": 9976,
+      "ratePer100k": null
+    },
+    {
+      "year": 2024,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "All recorded offenses",
+      "categorySlug": "all-recorded-offenses",
+      "count": 244608,
+      "ratePer100k": null
+    },
+    {
+      "year": 2024,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Homicide",
+      "categorySlug": "homicide",
+      "count": 128,
+      "ratePer100k": null
+    },
+    {
+      "year": 2024,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Attempted homicide",
+      "categorySlug": "attempted-homicide",
+      "count": 186,
+      "ratePer100k": null
+    },
+    {
+      "year": 2024,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Assault",
+      "categorySlug": "assault",
+      "count": 9562,
+      "ratePer100k": null
+    },
+    {
+      "year": 2024,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Sexual offenses",
+      "categorySlug": "sexual-offenses",
+      "count": 797,
+      "ratePer100k": null
+    },
+    {
+      "year": 2024,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Rape",
+      "categorySlug": "rape",
+      "count": 220,
+      "ratePer100k": null
+    },
+    {
+      "year": 2024,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Rape of vulnerable persons",
+      "categorySlug": "rape-of-vulnerable-persons",
+      "count": 577,
+      "ratePer100k": null
+    },
+    {
+      "year": 2024,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Kidnapping and extortion",
+      "categorySlug": "kidnapping-and-extortion",
+      "count": 26,
+      "ratePer100k": null
+    },
+    {
+      "year": 2024,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Drug trafficking",
+      "categorySlug": "drug-trafficking",
+      "count": 1201,
+      "ratePer100k": null
+    },
+    {
+      "year": 2024,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Robbery",
+      "categorySlug": "robbery",
+      "count": 28421,
+      "ratePer100k": null
+    },
+    {
+      "year": 2024,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Vehicle robbery",
+      "categorySlug": "vehicle-robbery",
+      "count": 3470,
+      "ratePer100k": null
+    },
+    {
+      "year": 2024,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Theft",
+      "categorySlug": "theft",
+      "count": 61755,
+      "ratePer100k": null
+    },
+    {
+      "year": 2024,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Vehicle theft",
+      "categorySlug": "vehicle-theft",
+      "count": 10579,
+      "ratePer100k": null
+    },
+    {
+      "year": 2025,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "All recorded offenses",
+      "categorySlug": "all-recorded-offenses",
+      "count": 241922,
+      "ratePer100k": null
+    },
+    {
+      "year": 2025,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Homicide",
+      "categorySlug": "homicide",
+      "count": 125,
+      "ratePer100k": null
+    },
+    {
+      "year": 2025,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Attempted homicide",
+      "categorySlug": "attempted-homicide",
+      "count": 171,
+      "ratePer100k": null
+    },
+    {
+      "year": 2025,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Assault",
+      "categorySlug": "assault",
+      "count": 10568,
+      "ratePer100k": null
+    },
+    {
+      "year": 2025,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Sexual offenses",
+      "categorySlug": "sexual-offenses",
+      "count": 730,
+      "ratePer100k": null
+    },
+    {
+      "year": 2025,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Rape",
+      "categorySlug": "rape",
+      "count": 172,
+      "ratePer100k": null
+    },
+    {
+      "year": 2025,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Rape of vulnerable persons",
+      "categorySlug": "rape-of-vulnerable-persons",
+      "count": 558,
+      "ratePer100k": null
+    },
+    {
+      "year": 2025,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Kidnapping and extortion",
+      "categorySlug": "kidnapping-and-extortion",
+      "count": 15,
+      "ratePer100k": null
+    },
+    {
+      "year": 2025,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Drug trafficking",
+      "categorySlug": "drug-trafficking",
+      "count": 1544,
+      "ratePer100k": null
+    },
+    {
+      "year": 2025,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Robbery",
+      "categorySlug": "robbery",
+      "count": 22170,
+      "ratePer100k": null
+    },
+    {
+      "year": 2025,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Vehicle robbery",
+      "categorySlug": "vehicle-robbery",
+      "count": 2271,
+      "ratePer100k": null
+    },
+    {
+      "year": 2025,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Theft",
+      "categorySlug": "theft",
+      "count": 61192,
+      "ratePer100k": null
+    },
+    {
+      "year": 2025,
+      "districtLabel": "São Paulo",
+      "districtSlug": "sao-paulo",
+      "categoryLabel": "Vehicle theft",
+      "categorySlug": "vehicle-theft",
+      "count": 9055,
+      "ratePer100k": null
+    }
+  ]
+}

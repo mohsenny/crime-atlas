@@ -5065,15 +5065,6 @@
       "ratePer100k": 150
     },
     {
-      "year": 2008,
-      "districtLabel": "Steglitz-Zehlendorf",
-      "districtSlug": "steglitz-zehlendorf",
-      "categoryLabel": "Aggravated assault",
-      "categorySlug": "aggravated-assault",
-      "count": 840258,
-      "ratePer100k": 771
-    },
-    {
       "year": 2009,
       "districtLabel": "Steglitz-Zehlendorf",
       "districtSlug": "steglitz-zehlendorf",
@@ -5270,15 +5261,6 @@
       "categorySlug": "coercion-threats-stalking",
       "count": 1075,
       "ratePer100k": 374
-    },
-    {
-      "year": 2009,
-      "districtLabel": "Spandau",
-      "districtSlug": "spandau",
-      "categoryLabel": "Coercion, threats & stalking",
-      "categorySlug": "coercion-threats-stalking",
-      "count": 983341,
-      "ratePer100k": 0
     },
     {
       "year": 2008,
@@ -5722,15 +5704,6 @@
       "ratePer100k": 146
     },
     {
-      "year": 2009,
-      "districtLabel": "Steglitz-Zehlendorf",
-      "districtSlug": "steglitz-zehlendorf",
-      "categoryLabel": "Motor vehicle theft",
-      "categorySlug": "motor-vehicle-theft",
-      "count": 720220,
-      "ratePer100k": 244
-    },
-    {
       "year": 2008,
       "districtLabel": "Tempelhof-Schöneberg",
       "districtSlug": "tempelhof-schoneberg",
@@ -5918,15 +5891,6 @@
       "categorySlug": "theft-from-vehicles",
       "count": 1970,
       "ratePer100k": 686
-    },
-    {
-      "year": 2009,
-      "districtLabel": "Spandau",
-      "districtSlug": "spandau",
-      "categoryLabel": "Theft from vehicles",
-      "categorySlug": "theft-from-vehicles",
-      "count": 1724597,
-      "ratePer100k": 0
     },
     {
       "year": 2008,
@@ -6136,15 +6100,6 @@
       "ratePer100k": 528
     },
     {
-      "year": 2009,
-      "districtLabel": "Spandau",
-      "districtSlug": "spandau",
-      "categoryLabel": "Bicycle theft",
-      "categorySlug": "bicycle-theft",
-      "count": 1345466,
-      "ratePer100k": 0
-    },
-    {
       "year": 2008,
       "districtLabel": "Steglitz-Zehlendorf",
       "districtSlug": "steglitz-zehlendorf",
@@ -6224,15 +6179,6 @@
       "categorySlug": "bicycle-theft",
       "count": 1415,
       "ratePer100k": 563
-    },
-    {
-      "year": 2009,
-      "districtLabel": "Marzahn-Hellersdorf",
-      "districtSlug": "marzahn-hellersdorf",
-      "categoryLabel": "Bicycle theft",
-      "categorySlug": "bicycle-theft",
-      "count": 1232493,
-      "ratePer100k": 0
     },
     {
       "year": 2008,
@@ -6359,15 +6305,6 @@
       "categorySlug": "residential-burglary",
       "count": 628,
       "ratePer100k": 218
-    },
-    {
-      "year": 2008,
-      "districtLabel": "Steglitz-Zehlendorf",
-      "districtSlug": "steglitz-zehlendorf",
-      "categoryLabel": "Residential burglary",
-      "categorySlug": "residential-burglary",
-      "count": 739227,
-      "ratePer100k": 884
     },
     {
       "year": 2009,
@@ -7313,15 +7250,6 @@
       "categorySlug": "graffiti-damage",
       "count": 1156,
       "ratePer100k": 462
-    },
-    {
-      "year": 2008,
-      "districtLabel": "Lichtenberg",
-      "districtSlug": "lichtenberg",
-      "categoryLabel": "Graffiti damage",
-      "categorySlug": "graffiti-damage",
-      "count": 872360,
-      "ratePer100k": 824
     },
     {
       "year": 2009,

@@ -227,25 +227,73 @@ As of April 2026, the current generated data still has several source-cleaning i
 
 ### Barcelona / Valencia
 
-- The Spanish source path is official, but the currently shipped extracted series appears to mix incompatible publication structures across some earlier and later years.
-- Example: Barcelona `All recorded offenses` drops from `154,830` in `2014` to `2,941` in `2015`, then jumps back to six-figure values in `2020+`.
-- Similar discontinuities appear in robbery, theft, vehicle theft, and drug-trafficking rows.
-- Treat this as an extraction / source-structure alignment problem, not a real crime collapse.
+- The Spanish source path is official, but the municipality-level publication structure is not stable enough across all archive years to ship as one continuous annual series.
+- The app now intentionally keeps only the verified municipality-comparable years:
+  - `2013`
+  - `2014`
+  - `2020–2025`
+- `2015–2019` are currently excluded on purpose because they created obvious structural discontinuities when stitched into the same city-level series.
+- Treat this as a source-family compatibility problem, not a real crime collapse.
 
 ### Los Angeles
 
-- Several LAPD area-level categories show clear one-year truncation in `2015`, then rebound in `2016`.
+- Several LAPD area-level categories showed clear one-year truncation in `2015`, then rebound in `2016`.
 - Examples appeared in `Southeast` and `Olympic` for robbery, burglary, theft, theft-from-vehicles, assaults, and fraud.
-- This likely indicates a schema/field interpretation issue in the transition year rather than a real crime crash.
+- The app now excludes `2015` entirely and also excludes `2024`, which appears to be an unsafe/incomplete latest-year slice in the currently used source path.
+- Treat this as a source-window / schema-transition issue, not a real crime crash.
 
 ### New York City
 
-- Borough-level rows show obvious discontinuities around `2021` and `2025` in several mapped categories.
-- Example pattern:
-  - normal 2020 value
-  - implausibly tiny 2021 value
-  - then a later jump back to normal magnitude
-- This strongly suggests partial-year ingestion, grouping mismatch, or source-window mixing.
+- Borough-level rows showed obvious discontinuities when the app mixed a historical endpoint with a current endpoint across `2021–2025`.
+- The app now uses:
+  - historical source for `2006–2024`
+  - current source only for `2025`
+- This eliminated the tiny false 2021–2024 values that appeared in borough series like robbery.
+- Rule: do not merge NYPD historical and current feeds across overlapping years unless the row structure is verified equivalent.
+
+### Tokyo
+
+- Official source family is now wired and shipped.
+- Source pattern:
+  - `https://www.toukei.metro.tokyo.lg.jp/tnenkan/<year>/tn<yy>qv201000.csv`
+- Current app coverage: `2010–2023`
+- Area breakdown: yes, aggregated from police-station rows to district/municipality rows
+- Important caveats:
+  - `2024` does not currently resolve at the verified CSV path
+  - the CSV should be fetched with a browser-like user agent
+  - police-station detail is more granular than the dashboard; the app aggregates to a stable area layer
+
+### São Paulo
+
+- Official source family is now wired and shipped.
+- Current app coverage: `2010–2025`
+- Area breakdown in app: no, citywide only
+- Source path:
+  - `https://www.ssp.sp.gov.br/assets/estatistica/trimestral/arquivos/<year>-04.htm`
+- Important caveats:
+  - use only quarter-4 (`-04`) pages for annual comparability
+  - parse the official HTML using workbook-style import while preserving formatted cell text
+  - use the `Capital` column for citywide São Paulo
+  - the parser must keep display strings like `164.650` intact or thousands separators may be misread
+
+### Berlin
+
+- The app now removes a small set of obviously impossible PDF-corrupted historical rows before building generated data.
+- This is a safeguard, not a full fix.
+- Current sanitizing rule lives in `scripts/prepare-data.ts` and only removes implausibly large old PDF-derived rows.
+- There are still unresolved early-year anomalies in Berlin, so treat comparison on old Berlin series as directionally useful but not fully clean.
+
+### London
+
+- One minor anomaly still remains in the airport special area:
+  - `London Heathrow and London City Airports__Theft from vehicles 2023:456 -> 2024:83`
+- This looks like a special-geography artifact rather than a citywide logic failure.
+
+### Valencia
+
+- One anomaly still remains in the currently shipped citywide series:
+  - `Theft 2022:4507 -> 2023:24234`
+- Treat Valencia as less trustworthy than Barcelona until the remaining Spanish municipality stitching is fully revalidated.
 
 ### Rule for future agents
 
@@ -257,6 +305,48 @@ First:
 2. isolate source-path failures
 3. patch parser / transform logic
 4. only then trust comparison behavior as broadly representative
+
+## Current official-source coverage added after the first launch
+
+These locations are now in the app and should be treated as shipped:
+
+- Tokyo
+- São Paulo
+
+Do not remove or remap them casually. Preserve their current official source families unless you have a demonstrably better official-series path.
+
+## Current strongest next research candidates
+
+These are the most promising official source paths after the current hardening pass:
+
+### Kyoto
+
+- Official source family verified:
+  - Kyoto Prefectural Police crime statistics page
+  - `https://www.pref.kyoto.jp/fukei/anzen/toke/tokei.html`
+- What is promising:
+  - city/municipality-level crime PDFs are explicitly published
+  - annual crime-statistics books exist
+- Why not shipped yet:
+  - still PDF-heavy
+  - needs a stable extraction strategy before being trusted in the same way as Tokyo
+
+### Mexico City
+
+- Official source family looks promising via Mexico City open-data / prosecutorial incidence publications.
+- What is promising:
+  - there are official notes and datasets that explicitly refer to `alcaldías`
+  - the city has a strong official open-data ecosystem
+- Why not shipped yet:
+  - the exact clean annual comparable offense-series path still needs one verified stable dataset family
+  - do not ship from mixed explanatory notes / partial resources alone
+
+### Lower-confidence investigations still open
+
+- Tampa
+- San Salvador
+
+These may still become shippable, but as of now they do not yet have a verified clean official annual structured series on par with the stronger city candidates above.
 
 ## Berlin historical warning
 

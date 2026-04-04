@@ -6,6 +6,7 @@ import { getComparisonData, getLocationSummaries } from "@/lib/dashboard-data";
 type ComparePageProps = {
   searchParams: Promise<{
     cities?: string;
+    category?: string;
   }>;
 };
 
@@ -17,7 +18,7 @@ function splitCities(value?: string) {
 }
 
 export default async function ComparePage({ searchParams }: ComparePageProps) {
-  const { cities } = await searchParams;
+  const { category, cities } = await searchParams;
   const selectedCities = splitCities(cities);
 
   if (selectedCities.length < 2 || selectedCities.length > 3) {
@@ -33,5 +34,5 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
     redirect("/");
   }
 
-  return <ComparisonPageClient data={data} locations={locations} />;
+  return <ComparisonPageClient data={data} initialCategorySlug={category} locations={locations} />;
 }

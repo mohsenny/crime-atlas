@@ -1,8 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ArrowLeft, ArrowRightLeft } from "lucide-react";
 import Link from "next/link";
+import { usePathname, useSearchParams } from "next/navigation";
 
 import type { ComparisonData, LocationOverview } from "@/lib/dashboard-data";
 
@@ -15,12 +16,39 @@ import { formatInteger } from "@/lib/utils";
 
 type ComparisonPageClientProps = {
   data: ComparisonData;
+  initialCategorySlug?: string;
   locations: LocationOverview[];
 };
 
-export function ComparisonPageClient({ data, locations }: ComparisonPageClientProps) {
-  const [selectedCategorySlug, setSelectedCategorySlug] = useState(data.defaultCategorySlug ?? data.categories[0]?.value ?? "");
+export function ComparisonPageClient({ data, initialCategorySlug, locations }: ComparisonPageClientProps) {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const resolvedInitialCategorySlug =
+    data.categories.find((category) => category.value === initialCategorySlug)?.value ??
+    data.defaultCategorySlug ??
+    data.categories[0]?.value ??
+    "";
+
+  const [selectedCategorySlug, setSelectedCategorySlug] = useState(resolvedInitialCategorySlug);
   const [metric, setMetric] = useState<"count" | "rate">(data.supportsRate ? "rate" : "count");
+
+  useEffect(() => {
+    setSelectedCategorySlug(resolvedInitialCategorySlug);
+  }, [resolvedInitialCategorySlug]);
+
+  useEffect(() => {
+    if (!selectedCategorySlug) {
+      return;
+    }
+
+    if (searchParams.get("category") === selectedCategorySlug) {
+      return;
+    }
+
+    const nextParams = new URLSearchParams(searchParams.toString());
+    nextParams.set("category", selectedCategorySlug);
+    window.history.replaceState(null, "", `${pathname}?${nextParams.toString()}`);
+  }, [pathname, searchParams, selectedCategorySlug]);
 
   const selectedCategory = data.categories.find((category) => category.value === selectedCategorySlug) ?? data.categories[0] ?? null;
 

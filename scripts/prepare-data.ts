@@ -24,7 +24,9 @@ import {
   MUNICH_LOCATION,
   PARIS_LOCATION,
   ROME_LOCATION,
+  SAO_PAULO_LOCATION,
   SAN_FRANCISCO_LOCATION,
+  TOKYO_LOCATION,
   VALENCIA_LOCATION,
   type LocationDefinition,
 } from "../src/lib/location-config";
@@ -854,6 +856,200 @@ async function buildSpainLocation(
   };
 }
 
+function getTokyoSourceUrl(year: number) {
+  const yearSuffix = String(year).slice(2);
+  return `https://www.toukei.metro.tokyo.lg.jp/tnenkan/${year}/tn${yearSuffix}qv201000.csv`;
+}
+
+async function buildTokyoLocation(): Promise<LocationPayload> {
+  await fs.mkdir(path.join(TMP_DIR, "tokyo"), { recursive: true });
+
+  const years = Array.from({ length: 14 }, (_, index) => 2010 + index);
+  const { options: categories, lookup: categoryLookup } = buildCategoryLookup(TOKYO_LOCATION);
+  const countsByKey = new Map<string, number>();
+  const districtsByLabel = new Map<string, FilterOption>();
+
+  for (const year of years) {
+    const filePath = path.join(TMP_DIR, "tokyo", `${year}.csv`);
+    await ensureFile(filePath, getTokyoSourceUrl(year));
+
+    const workbook = XLSX.read(await fs.readFile(filePath), { type: "buffer" });
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json<Array<string | number | null>>(sheet, {
+      header: 1,
+      defval: null,
+      raw: true,
+    });
+
+    const headerRow = rows[0] ?? [];
+    const districtColumnIndex = headerRow.findIndex((cell) => String(cell ?? "").trim() === "District");
+    const policeStationColumnIndex = headerRow.findIndex((cell) => String(cell ?? "").trim() === "Police station");
+
+    if (districtColumnIndex === -1 || policeStationColumnIndex === -1) {
+      throw new Error(`Could not determine Tokyo district columns for ${year}`);
+    }
+
+    const categoryColumns = headerRow
+      .map((cell, index) => ({
+        index,
+        sourceLabel: String(cell ?? "").trim(),
+      }))
+      .filter((column) => categoryLookup.has(normalizeSourceLabel(column.sourceLabel)));
+
+    for (const row of rows.slice(1)) {
+      const districtLabel = String(row[districtColumnIndex] ?? "").trim();
+      const policeStationLabel = String(row[policeStationColumnIndex] ?? "").trim();
+
+      if (!districtLabel || !policeStationLabel || districtLabel === "Tokyo-to" || districtLabel === "All ku") {
+        continue;
+      }
+
+      const districtSlug = slugify(districtLabel);
+      districtsByLabel.set(districtLabel, { label: districtLabel, value: districtSlug });
+
+      for (const column of categoryColumns) {
+        const category = categoryLookup.get(normalizeSourceLabel(column.sourceLabel));
+        if (!category) {
+          continue;
+        }
+
+        countsByKey.set(
+          `${year}__${districtSlug}__${category.slug}`,
+          (countsByKey.get(`${year}__${districtSlug}__${category.slug}`) ?? 0) + parseCountLike(row[column.index]),
+        );
+      }
+    }
+  }
+
+  const districts = [...districtsByLabel.values()].sort((left, right) => left.label.localeCompare(right.label));
+
+  return {
+    slug: TOKYO_LOCATION.slug,
+    label: TOKYO_LOCATION.label,
+    country: TOKYO_LOCATION.country,
+    areaLabelSingular: TOKYO_LOCATION.areaLabelSingular,
+    areaLabelPlural: TOKYO_LOCATION.areaLabelPlural,
+    chartTitle: TOKYO_LOCATION.chartTitle,
+    note: TOKYO_LOCATION.note,
+    sources: TOKYO_LOCATION.sources,
+    years,
+    districts,
+    categories,
+    defaultCategorySlugs: categories.filter((category) => category.isDefault).map((category) => category.value),
+    records: buildDenseCountRecords({ years, districts, categories, countsByKey }),
+  };
+}
+
+function getSaoPauloSourceUrl(year: number) {
+  return `https://www.ssp.sp.gov.br/assets/estatistica/trimestral/arquivos/${year}-04.htm`;
+}
+
+async function buildSaoPauloLocation(): Promise<LocationPayload> {
+  await fs.mkdir(path.join(TMP_DIR, "sao-paulo"), { recursive: true });
+
+  const years = Array.from({ length: 16 }, (_, index) => 2010 + index);
+  const { options: categories, lookup: categoryLookup } = buildCategoryLookup(SAO_PAULO_LOCATION);
+  const districtLabel = "São Paulo";
+  const districtSlug = slugify(districtLabel);
+  const recordsByKey = new Map<string, CrimeRecord>();
+
+  for (const year of years) {
+    const filePath = path.join(TMP_DIR, "sao-paulo", `${year}.htm`);
+    await ensureFile(filePath, getSaoPauloSourceUrl(year));
+
+    const workbook = XLSX.readFile(filePath, {
+      raw: true,
+      cellText: true,
+      cellNF: true,
+    });
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json<Array<string | number | null>>(sheet, {
+      header: 1,
+      defval: null,
+      raw: false,
+    });
+
+    const summaryHeaderIndex = rows.findIndex(
+      (row) => String(row?.[1] ?? "").trim() === "Ocorrências policiais registradas, por natureza" ||
+        String(row?.[1] ?? "").trim() === "Ocorr�ncias policiais registradas, por natureza",
+    );
+    const typeHeaderIndex = rows.findIndex(
+      (row) => String(row?.[1] ?? "").trim() === "Ocorrências policiais registradas, por tipo" ||
+        String(row?.[1] ?? "").trim() === "Ocorr�ncias policiais registradas, por tipo",
+    );
+
+    if (summaryHeaderIndex === -1 || typeHeaderIndex === -1) {
+      throw new Error(`Could not determine São Paulo offense tables for ${year}`);
+    }
+
+    const summaryHeader = rows[summaryHeaderIndex] ?? [];
+    const typeHeader = rows[typeHeaderIndex] ?? [];
+    const summaryCapitalColumnIndex = summaryHeader.findIndex((cell) => String(cell ?? "").trim() === "Capital");
+    const typeCapitalColumnIndex = typeHeader.findIndex((cell) => String(cell ?? "").trim() === "Capital");
+
+    if (summaryCapitalColumnIndex === -1 || typeCapitalColumnIndex === -1) {
+      throw new Error(`Could not determine São Paulo Capital column for ${year}`);
+    }
+
+    const collectTableRows = (startIndex: number) => {
+      const tableRows: Array<{ sourceLabel: string; count: number }> = [];
+
+      for (const row of rows.slice(startIndex + 1)) {
+        const label = String(row?.[1] ?? "").trim();
+        if (!label) {
+          continue;
+        }
+        if (String(row?.[0] ?? "").trim() === "ITEM") {
+          break;
+        }
+
+        const count = parseCountLike(row[startIndex === summaryHeaderIndex ? summaryCapitalColumnIndex : typeCapitalColumnIndex]);
+        tableRows.push({
+          sourceLabel: label,
+          count,
+        });
+      }
+
+      return tableRows;
+    };
+
+    const tableRows = [...collectTableRows(summaryHeaderIndex), ...collectTableRows(typeHeaderIndex)];
+
+    for (const row of tableRows) {
+      const category = categoryLookup.get(normalizeSourceLabel(row.sourceLabel));
+      if (!category) {
+        continue;
+      }
+
+      addOrMergeRecord(recordsByKey, {
+        year,
+        districtLabel,
+        districtSlug,
+        categoryLabel: category.label,
+        categorySlug: category.slug,
+        count: row.count,
+        ratePer100k: null,
+      });
+    }
+  }
+
+  return {
+    slug: SAO_PAULO_LOCATION.slug,
+    label: SAO_PAULO_LOCATION.label,
+    country: SAO_PAULO_LOCATION.country,
+    areaLabelSingular: SAO_PAULO_LOCATION.areaLabelSingular,
+    areaLabelPlural: SAO_PAULO_LOCATION.areaLabelPlural,
+    chartTitle: SAO_PAULO_LOCATION.chartTitle,
+    note: SAO_PAULO_LOCATION.note,
+    sources: SAO_PAULO_LOCATION.sources,
+    years,
+    districts: [{ label: districtLabel, value: districtSlug }],
+    categories,
+    defaultCategorySlugs: categories.filter((category) => category.isDefault).map((category) => category.value),
+    records: [...recordsByKey.values()].sort((left, right) => left.year - right.year),
+  };
+}
+
 async function parseMunichResourceLinks() {
   await fs.mkdir(path.join(TMP_DIR, "munich"), { recursive: true });
   const pagePath = path.join(TMP_DIR, "munich", "statistics_page.html");
@@ -1515,12 +1711,35 @@ async function parseBerlinHistoricalRecords() {
   return BERLIN_HISTORICAL_RECORDS;
 }
 
+function sanitizeBerlinHistoricalRecords(
+  records: Array<{ year: number; district: string; category: string; count: number; rate_per_100k: number }>,
+) {
+  const cleaned = records.filter((record) => {
+    if (record.category === "Straftaten -insgesamt-") {
+      return record.count <= 200_000;
+    }
+
+    if (record.category === "Diebstahl -insgesamt-") {
+      return record.count <= 100_000;
+    }
+
+    return record.count <= 50_000;
+  });
+
+  const removedCount = records.length - cleaned.length;
+  if (removedCount > 0) {
+    console.warn(`Removed ${removedCount} implausible Berlin historical rows from the PDF-derived archive extract.`);
+  }
+
+  return cleaned;
+}
+
 async function buildBerlinLocation(): Promise<LocationPayload> {
   const [historicalRecords, currentRecords] = await Promise.all([
     parseBerlinHistoricalRecords(),
     parseBerlinCurrentRecords(),
   ]);
-  const dedupedHistoricalRecords = historicalRecords.filter((record) => record.year < 2015);
+  const dedupedHistoricalRecords = sanitizeBerlinHistoricalRecords(historicalRecords).filter((record) => record.year < 2015);
 
   const { options: categories } = buildCategoryLookup(BERLIN_LOCATION);
   const mappedRecords = [...dedupedHistoricalRecords, ...currentRecords].map((row) => {
@@ -2002,14 +2221,14 @@ async function buildNewYorkCityLocation(): Promise<LocationPayload> {
   const [historicalRows, currentRows] = await Promise.all([
     fetchSocrataRows<NewYorkCrimeRow>(SOURCE_URLS.newYorkCrimeHistoricApi, {
       $select: "date_extract_y(cmplnt_fr_dt) as year,boro_nm,ofns_desc,count(*) as count",
-      $where: "cmplnt_fr_dt between '2006-01-01T00:00:00' and '2020-12-31T23:59:59' and boro_nm is not null",
+      $where: "cmplnt_fr_dt between '2006-01-01T00:00:00' and '2024-12-31T23:59:59' and boro_nm is not null",
       $group: "year,boro_nm,ofns_desc",
       $order: "year,boro_nm,ofns_desc",
       $limit: "50000",
     }),
     fetchSocrataRows<NewYorkCrimeRow>(SOURCE_URLS.newYorkCrimeCurrentApi, {
       $select: "date_extract_y(cmplnt_fr_dt) as year,boro_nm,ofns_desc,count(*) as count",
-      $where: "cmplnt_fr_dt between '2021-01-01T00:00:00' and '2025-12-31T23:59:59' and boro_nm is not null",
+      $where: "cmplnt_fr_dt between '2025-01-01T00:00:00' and '2025-12-31T23:59:59' and boro_nm is not null",
       $group: "year,boro_nm,ofns_desc",
       $order: "year,boro_nm,ofns_desc",
       $limit: "50000",
@@ -2131,7 +2350,7 @@ async function buildLosAngelesLocation(): Promise<LocationPayload> {
     }),
   ]);
 
-  const years = Array.from({ length: 15 }, (_, index) => 2010 + index);
+  const years = Array.from({ length: 15 }, (_, index) => 2010 + index).filter((year) => year !== 2015 && year !== 2024);
   const countsByKey = new Map<string, number>();
   const districtsByLabel = new Map<string, FilterOption>();
 
@@ -2224,11 +2443,6 @@ async function buildSanFranciscoLocation(): Promise<LocationPayload> {
 async function main() {
   const spainAnnualSources: SpainAnnualSource[] = [
     { year: 2014, type: "xls", url: SOURCE_URLS.spanishBalance2014Workbook },
-    { year: 2015, type: "pdf", url: SOURCE_URLS.spanishBalance2015 },
-    { year: 2016, type: "zip-pdf", url: SOURCE_URLS.spanishArchive2016, zipEntryContains: "cuarto trimestre" },
-    { year: 2017, type: "zip-pdf", url: SOURCE_URLS.spanishArchive2017, zipEntryContains: "cuarto trimestre" },
-    { year: 2018, type: "zip-pdf", url: SOURCE_URLS.spanishArchive2018, zipEntryContains: "4º trimestre" },
-    { year: 2019, type: "zip-pdf", url: SOURCE_URLS.spanishArchive2019, zipEntryContains: "cuarto trimestre" },
     { year: 2020, type: "zip-pdf", url: SOURCE_URLS.spanishArchive2020, zipEntryContains: "cuarto trimestre" },
     { year: 2021, type: "pdf", url: SOURCE_URLS.spanishBalance2021 },
     { year: 2022, type: "pdf", url: SOURCE_URLS.spanishBalance2022 },
@@ -2240,21 +2454,23 @@ async function main() {
   const barcelona = await buildSpainLocation(BARCELONA_LOCATION, "Barcelona", spainAnnualSources);
   const valencia = await buildSpainLocation(VALENCIA_LOCATION, "Valencia", spainAnnualSources);
 
-  const [berlin, chicago, frankfurt, hamburg, london, losAngeles, luton, milan, newYorkCity, paris, rome, sanFrancisco] =
+  const [berlin, chicago, frankfurt, hamburg, london, losAngeles, luton, milan, newYorkCity, paris, rome, sanFrancisco, saoPaulo, tokyo] =
     await Promise.all([
-    buildBerlinLocation(),
-    buildChicagoLocation(),
-    buildFrankfurtLocation(),
-    buildHamburgLocation(),
-    buildLondonLocation(),
-    buildLosAngelesLocation(),
-    buildLutonLocation(),
-    buildMilanLocation(),
-    buildNewYorkCityLocation(),
-    buildParisLocation(),
-    buildRomeLocation(),
-    buildSanFranciscoLocation(),
-  ]);
+      buildBerlinLocation(),
+      buildChicagoLocation(),
+      buildFrankfurtLocation(),
+      buildHamburgLocation(),
+      buildLondonLocation(),
+      buildLosAngelesLocation(),
+      buildLutonLocation(),
+      buildMilanLocation(),
+      buildNewYorkCityLocation(),
+      buildParisLocation(),
+      buildRomeLocation(),
+      buildSanFranciscoLocation(),
+      buildSaoPauloLocation(),
+      buildTokyoLocation(),
+    ]);
   const payload = {
     generatedAt: new Date().toISOString(),
     locations: [
@@ -2270,7 +2486,9 @@ async function main() {
       newYorkCity,
       paris,
       rome,
+      saoPaulo,
       sanFrancisco,
+      tokyo,
       valencia,
     ].sort((left, right) => left.label.localeCompare(right.label)),
   };
