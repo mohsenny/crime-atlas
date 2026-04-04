@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { ArrowRight, Search, X } from "lucide-react";
+import { ArrowRight, Search, X, type LucideIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import type { LocationOverview } from "@/lib/dashboard-data";
@@ -17,6 +17,7 @@ type CompareCityPickerProps = {
   initialSelectedSlugs?: string[];
   lockedSlugs?: string[];
   triggerLabel?: string;
+  triggerIcon?: LucideIcon;
   className?: string;
 };
 
@@ -25,6 +26,7 @@ export function CompareCityPicker({
   initialSelectedSlugs = [],
   lockedSlugs = [],
   triggerLabel = "Compare",
+  triggerIcon: TriggerIcon,
   className,
 }: CompareCityPickerProps) {
   const router = useRouter();
@@ -32,7 +34,6 @@ export function CompareCityPicker({
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedSlugs, setSelectedSlugs] = useState<string[]>(initialSelectedSlugs);
   const [isMobileViewport, setIsMobileViewport] = useState(false);
-  const initialSelectedKey = initialSelectedSlugs.join(",");
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 767px)");
@@ -41,13 +42,6 @@ export function CompareCityPicker({
     mediaQuery.addEventListener("change", sync);
     return () => mediaQuery.removeEventListener("change", sync);
   }, []);
-
-  useEffect(() => {
-    if (!open) {
-      setSearchQuery("");
-      setSelectedSlugs((current) => (current.join(",") === initialSelectedKey ? current : [...initialSelectedSlugs]));
-    }
-  }, [initialSelectedKey, initialSelectedSlugs, open]);
 
   const filteredLocations = useMemo(() => {
     const normalized = searchQuery.trim().toLowerCase();
@@ -90,6 +84,18 @@ export function CompareCityPicker({
     router.push(`/compare?cities=${selectedSlugs.join(",")}`);
   }
 
+  function openPicker() {
+    setSearchQuery("");
+    setSelectedSlugs([...initialSelectedSlugs]);
+    setOpen(true);
+  }
+
+  function closePicker() {
+    setSearchQuery("");
+    setSelectedSlugs([...initialSelectedSlugs]);
+    setOpen(false);
+  }
+
   const selectedCount = selectedSlugs.length;
 
   return (
@@ -100,9 +106,10 @@ export function CompareCityPicker({
           CONTROL_LABEL_TEXT_CLASS,
           className,
         )}
-        onClick={() => setOpen(true)}
+        onClick={openPicker}
         type="button"
       >
+        {TriggerIcon ? <TriggerIcon className="h-3.5 w-3.5" /> : null}
         <span>{triggerLabel}</span>
       </button>
 
@@ -124,7 +131,7 @@ export function CompareCityPicker({
                 </div>
                 <button
                   className="inline-flex h-10 w-10 items-center justify-center text-slate-400 transition hover:text-slate-50"
-                  onClick={() => setOpen(false)}
+                  onClick={closePicker}
                   type="button"
                 >
                   <X className="h-4 w-4" />

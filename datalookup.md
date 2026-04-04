@@ -1,5 +1,9 @@
 # Crime Atlas Data Lookup Notes
 
+Deprecated as the primary handoff.
+
+Use [agent.md](./agent.md) as the main future-agent guide going forward.
+
 ## Purpose
 This note is the handoff for future agents extending the data layer in this repo.
 
@@ -22,6 +26,49 @@ The generator is:
 
 Production builds intentionally use the committed generated data. If you refresh source data, run:
 - `npm run data:prepare`
+
+## Current comparison model
+City-to-city comparison no longer uses raw label intersection alone.
+
+The app now has an explicit canonical comparison layer in:
+- `src/lib/comparison-taxonomy.ts`
+
+That layer stores, per city:
+- the canonical comparison category key
+- the exact source category labels that feed it
+- a mapping confidence: `high`, `medium`, or `partial`
+
+Current rule:
+- only categories mapped across **all** selected cities are eligible
+- only `high` and `medium` mappings are shown
+- `partial` mappings are intentionally excluded from the comparison UI for now
+
+Important:
+- some canonical categories aggregate multiple official subcategories for a city
+- do **not** sum umbrella categories together with their own subcategories; pick one defensible representation per city/category
+- if a city has both an official aggregate and official subtypes, the comparison layer must avoid double counting
+
+When extending comparison:
+- prefer adding explicit city-by-city mappings over fuzzy label matching
+- store the mapping in `src/lib/comparison-taxonomy.ts`
+- if a category is only partially comparable, mark it `partial` rather than forcing it into the UI
+- if a category is a close but not perfect match, use `medium` and keep the label honest
+
+## Berlin historical extraction warning
+Berlin `2006–2015` history is extracted from archived atlas PDFs via `scripts/extract-berlin-historical.py`.
+
+There were two real failure modes in that parser:
+- choosing the wrong nearby PDF page when multiple pages in the scan looked table-like
+- splitting wrapped numeric fields incorrectly, which could fuse `count + rate` into one fake large number or over-split a normal thousands-formatted value
+
+This produced false spikes such as Berlin `Residential burglary` in `2008`.
+
+Current safeguards:
+- `pick_best_page()` now takes the first valid page near the TOC target instead of scoring pages by meaningless numeric magnitude
+- `normalize_primary_fields()` resolves the first four primary table columns as a coherent row using population-plausibility checks
+- `assertBerlinHistoricalRecordPlausibility()` in `scripts/prepare-data.ts` aborts the build if Berlin district counts become implausibly large again
+
+Future agents should keep that plausibility check and run a cross-city anomaly scan after every data refresh, especially for PDF-parsed sources.
 
 ## Project-wide sourcing rules
 

@@ -22,10 +22,11 @@ export function LocationOverviewCard({
   onSelect,
 }: LocationOverviewCardProps) {
   const baseClassName = cn(
-    "card-panel overview-card group relative flex min-h-72 w-full max-w-[27rem] overflow-hidden rounded-none p-5 md:h-72",
-    compareMode ? "cursor-pointer" : null,
-    compareMode && selected ? "border-slate-200 bg-slate-100" : null,
-    compareMode && !selected ? "hover:border-slate-200/80" : null,
+    "card-panel overview-card group relative flex min-h-72 w-full max-w-[27rem] overflow-hidden rounded-none p-5 text-left md:h-72",
+    compareMode ? "cursor-pointer border-slate-200/80" : null,
+    compareMode && selected
+      ? "overview-card--selected border-slate-200/80 bg-slate-100 shadow-[0_22px_52px_rgba(2,6,23,0.28)] [backdrop-filter:none]"
+      : null,
     compareMode && disabled ? "cursor-not-allowed opacity-45" : null,
   );
 
@@ -44,7 +45,7 @@ export function LocationOverviewCard({
         </div>
       ) : null}
 
-      <LocationFlag slug={location.slug} variant="card" />
+      <LocationFlag selected={selected} slug={location.slug} variant="card" />
 
       <div className="relative flex min-h-full flex-col justify-between">
         <div className="space-y-4">

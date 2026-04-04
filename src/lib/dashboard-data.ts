@@ -1,6 +1,11 @@
 import { cache } from "react";
 import locationsIndex from "@/generated/locations-index.json";
-import { slugify } from "@/lib/crime-taxonomy";
+import {
+  CANONICAL_COMPARISON_CATEGORIES,
+  isComparableMappingConfidence,
+  LOCATION_COMPARISON_MAPPINGS,
+  type ComparisonMappingConfidence,
+} from "@/lib/comparison-taxonomy";
 
 export type Metric = "count" | "rate";
 
@@ -46,6 +51,7 @@ export type ChartResponse = {
 
 export type ComparisonCategory = FilterOption & {
   sharedAcrossAll: true;
+  confidence: Exclude<ComparisonMappingConfidence, "partial">;
 };
 
 export type ComparisonSeriesRecord = {
@@ -75,6 +81,17 @@ export type ComparisonData = {
   supportsRate: boolean;
   note: string;
   seriesByCategory: Record<string, ComparisonSeriesRecord[]>;
+  methodologyByCategory: Record<
+    string,
+    {
+      confidence: Exclude<ComparisonMappingConfidence, "partial">;
+      locations: Array<{
+        locationSlug: string;
+        locationLabel: string;
+        sourceLabels: string[];
+      }>;
+    }
+  >;
 };
 
 export type LocationOverview = {
@@ -124,6 +141,12 @@ type LocationDataset = {
   categories: FilterOption[];
   defaultCategorySlugs: string[];
   records: LocationRecord[];
+};
+
+type ResolvedComparisonMapping = {
+  canonicalKey: string;
+  sourceCategoryValues: string[];
+  confidence: ComparisonMappingConfidence;
 };
 
 type LocationsIndex = typeof locationsIndex;
@@ -318,30 +341,59 @@ export async function getComparisonData(locationSlugs: string[]): Promise<Compar
     return null;
   }
 
-  const sharedCategoryLabels = locations
-    .map((location) => new Set(location.categories.map((category) => category.label)))
-    .reduce<Set<string> | null>((shared, labels) => {
-      if (!shared) {
-        return new Set(labels);
-      }
-      return new Set([...shared].filter((label) => labels.has(label)));
-    }, null);
+  const resolvedMappingsByLocation = new Map<string, Map<string, ResolvedComparisonMapping>>();
 
-  const baseLocation = locations[0];
-  const sharedCategories = baseLocation.categories
-    .filter((category) => sharedCategoryLabels?.has(category.label))
-    .map((category) => {
-      const matchingCategories = locations
-        .map((location) => location.categories.find((item) => item.label === category.label))
-        .filter((item): item is FilterOption => Boolean(item));
+  for (const location of locations) {
+    const configuredMappings = LOCATION_COMPARISON_MAPPINGS[location.slug] ?? [];
+    const resolvedMappings = new Map<string, ResolvedComparisonMapping>();
+
+    for (const mapping of configuredMappings) {
+      const sourceCategories = mapping.sourceLabels
+        .map((label) => location.categories.find((category) => category.label === label))
+        .filter((category): category is FilterOption => Boolean(category));
+
+      if (sourceCategories.length !== mapping.sourceLabels.length) {
+        continue;
+      }
+
+      resolvedMappings.set(mapping.canonicalKey, {
+        canonicalKey: mapping.canonicalKey,
+        sourceCategoryValues: sourceCategories.map((category) => category.value),
+        confidence: mapping.confidence,
+      });
+    }
+
+    resolvedMappingsByLocation.set(location.slug, resolvedMappings);
+  }
+
+  const sharedCategories = CANONICAL_COMPARISON_CATEGORIES
+    .map<ComparisonCategory | null>((canonicalCategory) => {
+      const mappings = locations
+        .map((location) => resolvedMappingsByLocation.get(location.slug)?.get(canonicalCategory.key) ?? null);
+
+      if (
+        mappings.some((mapping) => !mapping || !isComparableMappingConfidence(mapping.confidence))
+      ) {
+        return null;
+      }
+
+      const confidence = mappings.every((mapping) => mapping?.confidence === "high") ? "high" : "medium";
+
       return {
-        label: category.label,
-        value: slugify(category.label),
-        shortLabel: matchingCategories.find((item) => item.shortLabel)?.shortLabel ?? category.label,
-        color: matchingCategories.find((item) => item.color)?.color,
-        isDefault: matchingCategories.every((item) => Boolean(item.isDefault)),
+        label: canonicalCategory.label,
+        value: canonicalCategory.key,
+        shortLabel: canonicalCategory.shortLabel,
+        color: canonicalCategory.color,
+        isDefault: canonicalCategory.isDefault,
         sharedAcrossAll: true as const,
+        confidence,
       };
+    })
+    .filter((category): category is ComparisonCategory => category !== null)
+    .sort((left, right) => {
+      const leftOrder = CANONICAL_COMPARISON_CATEGORIES.find((item) => item.key === left.value)?.sortOrder ?? 999;
+      const rightOrder = CANONICAL_COMPARISON_CATEGORIES.find((item) => item.key === right.value)?.sortOrder ?? 999;
+      return leftOrder - rightOrder;
     });
 
   const supportsRate = locations.every(
@@ -350,13 +402,15 @@ export async function getComparisonData(locationSlugs: string[]): Promise<Compar
 
   const years = [...new Set(locations.flatMap((location) => location.years))].sort((leftYear, rightYear) => leftYear - rightYear);
   const seriesByCategory: Record<string, ComparisonSeriesRecord[]> = {};
+  const methodologyByCategory: ComparisonData["methodologyByCategory"] = {};
 
   for (const category of sharedCategories) {
     const records: ComparisonSeriesRecord[] = [];
+    const methodologyLocations: ComparisonData["methodologyByCategory"][string]["locations"] = [];
 
     for (const location of locations) {
-      const matchingCategory = location.categories.find((item) => item.label === category.label);
-      if (!matchingCategory) {
+      const mapping = resolvedMappingsByLocation.get(location.slug)?.get(category.value);
+      if (!mapping) {
         continue;
       }
 
@@ -367,7 +421,7 @@ export async function getComparisonData(locationSlugs: string[]): Promise<Compar
       }
 
       for (const record of location.records) {
-        if (record.categorySlug !== matchingCategory.value) {
+        if (!mapping.sourceCategoryValues.includes(record.categorySlug)) {
           continue;
         }
 
@@ -376,7 +430,7 @@ export async function getComparisonData(locationSlugs: string[]): Promise<Compar
           count: current.count + record.count,
           ratePer100k:
             location.districts.length === 1 && record.ratePer100k !== null
-              ? record.ratePer100k
+              ? (current.ratePer100k ?? 0) + record.ratePer100k
               : current.ratePer100k,
         });
       }
@@ -390,6 +444,14 @@ export async function getComparisonData(locationSlugs: string[]): Promise<Compar
           ratePer100k: supportsRate ? totals.ratePer100k : null,
         });
       }
+
+      methodologyLocations.push({
+        locationSlug: location.slug,
+        locationLabel: location.label,
+        sourceLabels: mapping.sourceCategoryValues
+          .map((categoryValue) => location.categories.find((item) => item.value === categoryValue)?.label ?? null)
+          .filter((label): label is string => Boolean(label)),
+      });
     }
 
     seriesByCategory[category.value] = records.sort((leftRecord, rightRecord) =>
@@ -397,6 +459,10 @@ export async function getComparisonData(locationSlugs: string[]): Promise<Compar
         ? leftRecord.locationSlug.localeCompare(rightRecord.locationSlug)
         : leftRecord.year - rightRecord.year,
     );
+    methodologyByCategory[category.value] = {
+      confidence: category.confidence,
+      locations: methodologyLocations,
+    };
   }
 
   const defaultCategorySlug =
@@ -419,7 +485,8 @@ export async function getComparisonData(locationSlugs: string[]): Promise<Compar
     years,
     supportsRate,
     note:
-      "Only categories with the same mapped canonical label in both selected cities are included. Rate per 100k is only enabled when both cities currently use citywide datasets.",
+      "Only canonical categories with exact or close official equivalents across all selected cities are included. Rate per 100k is only enabled when every selected location currently uses a citywide source with explicit official rates.",
     seriesByCategory,
+    methodologyByCategory,
   };
 }

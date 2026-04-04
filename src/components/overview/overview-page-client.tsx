@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import type { LocationOverview } from "@/lib/dashboard-data";
@@ -38,15 +38,6 @@ export function OverviewPageClient({ locations }: OverviewPageClientProps) {
     [locations, selectedCountry],
   );
 
-  useEffect(() => {
-    if (!compareMode) {
-      return;
-    }
-
-    const visibleSlugs = new Set(filteredLocations.map((location) => location.slug));
-    setSelectedCompareSlugs((current) => current.filter((slug) => visibleSlugs.has(slug)));
-  }, [compareMode, filteredLocations]);
-
   function toggleCompareSelection(slug: string) {
     setSelectedCompareSlugs((current) => {
       if (current.includes(slug)) {
@@ -64,6 +55,22 @@ export function OverviewPageClient({ locations }: OverviewPageClientProps) {
   function cancelCompareMode() {
     setCompareMode(false);
     setSelectedCompareSlugs([]);
+  }
+
+  function handleCountryChange(nextCountry: string) {
+    setSelectedCountry(nextCountry);
+
+    if (!compareMode) {
+      return;
+    }
+
+    const visibleSlugs = new Set(
+      locations
+        .filter((location) => nextCountry === "all" || location.country === nextCountry)
+        .map((location) => location.slug),
+    );
+
+    setSelectedCompareSlugs((current) => current.filter((slug) => visibleSlugs.has(slug)));
   }
 
   function handleDesktopCompareButton() {
@@ -92,35 +99,39 @@ export function OverviewPageClient({ locations }: OverviewPageClientProps) {
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3 xl:shrink-0">
-            <div className="hidden md:flex md:flex-none md:items-center md:gap-2">
-              <button
-                className={cn(
-                  "inline-flex h-10 items-center rounded-2xl border border-slate-700 bg-slate-900/70 px-3.5 text-slate-300 transition",
-                  "text-[10px] font-semibold uppercase tracking-[0.18em] leading-none",
-                  compareMode
-                    ? selectedCompareSlugs.length >= 2 && selectedCompareSlugs.length <= MAX_COMPARE_LOCATIONS
-                      ? "hover:text-slate-50"
-                      : "cursor-default text-slate-500"
-                    : "hover:text-slate-50",
-                )}
-                onClick={handleDesktopCompareButton}
-                type="button"
-              >
-                {compareMode
-                  ? selectedCompareSlugs.length >= 2
-                    ? `Compare ${selectedCompareSlugs.length} Cities`
-                    : "Select Cities"
-                  : "Compare"}
-              </button>
-              {compareMode ? (
+            <div className="hidden md:flex md:items-center md:gap-3">
+              <div className="flex min-w-[14.5rem] items-center gap-2">
                 <button
-                  className="inline-flex h-10 items-center px-1 text-sm font-medium text-slate-400 transition hover:text-slate-100"
-                  onClick={cancelCompareMode}
+                  className={cn(
+                    "inline-flex h-10 items-center rounded-2xl border border-slate-700 bg-slate-900/70 px-3.5 text-slate-300 transition",
+                    "min-w-[8.5rem] justify-center text-[10px] font-semibold uppercase tracking-[0.18em] leading-none",
+                    compareMode
+                      ? selectedCompareSlugs.length >= 2 && selectedCompareSlugs.length <= MAX_COMPARE_LOCATIONS
+                        ? "hover:text-slate-50"
+                        : "cursor-default text-slate-500"
+                      : "hover:text-slate-50",
+                  )}
+                  onClick={handleDesktopCompareButton}
                   type="button"
                 >
-                  Cancel
+                  {compareMode
+                    ? selectedCompareSlugs.length >= 2
+                      ? `Compare ${selectedCompareSlugs.length} Cities`
+                      : "Select Cities"
+                    : "Compare"}
                 </button>
-              ) : null}
+                <div className="w-12">
+                  {compareMode ? (
+                    <button
+                      className="inline-flex h-10 items-center px-1 text-sm font-medium text-slate-400 transition hover:text-slate-100"
+                      onClick={cancelCompareMode}
+                      type="button"
+                    >
+                      Cancel
+                    </button>
+                  ) : null}
+                </div>
+              </div>
               <OverviewViewToggle
                 onChange={(value) => setViewPreference(value)}
                 value={viewPreference}
@@ -135,7 +146,7 @@ export function OverviewPageClient({ locations }: OverviewPageClientProps) {
               maxOverlayWidth={320}
               maxWidth={320}
               minWidth={160}
-              onChange={setSelectedCountry}
+              onChange={handleCountryChange}
               options={countryOptions}
               value={selectedCountry}
             />

@@ -1,15 +1,15 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ArrowRightLeft } from "lucide-react";
 import Link from "next/link";
 
 import type { ComparisonData, LocationOverview } from "@/lib/dashboard-data";
 
 import { CompareCityPicker } from "@/components/comparison/compare-city-picker";
 import { ComparisonChart } from "@/components/comparison/comparison-chart";
+import { ComparisonMethodology } from "@/components/comparison/comparison-methodology";
 import { DashboardSources } from "@/components/dashboard/dashboard-sources";
-import { SingleSelectDropdown } from "@/components/dashboard/expandable-dropdown";
 import { MetricToggle } from "@/components/dashboard/metric-toggle";
 import { formatInteger } from "@/lib/utils";
 
@@ -68,23 +68,10 @@ export function ComparisonPageClient({ data, locations }: ComparisonPageClientPr
               <CompareCityPicker
                 initialSelectedSlugs={data.locations.map((location) => location.slug)}
                 locations={locations}
+                triggerIcon={ArrowRightLeft}
                 triggerLabel="Change Cities"
               />
               {data.supportsRate ? <MetricToggle value={metric} onChange={setMetric} /> : null}
-              {selectedCategory ? (
-                <SingleSelectDropdown
-                  label="Category"
-                  maxOverlayWidth={360}
-                  maxWidth={320}
-                  minWidth={210}
-                  onChange={setSelectedCategorySlug}
-                  options={data.categories.map((category) => ({
-                    label: category.shortLabel ?? category.label,
-                    value: category.value,
-                  }))}
-                  value={selectedCategorySlug}
-                />
-              ) : null}
             </div>
           </div>
 
@@ -96,6 +83,7 @@ export function ComparisonPageClient({ data, locations }: ComparisonPageClientPr
             {selectedCategory ? (
               <p className="text-xs uppercase tracking-[0.18em] text-slate-500">
                 Comparing {selectedCategory.label} across {formatInteger(data.years.length)} yearly positions
+                {selectedCategory.confidence === "medium" ? " · close official match" : ""}
               </p>
             ) : null}
           </div>
@@ -103,16 +91,24 @@ export function ComparisonPageClient({ data, locations }: ComparisonPageClientPr
 
         {selectedCategory ? (
           <ComparisonChart
+            categories={data.categories}
             locations={data.locations}
             metric={metric}
+            onSelectCategory={setSelectedCategorySlug}
             rows={rows}
+            selectedCategorySlug={selectedCategorySlug}
             title={selectedCategory.label}
           />
         ) : (
           <div className="card-panel chart-panel rounded-none p-6 text-sm text-slate-300">
-            No exact shared categories were found for the selected locations.
+            No mapped comparable categories were found for the selected locations.
           </div>
         )}
+
+        <ComparisonMethodology
+          category={selectedCategory}
+          methodology={selectedCategory ? data.methodologyByCategory[selectedCategory.value] ?? null : null}
+        />
 
         <DashboardSources sources={combinedSources} />
       </div>

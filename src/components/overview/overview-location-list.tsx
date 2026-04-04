@@ -26,27 +26,27 @@ export function OverviewLocationList({
         compareMode ? (
           <button
             className={cn(
-              "group relative flex w-full items-center gap-4 px-0 py-3 text-left transition sm:py-3.5",
+              "group relative flex w-full items-center gap-4 px-3 py-3 text-left transition sm:py-3.5",
               disabledSlugs.includes(location.slug) ? "cursor-not-allowed opacity-45" : null,
-              selectedSlugs.includes(location.slug) ? "bg-slate-100 px-3 text-slate-950" : "text-slate-100",
+              selectedSlugs.includes(location.slug) ? "bg-slate-100 text-slate-950" : "text-slate-100",
             )}
             disabled={disabledSlugs.includes(location.slug)}
             key={location.slug}
             onClick={() => onSelect?.(location.slug)}
             type="button"
           >
-            <LocationFlag slug={location.slug} variant="list" />
+            <LocationFlag selected={selectedSlugs.includes(location.slug)} slug={location.slug} variant="list" />
             <span
               className={cn(
                 "text-xl font-semibold tracking-[-0.02em] transition",
-                selectedSlugs.includes(location.slug) ? "text-slate-50" : "text-slate-100 group-hover:text-white",
+                selectedSlugs.includes(location.slug) ? "text-slate-950" : "text-slate-100 group-hover:text-white",
               )}
             >
               {location.label}
             </span>
             <span
               className={cn(
-                "ml-auto flex h-5 w-5 items-center justify-center border text-xs font-semibold leading-none transition-colors",
+                "ml-auto flex h-5 w-5 shrink-0 items-center justify-center border text-xs font-semibold leading-none transition-colors",
                 selectedSlugs.includes(location.slug)
                   ? "border-slate-200 bg-slate-100 text-slate-950"
                   : "border-white/18 text-transparent",
