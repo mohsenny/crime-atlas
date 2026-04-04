@@ -98,17 +98,19 @@ export function OverviewPageClient({ locations }: OverviewPageClientProps) {
             </p>
           </div>
 
-          <div className="flex items-center gap-2 xl:pr-1 xl:shrink-0">
-            <div className="hidden md:flex md:items-center md:gap-2">
-              {compareMode ? (
-                <button
-                  className="inline-flex h-10 items-center px-1 text-sm font-medium text-slate-400 transition hover:text-slate-100"
-                  onClick={cancelCompareMode}
-                  type="button"
-                >
-                  Cancel
-                </button>
-              ) : null}
+          <div className="hidden md:grid md:grid-cols-[13rem_max-content_18rem] md:items-center md:justify-end md:gap-2 xl:shrink-0 xl:pr-1 xl:pt-1">
+            <div className="flex h-10 items-center justify-end gap-2">
+              <span className="inline-flex min-w-10 justify-end">
+                {compareMode ? (
+                  <button
+                    className="inline-flex h-10 items-center px-1 text-sm font-medium text-slate-400 transition hover:text-slate-100"
+                    onClick={cancelCompareMode}
+                    type="button"
+                  >
+                    Cancel
+                  </button>
+                ) : null}
+              </span>
               <button
                 className={cn(
                   "inline-flex h-10 items-center rounded-2xl border border-slate-700 bg-slate-900/70 px-3.5 text-slate-300 transition",
@@ -128,12 +130,30 @@ export function OverviewPageClient({ locations }: OverviewPageClientProps) {
                     : "Select Cities"
                   : "Compare Cities"}
               </button>
+            </div>
+
+            <div className="justify-self-end">
               <OverviewViewToggle
                 onChange={(value) => setViewPreference(value)}
                 value={viewPreference}
               />
             </div>
-            <div className="md:hidden">
+            <div className="w-[18rem]">
+              <SingleSelectDropdown
+                fullWidth
+                label="Country"
+                maxOverlayWidth={320}
+                maxWidth={320}
+                minWidth={160}
+                onChange={handleCountryChange}
+                options={countryOptions}
+                value={selectedCountry}
+              />
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 md:hidden">
+            <div>
               <CompareCityPicker locations={locations} triggerLabel="Compare Cities" />
             </div>
             <SingleSelectDropdown

@@ -23,9 +23,9 @@ export function LocationOverviewCard({
 }: LocationOverviewCardProps) {
   const baseClassName = cn(
     "card-panel overview-card group relative flex min-h-72 w-full max-w-[27rem] overflow-hidden rounded-none p-5 text-left md:h-72",
-    compareMode ? "overview-card--compare-mode cursor-pointer border-white/80" : null,
+    compareMode ? "overview-card--compare-mode cursor-pointer !border-white" : null,
     compareMode && selected
-      ? "overview-card--selected border-white/80 bg-slate-100 shadow-[0_22px_52px_rgba(2,6,23,0.28)] [backdrop-filter:none]"
+      ? "overview-card--selected !border-white bg-slate-100 shadow-[0_22px_52px_rgba(2,6,23,0.28)] [backdrop-filter:none]"
       : null,
     compareMode && disabled ? "cursor-not-allowed opacity-45" : null,
   );

@@ -30,11 +30,7 @@ body {
   margin: 0;
   min-height: 100vh;
   font-family: var(--font-body);
-  background:
-    radial-gradient(circle at 16% 14%, rgba(181, 142, 84, 0.16), transparent 28%),
-    radial-gradient(circle at 86% 6%, rgba(44, 87, 112, 0.24), transparent 34%),
-    linear-gradient(120deg, rgba(255, 255, 255, 0.03) 0%, transparent 30%, transparent 70%, rgba(255, 255, 255, 0.02) 100%),
-    linear-gradient(180deg, #132335 0%, #0e1724 52%, #0a111b 100%);
+  background: #2d333c;
   color: var(--text-strong);
 }
 
@@ -84,7 +80,7 @@ input {
 
 .overview-card--compare-mode {
   border-width: 1px !important;
-  border-color: rgba(255, 255, 255, 0.82) !important;
+  border-color: rgba(255, 255, 255, 1) !important;
 }
 
 .expandable-dropdown-options {
