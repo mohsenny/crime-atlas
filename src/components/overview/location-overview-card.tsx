@@ -47,7 +47,7 @@ export function LocationOverviewCard({
 
       <LocationFlag selected={selected} slug={location.slug} variant="card" />
 
-      <div className="relative flex min-h-full flex-col justify-between">
+      <div className="relative flex min-h-full w-full flex-col justify-between">
         <div className="space-y-4">
           <div className="flex items-start gap-4">
             <div>
@@ -71,7 +71,7 @@ export function LocationOverviewCard({
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid w-full grid-cols-[repeat(3,minmax(0,1fr))] gap-3">
           <LocationOverviewStat
             footer={`${location.years[0]} - ${location.years.at(-1)}`}
             label="Coverage"
