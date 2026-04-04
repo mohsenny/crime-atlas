@@ -514,9 +514,13 @@ If a source host is flaky or anti-bot:
 ### Dallas
 
 - source family: Dallas Police Incidents (official city Socrata dataset)
-- coverage in app: `2014–2025`
+- coverage in app: `2017–2025`
 - district breakdown: yes, using division-level geography
-- caveat: `date1` is not a stable timestamp column for grouped annual queries; use `year1` for year aggregation
+- caveats:
+  - `date1` is not a stable timestamp column for grouped annual queries; use `year1` for year aggregation
+  - use `nibrs_crime`, not `offincident`, for category mapping
+  - the earlier `2014–2016` slice looked structurally incomplete in this source path and is intentionally excluded
+  - Dallas sexual-offense support is intentionally not shipped in the current mapping layer because the verified official fields did not expose a clean comparable series
 
 ### Houston
 
@@ -684,9 +688,3 @@ Avoid wording that implies:
 - all data comes directly from city authorities
 - all cities are perfectly comparable
 - the app measures all crime that happened rather than officially recorded crime
-
-## Related file
-
-`datalookup.md` is older supporting context.
-
-Use `agent.md` as the main operating guide going forward.

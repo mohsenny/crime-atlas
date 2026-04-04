@@ -108,7 +108,6 @@ export const LOCATION_COMPARISON_MAPPINGS: Record<string, LocationComparisonMapp
   ],
   dallas: [
     { canonicalKey: "homicide", sourceLabels: ["Homicide"], confidence: "high" },
-    { canonicalKey: "sexual_offenses", sourceLabels: ["Sexual offenses"], confidence: "medium" },
     { canonicalKey: "robbery", sourceLabels: ["Robbery"], confidence: "high" },
     { canonicalKey: "burglary", sourceLabels: ["Burglary"], confidence: "high" },
     { canonicalKey: "theft", sourceLabels: ["Theft"], confidence: "high" },

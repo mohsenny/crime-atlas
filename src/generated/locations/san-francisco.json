@@ -3140,7 +3140,7 @@
       "districtSlug": "mission",
       "categoryLabel": "Burglary",
       "categorySlug": "burglary",
-      "count": 650,
+      "count": 651,
       "ratePer100k": null
     },
     {
@@ -3266,7 +3266,7 @@
       "districtSlug": "mission",
       "categoryLabel": "Larceny theft",
       "categorySlug": "larceny-theft",
-      "count": 3352,
+      "count": 3353,
       "ratePer100k": null
     },
     {
@@ -7676,7 +7676,7 @@
       "districtSlug": "southern",
       "categoryLabel": "Motor vehicle theft",
       "categorySlug": "motor-vehicle-theft",
-      "count": 490,
+      "count": 491,
       "ratePer100k": null
     },
     {
@@ -7892,7 +7892,7 @@
       "districtSlug": "southern",
       "categoryLabel": "Fraud and forgery",
       "categorySlug": "fraud-and-forgery",
-      "count": 438,
+      "count": 439,
       "ratePer100k": null
     },
     {

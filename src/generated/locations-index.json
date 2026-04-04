@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-04T15:22:32.546Z",
+  "generatedAt": "2026-04-04T17:01:09.696Z",
   "locations": [
     {
       "slug": "austin",
@@ -183,9 +183,6 @@
         }
       ],
       "years": [
-        2014,
-        2015,
-        2016,
         2017,
         2018,
         2019,
@@ -197,7 +194,7 @@
         2025
       ],
       "districtCount": 8,
-      "categoryCount": 14,
+      "categoryCount": 13,
       "supportsRate": false
     },
     {

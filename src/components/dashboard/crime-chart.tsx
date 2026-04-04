@@ -12,6 +12,8 @@ import {
   YAxis,
 } from "recharts";
 
+import { ChartShell } from "@/components/chart/chart-shell";
+import { useChartUi } from "@/components/chart/use-chart-ui";
 import { ChartLegendButton } from "@/components/dashboard/chart-legend-button";
 import { ChartTooltip } from "@/components/dashboard/chart-tooltip";
 import { buildSeriesKey, type ChartResponse } from "@/lib/dashboard-data";
@@ -41,7 +43,7 @@ function pointsEqual(left: Point[], right: Point[]) {
 const DESKTOP_CHART_HEIGHT = 520;
 const MOBILE_CHART_HEIGHT = 420;
 const DESKTOP_AXIS_WIDTH = 88;
-const MOBILE_AXIS_WIDTH = 64;
+const MOBILE_AXIS_WIDTH = 52;
 
 export function CrimeChart({
   data,
@@ -58,21 +60,19 @@ export function CrimeChart({
   const [canScrollRight, setCanScrollRight] = useState(false);
   const [focusLinePoints, setFocusLinePoints] = useState<Point[]>([]);
   const [viewportWidth, setViewportWidth] = useState(0);
-  const [hasCoarsePointer, setHasCoarsePointer] = useState(false);
+  const { disableInteractiveTooltip, isMobileViewport } = useChartUi();
 
   const visibleCategories = useMemo(
     () => data.categories.filter((category) => !hiddenCategorySlugs.includes(category.value)),
     [data.categories, hiddenCategorySlugs],
   );
-  const isMobileViewport = viewportWidth > 0 && viewportWidth < 640;
-  const disableInteractiveTooltip = isMobileViewport || hasCoarsePointer;
   const chartHeight = isMobileViewport ? MOBILE_CHART_HEIGHT : DESKTOP_CHART_HEIGHT;
   const axisWidth = isMobileViewport ? MOBILE_AXIS_WIDTH : DESKTOP_AXIS_WIDTH;
   const groupWidth = Math.max(
     isMobileViewport ? 42 : 50,
     data.districts.length * (isMobileViewport ? 16 : 18) + (isMobileViewport ? 12 : 18),
   );
-  const minChartWidth = Math.max(isMobileViewport ? 520 : 760, data.years.length * groupWidth);
+  const minChartWidth = Math.max(isMobileViewport ? 0 : 760, data.years.length * groupWidth);
   const chartWidth = Math.max(minChartWidth, viewportWidth);
   const showDistrictMarkers = !isMobileViewport && data.districts.length > 1 && data.districts.length <= 16;
   const chartTopMargin = showDistrictMarkers ? 24 : 10;
@@ -118,14 +118,6 @@ export function CrimeChart({
   useEffect(() => {
     const id = window.requestAnimationFrame(() => setMounted(true));
     return () => window.cancelAnimationFrame(id);
-  }, []);
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(hover: none), (pointer: coarse)");
-    const sync = () => setHasCoarsePointer(mediaQuery.matches);
-    sync();
-    mediaQuery.addEventListener("change", sync);
-    return () => mediaQuery.removeEventListener("change", sync);
   }, []);
 
   useEffect(() => {
@@ -271,10 +263,10 @@ export function CrimeChart({
   }
 
   return (
-    <div className="card-panel chart-panel flex min-h-[26rem] flex-col rounded-none p-0 sm:min-h-[34rem] sm:p-5">
-      <div className="flex flex-wrap items-start justify-between gap-3 px-4 pt-4 sm:px-0 sm:pt-0">
-        <p className="text-sm font-semibold text-slate-200">{title}</p>
-        <div className="flex flex-wrap justify-end gap-1.5">
+    <ChartShell
+      title={title}
+      controls={
+        <>
           {data.categories.map((category) => {
             const active = !hiddenCategorySlugs.includes(category.value);
 
@@ -288,10 +280,56 @@ export function CrimeChart({
               />
             );
           })}
+        </>
+      }
+      footerLeft={
+        <div className="flex gap-2 overflow-x-auto pb-1 text-xs text-slate-400 sm:flex-wrap sm:overflow-visible sm:pb-0">
+          {data.districts.map((district, index) => (
+            <button
+              className={cn(
+                "inline-flex cursor-pointer items-start gap-2 rounded-full border px-3 py-1.5 text-left transition sm:items-center",
+                focusedDistrictSlug === null
+                  ? "border-slate-700 text-slate-400 hover:border-slate-600 hover:text-slate-200"
+                  : focusedDistrictSlug === district.value
+                    ? "border-slate-500 bg-slate-900/80 text-slate-100"
+                    : "border-slate-800 text-slate-500 opacity-55 hover:opacity-75",
+              )}
+              key={district.value}
+              onClick={() => onToggleDistrict(district.value)}
+              type="button"
+            >
+              <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[11px] font-semibold leading-none text-slate-900">
+                {index + 1}
+              </span>
+              <span className="min-w-0 leading-tight">{district.label}</span>
+            </button>
+          ))}
         </div>
-      </div>
-
-      <div className="mt-3 flex min-h-0 flex-1">
+      }
+      footerRight={
+        <div className="flex items-center justify-end gap-2">
+          <button
+            aria-label="Scroll chart left"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-700 bg-slate-900/70 text-slate-300 transition disabled:cursor-not-allowed disabled:opacity-35"
+            disabled={!canScrollLeft}
+            onClick={() => scrollChart(-1)}
+            type="button"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+          <button
+            aria-label="Scroll chart right"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-700 bg-slate-900/70 text-slate-300 transition disabled:cursor-not-allowed disabled:opacity-35"
+            disabled={!canScrollRight}
+            onClick={() => scrollChart(1)}
+            type="button"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
+        </div>
+      }
+    >
+      <div className="flex min-h-0 flex-1">
         <div className="relative shrink-0" style={{ width: axisWidth }}>
           <div className="relative" style={{ height: chartHeight }}>
             {axisTicks.map((tick) => {
@@ -315,7 +353,11 @@ export function CrimeChart({
         </div>
 
         <div className="chart-scroll-shell min-h-0 flex-1 overflow-x-auto" ref={scrollContainerRef}>
-          <div className="relative" ref={chartContentRef} style={{ width: `${chartWidth}px`, minWidth: `${minChartWidth}px`, height: chartHeight }}>
+          <div
+            className="relative"
+            ref={chartContentRef}
+            style={{ width: `${chartWidth}px`, minWidth: `${minChartWidth}px`, height: chartHeight }}
+          >
             {focusedDistrictSlug && focusLinePoints.length > 1 ? (
               <svg className="pointer-events-none absolute inset-0" height={chartHeight} width={chartWidth}>
                 <polyline
@@ -346,7 +388,7 @@ export function CrimeChart({
                   barCategoryGap={isMobileViewport ? 10 : 14}
                   barGap={2}
                   data={data.chartRows}
-                  margin={{ top: chartTopMargin, right: 12, left: 0, bottom: 4 }}
+                  margin={{ top: chartTopMargin, right: isMobileViewport ? 0 : 12, left: 0, bottom: 4 }}
                 >
                   <CartesianGrid horizontal={false} stroke="var(--chart-grid-dark)" strokeDasharray="3 3" />
                   <XAxis
@@ -403,52 +445,7 @@ export function CrimeChart({
           </div>
         </div>
       </div>
-
-      <div className="mt-4 flex flex-col gap-3 px-4 pb-4 sm:flex-row sm:items-center sm:justify-between sm:px-0 sm:pb-0">
-        <div className="flex gap-2 overflow-x-auto pb-1 text-xs text-slate-400 sm:flex-wrap sm:overflow-visible sm:pb-0">
-          {data.districts.map((district, index) => (
-            <button
-              className={cn(
-                "inline-flex cursor-pointer items-start gap-2 rounded-full border px-3 py-1.5 text-left transition sm:items-center",
-                focusedDistrictSlug === null
-                  ? "border-slate-700 text-slate-400 hover:border-slate-600 hover:text-slate-200"
-                  : focusedDistrictSlug === district.value
-                    ? "border-slate-500 bg-slate-900/80 text-slate-100"
-                    : "border-slate-800 text-slate-500 opacity-55 hover:opacity-75",
-              )}
-              key={district.value}
-              onClick={() => onToggleDistrict(district.value)}
-              type="button"
-            >
-              <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[11px] font-semibold leading-none text-slate-900">
-                {index + 1}
-              </span>
-              <span className="min-w-0 leading-tight">{district.label}</span>
-            </button>
-          ))}
-        </div>
-        <div className="flex items-center justify-end gap-2">
-          <button
-            aria-label="Scroll chart left"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-700 bg-slate-900/70 text-slate-300 transition disabled:cursor-not-allowed disabled:opacity-35"
-            disabled={!canScrollLeft}
-            onClick={() => scrollChart(-1)}
-            type="button"
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </button>
-          <button
-            aria-label="Scroll chart right"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-700 bg-slate-900/70 text-slate-300 transition disabled:cursor-not-allowed disabled:opacity-35"
-            disabled={!canScrollRight}
-            onClick={() => scrollChart(1)}
-            type="button"
-          >
-            <ChevronRight className="h-4 w-4" />
-          </button>
-        </div>
-      </div>
-    </div>
+    </ChartShell>
   );
 }
 

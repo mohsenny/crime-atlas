@@ -3,6 +3,10 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 const flagByLocationSlug: Record<string, { src: string; alt: string }> = {
+  austin: {
+    src: "/flags/united-states.png",
+    alt: "Flag of the United States",
+  },
   berlin: {
     src: "/flags/germany.png",
     alt: "Flag of Germany",
@@ -15,6 +19,10 @@ const flagByLocationSlug: Record<string, { src: string; alt: string }> = {
     src: "/flags/united-states.png",
     alt: "Flag of the United States",
   },
+  dallas: {
+    src: "/flags/united-states.png",
+    alt: "Flag of the United States",
+  },
   frankfurt: {
     src: "/flags/germany.png",
     alt: "Flag of Germany",
@@ -22,6 +30,10 @@ const flagByLocationSlug: Record<string, { src: string; alt: string }> = {
   hamburg: {
     src: "/flags/germany.png",
     alt: "Flag of Germany",
+  },
+  houston: {
+    src: "/flags/united-states.png",
+    alt: "Flag of the United States",
   },
   london: {
     src: "/flags/united-kingdom.png",
@@ -47,6 +59,10 @@ const flagByLocationSlug: Record<string, { src: string; alt: string }> = {
     src: "/flags/france.png",
     alt: "Flag of France",
   },
+  phoenix: {
+    src: "/flags/united-states.png",
+    alt: "Flag of the United States",
+  },
   rome: {
     src: "/flags/italy.png",
     alt: "Flag of Italy",
@@ -56,6 +72,10 @@ const flagByLocationSlug: Record<string, { src: string; alt: string }> = {
     alt: "Flag of Brazil",
   },
   "san-francisco": {
+    src: "/flags/united-states.png",
+    alt: "Flag of the United States",
+  },
+  seattle: {
     src: "/flags/united-states.png",
     alt: "Flag of the United States",
   },

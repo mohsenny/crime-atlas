@@ -160,10 +160,10 @@ export function CompareCityPicker({
                     return (
                       <button
                         className={cn(
-                          "flex w-full items-center gap-3 border px-3 py-3 text-left transition",
+                          "relative flex w-full items-center gap-3 px-3 py-3 text-left transition md:border",
                           selected
-                            ? "border-slate-200 bg-slate-100 text-slate-950"
-                            : "border-white/10 bg-transparent text-slate-100 hover:border-white/20",
+                            ? "bg-slate-100 text-slate-950 md:border-slate-200"
+                            : "bg-transparent text-slate-100 md:border-white/10 md:hover:border-white/20",
                           atLimit || locked ? "cursor-default" : "cursor-pointer",
                           atLimit ? "opacity-45" : null,
                         )}
@@ -183,12 +183,15 @@ export function CompareCityPicker({
                         </div>
                         <span
                           className={cn(
-                            "flex h-5 w-5 items-center justify-center border text-xs font-semibold leading-none",
-                            selected ? "border-slate-950 bg-slate-950 text-white" : "border-white/12 text-transparent",
+                            "flex h-5 w-5 items-center justify-center text-xs font-semibold leading-none md:border",
+                            selected
+                              ? "bg-slate-950 text-white md:border-slate-950"
+                              : "text-transparent md:border-white/12",
                           )}
                         >
                           ✓
                         </span>
+                        <span className="pointer-events-none absolute inset-x-3 bottom-0 h-px bg-white/8 md:hidden" />
                       </button>
                     );
                   })}

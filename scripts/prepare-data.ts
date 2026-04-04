@@ -107,7 +107,7 @@ type AustinCrimeRow = {
 type DallasCrimeRow = {
   year1: string;
   division: string;
-  offincident: string;
+  nibrs_crime: string;
   count: string;
 };
 type LosAngelesCrimeRow = {
@@ -2971,17 +2971,34 @@ function mapAustinCrimeType(crimeType: string) {
 function mapDallasCrimeType(crimeType: string) {
   const normalized = crimeType.toUpperCase();
   if (normalized.includes("HOMICIDE") || normalized.includes("MURDER") || normalized.includes("MANSLAUGHTER")) return "Homicide";
-  if (normalized.includes("RAPE") || normalized.includes("SEXUAL") || normalized.includes("INDECENCY")) return "Sexual offenses";
   if (normalized.includes("ROBBERY")) return "Robbery";
-  if (normalized.includes("BURGLARY OF VEHICLE") || normalized.includes("THEFT FROM MOTOR VEHICLE")) return "Theft from vehicles";
-  if (normalized.includes("AUTO THEFT") || normalized.includes("MOTOR VEHICLE THEFT") || normalized.includes("UUMV")) return "Motor vehicle theft";
+  if (normalized === "THEFT FROM MOTOR VEHICLE" || normalized.includes("MOTOR VEHICLE PARTS")) return "Theft from vehicles";
+  if (normalized === "UUMV" || normalized === "MOTOR VEHICLE THEFT") return "Motor vehicle theft";
   if (normalized.includes("BURGLARY")) return "Burglary";
-  if (normalized.includes("THEFT") || normalized.includes("SHOPLIFT")) return "Theft";
-  if (normalized.includes("AGG")) return "Aggravated assault";
-  if (normalized.includes("ASSAULT")) return "Assault";
+  if (
+    normalized === "ALL OTHER LARCENY" ||
+    normalized === "SHOPLIFTING" ||
+    normalized === "THEFT OF BUILDING" ||
+    normalized === "POCKET-PICKING" ||
+    normalized === "PURSE-SNATCHING" ||
+    normalized.includes("LARCENY")
+  )
+    return "Theft";
+  if (normalized.includes("AGG ASSAULT")) return "Aggravated assault";
+  if (normalized === "SIMPLE ASSAULT" || normalized === "INTIMIDATION") return "Assault";
   if (normalized.includes("DRUG") || normalized.includes("NARCOTIC") || normalized.includes("MARIJUANA")) return "Drug offenses";
-  if (normalized.includes("FRAUD") || normalized.includes("FORGERY") || normalized.includes("COUNTERFEIT") || normalized.includes("CREDIT CARD")) return "Fraud and forgery";
-  if (normalized.includes("MISCHIEF") || normalized.includes("VANDAL")) return "Criminal damage";
+  if (
+    normalized.includes("FRAUD") ||
+    normalized.includes("FORGERY") ||
+    normalized.includes("COUNTERFEIT") ||
+    normalized.includes("CREDIT CARD") ||
+    normalized.includes("FALSE PRETENSES") ||
+    normalized.includes("IDENTITY THEFT") ||
+    normalized.includes("EMBEZZELMENT") ||
+    normalized.includes("IMPERSONATION")
+  )
+    return "Fraud and forgery";
+  if (normalized.includes("DAMAGE") || normalized.includes("VANDAL")) return "Criminal damage";
   if (normalized.includes("WEAPON")) return "Weapons offenses";
   if (normalized.includes("ARSON")) return "Arson";
   return null;
@@ -3129,14 +3146,14 @@ async function buildDallasLocation(): Promise<LocationPayload> {
   const categoriesBySlug = buildCategoryOptionsMap(categories);
   const cityPopulationByYear = await parseUsCityPopulationByYear(US_CITY_POPULATION_SOURCES.dallas);
   const rows = await fetchSocrataRows<DallasCrimeRow>(SOURCE_URLS.dallasCrimeApi, {
-    $select: "year1,division,offincident,count(*) as count",
-    $where: "year1 between 2014 and 2025 and division is not null",
-    $group: "year1,division,offincident",
-    $order: "year1,division,offincident",
+    $select: "year1,division,nibrs_crime,count(*) as count",
+    $where: "year1 between 2017 and 2025 and division is not null and nibrs_crime is not null",
+    $group: "year1,division,nibrs_crime",
+    $order: "year1,division,nibrs_crime",
     $limit: "100000",
   });
 
-  const years = Array.from({ length: 12 }, (_, index) => 2014 + index);
+  const years = Array.from({ length: 9 }, (_, index) => 2017 + index);
   const countsByKey = new Map<string, number>();
   const districtsByLabel = new Map<string, FilterOption>();
 
@@ -3144,7 +3161,7 @@ async function buildDallasLocation(): Promise<LocationPayload> {
     const year = Number(row.year1);
     const rawDivision = String(row.division ?? "").trim();
     const divisionLabel = toTitleCase(rawDivision);
-    const category = resolveMappedCategory(categoriesBySlug, mapDallasCrimeType(String(row.offincident ?? "")));
+    const category = resolveMappedCategory(categoriesBySlug, mapDallasCrimeType(String(row.nibrs_crime ?? "")));
     if (!divisionLabel || !category || !years.includes(year)) {
       continue;
     }
