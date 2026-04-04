@@ -1,0 +1,136 @@
+{
+  "slug": "phoenix",
+  "label": "Phoenix",
+  "country": "United States",
+  "areaLabelSingular": "Grid",
+  "areaLabelPlural": "Grids",
+  "chartTitle": "Phoenix Crime by Grid",
+  "note": "Phoenix uses the official city crime-data CSV published on the municipal open-data portal. The source is aggregated here by grid and calendar year from the city’s UCR crime-category field.",
+  "sources": [
+    {
+      "label": "City of Phoenix Open Data: Crime Data",
+      "url": "https://www.phoenixopendata.com/dataset/crime-data"
+    }
+  ],
+  "years": [
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "districts": [],
+  "categories": [
+    {
+      "label": "Homicide",
+      "value": "homicide",
+      "shortLabel": "Homicide",
+      "color": "#be123c",
+      "isDefault": false
+    },
+    {
+      "label": "Rape",
+      "value": "rape",
+      "shortLabel": "Rape",
+      "color": "#f472b6",
+      "isDefault": true
+    },
+    {
+      "label": "Robbery",
+      "value": "robbery",
+      "shortLabel": "Robbery",
+      "color": "#f97316",
+      "isDefault": true
+    },
+    {
+      "label": "Burglary",
+      "value": "burglary",
+      "shortLabel": "Burglary",
+      "color": "#ef4444",
+      "isDefault": true
+    },
+    {
+      "label": "Larceny theft",
+      "value": "larceny-theft",
+      "shortLabel": "Larceny theft",
+      "color": "#facc15",
+      "isDefault": true
+    },
+    {
+      "label": "Motor vehicle theft",
+      "value": "motor-vehicle-theft",
+      "shortLabel": "Vehicle theft",
+      "color": "#4f46e5",
+      "isDefault": true
+    },
+    {
+      "label": "Simple assault",
+      "value": "simple-assault",
+      "shortLabel": "Simple assault",
+      "color": "#67e8f9",
+      "isDefault": false
+    },
+    {
+      "label": "Aggravated assault",
+      "value": "aggravated-assault",
+      "shortLabel": "Agg. assault",
+      "color": "#0ea5e9",
+      "isDefault": true
+    },
+    {
+      "label": "Drug offenses",
+      "value": "drug-offenses",
+      "shortLabel": "Drug offenses",
+      "color": "#22c55e",
+      "isDefault": true
+    },
+    {
+      "label": "Arson",
+      "value": "arson",
+      "shortLabel": "Arson",
+      "color": "#fb7185",
+      "isDefault": false
+    }
+  ],
+  "defaultCategorySlugs": [
+    "rape",
+    "robbery",
+    "burglary",
+    "larceny-theft",
+    "motor-vehicle-theft",
+    "aggravated-assault",
+    "drug-offenses"
+  ],
+  "cityPopulationByYear": {
+    "2001": 1342908,
+    "2002": 1357196,
+    "2003": 1368806,
+    "2004": 1386945,
+    "2005": 1417720,
+    "2006": 1441241,
+    "2007": 1450901,
+    "2008": 1456729,
+    "2009": 1452679,
+    "2010": 1446636,
+    "2011": 1457935,
+    "2012": 1477917,
+    "2013": 1495699,
+    "2014": 1515206,
+    "2015": 1534007,
+    "2016": 1553052,
+    "2017": 1564980,
+    "2018": 1576886,
+    "2019": 1595263,
+    "2020": 1612593,
+    "2021": 1625132,
+    "2022": 1644798,
+    "2023": 1656231,
+    "2024": 1673164
+  },
+  "records": []
+}

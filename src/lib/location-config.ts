@@ -2265,10 +2265,174 @@ export const SAN_FRANCISCO_LOCATION: LocationDefinition = {
   ],
 };
 
+export const AUSTIN_LOCATION: LocationDefinition = {
+  slug: "austin",
+  label: "Austin",
+  country: "United States",
+  areaLabelSingular: "District",
+  areaLabelPlural: "Districts",
+  chartTitle: "Austin Crime by District",
+  note:
+    "Austin uses the official city crime-reports feed published by the Austin Police Department. The source records the highest-level offense per incident and is aggregated here by district and calendar year.",
+  sources: [
+    {
+      label: "City of Austin Open Data: Crime Reports",
+      url: "https://data.austintexas.gov/Public-Safety/Crime-Reports/fdj4-gpfu",
+    },
+  ],
+  categories: [
+    { sourceLabels: ["Homicide"], label: "Homicide", shortLabel: "Homicide", color: "#be123c", isDefault: false, sortOrder: 1 },
+    { sourceLabels: ["Sexual offenses"], label: "Sexual offenses", shortLabel: "Sexual offenses", color: "#ec4899", isDefault: true, sortOrder: 2 },
+    { sourceLabels: ["Robbery"], label: "Robbery", shortLabel: "Robbery", color: "#f97316", isDefault: true, sortOrder: 3 },
+    { sourceLabels: ["Burglary"], label: "Burglary", shortLabel: "Burglary", color: "#ef4444", isDefault: true, sortOrder: 4 },
+    { sourceLabels: ["Residential burglary"], label: "Residential burglary", shortLabel: "Residential burglary", color: "#f87171", isDefault: false, sortOrder: 5 },
+    { sourceLabels: ["Theft"], label: "Theft", shortLabel: "Theft", color: "#facc15", isDefault: true, sortOrder: 6 },
+    { sourceLabels: ["Theft from vehicles"], label: "Theft from vehicles", shortLabel: "From vehicles", color: "#67e8f9", isDefault: false, sortOrder: 7 },
+    { sourceLabels: ["Bicycle theft"], label: "Bicycle theft", shortLabel: "Bike theft", color: "#22d3ee", isDefault: false, sortOrder: 8 },
+    { sourceLabels: ["Motor vehicle theft"], label: "Motor vehicle theft", shortLabel: "Vehicle theft", color: "#4f46e5", isDefault: true, sortOrder: 9 },
+    { sourceLabels: ["Assault"], label: "Assault", shortLabel: "Assault", color: "#38bdf8", isDefault: true, sortOrder: 10 },
+    { sourceLabels: ["Aggravated assault"], label: "Aggravated assault", shortLabel: "Agg. assault", color: "#0ea5e9", isDefault: false, sortOrder: 11 },
+    { sourceLabels: ["Drug offenses"], label: "Drug offenses", shortLabel: "Drug offenses", color: "#22c55e", isDefault: false, sortOrder: 12 },
+    { sourceLabels: ["Fraud and forgery"], label: "Fraud and forgery", shortLabel: "Fraud & forgery", color: "#94a3b8", isDefault: false, sortOrder: 13 },
+    { sourceLabels: ["Criminal damage"], label: "Criminal damage", shortLabel: "Criminal damage", color: "#fb7185", isDefault: false, sortOrder: 14 },
+    { sourceLabels: ["Weapons offenses"], label: "Weapons offenses", shortLabel: "Weapons", color: "#14b8a6", isDefault: false, sortOrder: 15 },
+  ],
+};
+
+export const DALLAS_LOCATION: LocationDefinition = {
+  slug: "dallas",
+  label: "Dallas",
+  country: "United States",
+  areaLabelSingular: "Division",
+  areaLabelPlural: "Divisions",
+  chartTitle: "Dallas Crime by Division",
+  note:
+    "Dallas uses the official Police Incidents open-data feed published by the city. The dashboard aggregates division-level incident records by calendar year and maps the incident descriptions into a stable set of offense buckets.",
+  sources: [
+    {
+      label: "Dallas Open Data: Police Incidents",
+      url: "https://www.dallasopendata.com/Public-Safety/Police-Incidents/qv6i-rri7",
+    },
+  ],
+  categories: [
+    { sourceLabels: ["Homicide"], label: "Homicide", shortLabel: "Homicide", color: "#be123c", isDefault: false, sortOrder: 1 },
+    { sourceLabels: ["Sexual offenses"], label: "Sexual offenses", shortLabel: "Sexual offenses", color: "#ec4899", isDefault: true, sortOrder: 2 },
+    { sourceLabels: ["Robbery"], label: "Robbery", shortLabel: "Robbery", color: "#f97316", isDefault: true, sortOrder: 3 },
+    { sourceLabels: ["Burglary"], label: "Burglary", shortLabel: "Burglary", color: "#ef4444", isDefault: true, sortOrder: 4 },
+    { sourceLabels: ["Theft"], label: "Theft", shortLabel: "Theft", color: "#facc15", isDefault: true, sortOrder: 5 },
+    { sourceLabels: ["Theft from vehicles"], label: "Theft from vehicles", shortLabel: "From vehicles", color: "#67e8f9", isDefault: false, sortOrder: 6 },
+    { sourceLabels: ["Motor vehicle theft"], label: "Motor vehicle theft", shortLabel: "Vehicle theft", color: "#4f46e5", isDefault: true, sortOrder: 7 },
+    { sourceLabels: ["Assault"], label: "Assault", shortLabel: "Assault", color: "#38bdf8", isDefault: true, sortOrder: 8 },
+    { sourceLabels: ["Aggravated assault"], label: "Aggravated assault", shortLabel: "Agg. assault", color: "#0ea5e9", isDefault: false, sortOrder: 9 },
+    { sourceLabels: ["Drug offenses"], label: "Drug offenses", shortLabel: "Drug offenses", color: "#22c55e", isDefault: false, sortOrder: 10 },
+    { sourceLabels: ["Fraud and forgery"], label: "Fraud and forgery", shortLabel: "Fraud & forgery", color: "#94a3b8", isDefault: false, sortOrder: 11 },
+    { sourceLabels: ["Criminal damage"], label: "Criminal damage", shortLabel: "Criminal damage", color: "#fb7185", isDefault: false, sortOrder: 12 },
+    { sourceLabels: ["Weapons offenses"], label: "Weapons offenses", shortLabel: "Weapons", color: "#14b8a6", isDefault: false, sortOrder: 13 },
+    { sourceLabels: ["Arson"], label: "Arson", shortLabel: "Arson", color: "#f59e0b", isDefault: false, sortOrder: 14 },
+  ],
+};
+
+export const PHOENIX_LOCATION: LocationDefinition = {
+  slug: "phoenix",
+  label: "Phoenix",
+  country: "United States",
+  areaLabelSingular: "Grid",
+  areaLabelPlural: "Grids",
+  chartTitle: "Phoenix Crime by Grid",
+  note:
+    "Phoenix uses the official city crime-data CSV published on the municipal open-data portal. The source is aggregated here by grid and calendar year from the city’s UCR crime-category field.",
+  sources: [
+    {
+      label: "City of Phoenix Open Data: Crime Data",
+      url: "https://www.phoenixopendata.com/dataset/crime-data",
+    },
+  ],
+  categories: [
+    { sourceLabels: ["Homicide"], label: "Homicide", shortLabel: "Homicide", color: "#be123c", isDefault: false, sortOrder: 1 },
+    { sourceLabels: ["Rape"], label: "Rape", shortLabel: "Rape", color: "#f472b6", isDefault: true, sortOrder: 2 },
+    { sourceLabels: ["Robbery"], label: "Robbery", shortLabel: "Robbery", color: "#f97316", isDefault: true, sortOrder: 3 },
+    { sourceLabels: ["Burglary"], label: "Burglary", shortLabel: "Burglary", color: "#ef4444", isDefault: true, sortOrder: 4 },
+    { sourceLabels: ["Larceny theft"], label: "Larceny theft", shortLabel: "Larceny theft", color: "#facc15", isDefault: true, sortOrder: 5 },
+    { sourceLabels: ["Motor vehicle theft"], label: "Motor vehicle theft", shortLabel: "Vehicle theft", color: "#4f46e5", isDefault: true, sortOrder: 6 },
+    { sourceLabels: ["Simple assault"], label: "Simple assault", shortLabel: "Simple assault", color: "#67e8f9", isDefault: false, sortOrder: 7 },
+    { sourceLabels: ["Aggravated assault"], label: "Aggravated assault", shortLabel: "Agg. assault", color: "#0ea5e9", isDefault: true, sortOrder: 8 },
+    { sourceLabels: ["Drug offenses"], label: "Drug offenses", shortLabel: "Drug offenses", color: "#22c55e", isDefault: true, sortOrder: 9 },
+    { sourceLabels: ["Arson"], label: "Arson", shortLabel: "Arson", color: "#fb7185", isDefault: false, sortOrder: 10 },
+  ],
+};
+
+export const HOUSTON_LOCATION: LocationDefinition = {
+  slug: "houston",
+  label: "Houston",
+  country: "United States",
+  areaLabelSingular: "Beat",
+  areaLabelPlural: "Beats",
+  chartTitle: "Houston Crime by Beat",
+  note:
+    "Houston uses the official HPD public NIBRS datasets published as annual CSVs. The dashboard aggregates beat-level incident rows to calendar years using the published NIBRS description field.",
+  sources: [
+    {
+      label: "Houston Police Department: Monthly Crime Data by Street / Neighborhood (Police Beat)",
+      url: "https://www.houstontx.gov/police/cs/Monthly_Crime_Data_by_Street_and_Police_Beat.htm",
+    },
+  ],
+  categories: [
+    { sourceLabels: ["Homicide"], label: "Homicide", shortLabel: "Homicide", color: "#be123c", isDefault: false, sortOrder: 1 },
+    { sourceLabels: ["Sexual offenses"], label: "Sexual offenses", shortLabel: "Sexual offenses", color: "#ec4899", isDefault: true, sortOrder: 2 },
+    { sourceLabels: ["Robbery"], label: "Robbery", shortLabel: "Robbery", color: "#f97316", isDefault: true, sortOrder: 3 },
+    { sourceLabels: ["Burglary"], label: "Burglary", shortLabel: "Burglary", color: "#ef4444", isDefault: true, sortOrder: 4 },
+    { sourceLabels: ["Theft"], label: "Theft", shortLabel: "Theft", color: "#facc15", isDefault: true, sortOrder: 5 },
+    { sourceLabels: ["Motor vehicle theft"], label: "Motor vehicle theft", shortLabel: "Vehicle theft", color: "#4f46e5", isDefault: true, sortOrder: 6 },
+    { sourceLabels: ["Assault"], label: "Assault", shortLabel: "Assault", color: "#38bdf8", isDefault: false, sortOrder: 7 },
+    { sourceLabels: ["Aggravated assault"], label: "Aggravated assault", shortLabel: "Agg. assault", color: "#0ea5e9", isDefault: true, sortOrder: 8 },
+    { sourceLabels: ["Drug offenses"], label: "Drug offenses", shortLabel: "Drug offenses", color: "#22c55e", isDefault: false, sortOrder: 9 },
+    { sourceLabels: ["Fraud and forgery"], label: "Fraud and forgery", shortLabel: "Fraud & forgery", color: "#94a3b8", isDefault: false, sortOrder: 10 },
+    { sourceLabels: ["Criminal damage"], label: "Criminal damage", shortLabel: "Criminal damage", color: "#fb7185", isDefault: false, sortOrder: 11 },
+    { sourceLabels: ["Weapons offenses"], label: "Weapons offenses", shortLabel: "Weapons", color: "#14b8a6", isDefault: false, sortOrder: 12 },
+    { sourceLabels: ["Arson"], label: "Arson", shortLabel: "Arson", color: "#f59e0b", isDefault: false, sortOrder: 13 },
+  ],
+};
+
+export const SEATTLE_LOCATION: LocationDefinition = {
+  slug: "seattle",
+  label: "Seattle",
+  country: "United States",
+  areaLabelSingular: "Precinct",
+  areaLabelPlural: "Precincts",
+  chartTitle: "Seattle Crime by Precinct",
+  note:
+    "Seattle uses the official SPD Crime Data open-data feed, which standardizes incidents to NIBRS-style classifications across the 2008-present window. The dashboard aggregates finalized precinct-level records by year.",
+  sources: [
+    {
+      label: "Seattle Open Data: SPD Crime Data 2008-Present",
+      url: "https://data.seattle.gov/Public-Safety/SPD-Crime-Data-2008-Present/tazs-3rd5",
+    },
+  ],
+  categories: [
+    { sourceLabels: ["Homicide"], label: "Homicide", shortLabel: "Homicide", color: "#be123c", isDefault: false, sortOrder: 1 },
+    { sourceLabels: ["Rape"], label: "Rape", shortLabel: "Rape", color: "#f472b6", isDefault: true, sortOrder: 2 },
+    { sourceLabels: ["Other sexual offenses"], label: "Other sexual offenses", shortLabel: "Other sexual", color: "#ec4899", isDefault: false, sortOrder: 3 },
+    { sourceLabels: ["Robbery"], label: "Robbery", shortLabel: "Robbery", color: "#f97316", isDefault: true, sortOrder: 4 },
+    { sourceLabels: ["Burglary"], label: "Burglary", shortLabel: "Burglary", color: "#ef4444", isDefault: true, sortOrder: 5 },
+    { sourceLabels: ["Theft"], label: "Theft", shortLabel: "Theft", color: "#facc15", isDefault: true, sortOrder: 6 },
+    { sourceLabels: ["Theft from vehicles"], label: "Theft from vehicles", shortLabel: "From vehicles", color: "#67e8f9", isDefault: false, sortOrder: 7 },
+    { sourceLabels: ["Motor vehicle theft"], label: "Motor vehicle theft", shortLabel: "Vehicle theft", color: "#4f46e5", isDefault: true, sortOrder: 8 },
+    { sourceLabels: ["Assault"], label: "Assault", shortLabel: "Assault", color: "#38bdf8", isDefault: false, sortOrder: 9 },
+    { sourceLabels: ["Aggravated assault"], label: "Aggravated assault", shortLabel: "Agg. assault", color: "#0ea5e9", isDefault: true, sortOrder: 10 },
+    { sourceLabels: ["Drug offenses"], label: "Drug offenses", shortLabel: "Drug offenses", color: "#22c55e", isDefault: false, sortOrder: 11 },
+    { sourceLabels: ["Fraud and forgery"], label: "Fraud and forgery", shortLabel: "Fraud & forgery", color: "#94a3b8", isDefault: false, sortOrder: 12 },
+    { sourceLabels: ["Criminal damage"], label: "Criminal damage", shortLabel: "Criminal damage", color: "#fb7185", isDefault: false, sortOrder: 13 },
+    { sourceLabels: ["Weapons offenses"], label: "Weapons offenses", shortLabel: "Weapons", color: "#14b8a6", isDefault: false, sortOrder: 14 },
+    { sourceLabels: ["Arson"], label: "Arson", shortLabel: "Arson", color: "#f59e0b", isDefault: false, sortOrder: 15 },
+  ],
+};
+
 export const LOCATION_DEFINITIONS: LocationDefinition[] = [
+  AUSTIN_LOCATION,
   BERLIN_LOCATION,
   BARCELONA_LOCATION,
   CHICAGO_LOCATION,
+  DALLAS_LOCATION,
   FRANKFURT_LOCATION,
   LONDON_LOCATION,
   LOS_ANGELES_LOCATION,
@@ -2276,9 +2440,12 @@ export const LOCATION_DEFINITIONS: LocationDefinition[] = [
   MILAN_LOCATION,
   NEW_YORK_CITY_LOCATION,
   PARIS_LOCATION,
+  PHOENIX_LOCATION,
   ROME_LOCATION,
   SAO_PAULO_LOCATION,
   SAN_FRANCISCO_LOCATION,
+  SEATTLE_LOCATION,
   TOKYO_LOCATION,
+  HOUSTON_LOCATION,
   VALENCIA_LOCATION,
 ];

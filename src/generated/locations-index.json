@@ -1,6 +1,49 @@
 {
-  "generatedAt": "2026-04-04T12:22:23.420Z",
+  "generatedAt": "2026-04-04T15:22:32.546Z",
   "locations": [
+    {
+      "slug": "austin",
+      "label": "Austin",
+      "country": "United States",
+      "areaLabelSingular": "District",
+      "areaLabelPlural": "Districts",
+      "chartTitle": "Austin Crime by District",
+      "note": "Austin uses the official city crime-reports feed published by the Austin Police Department. The source records the highest-level offense per incident and is aggregated here by district and calendar year.",
+      "sources": [
+        {
+          "label": "City of Austin Open Data: Crime Reports",
+          "url": "https://data.austintexas.gov/Public-Safety/Crime-Reports/fdj4-gpfu"
+        }
+      ],
+      "years": [
+        2003,
+        2004,
+        2005,
+        2006,
+        2007,
+        2008,
+        2009,
+        2010,
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "districtCount": 62,
+      "categoryCount": 15,
+      "supportsRate": false
+    },
     {
       "slug": "barcelona",
       "label": "Barcelona",
@@ -126,6 +169,38 @@
       "supportsRate": false
     },
     {
+      "slug": "dallas",
+      "label": "Dallas",
+      "country": "United States",
+      "areaLabelSingular": "Division",
+      "areaLabelPlural": "Divisions",
+      "chartTitle": "Dallas Crime by Division",
+      "note": "Dallas uses the official Police Incidents open-data feed published by the city. The dashboard aggregates division-level incident records by calendar year and maps the incident descriptions into a stable set of offense buckets.",
+      "sources": [
+        {
+          "label": "Dallas Open Data: Police Incidents",
+          "url": "https://www.dallasopendata.com/Public-Safety/Police-Incidents/qv6i-rri7"
+        }
+      ],
+      "years": [
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "districtCount": 8,
+      "categoryCount": 14,
+      "supportsRate": false
+    },
+    {
       "slug": "frankfurt",
       "label": "Frankfurt",
       "country": "Germany",
@@ -189,6 +264,33 @@
       ],
       "districtCount": 1,
       "categoryCount": 14,
+      "supportsRate": false
+    },
+    {
+      "slug": "houston",
+      "label": "Houston",
+      "country": "United States",
+      "areaLabelSingular": "Beat",
+      "areaLabelPlural": "Beats",
+      "chartTitle": "Houston Crime by Beat",
+      "note": "Houston uses the official HPD public NIBRS datasets published as annual CSVs. The dashboard aggregates beat-level incident rows to calendar years using the published NIBRS description field.",
+      "sources": [
+        {
+          "label": "Houston Police Department: Monthly Crime Data by Street / Neighborhood (Police Beat)",
+          "url": "https://www.houstontx.gov/police/cs/Monthly_Crime_Data_by_Street_and_Police_Beat.htm"
+        }
+      ],
+      "years": [
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "districtCount": 130,
+      "categoryCount": 13,
       "supportsRate": false
     },
     {
@@ -430,6 +532,36 @@
       "supportsRate": true
     },
     {
+      "slug": "phoenix",
+      "label": "Phoenix",
+      "country": "United States",
+      "areaLabelSingular": "Grid",
+      "areaLabelPlural": "Grids",
+      "chartTitle": "Phoenix Crime by Grid",
+      "note": "Phoenix uses the official city crime-data CSV published on the municipal open-data portal. The source is aggregated here by grid and calendar year from the city’s UCR crime-category field.",
+      "sources": [
+        {
+          "label": "City of Phoenix Open Data: Crime Data",
+          "url": "https://www.phoenixopendata.com/dataset/crime-data"
+        }
+      ],
+      "years": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "districtCount": 0,
+      "categoryCount": 10,
+      "supportsRate": false
+    },
+    {
       "slug": "rome",
       "label": "Rome",
       "country": "Italy",
@@ -519,6 +651,44 @@
       ],
       "districtCount": 1,
       "categoryCount": 13,
+      "supportsRate": false
+    },
+    {
+      "slug": "seattle",
+      "label": "Seattle",
+      "country": "United States",
+      "areaLabelSingular": "Precinct",
+      "areaLabelPlural": "Precincts",
+      "chartTitle": "Seattle Crime by Precinct",
+      "note": "Seattle uses the official SPD Crime Data open-data feed, which standardizes incidents to NIBRS-style classifications across the 2008-present window. The dashboard aggregates finalized precinct-level records by year.",
+      "sources": [
+        {
+          "label": "Seattle Open Data: SPD Crime Data 2008-Present",
+          "url": "https://data.seattle.gov/Public-Safety/SPD-Crime-Data-2008-Present/tazs-3rd5"
+        }
+      ],
+      "years": [
+        2008,
+        2009,
+        2010,
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "districtCount": 6,
+      "categoryCount": 15,
       "supportsRate": false
     },
     {

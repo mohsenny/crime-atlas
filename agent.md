@@ -127,6 +127,20 @@ It stores:
 - per-city mappings
 - mapping confidence
 
+## Population-series rule for comparison
+
+City-to-city `Rate per 100k` comparison should be treated as a first-class data requirement, not an optional afterthought.
+
+When adding or upgrading a city:
+
+1. verify the exact geography of the crime counts
+2. get an official yearly population series for that same geography
+3. store it in `cityPopulationByYear` in the generated location payload
+4. prefer official annual city totals over inferred or interpolated values
+5. if some years are missing from the official population source, leave those rate years blank rather than inventing them
+
+The compare page can safely enable the rate toggle when every selected city has a real official city-population series. Missing years should render as gaps, not fabricated lines.
+
 ## Comparison rules
 
 The app should not compare raw labels directly across cities.
@@ -234,6 +248,20 @@ As of April 2026, the current generated data still has several source-cleaning i
   - `2020–2025`
 - `2015–2019` are currently excluded on purpose because they created obvious structural discontinuities when stitched into the same city-level series.
 - Treat this as a source-family compatibility problem, not a real crime collapse.
+- Barcelona citywide population is now sourced from the official Barcelona open-data population package and covers the shipped years cleanly.
+- Valencia citywide population comes from the official Valencia municipal indicator `F02051000` (`Población residente`), but the live PDF endpoint is intermittently blocked by a WAF in this environment.
+- Because of that instability, the generator keeps a verified official fallback series for `2015–2024` extracted from the official PDF:
+  - 2015: 787,266
+  - 2016: 791,632
+  - 2017: 792,086
+  - 2018: 798,538
+  - 2019: 795,736
+  - 2020: 801,545
+  - 2021: 800,180
+  - 2022: 797,665
+  - 2023: 809,501
+  - 2024: 830,606
+- Do not replace that fallback with non-official numbers. If live access becomes reliable again, prefer the direct official PDF parse.
 
 ### Los Angeles
 
@@ -258,10 +286,32 @@ As of April 2026, the current generated data still has several source-cleaning i
   - `https://www.toukei.metro.tokyo.lg.jp/tnenkan/<year>/tn<yy>qv201000.csv`
 - Current app coverage: `2010–2023`
 - Area breakdown: yes, aggregated from police-station rows to district/municipality rows
+- Citywide population is available from the official Tokyo statistical yearbook CSV `tn23qv020100.csv` and is wired for `2010–2023`
+
+### São Paulo
+
+- Official crime source family in app: São Paulo state public-security quarterly/year-end HTML tables, aggregated to the Capital row
+- Current app coverage: `2010–2025`
+- Area breakdown in app: no
+- Citywide population is now sourced from official IBGE APIs:
+  - annual estimates table `6579` for `2011–2021`, `2024–2025`
+  - 2010 Census table `761`
+  - 2022 Census table `4714`
+- Important caveat: there is currently no clean official `2023` municipal population row wired in this repo, so `2023` rate views remain blank rather than interpolated
+
+### U.S. cities
+
+- Chicago, New York City, Los Angeles, and San Francisco now use official U.S. Census city population tables for `2001–2024`
+- Austin, Dallas, Houston, Phoenix, and Seattle now use the same official U.S. Census city population series pattern for comparison-rate support
+- Historical `2001–2010` values come from `sub-est00int.csv`
+- `2010–2020` and `2020–2024` values come from state-specific Census XLSX tables
+- Match the historical CSV on `SUMLEV=162`, `NAME`, and `STNAME`; do not match only on city-name substring or the wrong county/part rows can leak in
 - Important caveats:
   - `2024` does not currently resolve at the verified CSV path
   - the CSV should be fetched with a browser-like user agent
   - police-station detail is more granular than the dashboard; the app aggregates to a stable area layer
+  - comparison pages can use citywide rate calculations from these population series even when the city dashboard remains count-only because district-level population series are not wired
+  - Houston annual HPD NIBRS CSV downloads are much more reliable through `curl` than through the repo's generic `fetch` helper
 
 ### São Paulo
 
@@ -453,6 +503,41 @@ If a source host is flaky or anti-bot:
 - source family: Chicago Data Portal
 - coverage in app: `2001–2025`
 - district breakdown: yes
+
+### Austin
+
+- source family: Austin Police Department Crime Reports (official city Socrata dataset)
+- coverage in app: `2003–2025`
+- district breakdown: yes
+- caveat: raw Austin offense labels are verbose and include family-violence / weapon qualifiers, so the mapping layer intentionally groups them into broader canonical categories
+
+### Dallas
+
+- source family: Dallas Police Incidents (official city Socrata dataset)
+- coverage in app: `2014–2025`
+- district breakdown: yes, using division-level geography
+- caveat: `date1` is not a stable timestamp column for grouped annual queries; use `year1` for year aggregation
+
+### Houston
+
+- source family: Houston Police Department NIBRS public annual CSVs
+- coverage in app: `2019–2025`
+- area breakdown: yes, using police beats
+- caveat: the HPD annual CSVs are large and should be downloaded with `curl`; the generic `fetch` downloader stalled repeatedly in this environment
+
+### Phoenix
+
+- source family: Phoenix open-data crime CSV
+- coverage in app: `2016–2025`
+- area breakdown: no clean police-district layer in the shipped source; the dashboard is currently citywide
+- caveat: the first available slice in the CSV family is a partial `2015`, so the app starts at `2016`
+
+### Seattle
+
+- source family: SPD Crime Data 2008-Present (official Seattle open data)
+- coverage in app: `2008–2025`
+- precinct breakdown: yes
+- caveat: `offense_category` is too coarse for the app; use `nibrs_offense_code_description` for category mapping
 
 ### Los Angeles
 

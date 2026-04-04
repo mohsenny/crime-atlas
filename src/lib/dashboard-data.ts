@@ -140,6 +140,7 @@ type LocationDataset = {
   districts: FilterOption[];
   categories: FilterOption[];
   defaultCategorySlugs: string[];
+  cityPopulationByYear: Record<string, number>;
   records: LocationRecord[];
 };
 
@@ -152,20 +153,25 @@ type ResolvedComparisonMapping = {
 type LocationsIndex = typeof locationsIndex;
 
 const locationLoaders: Record<string, () => Promise<LocationDataset>> = {
+  austin: async () => (await import("@/generated/locations/austin.json")).default as LocationDataset,
   berlin: async () => (await import("@/generated/locations/berlin.json")).default as LocationDataset,
   barcelona: async () => (await import("@/generated/locations/barcelona.json")).default as LocationDataset,
   chicago: async () => (await import("@/generated/locations/chicago.json")).default as LocationDataset,
+  dallas: async () => (await import("@/generated/locations/dallas.json")).default as LocationDataset,
   frankfurt: async () => (await import("@/generated/locations/frankfurt.json")).default as LocationDataset,
   hamburg: async () => (await import("@/generated/locations/hamburg.json")).default as LocationDataset,
+  houston: async () => (await import("@/generated/locations/houston.json")).default as LocationDataset,
   london: async () => (await import("@/generated/locations/london.json")).default as LocationDataset,
   "los-angeles": async () => (await import("@/generated/locations/los-angeles.json")).default as LocationDataset,
   luton: async () => (await import("@/generated/locations/luton.json")).default as LocationDataset,
   milan: async () => (await import("@/generated/locations/milan.json")).default as LocationDataset,
   "new-york-city": async () => (await import("@/generated/locations/new-york-city.json")).default as LocationDataset,
   paris: async () => (await import("@/generated/locations/paris.json")).default as LocationDataset,
+  phoenix: async () => (await import("@/generated/locations/phoenix.json")).default as LocationDataset,
   rome: async () => (await import("@/generated/locations/rome.json")).default as LocationDataset,
   "sao-paulo": async () => (await import("@/generated/locations/sao-paulo.json")).default as LocationDataset,
   "san-francisco": async () => (await import("@/generated/locations/san-francisco.json")).default as LocationDataset,
+  seattle: async () => (await import("@/generated/locations/seattle.json")).default as LocationDataset,
   tokyo: async () => (await import("@/generated/locations/tokyo.json")).default as LocationDataset,
   valencia: async () => (await import("@/generated/locations/valencia.json")).default as LocationDataset,
 };
@@ -399,7 +405,7 @@ export async function getComparisonData(locationSlugs: string[]): Promise<Compar
     });
 
   const supportsRate = locations.every(
-    (location) => location.districts.length === 1 && location.records.some((record) => record.ratePer100k !== null),
+    (location) => Object.keys(location.cityPopulationByYear ?? {}).length > 0,
   );
 
   const years = [...new Set(locations.flatMap((location) => location.years))].sort((leftYear, rightYear) => leftYear - rightYear);
@@ -430,20 +436,18 @@ export async function getComparisonData(locationSlugs: string[]): Promise<Compar
         const current = totalsByYear.get(record.year) ?? { count: 0, ratePer100k: null };
         totalsByYear.set(record.year, {
           count: current.count + record.count,
-          ratePer100k:
-            location.districts.length === 1 && record.ratePer100k !== null
-              ? (current.ratePer100k ?? 0) + record.ratePer100k
-              : current.ratePer100k,
+          ratePer100k: current.ratePer100k,
         });
       }
 
       for (const year of location.years) {
         const totals = totalsByYear.get(year) ?? { count: 0, ratePer100k: null };
+        const population = location.cityPopulationByYear?.[String(year)] ?? null;
         records.push({
           year,
           locationSlug: location.slug,
           count: totals.count,
-          ratePer100k: supportsRate ? totals.ratePer100k : null,
+          ratePer100k: supportsRate && population ? (totals.count / population) * 100_000 : null,
         });
       }
 
@@ -479,7 +483,7 @@ export async function getComparisonData(locationSlugs: string[]): Promise<Compar
       areaLabelSingular: location.areaLabelSingular,
       areaLabelPlural: location.areaLabelPlural,
       districtCount: location.districts.length,
-      supportsRate: location.records.some((record) => record.ratePer100k !== null),
+      supportsRate: Object.keys(location.cityPopulationByYear ?? {}).length > 0,
       sources: location.sources,
     })),
     categories: sharedCategories,
@@ -487,7 +491,7 @@ export async function getComparisonData(locationSlugs: string[]): Promise<Compar
     years,
     supportsRate,
     note:
-      "Only canonical categories with exact or close official equivalents across all selected cities are included. Rate per 100k is only enabled when every selected location currently uses a citywide source with explicit official rates.",
+      "Only canonical categories with exact or close official equivalents across all selected cities are included. Rate per 100k is enabled when every selected location has a verified official yearly city-population series for comparison.",
     seriesByCategory,
     methodologyByCategory,
   };
