@@ -99,7 +99,11 @@ export function ComparisonPageClient({ data, initialCategorySlug, locations }: C
                 triggerIcon={ArrowRightLeft}
                 triggerLabel="Change Cities"
               />
-              {data.supportsRate ? <MetricToggle value={metric} onChange={setMetric} /> : null}
+              <MetricToggle
+                onChange={setMetric}
+                supportsRate={data.supportsRate}
+                value={metric}
+              />
             </div>
           </div>
 
