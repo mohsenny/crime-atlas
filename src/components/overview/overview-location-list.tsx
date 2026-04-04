@@ -28,7 +28,7 @@ export function OverviewLocationList({
             className={cn(
               "group relative flex w-full items-center gap-4 px-0 py-3 text-left transition sm:py-3.5",
               disabledSlugs.includes(location.slug) ? "cursor-not-allowed opacity-45" : null,
-              selectedSlugs.includes(location.slug) ? "text-slate-950" : "text-slate-100",
+              selectedSlugs.includes(location.slug) ? "bg-slate-100 px-3 text-slate-950" : "text-slate-100",
             )}
             disabled={disabledSlugs.includes(location.slug)}
             key={location.slug}

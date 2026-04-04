@@ -10,6 +10,8 @@ import { CONTROL_LABEL_TEXT_CLASS } from "@/components/dashboard/control-styles"
 import { LocationFlag } from "@/components/overview/location-flag";
 import { cn } from "@/lib/utils";
 
+export const MAX_COMPARE_LOCATIONS = 3;
+
 type CompareCityPickerProps = {
   locations: LocationOverview[];
   initialSelectedSlugs?: string[];
@@ -30,6 +32,7 @@ export function CompareCityPicker({
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedSlugs, setSelectedSlugs] = useState<string[]>(initialSelectedSlugs);
   const [isMobileViewport, setIsMobileViewport] = useState(false);
+  const initialSelectedKey = initialSelectedSlugs.join(",");
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 767px)");
@@ -42,9 +45,9 @@ export function CompareCityPicker({
   useEffect(() => {
     if (!open) {
       setSearchQuery("");
-      setSelectedSlugs(initialSelectedSlugs);
+      setSelectedSlugs((current) => (current.join(",") === initialSelectedKey ? current : [...initialSelectedSlugs]));
     }
-  }, [initialSelectedSlugs, open]);
+  }, [initialSelectedKey, initialSelectedSlugs, open]);
 
   const filteredLocations = useMemo(() => {
     const normalized = searchQuery.trim().toLowerCase();
@@ -70,7 +73,7 @@ export function CompareCityPicker({
         return current.filter((value) => value !== slug);
       }
 
-      if (current.length >= 2) {
+      if (current.length >= MAX_COMPARE_LOCATIONS) {
         return current;
       }
 
@@ -79,7 +82,7 @@ export function CompareCityPicker({
   }
 
   function submitComparison() {
-    if (selectedSlugs.length !== 2) {
+    if (selectedSlugs.length < 2 || selectedSlugs.length > MAX_COMPARE_LOCATIONS) {
       return;
     }
 
@@ -93,7 +96,7 @@ export function CompareCityPicker({
     <>
       <button
         className={cn(
-          "inline-flex h-10 items-center gap-2 border border-slate-700 bg-slate-900/70 px-3.5 text-slate-300 transition hover:text-slate-50",
+          "inline-flex h-10 items-center gap-2 rounded-2xl border border-slate-700 bg-slate-900/70 px-3.5 text-slate-300 transition hover:text-slate-50",
           CONTROL_LABEL_TEXT_CLASS,
           className,
         )}
@@ -116,7 +119,7 @@ export function CompareCityPicker({
                 <div className="space-y-1">
                   <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Compare Cities</p>
                   <p className="text-sm text-slate-300">
-                    {selectedCount}/2 selected
+                    {selectedCount}/{MAX_COMPARE_LOCATIONS} selected
                   </p>
                 </div>
                 <button
@@ -145,7 +148,7 @@ export function CompareCityPicker({
                   {filteredLocations.map((location) => {
                     const selected = selectedSlugs.includes(location.slug);
                     const locked = lockedSlugs.includes(location.slug);
-                    const atLimit = selectedSlugs.length >= 2 && !selected;
+                    const atLimit = selectedSlugs.length >= MAX_COMPARE_LOCATIONS && !selected;
 
                     return (
                       <button
@@ -189,15 +192,15 @@ export function CompareCityPicker({
                 <button
                   className={cn(
                     "inline-flex h-11 w-full items-center justify-center gap-2 border px-4 text-sm font-semibold transition",
-                    selectedCount === 2
+                    selectedCount >= 2 && selectedCount <= MAX_COMPARE_LOCATIONS
                       ? "border-slate-200 bg-slate-100 text-slate-950 hover:bg-white"
                       : "cursor-not-allowed border-white/10 bg-slate-900/70 text-slate-500",
                   )}
-                  disabled={selectedCount !== 2}
+                  disabled={selectedCount < 2 || selectedCount > MAX_COMPARE_LOCATIONS}
                   onClick={submitComparison}
                   type="button"
                 >
-                  Compare 2 Cities
+                  {selectedCount >= 2 ? `Compare ${selectedCount} Cities` : "Compare Cities"}
                   <ArrowRight className="h-4 w-4" />
                 </button>
               </div>

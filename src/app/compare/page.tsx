@@ -20,7 +20,7 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
   const { cities } = await searchParams;
   const selectedCities = splitCities(cities);
 
-  if (selectedCities.length !== 2) {
+  if (selectedCities.length < 2 || selectedCities.length > 3) {
     redirect("/");
   }
 

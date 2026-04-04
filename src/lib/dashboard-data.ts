@@ -314,22 +314,32 @@ export async function getChartData(input: {
 export async function getComparisonData(locationSlugs: string[]): Promise<ComparisonData | null> {
   const locations = await getLocationsBySlugs(locationSlugs);
 
-  if (locations.length !== 2) {
+  if (locations.length < 2 || locations.length > 3) {
     return null;
   }
 
-  const [left, right] = locations;
-  const rightCategoriesByLabel = new Map(right.categories.map((category) => [category.label, category]));
-  const sharedCategories = left.categories
-    .filter((category) => rightCategoriesByLabel.has(category.label))
+  const sharedCategoryLabels = locations
+    .map((location) => new Set(location.categories.map((category) => category.label)))
+    .reduce<Set<string> | null>((shared, labels) => {
+      if (!shared) {
+        return new Set(labels);
+      }
+      return new Set([...shared].filter((label) => labels.has(label)));
+    }, null);
+
+  const baseLocation = locations[0];
+  const sharedCategories = baseLocation.categories
+    .filter((category) => sharedCategoryLabels?.has(category.label))
     .map((category) => {
-      const rightCategory = rightCategoriesByLabel.get(category.label)!;
+      const matchingCategories = locations
+        .map((location) => location.categories.find((item) => item.label === category.label))
+        .filter((item): item is FilterOption => Boolean(item));
       return {
         label: category.label,
         value: slugify(category.label),
-        shortLabel: category.shortLabel ?? rightCategory.shortLabel ?? category.label,
-        color: category.color ?? rightCategory.color,
-        isDefault: Boolean(category.isDefault && rightCategory.isDefault),
+        shortLabel: matchingCategories.find((item) => item.shortLabel)?.shortLabel ?? category.label,
+        color: matchingCategories.find((item) => item.color)?.color,
+        isDefault: matchingCategories.every((item) => Boolean(item.isDefault)),
         sharedAcrossAll: true as const,
       };
     });

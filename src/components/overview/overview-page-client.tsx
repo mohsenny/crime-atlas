@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 
 import type { LocationOverview } from "@/lib/dashboard-data";
 
-import { CompareCityPicker } from "@/components/comparison/compare-city-picker";
+import { CompareCityPicker, MAX_COMPARE_LOCATIONS } from "@/components/comparison/compare-city-picker";
 import { SingleSelectDropdown } from "@/components/dashboard/expandable-dropdown";
 import { LocationOverviewCard } from "@/components/overview/location-overview-card";
 import { OverviewLocationList } from "@/components/overview/overview-location-list";
@@ -53,7 +53,7 @@ export function OverviewPageClient({ locations }: OverviewPageClientProps) {
         return current.filter((value) => value !== slug);
       }
 
-      if (current.length >= 2) {
+      if (current.length >= MAX_COMPARE_LOCATIONS) {
         return current;
       }
 
@@ -73,7 +73,7 @@ export function OverviewPageClient({ locations }: OverviewPageClientProps) {
       return;
     }
 
-    if (selectedCompareSlugs.length === 2) {
+    if (selectedCompareSlugs.length >= 2 && selectedCompareSlugs.length <= MAX_COMPARE_LOCATIONS) {
       router.push(`/compare?cities=${selectedCompareSlugs.join(",")}`);
     }
   }
@@ -95,10 +95,10 @@ export function OverviewPageClient({ locations }: OverviewPageClientProps) {
             <div className="hidden md:flex md:flex-none md:items-center md:gap-2">
               <button
                 className={cn(
-                  "inline-flex h-10 items-center border border-slate-700 bg-slate-900/70 px-3.5 text-slate-300 transition",
+                  "inline-flex h-10 items-center rounded-2xl border border-slate-700 bg-slate-900/70 px-3.5 text-slate-300 transition",
                   "text-[10px] font-semibold uppercase tracking-[0.18em] leading-none",
                   compareMode
-                    ? selectedCompareSlugs.length === 2
+                    ? selectedCompareSlugs.length >= 2 && selectedCompareSlugs.length <= MAX_COMPARE_LOCATIONS
                       ? "hover:text-slate-50"
                       : "cursor-default text-slate-500"
                     : "hover:text-slate-50",
@@ -107,9 +107,9 @@ export function OverviewPageClient({ locations }: OverviewPageClientProps) {
                 type="button"
               >
                 {compareMode
-                  ? selectedCompareSlugs.length === 2
-                    ? "Compare 2 Cities"
-                    : "Select 2 Cities"
+                  ? selectedCompareSlugs.length >= 2
+                    ? `Compare ${selectedCompareSlugs.length} Cities`
+                    : "Select Cities"
                   : "Compare"}
               </button>
               {compareMode ? (
@@ -151,7 +151,11 @@ export function OverviewPageClient({ locations }: OverviewPageClientProps) {
           {filteredLocations.map((location) => (
             <LocationOverviewCard
               compareMode={compareMode}
-              disabled={compareMode && selectedCompareSlugs.length === 2 && !selectedCompareSlugs.includes(location.slug)}
+              disabled={
+                compareMode &&
+                selectedCompareSlugs.length === MAX_COMPARE_LOCATIONS &&
+                !selectedCompareSlugs.includes(location.slug)
+              }
               key={location.slug}
               location={location}
               onSelect={toggleCompareSelection}
@@ -169,7 +173,7 @@ export function OverviewPageClient({ locations }: OverviewPageClientProps) {
           <OverviewLocationList
             compareMode={compareMode}
             disabledSlugs={
-              compareMode && selectedCompareSlugs.length === 2
+              compareMode && selectedCompareSlugs.length === MAX_COMPARE_LOCATIONS
                 ? filteredLocations
                     .map((location) => location.slug)
                     .filter((slug) => !selectedCompareSlugs.includes(slug))
