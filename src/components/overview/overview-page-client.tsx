@@ -148,20 +148,20 @@ export function OverviewPageClient({ locations }: OverviewPageClientProps) {
             </div>
           </div>
 
-          <div className="flex items-center gap-2 md:hidden">
-            <div>
-              <CompareCityPicker locations={locations} triggerLabel="Compare Cities" />
-            </div>
+          <div className="flex flex-col gap-2 md:hidden">
             <SingleSelectDropdown
               fullWidth
               label="Country"
-              maxOverlayWidth={320}
-              maxWidth={320}
-              minWidth={160}
+              maxOverlayWidth={280}
+              maxWidth={280}
+              minWidth={140}
               onChange={handleCountryChange}
               options={countryOptions}
               value={selectedCountry}
             />
+            <div>
+              <CompareCityPicker locations={locations} triggerLabel="Compare" />
+            </div>
           </div>
         </div>
 

@@ -195,7 +195,7 @@ export function ComparisonChart({
         </div>
       }
     >
-      <div className="flex min-h-0 flex-1">
+      <div className="flex min-h-0 flex-1 -mx-3 sm:-mx-4 lg:mx-0">
         <div className="chart-scroll-shell min-h-0 flex-1 overflow-x-auto" ref={scrollContainerRef}>
           <div style={{ height: chartHeight, width: chartWidth }}>
             <ResponsiveContainer height="100%" width="100%">

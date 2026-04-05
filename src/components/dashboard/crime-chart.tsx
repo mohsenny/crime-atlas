@@ -286,11 +286,11 @@ export function CrimeChart({
         </>
       }
       footerLeft={
-        <div className="flex gap-2 overflow-x-auto pb-1 text-xs text-slate-400 sm:flex-wrap sm:overflow-visible sm:pb-0">
+        <div className="flex flex-wrap gap-2 text-xs text-slate-400 pb-1 sm:pb-0">
           {data.districts.map((district, index) => (
             <button
               className={cn(
-                "inline-flex cursor-pointer items-start gap-2 rounded-full border px-3 py-1.5 text-left transition sm:items-center",
+                "inline-flex cursor-pointer items-start gap-2 rounded-full border px-2 py-1 text-left text-[11px] transition sm:items-center sm:px-3 sm:py-1.5 sm:text-sm",
                 focusedDistrictSlug === null
                   ? "border-slate-700 text-slate-400 hover:border-slate-600 hover:text-slate-200"
                   : focusedDistrictSlug === district.value
@@ -310,7 +310,7 @@ export function CrimeChart({
         </div>
       }
       footerRight={
-        <div className="flex items-center justify-end gap-2">
+        <div className="flex items-center justify-end gap-1 sm:gap-2">
           <button
             aria-label="Scroll chart left"
             className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-700 bg-slate-900/70 text-slate-300 transition disabled:cursor-not-allowed disabled:opacity-35"
@@ -332,7 +332,7 @@ export function CrimeChart({
         </div>
       }
     >
-      <div className="flex min-h-0 flex-1">
+      <div className="flex min-h-0 flex-1 -mx-3 sm:-mx-4 lg:mx-0">
         <div className="chart-scroll-shell min-h-0 flex-1 overflow-x-auto" ref={scrollContainerRef}>
           <div
             className="relative"
