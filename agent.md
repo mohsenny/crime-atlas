@@ -19,23 +19,29 @@ It is a public-facing crime-data product built on official recorded-crime statis
 
 The app does not read spreadsheets or PDFs at runtime.
 
-Runtime data comes from committed generated JSON:
+Runtime data comes from the committed SQLite database:
 
-- `src/generated/locations-index.json`
-- `src/generated/crime-data.json`
-- `src/generated/locations/*.json`
+- `prisma/crime-atlas.db`
 
-The generator is:
+The schema/client layer is:
 
+- `prisma/schema.prisma`
+- `src/lib/prisma.ts`
+
+The ingestion/reset flow is:
+
+- `scripts/reset-database.ts`
 - `scripts/prepare-data.ts`
 
-If source data changes, regenerate with:
+Local reseeding currently expects the host machine to have `sqlite3` available, because `scripts/reset-database.ts` applies SQL generated from the Prisma schema into `prisma/crime-atlas.db`.
+
+If source data changes, regenerate and reseed with:
 
 ```bash
 npm run data:prepare
 ```
 
-Production builds intentionally use committed generated data. Do not make Railway or production builds depend on live remote fetching unless there is a very good reason.
+Production builds intentionally use the committed database. Do not make Railway or production builds depend on live remote fetching unless there is a very good reason.
 
 ## Validation commands
 
@@ -135,7 +141,7 @@ When adding or upgrading a city:
 
 1. verify the exact geography of the crime counts
 2. get an official yearly population series for that same geography
-3. store it in `cityPopulationByYear` in the generated location payload
+3. store it in the normalized location-population table through the ingestion pipeline
 4. prefer official annual city totals over inferred or interpolated values
 5. if some years are missing from the official population source, leave those rate years blank rather than inventing them
 
@@ -210,6 +216,31 @@ That means exposing:
 - why some categories are missing
 
 The current comparison methodology UI is the beginning of that and should be preserved.
+
+## Database expectations
+
+The JSON-export era is over. Future agents should treat the SQLite database as the primary runtime store.
+
+That means:
+
+- source fetch/parsing belongs in `scripts/prepare-data.ts`
+- database reset/schema bootstrap belongs in `scripts/reset-database.ts`
+- runtime reads should come from Prisma queries in `src/lib/dashboard-data.ts`
+- if a source path emits duplicate or invalid numeric rows, fix that during ingestion rather than compensating in the UI
+
+The current normalized tables are designed to scale:
+
+- `Location`
+- `Source`
+- `District`
+- `Category`
+- `LocationPopulation`
+- `CrimeRecord`
+- `CanonicalCategory`
+- `ComparisonMapping`
+- `ComparisonMappingSource`
+
+When adding a new city, make sure the ingestion path fills all relevant tables, not just crime records.
 
 ## Anomaly checking
 

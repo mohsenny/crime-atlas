@@ -1,0 +1,129 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./crime-atlas.db"
+}
+
+model Location {
+  id                 Int                  @id @default(autoincrement())
+  slug               String               @unique
+  label              String
+  country            String
+  areaLabelSingular  String
+  areaLabelPlural    String
+  chartTitle         String
+  note               String
+  sources            Source[]
+  districts          District[]
+  categories         Category[]
+  populations        LocationPopulation[]
+  records            CrimeRecord[]
+  comparisonMappings ComparisonMapping[]
+}
+
+model Source {
+  id         Int      @id @default(autoincrement())
+  label      String
+  url        String?
+  sortOrder  Int
+  locationId Int
+  location   Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+
+  @@index([locationId, sortOrder])
+}
+
+model District {
+  id         Int           @id @default(autoincrement())
+  slug       String
+  label      String
+  sortOrder  Int
+  locationId Int
+  location   Location      @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  records    CrimeRecord[]
+
+  @@unique([locationId, slug])
+  @@index([locationId, sortOrder])
+}
+
+model Category {
+  id             Int                       @id @default(autoincrement())
+  slug           String
+  label          String
+  shortLabel     String?
+  color          String?
+  isDefault      Boolean                   @default(false)
+  sortOrder      Int
+  locationId     Int
+  location       Location                  @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  records        CrimeRecord[]
+  mappingSources ComparisonMappingSource[]
+
+  @@unique([locationId, slug])
+  @@index([locationId, sortOrder])
+}
+
+model LocationPopulation {
+  id         Int      @id @default(autoincrement())
+  year       Int
+  population Int
+  locationId Int
+  location   Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+
+  @@unique([locationId, year])
+  @@index([locationId, year])
+}
+
+model CrimeRecord {
+  id          Int      @id @default(autoincrement())
+  year        Int
+  count       Int
+  ratePer100k Float?
+  locationId  Int
+  districtId  Int
+  categoryId  Int
+  location    Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  district    District @relation(fields: [districtId], references: [id], onDelete: Cascade)
+  category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([locationId, districtId, categoryId, year])
+  @@index([locationId, year])
+  @@index([districtId, year])
+  @@index([categoryId, year])
+}
+
+model CanonicalCategory {
+  id         Int                 @id @default(autoincrement())
+  key        String              @unique
+  label      String
+  shortLabel String
+  color      String?
+  isDefault  Boolean             @default(false)
+  sortOrder  Int
+  mappings   ComparisonMapping[]
+}
+
+model ComparisonMapping {
+  id                  Int                    @id @default(autoincrement())
+  locationId          Int
+  canonicalCategoryId Int
+  confidence          String
+  location            Location               @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  canonicalCategory   CanonicalCategory      @relation(fields: [canonicalCategoryId], references: [id], onDelete: Cascade)
+  sourceCategories    ComparisonMappingSource[]
+
+  @@unique([locationId, canonicalCategoryId])
+}
+
+model ComparisonMappingSource {
+  mappingId  Int
+  categoryId Int
+  sortOrder  Int
+  mapping    ComparisonMapping @relation(fields: [mappingId], references: [id], onDelete: Cascade)
+  category   Category          @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([mappingId, categoryId])
+  @@index([categoryId])
+}

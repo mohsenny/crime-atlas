@@ -45,6 +45,8 @@ const MOBILE_CHART_HEIGHT = 420;
 const DESKTOP_AXIS_WIDTH = 88;
 const MOBILE_AXIS_WIDTH = 52;
 
+
+
 export function CrimeChart({
   data,
   focusedDistrictSlug,
@@ -76,7 +78,7 @@ export function CrimeChart({
   const chartWidth = Math.max(minChartWidth, viewportWidth);
   const showDistrictMarkers = !isMobileViewport && data.districts.length > 1 && data.districts.length <= 16;
   const chartTopMargin = showDistrictMarkers ? 24 : 10;
-  const chartBottomMargin = 34;
+  const chartBottomMargin = 8;
   const chartPlotHeight = chartHeight - chartTopMargin - chartBottomMargin;
   const districtIndexBySlug = useMemo(
     () => new Map(data.districts.map((district, index) => [district.value, index + 1])),
@@ -265,6 +267,7 @@ export function CrimeChart({
   return (
     <ChartShell
       title={title}
+      className="crime-chart-with-grid"
       controls={
         <>
           {data.categories.map((category) => {
@@ -330,28 +333,6 @@ export function CrimeChart({
       }
     >
       <div className="flex min-h-0 flex-1">
-        <div className="relative shrink-0" style={{ width: axisWidth }}>
-          <div className="relative" style={{ height: chartHeight }}>
-            {axisTicks.map((tick) => {
-              const ratio = yAxisMax === 0 ? 0 : tick / yAxisMax;
-              const top = chartTopMargin + (1 - ratio) * chartPlotHeight;
-
-              return (
-                <div
-                  className={cn(
-                    "absolute -translate-y-1/2 text-slate-400",
-                    isMobileViewport ? "right-2 text-[11px]" : "right-4 text-xs",
-                  )}
-                  key={tick}
-                  style={{ top }}
-                >
-                  {formatInteger(tick)}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
         <div className="chart-scroll-shell min-h-0 flex-1 overflow-x-auto" ref={scrollContainerRef}>
           <div
             className="relative"
@@ -388,17 +369,26 @@ export function CrimeChart({
                   barCategoryGap={isMobileViewport ? 10 : 14}
                   barGap={2}
                   data={data.chartRows}
-                  margin={{ top: chartTopMargin, right: isMobileViewport ? 0 : 12, left: 0, bottom: 4 }}
+                  margin={{ top: chartTopMargin, right: isMobileViewport ? 0 : 12, left: 0, bottom: 8 }}
                 >
                   <CartesianGrid horizontal={false} stroke="var(--chart-grid-dark)" strokeDasharray="3 3" />
                   <XAxis
                     axisLine={false}
                     dataKey="year"
+                    interval={0}
                     tick={{ fontSize: isMobileViewport ? 11 : 12, fill: "var(--chart-axis-dark)" }}
                     tickLine={false}
                     tickMargin={12}
                   />
-                  <YAxis domain={[0, yAxisMax]} hide ticks={axisTicks} type="number" />
+                  <YAxis
+                    domain={[0, yAxisMax]}
+                    ticks={axisTicks}
+                    type="number"
+                    width={axisWidth}
+                    tick={{ fontSize: isMobileViewport ? 11 : 12, fill: "var(--chart-axis-dark)" }}
+                    axisLine={false}
+                    tickLine={false}
+                  />
                   {!disableInteractiveTooltip ? (
                     <Tooltip
                       content={

@@ -134,65 +134,45 @@ export function DashboardClient({
   return (
     <main className="relative min-h-screen overflow-hidden py-5 sm:px-6 sm:py-6 lg:px-8">
       <div className="mx-auto max-w-7xl space-y-4">
-        <div className="space-y-3 px-4 sm:px-0">
-          <div className="flex items-center justify-between gap-2 sm:flex-wrap sm:gap-3">
+        <div className="px-4 sm:px-0">
+          <div className="flex items-center justify-between gap-1.5 sm:gap-2">
             <Link
-              className="inline-flex h-10 items-center gap-2 text-sm font-medium text-slate-400 transition hover:text-slate-100"
+              aria-label={backLabel}
+              className="-ml-1 inline-flex h-10 items-center gap-2 text-slate-400 transition hover:text-slate-100"
               href={backHref as Route}
             >
-              <ArrowLeft className="h-4 w-4" />
-              <span className="hidden sm:inline">{backLabel}</span>
-              <span className="sr-only sm:hidden">{backLabel}</span>
+              <ArrowLeft className="h-4 w-4 shrink-0" />
+              <span className="hidden sm:inline text-sm font-semibold leading-none">{backLabel}</span>
             </Link>
-
-            <div className="flex items-center justify-end gap-2 sm:gap-3">
+            <div className="flex items-center gap-1.5 sm:gap-2">
               <CompareCityPicker
+                className="shrink-0"
                 initialSelectedSlugs={[meta.slug]}
                 locations={locations}
                 lockedSlugs={[meta.slug]}
                 triggerLabel="Compare"
               />
-              {meta.supportsRate ? <MetricToggle value={metric} onChange={setMetric} /> : null}
-              {meta.districts.length > 1 && !isMobileViewport ? (
-                <ExpandableDropdown
-                  label={meta.areaLabelPlural}
-                  onChange={setSelectedDistricts}
-                  options={meta.districts}
-                  values={selectedDistricts}
-                />
+              {meta.supportsRate ? (
+                <div className="shrink-0">
+                  <MetricToggle value={metric} onChange={setMetric} />
+                </div>
               ) : null}
-              {meta.districts.length > 1 && !isMobileViewport ? (
-                <button
-                  aria-label="Reset dashboard filters"
-                  className="inline-flex h-10 items-center gap-1.5 px-1 text-sm font-semibold leading-none tracking-[-0.01em] text-slate-400 transition hover:text-slate-100"
-                  onClick={() => {
-                    setSelectedDistricts(meta.defaultDistrictSlugs);
-                    setHiddenCategorySlugs(
-                      meta.categories
-                        .filter((category) => !meta.defaultCategorySlugs.includes(category.value))
-                        .map((category) => category.value),
-                    );
-                    setFocusedDistrictSlug(null);
-                    setMetric("count");
-                  }}
-                  type="button"
-                >
-                  <RefreshCw className="size-4" strokeWidth={2.1} />
-                  <span className="hidden sm:inline">Reset</span>
-                </button>
+              {meta.districts.length > 1 ? (
+                <div className="min-w-0 sm:w-80 sm:flex-none">
+                  <ExpandableDropdown
+                    fullWidth
+                    label={meta.areaLabelPlural}
+                    maxOverlayWidth={360}
+                    maxWidth={360}
+                    minWidth={140}
+                    onChange={setSelectedDistricts}
+                    options={meta.districts}
+                    values={selectedDistricts}
+                  />
+                </div>
               ) : null}
             </div>
           </div>
-
-          {meta.districts.length > 1 && isMobileViewport ? (
-            <ExpandableDropdown
-              fullWidth
-              label={meta.areaLabelPlural}
-              onChange={setSelectedDistricts}
-              options={meta.districts}
-              values={selectedDistricts}
-            />
-          ) : null}
         </div>
 
         {error ? <div className="px-4 text-right text-sm text-rose-300 sm:px-0">{error}</div> : null}

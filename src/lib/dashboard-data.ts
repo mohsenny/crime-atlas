@@ -1,11 +1,11 @@
 import { cache } from "react";
-import locationsIndex from "@/generated/locations-index.json";
+import type { Prisma } from "@prisma/client";
 import {
   CANONICAL_COMPARISON_CATEGORIES,
   isComparableMappingConfidence,
-  LOCATION_COMPARISON_MAPPINGS,
   type ComparisonMappingConfidence,
 } from "@/lib/comparison-taxonomy";
+import { prisma } from "@/lib/prisma";
 
 export type Metric = "count" | "rate";
 
@@ -142,6 +142,7 @@ type LocationDataset = {
   defaultCategorySlugs: string[];
   cityPopulationByYear: Record<string, number>;
   records: LocationRecord[];
+  comparisonMappings: ResolvedComparisonMapping[];
 };
 
 type ResolvedComparisonMapping = {
@@ -150,31 +151,82 @@ type ResolvedComparisonMapping = {
   confidence: ComparisonMappingConfidence;
 };
 
-type LocationsIndex = typeof locationsIndex;
+function toComparisonConfidence(value: string): ComparisonMappingConfidence {
+  return value === "high" || value === "medium" || value === "partial" ? value : "partial";
+}
 
-const locationLoaders: Record<string, () => Promise<LocationDataset>> = {
-  austin: async () => (await import("@/generated/locations/austin.json")).default as LocationDataset,
-  berlin: async () => (await import("@/generated/locations/berlin.json")).default as LocationDataset,
-  barcelona: async () => (await import("@/generated/locations/barcelona.json")).default as LocationDataset,
-  chicago: async () => (await import("@/generated/locations/chicago.json")).default as LocationDataset,
-  dallas: async () => (await import("@/generated/locations/dallas.json")).default as LocationDataset,
-  frankfurt: async () => (await import("@/generated/locations/frankfurt.json")).default as LocationDataset,
-  hamburg: async () => (await import("@/generated/locations/hamburg.json")).default as LocationDataset,
-  houston: async () => (await import("@/generated/locations/houston.json")).default as LocationDataset,
-  london: async () => (await import("@/generated/locations/london.json")).default as LocationDataset,
-  "los-angeles": async () => (await import("@/generated/locations/los-angeles.json")).default as LocationDataset,
-  luton: async () => (await import("@/generated/locations/luton.json")).default as LocationDataset,
-  milan: async () => (await import("@/generated/locations/milan.json")).default as LocationDataset,
-  "new-york-city": async () => (await import("@/generated/locations/new-york-city.json")).default as LocationDataset,
-  paris: async () => (await import("@/generated/locations/paris.json")).default as LocationDataset,
-  phoenix: async () => (await import("@/generated/locations/phoenix.json")).default as LocationDataset,
-  rome: async () => (await import("@/generated/locations/rome.json")).default as LocationDataset,
-  "sao-paulo": async () => (await import("@/generated/locations/sao-paulo.json")).default as LocationDataset,
-  "san-francisco": async () => (await import("@/generated/locations/san-francisco.json")).default as LocationDataset,
-  seattle: async () => (await import("@/generated/locations/seattle.json")).default as LocationDataset,
-  tokyo: async () => (await import("@/generated/locations/tokyo.json")).default as LocationDataset,
-  valencia: async () => (await import("@/generated/locations/valencia.json")).default as LocationDataset,
-};
+type DbLocationPayload = Prisma.LocationGetPayload<{
+  include: {
+    sources: { orderBy: { sortOrder: "asc" } };
+    districts: { orderBy: { sortOrder: "asc" } };
+    categories: { orderBy: { sortOrder: "asc" } };
+    populations: true;
+    records: {
+      orderBy: [{ year: "asc" }];
+      include: {
+        district: true;
+        category: true;
+      };
+    };
+    comparisonMappings: {
+      include: {
+        canonicalCategory: true;
+        sourceCategories: {
+          orderBy: { sortOrder: "asc" };
+          include: { category: true };
+        };
+      };
+    };
+  };
+}>;
+
+function mapLocationEntityToDataset(location: DbLocationPayload): LocationDataset {
+  const years = [...new Set(location.records.map((record) => record.year))].sort((left, right) => left - right);
+
+  return {
+    slug: location.slug,
+    label: location.label,
+    country: location.country,
+    areaLabelSingular: location.areaLabelSingular,
+    areaLabelPlural: location.areaLabelPlural,
+    chartTitle: location.chartTitle,
+    note: location.note,
+    sources: location.sources.map((source) => ({
+      label: source.label,
+      url: source.url ?? undefined,
+    })),
+    years,
+    districts: location.districts.map((district) => ({
+      label: district.label,
+      value: district.slug,
+    })),
+    categories: location.categories.map((category) => ({
+      label: category.label,
+      value: category.slug,
+      shortLabel: category.shortLabel ?? undefined,
+      color: category.color ?? undefined,
+      isDefault: category.isDefault,
+    })),
+    defaultCategorySlugs: location.categories.filter((category) => category.isDefault).map((category) => category.slug),
+    cityPopulationByYear: Object.fromEntries(
+      location.populations.map((population) => [String(population.year), population.population]),
+    ),
+    records: location.records.map((record) => ({
+      year: record.year,
+      districtLabel: record.district.label,
+      districtSlug: record.district.slug,
+      categoryLabel: record.category.label,
+      categorySlug: record.category.slug,
+      count: record.count,
+      ratePer100k: record.ratePer100k,
+    })),
+    comparisonMappings: location.comparisonMappings.map((mapping) => ({
+      canonicalKey: mapping.canonicalCategory.key,
+      sourceCategoryValues: mapping.sourceCategories.map((sourceCategory) => sourceCategory.category.slug),
+      confidence: toComparisonConfidence(mapping.confidence),
+    })),
+  };
+}
 
 function buildValue(record: LocationRecord, metric: Metric) {
   if (metric === "rate") {
@@ -185,8 +237,33 @@ function buildValue(record: LocationRecord, metric: Metric) {
 }
 
 const loadLocation = cache(async (slug: string) => {
-  const loader = locationLoaders[slug];
-  return loader ? loader() : null;
+  const location = await prisma.location.findUnique({
+    where: { slug },
+    include: {
+      sources: { orderBy: { sortOrder: "asc" } },
+      districts: { orderBy: { sortOrder: "asc" } },
+      categories: { orderBy: { sortOrder: "asc" } },
+      populations: true,
+      records: {
+        orderBy: [{ year: "asc" }],
+        include: {
+          district: true,
+          category: true,
+        },
+      },
+      comparisonMappings: {
+        include: {
+          canonicalCategory: true,
+          sourceCategories: {
+            orderBy: { sortOrder: "asc" },
+            include: { category: true },
+          },
+        },
+      },
+    },
+  });
+
+  return location ? mapLocationEntityToDataset(location) : null;
 });
 
 export function buildSeriesKey(districtSlug: string, categorySlug: string) {
@@ -194,7 +271,37 @@ export function buildSeriesKey(districtSlug: string, categorySlug: string) {
 }
 
 export const getLocationSummaries = cache(async (): Promise<LocationOverview[]> => {
-  return locationsIndex.locations as LocationsIndex["locations"];
+  const locations = await prisma.location.findMany({
+    orderBy: { label: "asc" },
+    include: {
+      sources: { orderBy: { sortOrder: "asc" } },
+      districts: { orderBy: { sortOrder: "asc" } },
+      categories: { orderBy: { sortOrder: "asc" } },
+      records: { select: { year: true, ratePer100k: true } },
+    },
+  });
+
+  return locations.map((location) => {
+    const years = [...new Set(location.records.map((record) => record.year))].sort((left, right) => left - right);
+
+    return {
+      slug: location.slug,
+      label: location.label,
+      country: location.country,
+      chartTitle: location.chartTitle,
+      note: location.note,
+      years,
+      areaLabelSingular: location.areaLabelSingular,
+      areaLabelPlural: location.areaLabelPlural,
+      districtCount: location.districts.length,
+      categoryCount: location.categories.length,
+      sources: location.sources.map((source) => ({
+        label: source.label,
+        url: source.url ?? undefined,
+      })),
+      supportsRate: location.records.some((record) => record.ratePer100k !== null),
+    };
+  });
 });
 
 async function getLocationsBySlugs(locationSlugs: string[]) {
@@ -352,21 +459,12 @@ export async function getComparisonData(locationSlugs: string[]): Promise<Compar
   const resolvedMappingsByLocation = new Map<string, Map<string, ResolvedComparisonMapping>>();
 
   for (const location of locations) {
-    const configuredMappings = LOCATION_COMPARISON_MAPPINGS[location.slug] ?? [];
     const resolvedMappings = new Map<string, ResolvedComparisonMapping>();
 
-    for (const mapping of configuredMappings) {
-      const sourceCategories = mapping.sourceLabels
-        .map((label) => location.categories.find((category) => category.label === label))
-        .filter((category): category is FilterOption => Boolean(category));
-
-      if (sourceCategories.length !== mapping.sourceLabels.length) {
-        continue;
-      }
-
+    for (const mapping of location.comparisonMappings) {
       resolvedMappings.set(mapping.canonicalKey, {
         canonicalKey: mapping.canonicalKey,
-        sourceCategoryValues: sourceCategories.map((category) => category.value),
+        sourceCategoryValues: mapping.sourceCategoryValues,
         confidence: mapping.confidence,
       });
     }

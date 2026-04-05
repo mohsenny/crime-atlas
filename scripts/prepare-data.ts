@@ -5,11 +5,16 @@ import { createReadStream } from "node:fs";
 import readline from "node:readline";
 import zlib from "node:zlib";
 
+import { PrismaClient } from "@prisma/client";
 import { PDFParse } from "pdf-parse";
 import * as XLSX from "xlsx";
 
 import berlinHistoricalRecords from "../src/data/berlin-historical-records.json";
 import { normalizeSourceLabel, slugify } from "../src/lib/crime-taxonomy";
+import {
+  CANONICAL_COMPARISON_CATEGORIES,
+  LOCATION_COMPARISON_MAPPINGS,
+} from "../src/lib/comparison-taxonomy";
 import {
   AUSTIN_LOCATION,
   BARCELONA_LOCATION,
@@ -74,6 +79,11 @@ type LocationPayload = {
   records: CrimeRecord[];
 };
 
+type PreparedPayload = {
+  generatedAt: string;
+  locations: LocationPayload[];
+};
+
 type LondonCrimeRow = Record<string, string | number>;
 type LondonPopulationRow = Record<string, string | number>;
 type FrankfurtRow = Record<string, string>;
@@ -130,6 +140,7 @@ type SeattleCrimeRow = {
 };
 
 const ROOT = process.cwd();
+const prisma = new PrismaClient();
 const TMP_DIR = path.join(ROOT, "tmp_sources");
 const BERLIN_WORKBOOK_PATH = path.join(TMP_DIR, "berlin_kriminalitaetsatlas_2015_2024.xlsx");
 const BERLIN_HISTORICAL_RECORDS = berlinHistoricalRecords as Array<{
@@ -3369,6 +3380,177 @@ async function buildSeattleLocation(): Promise<LocationPayload> {
   };
 }
 
+function chunkArray<T>(items: T[], size: number) {
+  const chunks: T[][] = [];
+
+  for (let index = 0; index < items.length; index += size) {
+    chunks.push(items.slice(index, index + size));
+  }
+
+  return chunks;
+}
+
+function mergeDuplicateRecords(records: CrimeRecord[]) {
+  const merged = new Map<string, CrimeRecord>();
+
+  for (const record of records) {
+    if (!Number.isFinite(record.year) || !Number.isFinite(record.count)) {
+      continue;
+    }
+
+    const key = `${record.year}__${record.districtSlug}__${record.categorySlug}`;
+    const existing = merged.get(key);
+    const safeRate = record.ratePer100k !== null && Number.isFinite(record.ratePer100k) ? record.ratePer100k : null;
+
+    if (!existing) {
+      merged.set(key, { ...record, ratePer100k: safeRate });
+      continue;
+    }
+
+    merged.set(key, {
+      ...existing,
+      count: existing.count + record.count,
+      ratePer100k: existing.ratePer100k ?? safeRate,
+    });
+  }
+
+  return [...merged.values()];
+}
+
+async function syncDatabase(payload: PreparedPayload) {
+  await prisma.comparisonMappingSource.deleteMany();
+  await prisma.comparisonMapping.deleteMany();
+  await prisma.canonicalCategory.deleteMany();
+  await prisma.crimeRecord.deleteMany();
+  await prisma.locationPopulation.deleteMany();
+  await prisma.source.deleteMany();
+  await prisma.district.deleteMany();
+  await prisma.category.deleteMany();
+  await prisma.location.deleteMany();
+
+  await prisma.canonicalCategory.createMany({
+    data: CANONICAL_COMPARISON_CATEGORIES.map((category) => ({
+      key: category.key,
+      label: category.label,
+      shortLabel: category.shortLabel,
+      color: category.color,
+      isDefault: category.isDefault,
+      sortOrder: category.sortOrder,
+    })),
+  });
+
+  const canonicalCategories = await prisma.canonicalCategory.findMany();
+  const canonicalCategoryIdByKey = new Map(canonicalCategories.map((category) => [category.key, category.id]));
+
+  for (const location of payload.locations) {
+    const createdLocation = await prisma.location.create({
+      data: {
+        slug: location.slug,
+        label: location.label,
+        country: location.country,
+        areaLabelSingular: location.areaLabelSingular,
+        areaLabelPlural: location.areaLabelPlural,
+        chartTitle: location.chartTitle,
+        note: location.note,
+      },
+    });
+
+    if (location.sources.length) {
+      await prisma.source.createMany({
+        data: location.sources.map((source, index) => ({
+          label: source.label,
+          url: source.url,
+          sortOrder: index,
+          locationId: createdLocation.id,
+        })),
+      });
+    }
+
+    await prisma.district.createMany({
+      data: location.districts.map((district, index) => ({
+        slug: district.value,
+        label: district.label,
+        sortOrder: index,
+        locationId: createdLocation.id,
+      })),
+    });
+
+    await prisma.category.createMany({
+      data: location.categories.map((category, index) => ({
+        slug: category.value,
+        label: category.label,
+        shortLabel: category.shortLabel,
+        color: category.color,
+        isDefault: category.isDefault ?? false,
+        sortOrder: index,
+        locationId: createdLocation.id,
+      })),
+    });
+
+    const populations = Object.entries(location.cityPopulationByYear).map(([year, population]) => ({
+      locationId: createdLocation.id,
+      year: Number(year),
+      population,
+    }));
+
+    if (populations.length) {
+      await prisma.locationPopulation.createMany({ data: populations });
+    }
+
+    const districts = await prisma.district.findMany({ where: { locationId: createdLocation.id } });
+    const categories = await prisma.category.findMany({ where: { locationId: createdLocation.id } });
+    const districtIdBySlug = new Map(districts.map((district) => [district.slug, district.id]));
+    const categoryIdBySlug = new Map(categories.map((category) => [category.slug, category.id]));
+    const categoryIdByLabel = new Map(categories.map((category) => [category.label, category.id]));
+
+    const normalizedRecords = mergeDuplicateRecords(location.records);
+
+    for (const recordBatch of chunkArray(normalizedRecords, 1000)) {
+      await prisma.crimeRecord.createMany({
+        data: recordBatch.map((record) => ({
+          year: record.year,
+          count: record.count,
+          ratePer100k: record.ratePer100k,
+          locationId: createdLocation.id,
+          districtId: districtIdBySlug.get(record.districtSlug)!,
+          categoryId: categoryIdBySlug.get(record.categorySlug)!,
+        })),
+      });
+    }
+
+    for (const mapping of LOCATION_COMPARISON_MAPPINGS[location.slug] ?? []) {
+      const canonicalCategoryId = canonicalCategoryIdByKey.get(mapping.canonicalKey);
+      if (!canonicalCategoryId) {
+        continue;
+      }
+
+      const sourceCategoryIds = mapping.sourceLabels
+        .map((label) => categoryIdByLabel.get(label))
+        .filter((value): value is number => Boolean(value));
+
+      if (sourceCategoryIds.length !== mapping.sourceLabels.length) {
+        continue;
+      }
+
+      const createdMapping = await prisma.comparisonMapping.create({
+        data: {
+          locationId: createdLocation.id,
+          canonicalCategoryId,
+          confidence: mapping.confidence,
+        },
+      });
+
+      await prisma.comparisonMappingSource.createMany({
+        data: sourceCategoryIds.map((categoryId, index) => ({
+          mappingId: createdMapping.id,
+          categoryId,
+          sortOrder: index,
+        })),
+      });
+    }
+  }
+}
+
 async function main() {
   const spainAnnualSources: SpainAnnualSource[] = [
     { year: 2014, type: "xls", url: SOURCE_URLS.spanishBalance2014Workbook },
@@ -3435,53 +3617,17 @@ async function main() {
       valencia,
     ].sort((left, right) => left.label.localeCompare(right.label)),
   };
-
-  const outputDir = path.join(ROOT, "src", "generated");
-  const locationsDir = path.join(outputDir, "locations");
-  const legacyOutputPath = path.join(outputDir, "crime-data.json");
-  const indexOutputPath = path.join(outputDir, "locations-index.json");
-
-  await fs.mkdir(locationsDir, { recursive: true });
-
-  await Promise.all(
-    payload.locations.map((location) =>
-      fs.writeFile(path.join(locationsDir, `${location.slug}.json`), `${JSON.stringify(location, null, 2)}\n`, "utf8"),
-    ),
-  );
-
-  await fs.writeFile(
-    indexOutputPath,
-    `${JSON.stringify(
-      {
-        generatedAt: payload.generatedAt,
-        locations: payload.locations.map((location) => ({
-          slug: location.slug,
-          label: location.label,
-          country: location.country,
-          areaLabelSingular: location.areaLabelSingular,
-          areaLabelPlural: location.areaLabelPlural,
-          chartTitle: location.chartTitle,
-          note: location.note,
-          sources: location.sources,
-          years: location.years,
-          districtCount: location.districts.length,
-          categoryCount: location.categories.length,
-          supportsRate: location.records.some((record) => record.ratePer100k !== null),
-        })),
-      },
-      null,
-      2,
-    )}\n`,
-    "utf8",
-  );
-
-  await fs.writeFile(legacyOutputPath, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
+  await syncDatabase(payload);
 
   const totalRecords = payload.locations.reduce((sum, location) => sum + location.records.length, 0);
-  console.log(`Generated ${totalRecords} records across ${payload.locations.length} locations into src/generated/crime-data.json`);
+  console.log(`Synced ${totalRecords} records across ${payload.locations.length} locations into prisma/crime-atlas.db`);
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exit(1);
-});
+main()
+  .catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });

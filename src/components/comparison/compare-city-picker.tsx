@@ -19,6 +19,7 @@ type CompareCityPickerProps = {
   triggerLabel?: string;
   triggerIcon?: LucideIcon;
   className?: string;
+  showTriggerLabel?: boolean;
 };
 
 export function CompareCityPicker({
@@ -28,6 +29,7 @@ export function CompareCityPicker({
   triggerLabel = "Compare",
   triggerIcon: TriggerIcon,
   className,
+  showTriggerLabel = true,
 }: CompareCityPickerProps) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -101,8 +103,10 @@ export function CompareCityPicker({
   return (
     <>
       <button
+        aria-label={triggerLabel}
         className={cn(
           "inline-flex h-10 items-center gap-2 rounded-2xl border border-slate-700 bg-slate-900/70 px-3.5 text-slate-300 transition hover:text-slate-50",
+          "sm:px-4",
           CONTROL_LABEL_TEXT_CLASS,
           className,
         )}
@@ -110,7 +114,7 @@ export function CompareCityPicker({
         type="button"
       >
         {TriggerIcon ? <TriggerIcon className="h-3.5 w-3.5" /> : null}
-        <span>{triggerLabel}</span>
+        {showTriggerLabel && <span className="hidden sm:inline">{triggerLabel}</span>}
       </button>
 
       {open ? (

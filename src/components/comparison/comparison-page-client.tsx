@@ -12,8 +12,6 @@ import { ComparisonChart } from "@/components/comparison/comparison-chart";
 import { ComparisonMethodology } from "@/components/comparison/comparison-methodology";
 import { DashboardSources } from "@/components/dashboard/dashboard-sources";
 import { MetricToggle } from "@/components/dashboard/metric-toggle";
-import { formatInteger } from "@/lib/utils";
-
 type ComparisonPageClientProps = {
   data: ComparisonData;
   initialCategorySlug?: string;
@@ -82,42 +80,31 @@ export function ComparisonPageClient({ data, initialCategorySlug, locations }: C
   return (
     <main className="min-h-screen px-4 py-5 sm:px-6 sm:py-6 lg:px-8">
       <div className="mx-auto max-w-7xl space-y-4">
-        <div className="space-y-3">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <Link
-              className="inline-flex h-10 items-center gap-2 text-sm font-medium text-slate-400 transition hover:text-slate-100"
-              href="/"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              <span>All locations</span>
-            </Link>
-
-            <div className="flex items-center gap-2 sm:gap-3">
-              <CompareCityPicker
-                initialSelectedSlugs={data.locations.map((location) => location.slug)}
-                locations={locations}
-                triggerIcon={ArrowRightLeft}
-                triggerLabel="Change Cities"
-              />
+        <div className="flex items-center justify-between gap-1.5 sm:gap-2">
+          <Link
+            aria-label="All locations"
+            className="-ml-1 inline-flex h-10 items-center gap-2 text-slate-400 transition hover:text-slate-100"
+            href="/"
+          >
+            <ArrowLeft className="h-4 w-4 shrink-0" />
+            <span className="hidden sm:inline text-sm font-semibold leading-none">All locations</span>
+          </Link>
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <CompareCityPicker
+              className="shrink-0"
+              initialSelectedSlugs={data.locations.map((location) => location.slug)}
+              locations={locations}
+              showTriggerLabel={true}
+              triggerIcon={ArrowRightLeft}
+              triggerLabel="Change cities"
+            />
+            <div className="shrink-0">
               <MetricToggle
                 onChange={setMetric}
                 supportsRate={data.supportsRate}
                 value={metric}
               />
             </div>
-          </div>
-
-          <div className="space-y-2">
-            <h1 className="text-2xl font-semibold tracking-[-0.03em] text-slate-50 sm:text-3xl">
-              {data.locations.map((location) => location.label).join(" vs ")}
-            </h1>
-            <p className="max-w-4xl text-sm leading-6 text-slate-300/85">{data.note}</p>
-            {selectedCategory ? (
-              <p className="text-xs uppercase tracking-[0.18em] text-slate-500">
-                Comparing {selectedCategory.label} across {formatInteger(data.years.length)} yearly positions
-                {selectedCategory.confidence === "medium" ? " · close official match" : ""}
-              </p>
-            ) : null}
           </div>
         </div>
 
@@ -129,7 +116,7 @@ export function ComparisonPageClient({ data, initialCategorySlug, locations }: C
             onSelectCategory={setSelectedCategorySlug}
             rows={rows}
             selectedCategorySlug={selectedCategorySlug}
-            title={selectedCategory.label}
+            title={data.locations.map((location) => location.label).join(" vs ")}
           />
         ) : (
           <div className="card-panel chart-panel rounded-none p-6 text-sm text-slate-300">

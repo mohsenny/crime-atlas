@@ -118,3 +118,9 @@ input {
 .masthead-title {
   font-family: var(--font-masthead);
 }
+
+/* Hide the first and last vertical grid lines in crime charts */
+.crime-chart-with-grid .recharts-cartesian-grid-vertical line:first-of-type,
+.crime-chart-with-grid .recharts-cartesian-grid-vertical line:last-of-type {
+  display: none;
+}

@@ -88,29 +88,27 @@ export function OverviewPageClient({ locations }: OverviewPageClientProps) {
   return (
     <main className="min-h-screen px-4 py-7 sm:px-6 sm:py-8 lg:px-8">
       <div className="mx-auto max-w-[83rem]">
-        <div className="mb-8 flex flex-col gap-4 md:gap-5 xl:flex-row xl:items-start xl:justify-between">
-          <div className="space-y-3 xl:max-w-[44rem] xl:flex-1">
+        <div className="mb-8 flex flex-col gap-6 md:flex-row md:items-start md:gap-8">
+          <div className="space-y-3 md:flex-1">
             <h1 className="masthead-title text-5xl leading-[0.94] tracking-[0.01em] text-stone-50 sm:text-6xl md:text-[4.35rem]">
               Crime Atlas
             </h1>
-            <p className="pl-1 text-sm leading-6 text-slate-300/85 sm:text-base xl:whitespace-nowrap">
+            <p className="pl-1 text-sm leading-6 text-slate-300/85 sm:text-base">
               Official dashboards built from police-recorded crime data published by public authorities for each location.
             </p>
           </div>
 
-          <div className="hidden md:grid md:grid-cols-[13rem_max-content_18rem] md:items-center md:justify-end md:gap-2 xl:shrink-0 xl:pr-1 xl:pt-1">
-            <div className="flex h-10 items-center justify-end gap-2">
-              <span className="inline-flex min-w-10 justify-end">
-                {compareMode ? (
-                  <button
-                    className="inline-flex h-10 items-center px-1 text-sm font-medium text-slate-400 transition hover:text-slate-100"
-                    onClick={cancelCompareMode}
-                    type="button"
-                  >
-                    Cancel
-                  </button>
-                ) : null}
-              </span>
+          <div className="hidden md:flex md:items-center md:gap-4 lg:gap-6">
+            <div className="flex h-10 items-center gap-2">
+              {compareMode ? (
+                <button
+                  className="inline-flex h-10 items-center px-1 text-sm font-medium text-slate-400 transition hover:text-slate-100"
+                  onClick={cancelCompareMode}
+                  type="button"
+                >
+                  Cancel
+                </button>
+              ) : null}
               <button
                 className={cn(
                   "inline-flex h-10 items-center rounded-2xl border border-slate-700 bg-slate-900/70 px-3.5 text-slate-300 transition",
@@ -132,13 +130,11 @@ export function OverviewPageClient({ locations }: OverviewPageClientProps) {
               </button>
             </div>
 
-            <div className="justify-self-end">
-              <OverviewViewToggle
-                onChange={(value) => setViewPreference(value)}
-                value={viewPreference}
-              />
-            </div>
-            <div className="w-[18rem]">
+            <OverviewViewToggle
+              onChange={(value) => setViewPreference(value)}
+              value={viewPreference}
+            />
+            <div className="w-72">
               <SingleSelectDropdown
                 fullWidth
                 label="Country"

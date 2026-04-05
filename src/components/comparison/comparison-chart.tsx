@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 import type { ComparisonCategory, ComparisonLocation } from "@/lib/dashboard-data";
@@ -23,6 +24,8 @@ type ComparisonChartProps = {
 const CITY_COLORS = ["#7dd3fc", "#f97316", "#a78bfa", "#22c55e"];
 const DESKTOP_CHART_HEIGHT = 520;
 const MOBILE_CHART_HEIGHT = 420;
+const DESKTOP_AXIS_WIDTH = 88;
+const MOBILE_AXIS_WIDTH = 52;
 
 export function ComparisonChart({
   rows,
@@ -33,9 +36,17 @@ export function ComparisonChart({
   metric,
   title,
 }: ComparisonChartProps) {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [focusedLocationSlug, setFocusedLocationSlug] = useState<string | null>(null);
+  const [viewportWidth, setViewportWidth] = useState(0);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
   const { disableInteractiveTooltip, isMobileViewport } = useChartUi();
   const chartHeight = isMobileViewport ? MOBILE_CHART_HEIGHT : DESKTOP_CHART_HEIGHT;
+  const axisWidth = isMobileViewport ? MOBILE_AXIS_WIDTH : DESKTOP_AXIS_WIDTH;
+  const groupWidth = isMobileViewport ? 52 : 72;
+  const minChartWidth = Math.max(isMobileViewport ? 0 : 760, rows.length * groupWidth);
+  const chartWidth = Math.max(minChartWidth, viewportWidth);
 
   const yMax = useMemo(() => {
     const values = rows.flatMap((row) =>
@@ -46,10 +57,90 @@ export function ComparisonChart({
     return values.length ? Math.max(...values) : 0;
   }, [locations, rows]);
 
+  const axisTicks = useMemo(() => {
+    const buildAxisTicks = (max: number) => {
+      if (max <= 0) return [0];
+      const magnitude = Math.pow(10, Math.floor(Math.log10(max)));
+      const normalized = max / magnitude;
+      const step = normalized <= 1 ? 0.1 : normalized <= 2 ? 0.2 : normalized <= 5 ? 0.5 : 1;
+      const ticks = [];
+      for (let i = 0; i <= Math.ceil(normalized / step); i++) {
+        ticks.push(Math.round(i * step * magnitude * 100) / 100);
+      }
+      return ticks;
+    };
+    return buildAxisTicks(yMax);
+  }, [yMax]);
+
+  const chartTopMargin = 12;
+  const chartBottomMargin = 8;
+  const chartPlotHeight = chartHeight - chartTopMargin - chartBottomMargin;
+  const yAxisMax = axisTicks.at(-1) ?? 1;
   const visibleLocationSlugs = focusedLocationSlug ? [focusedLocationSlug] : locations.map((location) => location.slug);
+
+  const syncScrollState = useCallback(() => {
+    const element = scrollContainerRef.current;
+
+    if (!element) {
+      return;
+    }
+
+    setCanScrollLeft(element.scrollLeft > 8);
+    setCanScrollRight(element.scrollLeft + element.clientWidth < element.scrollWidth - 8);
+  }, []);
+
+  useEffect(() => {
+    const element = scrollContainerRef.current;
+    if (!element) {
+      return;
+    }
+
+    const syncViewport = () => {
+      setViewportWidth(element.clientWidth);
+      syncScrollState();
+    };
+
+    const id = window.requestAnimationFrame(syncViewport);
+    const resizeObserver = new ResizeObserver(syncViewport);
+    resizeObserver.observe(element);
+    window.addEventListener("resize", syncViewport);
+
+    return () => {
+      window.cancelAnimationFrame(id);
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", syncViewport);
+    };
+  }, [syncScrollState]);
+
+  useEffect(() => {
+    const element = scrollContainerRef.current;
+    if (!element) {
+      return;
+    }
+
+    const onScroll = () => syncScrollState();
+    element.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => {
+      element.removeEventListener("scroll", onScroll);
+    };
+  }, [syncScrollState]);
 
   function toggleFocusedLocation(slug: string) {
     setFocusedLocationSlug((current) => (current === slug ? null : slug));
+  }
+
+  function scrollChart(direction: 1 | -1) {
+    const element = scrollContainerRef.current;
+
+    if (!element) {
+      return;
+    }
+
+    element.scrollBy({
+      left: direction * Math.max(element.clientWidth * 0.75, 240),
+      behavior: "smooth",
+    });
   }
 
   return (
@@ -60,10 +151,10 @@ export function ComparisonChart({
           {categories.map((category) => (
             <ChartLegendButton
               active={category.value === selectedCategorySlug}
-              color={category.color ?? "#7dd3fc"}
               key={category.value}
               label={category.shortLabel ?? category.label}
               onClick={() => onSelectCategory(category.value)}
+              showDot={false}
             />
           ))}
         </>
@@ -82,94 +173,115 @@ export function ComparisonChart({
         </div>
       }
       footerRight={
-        <p className={cn("max-w-2xl text-xs text-slate-400 sm:text-right")}>
-          {metric === "rate"
-            ? "Rate view is shown only when every selected location uses a citywide source with explicit official rates."
-            : yMax === 0
-              ? "No comparable values are available for the selected category."
-              : "Only mapped exact or close category equivalents are compared; missing years remain blank rather than interpolated."}
-        </p>
+        <div className="flex items-center justify-end gap-2">
+          <button
+            aria-label="Scroll chart left"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-700 bg-slate-900/70 text-slate-300 transition disabled:cursor-not-allowed disabled:opacity-35"
+            disabled={!canScrollLeft}
+            onClick={() => scrollChart(-1)}
+            type="button"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+          <button
+            aria-label="Scroll chart right"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-700 bg-slate-900/70 text-slate-300 transition disabled:cursor-not-allowed disabled:opacity-35"
+            disabled={!canScrollRight}
+            onClick={() => scrollChart(1)}
+            type="button"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
+        </div>
       }
     >
-      <div style={{ height: chartHeight }}>
-        <ResponsiveContainer height="100%" width="100%">
-          <LineChart
-            data={rows}
-            margin={{ top: 12, right: isMobileViewport ? 0 : 12, left: isMobileViewport ? -28 : -12, bottom: 4 }}
-          >
-            <CartesianGrid stroke="rgba(100,116,139,0.14)" strokeDasharray="3 4" vertical={false} />
-            <XAxis
-              axisLine={false}
-              dataKey="year"
-              tick={{ fill: "#94a3b8", fontSize: isMobileViewport ? 11 : 12 }}
-              tickLine={false}
-            />
-            <YAxis
-              axisLine={false}
-              tick={{ fill: "#94a3b8", fontSize: isMobileViewport ? 11 : 12 }}
-              tickFormatter={(value) => formatInteger(Number(value))}
-              tickLine={false}
-              width={isMobileViewport ? 52 : 72}
-            />
-            <Tooltip
-              active={!disableInteractiveTooltip}
-              content={({ active, label, payload }) => {
-                if (!active || !payload?.length) {
-                  return null;
-                }
+      <div className="flex min-h-0 flex-1">
+        <div className="chart-scroll-shell min-h-0 flex-1 overflow-x-auto" ref={scrollContainerRef}>
+          <div style={{ height: chartHeight, width: chartWidth }}>
+            <ResponsiveContainer height="100%" width="100%">
+            <LineChart
+              data={rows}
+              margin={{ top: chartTopMargin, right: isMobileViewport ? 0 : 12, left: 0, bottom: 8 }}
+            >
+              <CartesianGrid stroke="rgba(100,116,139,0.14)" strokeDasharray="3 4" vertical={false} />
+              <XAxis
+                axisLine={false}
+                dataKey="year"
+                interval={0}
+                tick={{ fill: "#94a3b8", fontSize: isMobileViewport ? 11 : 12 }}
+                tickLine={false}
+                tickMargin={12}
+              />
+              <Tooltip
+                active={!disableInteractiveTooltip}
+                content={({ active, label, payload }) => {
+                  if (!active || !payload?.length) {
+                    return null;
+                  }
 
-                const visiblePayload = payload.filter((entry) => visibleLocationSlugs.includes(String(entry.dataKey)));
+                  const visiblePayload = payload.filter((entry) => visibleLocationSlugs.includes(String(entry.dataKey)));
 
-                if (!visiblePayload.length) {
-                  return null;
-                }
+                  if (!visiblePayload.length) {
+                    return null;
+                  }
+
+                  return (
+                    <div className="border border-slate-700 bg-slate-950/95 px-3 py-2 text-xs text-slate-100 shadow-xl backdrop-blur-sm">
+                      <p className="font-semibold text-slate-200">{label}</p>
+                      <div className="mt-2 space-y-1.5">
+                        {visiblePayload.map((entry) => (
+                          <div className="flex items-center justify-between gap-4" key={String(entry.dataKey)}>
+                            <span className="inline-flex items-center gap-1.5 text-slate-300">
+                              <span className="h-2 w-2 rounded-full" style={{ backgroundColor: String(entry.color ?? "#7dd3fc") }} />
+                              {String(entry.name)}
+                            </span>
+                            <span className="font-semibold text-slate-100">
+                              {metric === "rate"
+                                ? `${formatInteger(Math.round(Number(entry.value ?? 0)))} / 100k`
+                                : formatInteger(Math.round(Number(entry.value ?? 0)))}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                }}
+                cursor={{ stroke: "rgba(148,163,184,0.24)", strokeWidth: 1 }}
+              />
+              <YAxis
+                domain={[0, yAxisMax]}
+                ticks={axisTicks}
+                type="number"
+                width={axisWidth}
+                tick={{ fontSize: isMobileViewport ? 11 : 12, fill: "#94a3b8" }}
+                axisLine={false}
+                tickLine={false}
+              />
+              {locations.map((location, index) => {
+                const focused = focusedLocationSlug === location.slug;
+                const dimmed = Boolean(focusedLocationSlug) && !focused;
 
                 return (
-                  <div className="border border-slate-700 bg-slate-950/95 px-3 py-2 text-xs text-slate-100 shadow-xl backdrop-blur-sm">
-                    <p className="font-semibold text-slate-200">{label}</p>
-                    <div className="mt-2 space-y-1.5">
-                      {visiblePayload.map((entry) => (
-                        <div className="flex items-center justify-between gap-4" key={String(entry.dataKey)}>
-                          <span className="inline-flex items-center gap-1.5 text-slate-300">
-                            <span className="h-2 w-2 rounded-full" style={{ backgroundColor: String(entry.color ?? "#7dd3fc") }} />
-                            {String(entry.name)}
-                          </span>
-                          <span className="font-semibold text-slate-100">
-                            {metric === "rate"
-                              ? `${formatInteger(Math.round(Number(entry.value ?? 0)))} / 100k`
-                              : formatInteger(Math.round(Number(entry.value ?? 0)))}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                  <Line
+                    animationDuration={220}
+                    connectNulls={false}
+                    dataKey={location.slug}
+                    dot={false}
+                    hide={false}
+                    key={location.slug}
+                    name={location.label}
+                    opacity={dimmed ? 0.14 : 1}
+                    stroke={CITY_COLORS[index % CITY_COLORS.length]}
+                    strokeLinecap="round"
+                    strokeWidth={focused ? 3 : 2.5}
+                    type="monotone"
+                  />
                 );
-              }}
-              cursor={{ stroke: "rgba(148,163,184,0.24)", strokeWidth: 1 }}
-            />
-            {locations.map((location, index) => {
-              const focused = focusedLocationSlug === location.slug;
-              const dimmed = Boolean(focusedLocationSlug) && !focused;
-
-              return (
-                <Line
-                  animationDuration={220}
-                  connectNulls={false}
-                  dataKey={location.slug}
-                  dot={false}
-                  hide={false}
-                  key={location.slug}
-                  name={location.label}
-                  opacity={dimmed ? 0.14 : 1}
-                  stroke={CITY_COLORS[index % CITY_COLORS.length]}
-                  strokeLinecap="round"
-                  strokeWidth={focused ? 3 : 2.5}
-                  type="monotone"
-                />
-              );
-            })}
-          </LineChart>
-        </ResponsiveContainer>
+              })}
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+        </div>
       </div>
     </ChartShell>
   );
