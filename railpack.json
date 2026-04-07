@@ -6,6 +6,9 @@
   },
   "steps": {
     "install": {
+      "inputs": [
+        "."
+      ],
       "commands": [
         "npm install --include=dev"
       ]
