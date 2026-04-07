@@ -7,7 +7,6 @@
   "steps": {
     "install": {
       "commands": [
-        "npm i -g corepack@latest && corepack enable && corepack prepare --activate",
         "npm ci --include=dev"
       ]
     }
