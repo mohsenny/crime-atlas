@@ -1571,6 +1571,17 @@ function extractSingleCountFromPatterns(flattenedText: string, patterns: RegExp[
   throw new Error(`Could not parse ${context}`);
 }
 
+function extractCurrentYearCountFromPatterns(flattenedText: string, patterns: RegExp[], context: string) {
+  for (const pattern of patterns) {
+    const match = flattenedText.match(pattern);
+    if (match) {
+      return parseCountLike(match[2]);
+    }
+  }
+
+  throw new Error(`Could not parse ${context}`);
+}
+
 function extractYearPair(flattenedText: string, pattern: RegExp, context: string) {
   const match = flattenedText.match(pattern);
   if (!match) {
@@ -1595,6 +1606,104 @@ function extractLeadingYearPairAfterLabel(flattenedText: string, patterns: RegEx
   }
 
   throw new Error(`Could not parse ${context}`);
+}
+
+function parseMunichArchivedCounts(text: string) {
+  const flat = flattenPdfText(text);
+  const rapeCount = extractCurrentYearCountFromPatterns(
+    flat,
+    [/Vergewaltigung\s+(\d{1,3}(?: \d{3})*)\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*\s+\d{1,3}(?: \d{3})*/i],
+    "Munich archived rape",
+  );
+  const vehicleTheft = extractCurrentYearCountFromPatterns(
+    flat,
+    [
+      /Kraftfahrzeugdiebstahl\s+(\d{1,3}(?: \d{3})*)\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*\s+\d{1,3}(?: \d{3})*/i,
+      /Diebstahl von Kraftwagen\s+(\d{1,3}(?: \d{3})*)\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*\s+\d{1,3}(?: \d{3})*/i,
+    ],
+    "Munich archived vehicle theft",
+  );
+  const bicycleTheft = extractCurrentYearCountFromPatterns(
+    flat,
+    [
+      /Fahrraddiebstahl\s+(\d{1,3}(?: \d{3})*)\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*\s+\d{1,3}(?: \d{3})*/i,
+      /Fahrr[aä‰]dern\s+(\d{1,3}(?: \d{3})*)\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*\s+\d{1,3}(?: \d{3})*/i,
+    ],
+    "Munich archived bicycle theft",
+  );
+  const theftTotal = flat.match(/Diebstahl insgesamt\s+(\d{1,3}(?: \d{3})*)\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*\s+\d{1,3}(?: \d{3})*/i)
+    ? extractCurrentYearCountFromPatterns(
+        flat,
+        [/Diebstahl insgesamt\s+(\d{1,3}(?: \d{3})*)\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*\s+\d{1,3}(?: \d{3})*/i],
+        "Munich archived theft",
+      )
+    : vehicleTheft +
+      bicycleTheft +
+      extractCurrentYearCountFromPatterns(
+        flat,
+        [/Sonstige Diebst[aä‰]hle\s+(\d{1,3}(?: \d{3})*)\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*\s+\d{1,3}(?: \d{3})*/i],
+        "Munich archived other theft",
+      );
+  const drugOffenses = extractCurrentYearCountFromPatterns(
+    flat,
+    [
+      /Rauschgiftdelikte\s+(\d{1,3}(?: \d{3})*)\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*\s+\d{1,3}(?: \d{3})*/i,
+      /BtMG[^0-9]{0,60}(\d{1,3}(?: \d{3})*)\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*\s+\d{1,3}(?: \d{3})*/i,
+    ],
+    "Munich archived drug offenses",
+  );
+  const fraudAndEmbezzlement = flat.match(/Betrug und Veruntreuung\s+(\d{1,3}(?: \d{3})*)\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*\s+\d{1,3}(?: \d{3})*/i)
+    ? extractCurrentYearCountFromPatterns(
+        flat,
+        [/Betrug und Veruntreuung\s+(\d{1,3}(?: \d{3})*)\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*\s+\d{1,3}(?: \d{3})*/i],
+        "Munich archived fraud and embezzlement",
+      )
+    : extractCurrentYearCountFromPatterns(
+        flat,
+        [/Betrug\s+(\d{1,3}(?: \d{3})*)\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*\s+\d{1,3}(?: \d{3})*/i],
+        "Munich archived fraud",
+      ) +
+      extractCurrentYearCountFromPatterns(
+        flat,
+        [/Veruntreuung\s+(\d{1,3}(?: \d{3})*)\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*\s+\d{1,3}(?: \d{3})*/i],
+        "Munich archived embezzlement",
+      );
+
+  return new Map<string, number>([
+    [
+      "Straftaten insgesamt",
+      extractCurrentYearCountFromPatterns(
+        flat,
+        [/Straftaten insgesamt\s+(\d{1,3}(?: \d{3})*)\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*\s+\d{1,3}(?: \d{3})*/i],
+        "Munich archived total offenses",
+      ),
+    ],
+    [
+      "Straftaten gegen die sexuelle Selbstbestimmung",
+      extractCurrentYearCountFromPatterns(
+        flat,
+        [/Straftaten gegen die sexuelle Selbstbestimmung\s+(\d{1,3}(?: \d{3})*)\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*\s+\d{1,3}(?: \d{3})*/i],
+        "Munich archived sexual offenses",
+      ),
+    ],
+    ["Vergewaltigung", rapeCount],
+    [
+      "Raub, räuberische Erpressung und räuberischer Angriff auf Kraftfahrer*innen",
+      extractCurrentYearCountFromPatterns(
+        flat,
+        [
+          /Raub,?\s*r[aä‰]uberische Erpressung,?\s*r[aä‰]uberischer Angriff auf K(?:raftfahrzeuge|fz)[^0-9]{0,80}(\d{1,3}(?: \d{3})*)\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*\s+\d{1,3}(?: \d{3})*/i,
+          /Raub,?\s*r[aä‰]uberische Erpressung[^0-9]{0,80}(\d{1,3}(?: \d{3})*)\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*\s+\d{1,3}(?: \d{3})*/i,
+        ],
+        "Munich archived robbery",
+      ),
+    ],
+    ["Diebstahl insgesamt", theftTotal],
+    ["Diebstahl von Kraftwagen", vehicleTheft],
+    ["Diebstahl von Fahrrädern", bicycleTheft],
+    ["Betrug und Veruntreuung", fraudAndEmbezzlement],
+    ["Rauschgiftdelikte", drugOffenses],
+  ]);
 }
 
 function parseMunichCounts(text: string) {
@@ -1711,9 +1820,13 @@ function parseMunichCounts(text: string) {
 }
 
 async function buildMunichLocation(): Promise<LocationPayload> {
-  const { yearbookByYear, countPdfByYear } = await parseMunichResourceLinks();
-  const years = [...new Set([...yearbookByYear.keys(), ...countPdfByYear.keys()])]
-    .filter((year) => year >= 2010)
+  const munichDir = path.join(TMP_DIR, "munich");
+  const approvedPilotYears = new Set([2001, 2002, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017]);
+  const years = (await fs.readdir(munichDir))
+    .map((fileName) => /^([0-9]{4})\.pdf$/i.exec(fileName)?.[1] ?? null)
+    .filter((value): value is string => value !== null)
+    .map((value) => Number(value))
+    .filter((year) => approvedPilotYears.has(year))
     .sort((left, right) => left - right);
   const { options: categories, lookup: categoryLookup } = buildCategoryLookup(MUNICH_LOCATION);
   const districtLabel = "Munich";
@@ -1721,14 +1834,10 @@ async function buildMunichLocation(): Promise<LocationPayload> {
   const recordsByKey = new Map<string, CrimeRecord>();
 
   for (const year of years) {
-    const sourceUrl = countPdfByYear.get(year) ?? yearbookByYear.get(year);
-    if (!sourceUrl) {
-      continue;
-    }
-
     const filePath = path.join(TMP_DIR, "munich", `${year}.pdf`);
-    await ensureFile(filePath, sourceUrl);
-    const counts = parseMunichCounts(await extractPdfText(filePath));
+    const counts = year < 2010
+      ? parseMunichArchivedCounts(await extractPdfText(filePath))
+      : parseMunichCounts(await extractPdfText(filePath));
 
     for (const [sourceLabel, count] of counts) {
       const category = categoryLookup.get(normalizeSourceLabel(sourceLabel));
@@ -3569,7 +3678,7 @@ async function main() {
   const barcelona = await buildSpainLocation(BARCELONA_LOCATION, "Barcelona", spainAnnualSources, barcelonaPopulationByYear);
   const valencia = await buildSpainLocation(VALENCIA_LOCATION, "Valencia", spainAnnualSources, valenciaPopulationByYear);
 
-  const [austin, berlin, chicago, dallas, frankfurt, hamburg, houston, london, losAngeles, luton, milan, newYorkCity, paris, phoenix, rome, sanFrancisco, saoPaulo, seattle, tokyo] =
+  const [austin, berlin, chicago, dallas, frankfurt, hamburg, houston, london, losAngeles, luton, milan, munich, newYorkCity, paris, phoenix, rome, sanFrancisco, saoPaulo, seattle, tokyo] =
     await Promise.all([
       buildAustinLocation(),
       buildBerlinLocation(),
@@ -3582,6 +3691,7 @@ async function main() {
       buildLosAngelesLocation(),
       buildLutonLocation(),
       buildMilanLocation(),
+      buildMunichLocation(),
       buildNewYorkCityLocation(),
       buildParisLocation(),
       buildPhoenixLocation(),
@@ -3606,6 +3716,7 @@ async function main() {
       losAngeles,
       luton,
       milan,
+      munich,
       newYorkCity,
       paris,
       phoenix,

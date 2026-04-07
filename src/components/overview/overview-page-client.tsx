@@ -185,10 +185,10 @@ export function OverviewPageClient({ locations }: OverviewPageClientProps) {
             </div>
           </div>
 
-          <div className="flex items-center gap-2 md:hidden">
+          <div className="grid h-10 grid-cols-[5.75rem_minmax(0,1fr)] items-stretch gap-2 md:hidden">
             <button
               className={cn(
-                "inline-flex h-10 shrink-0 items-center justify-center rounded-2xl border px-3.5 text-[10px] font-semibold uppercase tracking-[0.18em] leading-none transition",
+                "inline-flex h-full w-full items-center justify-center rounded-2xl border px-3.5 text-[10px] font-semibold uppercase tracking-[0.18em] leading-none transition",
                 compareMode
                   ? selectedCompareSlugs.length >= 2 && selectedCompareSlugs.length <= MAX_COMPARE_LOCATIONS
                     ? "border-slate-200 bg-slate-100 text-slate-950 hover:bg-white"
@@ -202,10 +202,10 @@ export function OverviewPageClient({ locations }: OverviewPageClientProps) {
             </button>
 
             {compareMode ? (
-              <>
+              <div className="flex min-w-0 items-stretch gap-2">
                 <button
                   aria-label="Cancel compare"
-                  className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-slate-700 bg-slate-900/70 text-slate-300 transition hover:text-slate-50"
+                  className="inline-flex h-full w-7 shrink-0 items-center justify-center text-slate-300 transition hover:text-slate-50"
                   onClick={cancelCompareMode}
                   type="button"
                 >
@@ -214,16 +214,16 @@ export function OverviewPageClient({ locations }: OverviewPageClientProps) {
                 <label className="relative block min-w-0 flex-1">
                   <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
                   <input
-                    className="h-10 w-full rounded-2xl border border-slate-700 bg-slate-900/70 pl-10 pr-3 text-sm font-medium text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-slate-500"
+                    className="h-full w-full rounded-2xl border border-slate-700 bg-slate-900/70 pl-10 pr-3 text-sm font-medium text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-slate-500"
                     onChange={(event) => setMobileCompareQuery(event.target.value)}
                     placeholder="Search cities"
                     type="text"
                     value={mobileCompareQuery}
                   />
                 </label>
-              </>
+              </div>
             ) : (
-              <div className="min-w-0 flex-1">
+              <div className="min-w-0 h-full">
                 <SingleSelectDropdown
                   fullWidth
                   label="Country"

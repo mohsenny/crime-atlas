@@ -1,9 +1,10 @@
 "use client";
 
-import { startTransition, useDeferredValue, useEffect, useState } from "react";
+import { startTransition, useDeferredValue, useEffect, useMemo, useState } from "react";
 import { ArrowLeft, LoaderCircle, RefreshCw } from "lucide-react";
 import type { Route } from "next";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import { CompareCityPicker } from "@/components/comparison/compare-city-picker";
 import { CrimeChart } from "@/components/dashboard/crime-chart";
@@ -13,12 +14,16 @@ import { ExpandableDropdown } from "@/components/dashboard/expandable-dropdown";
 import { MetricToggle } from "@/components/dashboard/metric-toggle";
 import type { ChartResponse, FilterMetadata, LocationOverview } from "@/lib/dashboard-data";
 import { cn } from "@/lib/utils";
+import { buildLocationSearchParams } from "@/lib/view-state";
 
 type DashboardClientProps = {
   meta: FilterMetadata;
   locations: LocationOverview[];
   backHref?: string;
   backLabel?: string;
+  initialDistrictSlugs: string[];
+  initialCategorySlugs: string[];
+  initialMetric: "count" | "rate";
 };
 
 export function DashboardClient({
@@ -26,12 +31,16 @@ export function DashboardClient({
   locations,
   backHref = "/",
   backLabel = "All locations",
+  initialDistrictSlugs,
+  initialCategorySlugs,
+  initialMetric,
 }: DashboardClientProps) {
+  const pathname = usePathname();
   const [isMobileViewport, setIsMobileViewport] = useState(false);
-  const [selectedDistricts, setSelectedDistricts] = useState(meta.defaultDistrictSlugs);
-  const [metric, setMetric] = useState<"count" | "rate">("count");
+  const [selectedDistricts, setSelectedDistricts] = useState(initialDistrictSlugs);
+  const [metric, setMetric] = useState<"count" | "rate">(initialMetric);
   const [hiddenCategorySlugs, setHiddenCategorySlugs] = useState<string[]>(
-    meta.categories.filter((category) => !meta.defaultCategorySlugs.includes(category.value)).map((category) => category.value),
+    meta.categories.filter((category) => !initialCategorySlugs.includes(category.value)).map((category) => category.value),
   );
   const [focusedDistrictSlug, setFocusedDistrictSlug] = useState<string | null>(null);
   const [data, setData] = useState<ChartResponse | null>(null);
@@ -47,6 +56,10 @@ export function DashboardClient({
   const isRefreshing = isLoading && hasLoadedOnce;
   const effectiveFocusedDistrictSlug =
     focusedDistrictSlug && selectedDistricts.includes(focusedDistrictSlug) ? focusedDistrictSlug : null;
+  const visibleCategorySlugs = useMemo(
+    () => meta.categories.map((category) => category.value).filter((categorySlug) => !hiddenCategorySlugs.includes(categorySlug)),
+    [hiddenCategorySlugs, meta.categories],
+  );
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 767px)");
@@ -55,6 +68,20 @@ export function DashboardClient({
     mediaQuery.addEventListener("change", sync);
     return () => mediaQuery.removeEventListener("change", sync);
   }, []);
+
+  useEffect(() => {
+    const nextParams = buildLocationSearchParams({
+      meta,
+      districtSlugs: selectedDistricts,
+      categorySlugs: visibleCategorySlugs,
+      metric,
+    });
+    const nextUrl = `${pathname}?${nextParams.toString()}`;
+
+    if (`${window.location.pathname}${window.location.search}` !== nextUrl) {
+      window.history.replaceState(null, "", nextUrl);
+    }
+  }, [meta, metric, pathname, selectedDistricts, visibleCategorySlugs]);
 
   useEffect(() => {
     const controller = new AbortController();

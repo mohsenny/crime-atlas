@@ -130,7 +130,6 @@ function ExpandableDropdownBase({
   onCommit,
 }: ExpandableDropdownSharedProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const placeholderPillRef = useRef<HTMLDivElement>(null);
   const placeholderButtonRef = useRef<HTMLButtonElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const optionsRef = useRef<HTMLDivElement>(null);
@@ -176,7 +175,7 @@ function ExpandableDropdownBase({
   }, []);
 
   const syncRect = useCallback(() => {
-    const next = getRect(placeholderPillRef.current);
+    const next = getRect(placeholderButtonRef.current);
     if (next) {
       setRect(next);
     }
@@ -399,7 +398,7 @@ function ExpandableDropdownBase({
       };
 
   return (
-    <div className={cn("relative", fullWidth && "w-full")} ref={containerRef} style={triggerWidth}>
+    <div className={cn("relative h-10", fullWidth && "w-full")} ref={containerRef} style={triggerWidth}>
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -left-[99999px] -top-[99999px] opacity-0"
@@ -418,36 +417,31 @@ function ExpandableDropdownBase({
         ))}
       </div>
 
-      <div
+      <button
+        aria-expanded={open}
+        aria-haspopup="listbox"
         className={cn(
-          "overflow-hidden rounded-2xl border border-slate-700 bg-slate-900/70 shadow-sm transition-colors duration-200",
+          "relative h-full w-full overflow-hidden rounded-2xl border border-slate-700 bg-slate-900/70 px-4 text-left shadow-sm transition-colors duration-200 focus:outline-none",
           open && "opacity-0",
         )}
-        ref={placeholderPillRef}
+        onClick={toggleMenu}
+        onKeyDown={handleButtonKeyDown}
+        ref={placeholderButtonRef}
+        type="button"
       >
-        <button
-          aria-expanded={open}
-          aria-haspopup="listbox"
-          className="relative h-10 w-full overflow-hidden px-4 text-left focus:outline-none"
-          onClick={toggleMenu}
-          onKeyDown={handleButtonKeyDown}
-          ref={placeholderButtonRef}
-          type="button"
-        >
-          <span className={cn("absolute left-4 top-1/2 -translate-y-1/2 text-slate-400", CONTROL_LABEL_TEXT_CLASS)}>
-            {label}
-          </span>
-          <span className="block w-full truncate px-20 text-center text-sm font-semibold text-slate-50">
-            {selectedLabel}
-          </span>
-          <ChevronDown
-            className={cn(
-              "absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-300 transition-transform duration-200",
-              open && "rotate-180",
-            )}
-          />
-        </button>
-      </div>
+        <span className={cn("absolute left-4 top-1/2 -translate-y-1/2 text-slate-400", CONTROL_LABEL_TEXT_CLASS)}>
+          {label}
+        </span>
+        <span className="block w-full truncate px-20 text-center text-sm font-semibold text-slate-50">
+          {selectedLabel}
+        </span>
+        <ChevronDown
+          className={cn(
+            "absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-300 transition-transform duration-200",
+            open && "rotate-180",
+          )}
+        />
+      </button>
 
       {open && rect
         ? createPortal(

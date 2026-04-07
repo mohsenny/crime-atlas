@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ArrowLeft, ArrowRightLeft } from "lucide-react";
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 import type { ComparisonData, LocationOverview } from "@/lib/dashboard-data";
 
@@ -12,15 +12,16 @@ import { ComparisonChart } from "@/components/comparison/comparison-chart";
 import { ComparisonMethodology } from "@/components/comparison/comparison-methodology";
 import { DashboardSources } from "@/components/dashboard/dashboard-sources";
 import { MetricToggle } from "@/components/dashboard/metric-toggle";
+import { buildCompareSearchParams } from "@/lib/view-state";
 type ComparisonPageClientProps = {
   data: ComparisonData;
   initialCategorySlug?: string;
+  initialMetric: "count" | "rate";
   locations: LocationOverview[];
 };
 
-export function ComparisonPageClient({ data, initialCategorySlug, locations }: ComparisonPageClientProps) {
+export function ComparisonPageClient({ data, initialCategorySlug, initialMetric, locations }: ComparisonPageClientProps) {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
   const resolvedInitialCategorySlug =
     data.categories.find((category) => category.value === initialCategorySlug)?.value ??
     data.defaultCategorySlug ??
@@ -28,25 +29,28 @@ export function ComparisonPageClient({ data, initialCategorySlug, locations }: C
     "";
 
   const [selectedCategorySlug, setSelectedCategorySlug] = useState(resolvedInitialCategorySlug);
-  const [metric, setMetric] = useState<"count" | "rate">(data.supportsRate ? "rate" : "count");
+  const [metric, setMetric] = useState<"count" | "rate">(initialMetric);
 
   useEffect(() => {
     setSelectedCategorySlug(resolvedInitialCategorySlug);
   }, [resolvedInitialCategorySlug]);
 
   useEffect(() => {
-    if (!selectedCategorySlug) {
+    if (!selectedCategorySlug || data.locations.length === 0) {
       return;
     }
 
-    if (searchParams.get("category") === selectedCategorySlug) {
-      return;
-    }
+    const nextParams = buildCompareSearchParams({
+      cities: data.locations.map((location) => location.slug),
+      categorySlug: selectedCategorySlug,
+      metric,
+    });
+    const nextUrl = `${pathname}?${nextParams.toString()}`;
 
-    const nextParams = new URLSearchParams(searchParams.toString());
-    nextParams.set("category", selectedCategorySlug);
-    window.history.replaceState(null, "", `${pathname}?${nextParams.toString()}`);
-  }, [pathname, searchParams, selectedCategorySlug]);
+    if (`${window.location.pathname}${window.location.search}` !== nextUrl) {
+      window.history.replaceState(null, "", nextUrl);
+    }
+  }, [data.locations, metric, pathname, selectedCategorySlug]);
 
   const selectedCategory = data.categories.find((category) => category.value === selectedCategorySlug) ?? data.categories[0] ?? null;
 

@@ -810,10 +810,10 @@ export const MUNICH_LOCATION: LocationDefinition = {
   areaLabelPlural: "Areas",
   chartTitle: "Munich Crime Overview",
   note:
-    "Munich uses official city statistics publications sourced from Polizeipräsidium München. The app extracts a stable cross-year subset of annual citywide recorded-crime categories from the official summary tables; no sub-city breakdown is wired yet.",
+    "Munich uses official city statistics publications sourced from Polizeipräsidium München. The current pilot coverage is built from committed official archive PDFs for 2001, 2002, and 2010-2017; no sub-city breakdown is wired yet.",
   sources: [
     {
-      label: "Landeshauptstadt München: safety and crime statistics archive",
+      label: "Landeshauptstadt München: safety and crime statistics archive PDFs",
       url: "https://stadt.muenchen.de/infos/statistik-sicherheit.html",
     },
   ],
