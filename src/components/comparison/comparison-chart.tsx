@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { CartesianGrid, Line, LineChart, Tooltip, XAxis, YAxis } from "recharts";
 
 import type { ComparisonCategory, ComparisonLocation } from "@/lib/dashboard-data";
 
@@ -26,6 +26,7 @@ const DESKTOP_CHART_HEIGHT = 520;
 const MOBILE_CHART_HEIGHT = 420;
 const DESKTOP_AXIS_WIDTH = 88;
 const MOBILE_AXIS_WIDTH = 52;
+const X_AXIS_HEIGHT = 30;
 
 export function ComparisonChart({
   rows,
@@ -44,6 +45,8 @@ export function ComparisonChart({
   const { disableInteractiveTooltip, isMobileViewport } = useChartUi();
   const chartHeight = isMobileViewport ? MOBILE_CHART_HEIGHT : DESKTOP_CHART_HEIGHT;
   const axisWidth = isMobileViewport ? MOBILE_AXIS_WIDTH : DESKTOP_AXIS_WIDTH;
+  const axisChartWidth = axisWidth + (isMobileViewport ? 6 : 8);
+  const axisProbeLocationSlug = locations[0]?.slug ?? null;
   const groupWidth = isMobileViewport ? 52 : 72;
   const minChartWidth = Math.max(isMobileViewport ? 0 : 760, rows.length * groupWidth);
   const chartWidth = Math.max(minChartWidth, viewportWidth);
@@ -172,7 +175,7 @@ export function ComparisonChart({
           ))}
         </div>
       }
-      footerRight={
+      footerRight={isMobileViewport ? null : (
         <div className="flex items-center justify-end gap-2">
           <button
             aria-label="Scroll chart left"
@@ -193,20 +196,64 @@ export function ComparisonChart({
             <ChevronRight className="h-4 w-4" />
           </button>
         </div>
-      }
+      )}
     >
       <div className="flex min-h-0 flex-1 -mx-3 sm:-mx-4 lg:mx-0">
-        <div className="chart-scroll-shell min-h-0 flex-1 overflow-x-auto" ref={scrollContainerRef}>
-          <div style={{ height: chartHeight, width: chartWidth }}>
-            <ResponsiveContainer height="100%" width="100%">
+        <div className="flex min-h-0 w-full overflow-hidden">
+          <div
+            className="pointer-events-none relative z-[1] shrink-0 border-r border-slate-800/70"
+            style={{ width: axisChartWidth, height: chartHeight }}
+          >
             <LineChart
               data={rows}
-              margin={{ top: chartTopMargin, right: isMobileViewport ? 0 : 12, left: 0, bottom: 8 }}
+              height={chartHeight}
+              margin={{ top: chartTopMargin, right: 0, left: 0, bottom: 8 }}
+              width={axisChartWidth}
             >
+              <XAxis
+                axisLine={false}
+                dataKey="year"
+                height={X_AXIS_HEIGHT}
+                tick={false}
+                tickLine={false}
+              />
+              <YAxis
+                axisLine={false}
+                domain={[0, yAxisMax]}
+                tick={{ fontSize: isMobileViewport ? 11 : 12, fill: "#94a3b8" }}
+                tickLine={false}
+                ticks={axisTicks}
+                type="number"
+                width={axisWidth}
+              />
+              {axisProbeLocationSlug ? (
+                <Line
+                  activeDot={false}
+                  dataKey={axisProbeLocationSlug}
+                  dot={false}
+                  isAnimationActive={false}
+                  stroke="transparent"
+                  strokeOpacity={0}
+                  strokeWidth={0}
+                  type="monotone"
+                />
+              ) : null}
+            </LineChart>
+          </div>
+
+          <div className="chart-scroll-shell min-h-0 flex-1 overflow-x-auto" ref={scrollContainerRef}>
+            <div style={{ height: chartHeight, width: chartWidth }}>
+              <LineChart
+                data={rows}
+                height={chartHeight}
+                margin={{ top: chartTopMargin, right: isMobileViewport ? 0 : 12, left: 0, bottom: 8 }}
+                width={chartWidth}
+              >
               <CartesianGrid stroke="rgba(100,116,139,0.14)" strokeDasharray="3 4" vertical={false} />
               <XAxis
                 axisLine={false}
                 dataKey="year"
+                height={X_AXIS_HEIGHT}
                 interval={0}
                 tick={{ fill: "#94a3b8", fontSize: isMobileViewport ? 11 : 12 }}
                 tickLine={false}
@@ -248,15 +295,6 @@ export function ComparisonChart({
                 }}
                 cursor={{ stroke: "rgba(148,163,184,0.24)", strokeWidth: 1 }}
               />
-              <YAxis
-                domain={[0, yAxisMax]}
-                ticks={axisTicks}
-                type="number"
-                width={axisWidth}
-                tick={{ fontSize: isMobileViewport ? 11 : 12, fill: "#94a3b8" }}
-                axisLine={false}
-                tickLine={false}
-              />
               {locations.map((location, index) => {
                 const focused = focusedLocationSlug === location.slug;
                 const dimmed = Boolean(focusedLocationSlug) && !focused;
@@ -278,9 +316,9 @@ export function ComparisonChart({
                   />
                 );
               })}
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
+              </LineChart>
+            </div>
+          </div>
         </div>
       </div>
     </ChartShell>

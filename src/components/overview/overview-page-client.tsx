@@ -1,11 +1,12 @@
 "use client";
 
+import { Search, X } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import type { LocationOverview } from "@/lib/dashboard-data";
 
-import { CompareCityPicker, MAX_COMPARE_LOCATIONS } from "@/components/comparison/compare-city-picker";
+import { MAX_COMPARE_LOCATIONS } from "@/components/comparison/compare-city-picker";
 import { SingleSelectDropdown } from "@/components/dashboard/expandable-dropdown";
 import { LocationOverviewCard } from "@/components/overview/location-overview-card";
 import { OverviewLocationList } from "@/components/overview/overview-location-list";
@@ -22,6 +23,7 @@ export function OverviewPageClient({ locations }: OverviewPageClientProps) {
   const [viewPreference, setViewPreference] = useState<"card" | "list">("card");
   const [compareMode, setCompareMode] = useState(false);
   const [selectedCompareSlugs, setSelectedCompareSlugs] = useState<string[]>([]);
+  const [mobileCompareQuery, setMobileCompareQuery] = useState("");
 
   const countryOptions = useMemo(
     () => [
@@ -37,6 +39,26 @@ export function OverviewPageClient({ locations }: OverviewPageClientProps) {
     () => locations.filter((location) => selectedCountry === "all" || location.country === selectedCountry),
     [locations, selectedCountry],
   );
+  const mobileCompareLocations = useMemo(() => {
+    if (!compareMode) {
+      return filteredLocations;
+    }
+
+    const normalizedQuery = mobileCompareQuery.trim().toLowerCase();
+    const selectedSlugs = new Set(selectedCompareSlugs);
+
+    return locations.filter((location) => {
+      if (selectedSlugs.has(location.slug)) {
+        return true;
+      }
+
+      if (!normalizedQuery) {
+        return true;
+      }
+
+      return location.label.toLowerCase().includes(normalizedQuery);
+    });
+  }, [compareMode, filteredLocations, locations, mobileCompareQuery, selectedCompareSlugs]);
 
   function toggleCompareSelection(slug: string) {
     setSelectedCompareSlugs((current) => {
@@ -55,6 +77,7 @@ export function OverviewPageClient({ locations }: OverviewPageClientProps) {
   function cancelCompareMode() {
     setCompareMode(false);
     setSelectedCompareSlugs([]);
+    setMobileCompareQuery("");
   }
 
   function handleCountryChange(nextCountry: string) {
@@ -77,6 +100,20 @@ export function OverviewPageClient({ locations }: OverviewPageClientProps) {
     if (!compareMode) {
       setCompareMode(true);
       setSelectedCompareSlugs([]);
+      setMobileCompareQuery("");
+      return;
+    }
+
+    if (selectedCompareSlugs.length >= 2 && selectedCompareSlugs.length <= MAX_COMPARE_LOCATIONS) {
+      router.push(`/compare?cities=${selectedCompareSlugs.join(",")}`);
+    }
+  }
+
+  function handleMobileCompareButton() {
+    if (!compareMode) {
+      setCompareMode(true);
+      setSelectedCompareSlugs([]);
+      setMobileCompareQuery("");
       return;
     }
 
@@ -98,7 +135,7 @@ export function OverviewPageClient({ locations }: OverviewPageClientProps) {
             </p>
           </div>
 
-          <div className="hidden md:flex md:items-center md:gap-4 lg:gap-6">
+          <div className="hidden md:flex md:items-center md:gap-1.5 lg:gap-2">
             <div className="flex h-10 items-center gap-2">
               {compareMode ? (
                 <button
@@ -148,22 +185,57 @@ export function OverviewPageClient({ locations }: OverviewPageClientProps) {
             </div>
           </div>
 
-          <div className="flex flex-row gap-2 md:hidden items-center">
-            <div className="flex-1 min-w-0">
-              <SingleSelectDropdown
-                fullWidth
-                label="Country"
-                maxOverlayWidth={280}
-                maxWidth={280}
-                minWidth={140}
-                onChange={handleCountryChange}
-                options={countryOptions}
-                value={selectedCountry}
-              />
-            </div>
-            <div className="shrink-0">
-              <CompareCityPicker locations={locations} triggerLabel="Compare" />
-            </div>
+          <div className="flex items-center gap-2 md:hidden">
+            <button
+              className={cn(
+                "inline-flex h-10 shrink-0 items-center justify-center rounded-2xl border px-3.5 text-[10px] font-semibold uppercase tracking-[0.18em] leading-none transition",
+                compareMode
+                  ? selectedCompareSlugs.length >= 2 && selectedCompareSlugs.length <= MAX_COMPARE_LOCATIONS
+                    ? "border-slate-200 bg-slate-100 text-slate-950 hover:bg-white"
+                    : "border-slate-700 bg-slate-900/70 text-slate-500"
+                  : "border-slate-700 bg-slate-900/70 text-slate-300 hover:text-slate-50",
+              )}
+              onClick={handleMobileCompareButton}
+              type="button"
+            >
+              Compare
+            </button>
+
+            {compareMode ? (
+              <>
+                <button
+                  aria-label="Cancel compare"
+                  className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-slate-700 bg-slate-900/70 text-slate-300 transition hover:text-slate-50"
+                  onClick={cancelCompareMode}
+                  type="button"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+                <label className="relative block min-w-0 flex-1">
+                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+                  <input
+                    className="h-10 w-full rounded-2xl border border-slate-700 bg-slate-900/70 pl-10 pr-3 text-sm font-medium text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-slate-500"
+                    onChange={(event) => setMobileCompareQuery(event.target.value)}
+                    placeholder="Search cities"
+                    type="text"
+                    value={mobileCompareQuery}
+                  />
+                </label>
+              </>
+            ) : (
+              <div className="min-w-0 flex-1">
+                <SingleSelectDropdown
+                  fullWidth
+                  label="Country"
+                  maxOverlayWidth={280}
+                  maxWidth={280}
+                  minWidth={140}
+                  onChange={handleCountryChange}
+                  options={countryOptions}
+                  value={selectedCountry}
+                />
+              </div>
+            )}
           </div>
         </div>
 
@@ -199,12 +271,12 @@ export function OverviewPageClient({ locations }: OverviewPageClientProps) {
             compareMode={compareMode}
             disabledSlugs={
               compareMode && selectedCompareSlugs.length === MAX_COMPARE_LOCATIONS
-                ? filteredLocations
+                ? mobileCompareLocations
                     .map((location) => location.slug)
                     .filter((slug) => !selectedCompareSlugs.includes(slug))
                 : []
             }
-            locations={filteredLocations}
+            locations={mobileCompareLocations}
             onSelect={toggleCompareSelection}
             selectedSlugs={selectedCompareSlugs}
           />

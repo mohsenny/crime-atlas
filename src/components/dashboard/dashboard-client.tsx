@@ -135,21 +135,22 @@ export function DashboardClient({
     <main className="relative min-h-screen overflow-hidden py-5 sm:px-6 sm:py-6 lg:px-8">
       <div className="mx-auto max-w-7xl space-y-4">
         <div className="px-4 sm:px-0">
-          <div className="flex items-center justify-between gap-1.5 sm:gap-2">
+          <div className="flex items-center gap-2 sm:justify-between">
             <Link
               aria-label={backLabel}
-              className="-ml-1 inline-flex h-10 items-center gap-2 text-slate-400 transition hover:text-slate-100"
+              className="-ml-1 inline-flex h-10 shrink-0 items-center gap-2 text-slate-400 transition hover:text-slate-100"
               href={backHref as Route}
             >
               <ArrowLeft className="h-4 w-4 shrink-0" />
               <span className="hidden sm:inline text-sm font-semibold leading-none">{backLabel}</span>
             </Link>
-            <div className="flex items-center gap-1.5 sm:gap-2">
+            <div className="flex min-w-0 flex-1 items-center justify-end gap-1.5 sm:flex-none sm:gap-2">
               <CompareCityPicker
-                className="shrink-0"
+                className="min-w-[5.75rem] shrink-0 justify-center sm:min-w-0"
                 initialSelectedSlugs={[meta.slug]}
                 locations={locations}
                 lockedSlugs={[meta.slug]}
+                mobileTriggerLabel="Compare"
                 triggerLabel="Compare"
               />
               {meta.supportsRate ? (
@@ -158,13 +159,13 @@ export function DashboardClient({
                 </div>
               ) : null}
               {meta.districts.length > 1 ? (
-                <div className="min-w-0 sm:w-80 sm:flex-none">
+                <div className="min-w-0 flex-1 sm:w-80 sm:flex-none">
                   <ExpandableDropdown
                     fullWidth
                     label={meta.areaLabelPlural}
                     maxOverlayWidth={360}
                     maxWidth={360}
-                    minWidth={140}
+                    minWidth={116}
                     onChange={setSelectedDistricts}
                     options={meta.districts}
                     values={selectedDistricts}

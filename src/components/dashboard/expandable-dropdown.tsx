@@ -143,6 +143,7 @@ function ExpandableDropdownBase({
   const [overlayWidth, setOverlayWidth] = useState<number | null>(null);
   const [pillWidth, setPillWidth] = useState<number | null>(null);
   const [draftValues, setDraftValues] = useState<string[]>(selectedValues);
+  const [isNarrowViewport, setIsNarrowViewport] = useState(false);
   const visibleValues = open ? draftValues : selectedValues;
 
   const selectedLabel = useMemo(() => {
@@ -150,16 +151,29 @@ function ExpandableDropdownBase({
       return placeholder;
     }
 
+    if (mode === "multi" && isNarrowViewport) {
+      return String(visibleValues.length);
+    }
+
     if (visibleValues.length === 1) {
       return options.find((option) => option.value === visibleValues[0])?.label ?? placeholder;
     }
 
     return `${visibleValues.length} selected`;
-  }, [options, placeholder, visibleValues]);
+  }, [isNarrowViewport, mode, options, placeholder, visibleValues]);
 
   const minAllowedWidth = minWidth ?? MIN_PILL_WIDTH;
   const maxAllowedWidth = maxWidth ?? MAX_PILL_WIDTH;
   const maxOverlayAllowedWidth = maxOverlayWidth ?? MAX_OVERLAY_WIDTH;
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 430px)");
+    const sync = () => setIsNarrowViewport(mediaQuery.matches);
+    sync();
+    mediaQuery.addEventListener("change", sync);
+
+    return () => mediaQuery.removeEventListener("change", sync);
+  }, []);
 
   const syncRect = useCallback(() => {
     const next = getRect(placeholderPillRef.current);

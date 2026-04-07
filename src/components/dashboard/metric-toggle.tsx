@@ -7,14 +7,20 @@ type MetricToggleProps = {
   value: "count" | "rate";
   onChange: (value: "count" | "rate") => void;
   supportsRate?: boolean;
+  mobileLabelMode?: "compact" | "adaptive";
 };
 
-export function MetricToggle({ value, onChange, supportsRate = true }: MetricToggleProps) {
+export function MetricToggle({
+  value,
+  onChange,
+  supportsRate = true,
+  mobileLabelMode = "compact",
+}: MetricToggleProps) {
   return (
     <div className="inline-flex h-10 overflow-hidden rounded-2xl border border-slate-700 bg-slate-900/70 shadow-sm">
       {[
-        { value: "count" as const, label: "Case Counts" },
-        { value: "rate" as const, label: "Rate per 100k" },
+        { value: "count" as const, label: "Case Counts", mobileLabel: "Cases" },
+        { value: "rate" as const, label: "Rate per 100k", mobileLabel: "Rate" },
       ].map((option) => {
         const disabled = option.value === "rate" && !supportsRate;
 
@@ -22,7 +28,7 @@ export function MetricToggle({ value, onChange, supportsRate = true }: MetricTog
           <button
             aria-disabled={disabled}
             className={cn(
-              "flex h-full items-center px-3.5 transition",
+              "flex h-full items-center px-2.5 transition sm:px-3.5",
               CONTROL_LABEL_TEXT_CLASS,
               value === option.value
                 ? "bg-slate-100 text-slate-900 shadow-sm"
@@ -40,7 +46,17 @@ export function MetricToggle({ value, onChange, supportsRate = true }: MetricTog
             }}
             type="button"
           >
-            {option.label}
+            {mobileLabelMode === "adaptive" ? (
+              <>
+                <span className="min-[380px]:hidden sm:hidden">{option.mobileLabel}</span>
+                <span className="hidden min-[380px]:inline sm:inline">{option.label}</span>
+              </>
+            ) : (
+              <>
+                <span className="sm:hidden">{option.mobileLabel}</span>
+                <span className="hidden sm:inline">{option.label}</span>
+              </>
+            )}
           </button>
         );
       })}

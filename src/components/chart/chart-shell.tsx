@@ -25,9 +25,9 @@ export function ChartShell({
 }: ChartShellProps) {
   return (
     <div className={cn("card-panel chart-panel flex min-h-[26rem] flex-col rounded-none p-0 sm:min-h-[34rem]", className)}>
-      <div className="flex gap-3 px-3 pt-3 sm:px-4 sm:pt-4">
+      <div className="flex flex-col gap-2 px-3 pt-3 sm:flex-row sm:gap-3 sm:px-4 sm:pt-4">
         <p className="text-sm font-semibold text-slate-200 shrink-0">{title}</p>
-        {controls ? <div className="flex flex-wrap gap-1.5 justify-end flex-1">{controls}</div> : null}
+        {controls ? <div className="flex flex-wrap gap-1.5 sm:flex-1 sm:justify-end">{controls}</div> : null}
       </div>
 
       <div className={cn("mt-3 min-h-0 flex-1", contentClassName)}>{children}</div>

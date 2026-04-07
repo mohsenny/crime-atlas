@@ -6,7 +6,6 @@ import {
   Bar,
   BarChart,
   CartesianGrid,
-  ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
@@ -44,8 +43,7 @@ const DESKTOP_CHART_HEIGHT = 520;
 const MOBILE_CHART_HEIGHT = 420;
 const DESKTOP_AXIS_WIDTH = 88;
 const MOBILE_AXIS_WIDTH = 52;
-
-
+const X_AXIS_HEIGHT = 30;
 
 export function CrimeChart({
   data,
@@ -70,6 +68,10 @@ export function CrimeChart({
   );
   const chartHeight = isMobileViewport ? MOBILE_CHART_HEIGHT : DESKTOP_CHART_HEIGHT;
   const axisWidth = isMobileViewport ? MOBILE_AXIS_WIDTH : DESKTOP_AXIS_WIDTH;
+  const axisChartWidth = axisWidth + (isMobileViewport ? 6 : 8);
+  const axisProbeSeriesKey = data.districts[0] && data.categories[0]
+    ? buildSeriesKey(data.districts[0].value, data.categories[0].value)
+    : null;
   const groupWidth = Math.max(
     isMobileViewport ? 42 : 50,
     data.districts.length * (isMobileViewport ? 16 : 18) + (isMobileViewport ? 12 : 18),
@@ -309,7 +311,7 @@ export function CrimeChart({
           ))}
         </div>
       }
-      footerRight={
+      footerRight={isMobileViewport ? null : (
         <div className="flex items-center justify-end gap-1 sm:gap-2">
           <button
             aria-label="Scroll chart left"
@@ -330,64 +332,102 @@ export function CrimeChart({
             <ChevronRight className="h-4 w-4" />
           </button>
         </div>
-      }
+      )}
     >
       <div className="flex min-h-0 flex-1 -mx-3 sm:-mx-4 lg:mx-0">
-        <div className="chart-scroll-shell min-h-0 flex-1 overflow-x-auto" ref={scrollContainerRef}>
+        <div className="flex min-h-0 w-full overflow-hidden">
           <div
-            className="relative"
-            ref={chartContentRef}
-            style={{ width: `${chartWidth}px`, minWidth: `${minChartWidth}px`, height: chartHeight }}
+            className="pointer-events-none relative z-[1] shrink-0 border-r border-slate-800/70"
+            style={{ width: axisChartWidth, height: chartHeight }}
           >
-            {focusedDistrictSlug && focusLinePoints.length > 1 ? (
-              <svg className="pointer-events-none absolute inset-0" height={chartHeight} width={chartWidth}>
-                <polyline
-                  fill="none"
-                  points={focusLinePoints.map((point) => `${point.x},${point.y}`).join(" ")}
-                  stroke="rgba(125, 211, 252, 0.22)"
-                  strokeWidth={8}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <polyline
-                  fill="none"
-                  points={focusLinePoints.map((point) => `${point.x},${point.y}`).join(" ")}
-                  stroke="#dbeafe"
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                {focusLinePoints.map((point) => (
-                  <circle cx={point.x} cy={point.y} fill="#dbeafe" key={`${point.x}-${point.y}`} r={2.5} />
-                ))}
-              </svg>
-            ) : null}
-
             {mounted ? (
-              <ResponsiveContainer height="100%" width="100%">
+              <BarChart
+                barCategoryGap={isMobileViewport ? 10 : 14}
+                barGap={2}
+                data={data.chartRows}
+                height={chartHeight}
+                margin={{ top: chartTopMargin, right: 0, left: 0, bottom: 8 }}
+                width={axisChartWidth}
+              >
+                <XAxis
+                  axisLine={false}
+                  dataKey="year"
+                  height={X_AXIS_HEIGHT}
+                  tick={false}
+                  tickLine={false}
+                />
+                <YAxis
+                  axisLine={false}
+                  domain={[0, yAxisMax]}
+                  tick={{ fontSize: isMobileViewport ? 11 : 12, fill: "var(--chart-axis-dark)" }}
+                  tickLine={false}
+                  ticks={axisTicks}
+                  type="number"
+                  width={axisWidth}
+                />
+                {axisProbeSeriesKey ? (
+                  <Bar
+                    barSize={1}
+                    dataKey={axisProbeSeriesKey}
+                    fill="transparent"
+                    fillOpacity={0}
+                    isAnimationActive={false}
+                  />
+                ) : null}
+              </BarChart>
+            ) : (
+              <div className="h-full border-r border-white/8 bg-white/[0.03]" />
+            )}
+          </div>
+
+          <div className="chart-scroll-shell min-h-0 flex-1 overflow-x-auto" ref={scrollContainerRef}>
+            <div
+              className="relative"
+              ref={chartContentRef}
+              style={{ width: `${chartWidth}px`, minWidth: `${minChartWidth}px`, height: chartHeight }}
+            >
+              {focusedDistrictSlug && focusLinePoints.length > 1 ? (
+                <svg className="pointer-events-none absolute inset-0" height={chartHeight} width={chartWidth}>
+                  <polyline
+                    fill="none"
+                    points={focusLinePoints.map((point) => `${point.x},${point.y}`).join(" ")}
+                    stroke="rgba(125, 211, 252, 0.22)"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={8}
+                  />
+                  <polyline
+                    fill="none"
+                    points={focusLinePoints.map((point) => `${point.x},${point.y}`).join(" ")}
+                    stroke="#dbeafe"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                  />
+                  {focusLinePoints.map((point) => (
+                    <circle cx={point.x} cy={point.y} fill="#dbeafe" key={`${point.x}-${point.y}`} r={2.5} />
+                  ))}
+                </svg>
+              ) : null}
+
+              {mounted ? (
                 <BarChart
                   barCategoryGap={isMobileViewport ? 10 : 14}
                   barGap={2}
                   data={data.chartRows}
+                  height={chartHeight}
                   margin={{ top: chartTopMargin, right: isMobileViewport ? 0 : 12, left: 0, bottom: 8 }}
+                  width={chartWidth}
                 >
                   <CartesianGrid horizontal={false} stroke="var(--chart-grid-dark)" strokeDasharray="3 3" />
                   <XAxis
                     axisLine={false}
                     dataKey="year"
+                    height={X_AXIS_HEIGHT}
                     interval={0}
                     tick={{ fontSize: isMobileViewport ? 11 : 12, fill: "var(--chart-axis-dark)" }}
                     tickLine={false}
                     tickMargin={12}
-                  />
-                  <YAxis
-                    domain={[0, yAxisMax]}
-                    ticks={axisTicks}
-                    type="number"
-                    width={axisWidth}
-                    tick={{ fontSize: isMobileViewport ? 11 : 12, fill: "var(--chart-axis-dark)" }}
-                    axisLine={false}
-                    tickLine={false}
                   />
                   {!disableInteractiveTooltip ? (
                     <Tooltip
@@ -428,10 +468,10 @@ export function CrimeChart({
                     )),
                   )}
                 </BarChart>
-              </ResponsiveContainer>
-            ) : (
-              <div className="h-full border border-white/8 bg-white/[0.03]" />
-            )}
+              ) : (
+                <div className="h-full border border-white/8 bg-white/[0.03]" />
+              )}
+            </div>
           </div>
         </div>
       </div>

@@ -26,7 +26,7 @@ export function OverviewLocationList({
         compareMode ? (
           <button
             className={cn(
-              "group relative flex w-full items-center gap-4 px-3 py-3 text-left transition sm:py-3.5",
+              "group relative flex w-full items-center gap-4 px-0 py-3 text-left transition sm:py-3.5",
               disabledSlugs.includes(location.slug) ? "cursor-not-allowed opacity-45" : null,
               selectedSlugs.includes(location.slug) ? "bg-slate-100 text-slate-950" : "text-slate-100",
             )}
@@ -46,7 +46,7 @@ export function OverviewLocationList({
             </span>
             <span
               className={cn(
-                "ml-auto flex h-5 w-5 shrink-0 items-center justify-center border text-xs font-semibold leading-none transition-colors",
+                "ml-auto mr-3 flex h-5 w-5 shrink-0 items-center justify-center border text-xs font-semibold leading-none transition-colors",
                 selectedSlugs.includes(location.slug)
                   ? "border-slate-200 bg-slate-100 text-slate-950"
                   : "border-white/18 text-transparent",

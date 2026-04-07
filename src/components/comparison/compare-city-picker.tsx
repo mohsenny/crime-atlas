@@ -17,6 +17,7 @@ type CompareCityPickerProps = {
   initialSelectedSlugs?: string[];
   lockedSlugs?: string[];
   triggerLabel?: string;
+  mobileTriggerLabel?: string;
   triggerIcon?: LucideIcon;
   className?: string;
   showTriggerLabel?: boolean;
@@ -27,6 +28,7 @@ export function CompareCityPicker({
   initialSelectedSlugs = [],
   lockedSlugs = [],
   triggerLabel = "Compare",
+  mobileTriggerLabel,
   triggerIcon: TriggerIcon,
   className,
   showTriggerLabel = true,
@@ -99,13 +101,14 @@ export function CompareCityPicker({
   }
 
   const selectedCount = selectedSlugs.length;
+  const resolvedMobileTriggerLabel = mobileTriggerLabel ?? triggerLabel;
 
   return (
     <>
       <button
         aria-label={triggerLabel}
         className={cn(
-          "inline-flex h-10 items-center gap-2 rounded-2xl border border-slate-700 bg-slate-900/70 px-3.5 text-slate-300 transition hover:text-slate-50",
+          "inline-flex h-10 items-center gap-1.5 rounded-2xl border border-slate-700 bg-slate-900/70 px-3 text-slate-300 transition hover:text-slate-50",
           "sm:px-4",
           CONTROL_LABEL_TEXT_CLASS,
           className,
@@ -114,7 +117,12 @@ export function CompareCityPicker({
         type="button"
       >
         {TriggerIcon ? <TriggerIcon className="h-3.5 w-3.5" /> : null}
-        {showTriggerLabel && <span className="hidden sm:inline">{triggerLabel}</span>}
+        {showTriggerLabel ? (
+          <>
+            <span className="sm:hidden">{resolvedMobileTriggerLabel}</span>
+            <span className="hidden sm:inline">{triggerLabel}</span>
+          </>
+        ) : null}
       </button>
 
       {open ? (
