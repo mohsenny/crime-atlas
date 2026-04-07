@@ -3,15 +3,5 @@
   "provider": "node",
   "packages": {
     "node": "20"
-  },
-  "steps": {
-    "install": {
-      "inputs": [
-        "."
-      ],
-      "commands": [
-        "npm install --include=dev"
-      ]
-    }
   }
 }
