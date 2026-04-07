@@ -13,6 +13,10 @@ import { DashboardSources } from "@/components/dashboard/dashboard-sources";
 import { ExpandableDropdown } from "@/components/dashboard/expandable-dropdown";
 import { MetricToggle } from "@/components/dashboard/metric-toggle";
 import type { ChartResponse, FilterMetadata, LocationOverview } from "@/lib/dashboard-data";
+import {
+  findAllOffensesCategorySlug,
+  normalizeLocationCategorySlugs,
+} from "@/lib/location-category-selection";
 import { cn } from "@/lib/utils";
 import { buildLocationSearchParams } from "@/lib/view-state";
 
@@ -37,10 +41,15 @@ export function DashboardClient({
 }: DashboardClientProps) {
   const pathname = usePathname();
   const [isMobileViewport, setIsMobileViewport] = useState(false);
+  const categoryValues = useMemo(() => meta.categories.map((category) => category.value), [meta.categories]);
+  const allOffensesCategorySlug = useMemo(() => findAllOffensesCategorySlug(meta.categories), [meta.categories]);
   const [selectedDistricts, setSelectedDistricts] = useState(initialDistrictSlugs);
   const [metric, setMetric] = useState<"count" | "rate">(initialMetric);
   const [hiddenCategorySlugs, setHiddenCategorySlugs] = useState<string[]>(
-    meta.categories.filter((category) => !initialCategorySlugs.includes(category.value)).map((category) => category.value),
+    categoryValues.filter(
+      (categorySlug) =>
+        !normalizeLocationCategorySlugs(meta.categories, initialCategorySlugs).includes(categorySlug),
+    ),
   );
   const [focusedDistrictSlug, setFocusedDistrictSlug] = useState<string | null>(null);
   const [data, setData] = useState<ChartResponse | null>(null);
@@ -57,8 +66,8 @@ export function DashboardClient({
   const effectiveFocusedDistrictSlug =
     focusedDistrictSlug && selectedDistricts.includes(focusedDistrictSlug) ? focusedDistrictSlug : null;
   const visibleCategorySlugs = useMemo(
-    () => meta.categories.map((category) => category.value).filter((categorySlug) => !hiddenCategorySlugs.includes(categorySlug)),
-    [hiddenCategorySlugs, meta.categories],
+    () => categoryValues.filter((categorySlug) => !hiddenCategorySlugs.includes(categorySlug)),
+    [categoryValues, hiddenCategorySlugs],
   );
 
   useEffect(() => {
@@ -118,11 +127,22 @@ export function DashboardClient({
   }, [deferredDistricts, deferredMetric, meta.slug]);
 
   function toggleHiddenCategory(categorySlug: string) {
-    setHiddenCategorySlugs((current) =>
-      current.includes(categorySlug)
-        ? current.filter((value) => value !== categorySlug)
-        : [...current, categorySlug],
-    );
+    setHiddenCategorySlugs((current) => {
+      const currentVisible = categoryValues.filter((value) => !current.includes(value));
+      let nextVisible: string[];
+
+      if (categorySlug === allOffensesCategorySlug) {
+        nextVisible = currentVisible.includes(categorySlug) ? [] : [categorySlug];
+      } else if (currentVisible.includes(categorySlug)) {
+        nextVisible = currentVisible.filter((value) => value !== categorySlug);
+      } else {
+        nextVisible = [...currentVisible.filter((value) => value !== allOffensesCategorySlug), categorySlug];
+      }
+
+      const normalizedVisible = normalizeLocationCategorySlugs(meta.categories, nextVisible);
+
+      return categoryValues.filter((value) => !normalizedVisible.includes(value));
+    });
   }
 
   function toggleFocusedDistrict(districtSlug: string) {

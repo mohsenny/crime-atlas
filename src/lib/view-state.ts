@@ -1,4 +1,8 @@
 import type { ComparisonData, FilterMetadata, Metric } from "@/lib/dashboard-data";
+import {
+  findAllOffensesCategorySlug,
+  normalizeLocationCategorySlugs,
+} from "@/lib/location-category-selection";
 
 type LocationSearchStateInput = {
   districts?: string;
@@ -27,21 +31,19 @@ export function splitParam(value?: string | null) {
 export function resolveLocationViewState(meta: FilterMetadata, searchState: LocationSearchStateInput) {
   const validDistricts = new Set(meta.districts.map((district) => district.value));
   const validCategories = new Set(meta.categories.map((category) => category.value));
+  const allOffensesCategorySlug = findAllOffensesCategorySlug(meta.categories);
 
   const districtSlugs = splitParam(searchState.districts).filter((slug) => validDistricts.has(slug));
   const requestedCategorySlugs =
     searchState.categories === "all"
-      ? meta.categories.map((category) => category.value)
+      ? meta.categories
+          .map((category) => category.value)
+          .filter((slug) => slug !== allOffensesCategorySlug)
       : splitParam(searchState.categories).filter((slug) => validCategories.has(slug));
 
   return {
     districtSlugs: districtSlugs.length > 0 ? districtSlugs : meta.defaultDistrictSlugs,
-    categorySlugs:
-      requestedCategorySlugs.length > 0
-        ? requestedCategorySlugs
-        : (meta.defaultCategorySlugs.length > 0
-            ? meta.defaultCategorySlugs
-            : meta.categories.map((category) => category.value)),
+    categorySlugs: normalizeLocationCategorySlugs(meta.categories, requestedCategorySlugs),
     metric: searchState.metric === "rate" && meta.supportsRate ? ("rate" as const) : ("count" as const),
   };
 }
@@ -53,11 +55,9 @@ export function buildLocationSearchParams(input: {
   metric: Metric;
 }) {
   const params = new URLSearchParams();
+  const normalizedCategorySlugs = normalizeLocationCategorySlugs(input.meta.categories, input.categorySlugs);
   params.set("districts", unique(input.districtSlugs).join(","));
-  params.set(
-    "categories",
-    input.categorySlugs.length === input.meta.categories.length ? "all" : unique(input.categorySlugs).join(","),
-  );
+  params.set("categories", normalizedCategorySlugs.join(","));
   params.set("metric", input.metric);
   return params;
 }

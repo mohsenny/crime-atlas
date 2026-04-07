@@ -75,6 +75,20 @@ Do not use:
 - NGO summaries as primary data
 - random Kaggle / GitHub reposts
 
+### 1.1 Wikipedia can be a lead, not a source
+
+Wikipedia is acceptable for discovery only.
+
+Use it to:
+
+- identify candidate cities or countries
+- find the names of police/statistical institutions
+- find archive page titles, report names, and official datasets in the references
+
+Do not use Wikipedia numbers as product data.
+
+If Wikipedia points to a useful source, follow the citation through to the original official publisher and validate the geography, year range, taxonomy, and file usability there.
+
 ### 2. Archive year links are not proof
 
 An archive listing `2000–2025` does not prove there is:

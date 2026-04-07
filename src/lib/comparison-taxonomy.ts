@@ -45,6 +45,7 @@ export const CANONICAL_COMPARISON_CATEGORIES: CanonicalComparisonCategoryDefinit
 
 export const LOCATION_COMPARISON_MAPPINGS: Record<string, LocationComparisonMappingDefinition[]> = {
   austin: [
+    { canonicalKey: "total_offenses", sourceLabels: ["All recorded offenses"], confidence: "high" },
     { canonicalKey: "homicide", sourceLabels: ["Homicide"], confidence: "high" },
     { canonicalKey: "sexual_offenses", sourceLabels: ["Sexual offenses"], confidence: "medium" },
     { canonicalKey: "robbery", sourceLabels: ["Robbery"], confidence: "high" },
@@ -91,6 +92,7 @@ export const LOCATION_COMPARISON_MAPPINGS: Record<string, LocationComparisonMapp
     { canonicalKey: "drug_offenses", sourceLabels: ["Drug offenses"], confidence: "high" },
   ],
   chicago: [
+    { canonicalKey: "total_offenses", sourceLabels: ["All recorded offenses"], confidence: "high" },
     { canonicalKey: "homicide", sourceLabels: ["Homicide"], confidence: "high" },
     { canonicalKey: "sexual_offenses", sourceLabels: ["Criminal sexual assault", "Other sexual offenses"], confidence: "medium" },
     { canonicalKey: "sexual_violence", sourceLabels: ["Criminal sexual assault"], confidence: "medium" },
@@ -107,6 +109,7 @@ export const LOCATION_COMPARISON_MAPPINGS: Record<string, LocationComparisonMapp
     { canonicalKey: "arson", sourceLabels: ["Arson"], confidence: "high" },
   ],
   dallas: [
+    { canonicalKey: "total_offenses", sourceLabels: ["All recorded offenses"], confidence: "high" },
     { canonicalKey: "homicide", sourceLabels: ["Homicide"], confidence: "high" },
     { canonicalKey: "robbery", sourceLabels: ["Robbery"], confidence: "high" },
     { canonicalKey: "burglary", sourceLabels: ["Burglary"], confidence: "high" },
@@ -141,6 +144,7 @@ export const LOCATION_COMPARISON_MAPPINGS: Record<string, LocationComparisonMapp
     { canonicalKey: "fraud_and_deception", sourceLabels: ["Fraud"], confidence: "high" },
   ],
   houston: [
+    { canonicalKey: "total_offenses", sourceLabels: ["All recorded offenses"], confidence: "high" },
     { canonicalKey: "homicide", sourceLabels: ["Homicide"], confidence: "high" },
     { canonicalKey: "sexual_offenses", sourceLabels: ["Sexual offenses"], confidence: "medium" },
     { canonicalKey: "robbery", sourceLabels: ["Robbery"], confidence: "high" },
@@ -156,6 +160,7 @@ export const LOCATION_COMPARISON_MAPPINGS: Record<string, LocationComparisonMapp
     { canonicalKey: "arson", sourceLabels: ["Arson"], confidence: "high" },
   ],
   london: [
+    { canonicalKey: "total_offenses", sourceLabels: ["All recorded offenses"], confidence: "high" },
     { canonicalKey: "sexual_offenses", sourceLabels: ["Rape", "Other sexual offences"], confidence: "high" },
     { canonicalKey: "sexual_violence", sourceLabels: ["Rape"], confidence: "high" },
     { canonicalKey: "other_sexual_offenses", sourceLabels: ["Other sexual offences"], confidence: "high" },
@@ -170,6 +175,7 @@ export const LOCATION_COMPARISON_MAPPINGS: Record<string, LocationComparisonMapp
     { canonicalKey: "public_order", sourceLabels: ["Public order offences"], confidence: "high" },
   ],
   "los-angeles": [
+    { canonicalKey: "total_offenses", sourceLabels: ["All recorded offenses"], confidence: "high" },
     { canonicalKey: "homicide", sourceLabels: ["Homicide"], confidence: "high" },
     { canonicalKey: "sexual_offenses", sourceLabels: ["Sexual offenses"], confidence: "high" },
     { canonicalKey: "robbery", sourceLabels: ["Robbery"], confidence: "high" },
@@ -183,6 +189,7 @@ export const LOCATION_COMPARISON_MAPPINGS: Record<string, LocationComparisonMapp
     { canonicalKey: "weapons_offenses", sourceLabels: ["Weapons incidents"], confidence: "medium" },
   ],
   luton: [
+    { canonicalKey: "total_offenses", sourceLabels: ["All recorded offenses"], confidence: "high" },
     { canonicalKey: "homicide", sourceLabels: ["Homicide"], confidence: "high" },
     { canonicalKey: "sexual_offenses", sourceLabels: ["Sexual offences"], confidence: "high" },
     { canonicalKey: "robbery", sourceLabels: ["Robbery"], confidence: "high" },
@@ -209,7 +216,19 @@ export const LOCATION_COMPARISON_MAPPINGS: Record<string, LocationComparisonMapp
     { canonicalKey: "attempted_homicide", sourceLabels: ["Attempted homicide"], confidence: "high" },
     { canonicalKey: "arson", sourceLabels: ["Arson and fires"], confidence: "medium" },
   ],
+  munich: [
+    { canonicalKey: "total_offenses", sourceLabels: ["All recorded offenses"], confidence: "high" },
+    { canonicalKey: "sexual_offenses", sourceLabels: ["Sexual offenses"], confidence: "high" },
+    { canonicalKey: "sexual_violence", sourceLabels: ["Rape"], confidence: "high" },
+    { canonicalKey: "robbery", sourceLabels: ["Robbery"], confidence: "high" },
+    { canonicalKey: "theft", sourceLabels: ["Theft"], confidence: "high" },
+    { canonicalKey: "vehicle_theft", sourceLabels: ["Vehicle theft"], confidence: "high" },
+    { canonicalKey: "bicycle_theft", sourceLabels: ["Bicycle theft"], confidence: "high" },
+    { canonicalKey: "drug_offenses", sourceLabels: ["Drug offenses"], confidence: "high" },
+    { canonicalKey: "fraud_and_deception", sourceLabels: ["Fraud and embezzlement"], confidence: "medium" },
+  ],
   "new-york-city": [
+    { canonicalKey: "total_offenses", sourceLabels: ["All recorded offenses"], confidence: "high" },
     { canonicalKey: "homicide", sourceLabels: ["Homicide"], confidence: "high" },
     { canonicalKey: "sexual_offenses", sourceLabels: ["Rape", "Other sexual offenses"], confidence: "high" },
     { canonicalKey: "sexual_violence", sourceLabels: ["Rape"], confidence: "high" },
@@ -224,6 +243,7 @@ export const LOCATION_COMPARISON_MAPPINGS: Record<string, LocationComparisonMapp
     { canonicalKey: "fraud_and_deception", sourceLabels: ["Fraud and forgery"], confidence: "high" },
   ],
   paris: [
+    { canonicalKey: "total_offenses", sourceLabels: ["All recorded offenses"], confidence: "high" },
     { canonicalKey: "sexual_violence", sourceLabels: ["Sexual violence"], confidence: "medium" },
     { canonicalKey: "robbery", sourceLabels: ["Armed theft", "Violent theft without weapon"], confidence: "medium" },
     { canonicalKey: "personal_theft", sourceLabels: ["Non-violent personal theft"], confidence: "high" },
@@ -235,6 +255,7 @@ export const LOCATION_COMPARISON_MAPPINGS: Record<string, LocationComparisonMapp
     { canonicalKey: "fraud_and_deception", sourceLabels: ["Payment fraud and scams"], confidence: "medium" },
   ],
   phoenix: [
+    { canonicalKey: "total_offenses", sourceLabels: ["All recorded offenses"], confidence: "high" },
     { canonicalKey: "homicide", sourceLabels: ["Homicide"], confidence: "high" },
     { canonicalKey: "sexual_violence", sourceLabels: ["Rape"], confidence: "high" },
     { canonicalKey: "robbery", sourceLabels: ["Robbery"], confidence: "high" },
@@ -273,6 +294,7 @@ export const LOCATION_COMPARISON_MAPPINGS: Record<string, LocationComparisonMapp
     { canonicalKey: "drug_trafficking", sourceLabels: ["Drug trafficking"], confidence: "high" },
   ],
   "san-francisco": [
+    { canonicalKey: "total_offenses", sourceLabels: ["All recorded offenses"], confidence: "high" },
     { canonicalKey: "homicide", sourceLabels: ["Homicide"], confidence: "high" },
     { canonicalKey: "sexual_offenses", sourceLabels: ["Rape", "Other sexual offenses"], confidence: "high" },
     { canonicalKey: "sexual_violence", sourceLabels: ["Rape"], confidence: "high" },
@@ -288,6 +310,7 @@ export const LOCATION_COMPARISON_MAPPINGS: Record<string, LocationComparisonMapp
     { canonicalKey: "criminal_damage", sourceLabels: ["Criminal damage"], confidence: "high" },
   ],
   seattle: [
+    { canonicalKey: "total_offenses", sourceLabels: ["All recorded offenses"], confidence: "high" },
     { canonicalKey: "homicide", sourceLabels: ["Homicide"], confidence: "high" },
     { canonicalKey: "sexual_offenses", sourceLabels: ["Rape", "Other sexual offenses"], confidence: "high" },
     { canonicalKey: "sexual_violence", sourceLabels: ["Rape"], confidence: "high" },

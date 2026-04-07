@@ -5,6 +5,7 @@ import {
   isComparableMappingConfidence,
   type ComparisonMappingConfidence,
 } from "@/lib/comparison-taxonomy";
+import { getDefaultLocationCategorySlugs } from "@/lib/location-category-selection";
 import { prisma } from "@/lib/prisma";
 
 export type Metric = "count" | "rate";
@@ -313,12 +314,10 @@ async function getLocationsBySlugs(locationSlugs: string[]) {
 function buildDefaultDistrictSlugs(location: LocationDataset) {
   const latestYear = location.years.at(-1);
   if (!latestYear) {
-    return location.districts.slice(0, 3).map((item) => item.value);
+    return location.districts.slice(0, 2).map((item) => item.value);
   }
 
-  const configuredDefaultCategories = location.categories.filter((category) => category.isDefault).map((category) => category.value);
-  const preferredCategorySlugs =
-    configuredDefaultCategories.length > 0 ? configuredDefaultCategories : location.defaultCategorySlugs;
+  const preferredCategorySlugs = getDefaultLocationCategorySlugs(location.categories);
 
   const districtTotals = new Map<string, number>();
 
@@ -332,10 +331,10 @@ function buildDefaultDistrictSlugs(location: LocationDataset) {
 
   const topDistricts = [...districtTotals.entries()]
     .sort((left, right) => right[1] - left[1])
-    .slice(0, 3)
+    .slice(0, 2)
     .map(([districtSlug]) => districtSlug);
 
-  return topDistricts.length > 0 ? topDistricts : location.districts.slice(0, 3).map((item) => item.value);
+  return topDistricts.length > 0 ? topDistricts : location.districts.slice(0, 2).map((item) => item.value);
 }
 
 export const getFilterMetadata = cache(async (locationSlug: string): Promise<FilterMetadata | null> => {
@@ -361,7 +360,7 @@ export const getFilterMetadata = cache(async (locationSlug: string): Promise<Fil
     districts: location.districts,
     categories: location.categories,
     defaultDistrictSlugs: buildDefaultDistrictSlugs(location),
-    defaultCategorySlugs: location.defaultCategorySlugs,
+    defaultCategorySlugs: getDefaultLocationCategorySlugs(location.categories),
     latestYear: location.years.at(-1) ?? null,
   };
 });

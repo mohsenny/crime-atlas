@@ -198,8 +198,8 @@ export function ComparisonChart({
         </div>
       )}
     >
-      <div className="flex min-h-0 flex-1 -mx-3 sm:-mx-4 lg:mx-0">
-        <div className="flex min-h-0 w-full overflow-hidden">
+      <div className="flex min-h-0 flex-1 sm:-mx-4 lg:mx-0">
+        <div className="flex min-h-0 min-w-0 w-full overflow-hidden">
           <div
             className="pointer-events-none relative z-[1] shrink-0 border-r border-slate-800/70"
             style={{ width: axisChartWidth, height: chartHeight }}
@@ -241,7 +241,7 @@ export function ComparisonChart({
             </LineChart>
           </div>
 
-          <div className="chart-scroll-shell min-h-0 flex-1 overflow-x-auto" ref={scrollContainerRef}>
+          <div className="chart-scroll-shell min-h-0 min-w-0 flex-1 overflow-x-auto overflow-y-hidden" ref={scrollContainerRef}>
             <div style={{ height: chartHeight, width: chartWidth }}>
               <LineChart
                 data={rows}

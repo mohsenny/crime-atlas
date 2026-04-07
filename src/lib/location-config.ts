@@ -210,6 +210,14 @@ export const LONDON_LOCATION: LocationDefinition = {
   ],
   categories: [
     {
+      sourceLabels: ["All recorded offenses"],
+      label: "All recorded offenses",
+      shortLabel: "All offenses",
+      color: "#7dd3fc",
+      isDefault: false,
+      sortOrder: 0,
+    },
+    {
       sourceLabels: ["ROBBERY OF PERSONAL PROPERTY"],
       label: "Personal robbery",
       shortLabel: "Robbery",
@@ -501,6 +509,14 @@ export const LUTON_LOCATION: LocationDefinition = {
   ],
   categories: [
     {
+      sourceLabels: ["All recorded offenses"],
+      label: "All recorded offenses",
+      shortLabel: "All offenses",
+      color: "#7dd3fc",
+      isDefault: false,
+      sortOrder: 0,
+    },
+    {
       sourceLabels: ["Violence with injury"],
       label: "Violence with injury",
       shortLabel: "Violence w/ injury",
@@ -680,6 +696,14 @@ export const PARIS_LOCATION: LocationDefinition = {
   ],
   categories: [
     {
+      sourceLabels: ["All recorded offenses"],
+      label: "All recorded offenses",
+      shortLabel: "All offenses",
+      color: "#7dd3fc",
+      isDefault: false,
+      sortOrder: 0,
+    },
+    {
       sourceLabels: ["Violences physiques intrafamiliales"],
       label: "Domestic physical violence",
       shortLabel: "Domestic violence",
@@ -810,11 +834,15 @@ export const MUNICH_LOCATION: LocationDefinition = {
   areaLabelPlural: "Areas",
   chartTitle: "Munich Crime Overview",
   note:
-    "Munich uses official city statistics publications sourced from Polizeipräsidium München. The current pilot coverage is built from committed official archive PDFs for 2001, 2002, and 2010-2017; no sub-city breakdown is wired yet.",
+    "Munich uses official city statistics publications sourced from Polizeipräsidium München plus official annual city-population figures from the Munich statistical office. The current pilot coverage is built from committed official archive PDFs for 2001, 2002, and 2010-2017; no sub-city breakdown is wired yet.",
   sources: [
     {
       label: "Landeshauptstadt München: safety and crime statistics archive PDFs",
       url: "https://stadt.muenchen.de/infos/statistik-sicherheit.html",
+    },
+    {
+      label: "Landeshauptstadt München: population statistics archive",
+      url: "https://stadt.muenchen.de/infos/statistik-bevoelkerung.html",
     },
   ],
   categories: [
@@ -823,7 +851,7 @@ export const MUNICH_LOCATION: LocationDefinition = {
       label: "All recorded offenses",
       shortLabel: "All offenses",
       color: "#7dd3fc",
-      isDefault: false,
+      isDefault: true,
       sortOrder: 1,
     },
     {
@@ -831,7 +859,7 @@ export const MUNICH_LOCATION: LocationDefinition = {
       label: "Sexual offenses",
       shortLabel: "Sexual offenses",
       color: "#ec4899",
-      isDefault: true,
+      isDefault: false,
       sortOrder: 2,
     },
     {
@@ -847,7 +875,7 @@ export const MUNICH_LOCATION: LocationDefinition = {
       label: "Robbery",
       shortLabel: "Robbery",
       color: "#f97316",
-      isDefault: true,
+      isDefault: false,
       sortOrder: 4,
     },
     {
@@ -855,7 +883,7 @@ export const MUNICH_LOCATION: LocationDefinition = {
       label: "Theft",
       shortLabel: "Theft",
       color: "#facc15",
-      isDefault: true,
+      isDefault: false,
       sortOrder: 5,
     },
     {
@@ -863,7 +891,7 @@ export const MUNICH_LOCATION: LocationDefinition = {
       label: "Vehicle theft",
       shortLabel: "Vehicle theft",
       color: "#4f46e5",
-      isDefault: true,
+      isDefault: false,
       sortOrder: 6,
     },
     {
@@ -887,7 +915,7 @@ export const MUNICH_LOCATION: LocationDefinition = {
       label: "Drug offenses",
       shortLabel: "Drug offenses",
       color: "#22c55e",
-      isDefault: true,
+      isDefault: false,
       sortOrder: 9,
     },
   ],
@@ -1751,6 +1779,14 @@ export const NEW_YORK_CITY_LOCATION: LocationDefinition = {
   ],
   categories: [
     {
+      sourceLabels: ["All recorded offenses"],
+      label: "All recorded offenses",
+      shortLabel: "All offenses",
+      color: "#7dd3fc",
+      isDefault: false,
+      sortOrder: 0,
+    },
+    {
       sourceLabels: ["MURDER & NON-NEGL. MANSLAUGHTER"],
       label: "Homicide",
       shortLabel: "Homicide",
@@ -1873,6 +1909,14 @@ export const CHICAGO_LOCATION: LocationDefinition = {
     },
   ],
   categories: [
+    {
+      sourceLabels: ["All recorded offenses"],
+      label: "All recorded offenses",
+      shortLabel: "All offenses",
+      color: "#7dd3fc",
+      isDefault: false,
+      sortOrder: 0,
+    },
     {
       sourceLabels: ["HOMICIDE"],
       label: "Homicide",
@@ -2008,6 +2052,14 @@ export const LOS_ANGELES_LOCATION: LocationDefinition = {
     },
   ],
   categories: [
+    {
+      sourceLabels: ["All recorded offenses"],
+      label: "All recorded offenses",
+      shortLabel: "All offenses",
+      color: "#7dd3fc",
+      isDefault: false,
+      sortOrder: 0,
+    },
     {
       sourceLabels: ["CRIMINAL HOMICIDE"],
       label: "Homicide",
@@ -2167,6 +2219,14 @@ export const SAN_FRANCISCO_LOCATION: LocationDefinition = {
   ],
   categories: [
     {
+      sourceLabels: ["All recorded offenses"],
+      label: "All recorded offenses",
+      shortLabel: "All offenses",
+      color: "#7dd3fc",
+      isDefault: false,
+      sortOrder: 0,
+    },
+    {
       sourceLabels: ["Homicide"],
       label: "Homicide",
       shortLabel: "Homicide",
@@ -2281,6 +2341,14 @@ export const AUSTIN_LOCATION: LocationDefinition = {
     },
   ],
   categories: [
+    {
+      sourceLabels: ["All recorded offenses"],
+      label: "All recorded offenses",
+      shortLabel: "All offenses",
+      color: "#7dd3fc",
+      isDefault: false,
+      sortOrder: 0,
+    },
     { sourceLabels: ["Homicide"], label: "Homicide", shortLabel: "Homicide", color: "#be123c", isDefault: false, sortOrder: 1 },
     { sourceLabels: ["Sexual offenses"], label: "Sexual offenses", shortLabel: "Sexual offenses", color: "#ec4899", isDefault: true, sortOrder: 2 },
     { sourceLabels: ["Robbery"], label: "Robbery", shortLabel: "Robbery", color: "#f97316", isDefault: true, sortOrder: 3 },
@@ -2315,6 +2383,14 @@ export const DALLAS_LOCATION: LocationDefinition = {
     },
   ],
   categories: [
+    {
+      sourceLabels: ["All recorded offenses"],
+      label: "All recorded offenses",
+      shortLabel: "All offenses",
+      color: "#7dd3fc",
+      isDefault: false,
+      sortOrder: 0,
+    },
     { sourceLabels: ["Homicide"], label: "Homicide", shortLabel: "Homicide", color: "#be123c", isDefault: false, sortOrder: 1 },
     { sourceLabels: ["Robbery"], label: "Robbery", shortLabel: "Robbery", color: "#f97316", isDefault: true, sortOrder: 2 },
     { sourceLabels: ["Burglary"], label: "Burglary", shortLabel: "Burglary", color: "#ef4444", isDefault: true, sortOrder: 3 },
@@ -2347,6 +2423,14 @@ export const PHOENIX_LOCATION: LocationDefinition = {
     },
   ],
   categories: [
+    {
+      sourceLabels: ["All recorded offenses"],
+      label: "All recorded offenses",
+      shortLabel: "All offenses",
+      color: "#7dd3fc",
+      isDefault: false,
+      sortOrder: 0,
+    },
     { sourceLabels: ["Homicide"], label: "Homicide", shortLabel: "Homicide", color: "#be123c", isDefault: false, sortOrder: 1 },
     { sourceLabels: ["Rape"], label: "Rape", shortLabel: "Rape", color: "#f472b6", isDefault: true, sortOrder: 2 },
     { sourceLabels: ["Robbery"], label: "Robbery", shortLabel: "Robbery", color: "#f97316", isDefault: true, sortOrder: 3 },
@@ -2376,6 +2460,14 @@ export const HOUSTON_LOCATION: LocationDefinition = {
     },
   ],
   categories: [
+    {
+      sourceLabels: ["All recorded offenses"],
+      label: "All recorded offenses",
+      shortLabel: "All offenses",
+      color: "#7dd3fc",
+      isDefault: false,
+      sortOrder: 0,
+    },
     { sourceLabels: ["Homicide"], label: "Homicide", shortLabel: "Homicide", color: "#be123c", isDefault: false, sortOrder: 1 },
     { sourceLabels: ["Sexual offenses"], label: "Sexual offenses", shortLabel: "Sexual offenses", color: "#ec4899", isDefault: true, sortOrder: 2 },
     { sourceLabels: ["Robbery"], label: "Robbery", shortLabel: "Robbery", color: "#f97316", isDefault: true, sortOrder: 3 },
@@ -2408,6 +2500,14 @@ export const SEATTLE_LOCATION: LocationDefinition = {
     },
   ],
   categories: [
+    {
+      sourceLabels: ["All recorded offenses"],
+      label: "All recorded offenses",
+      shortLabel: "All offenses",
+      color: "#7dd3fc",
+      isDefault: false,
+      sortOrder: 0,
+    },
     { sourceLabels: ["Homicide"], label: "Homicide", shortLabel: "Homicide", color: "#be123c", isDefault: false, sortOrder: 1 },
     { sourceLabels: ["Rape"], label: "Rape", shortLabel: "Rape", color: "#f472b6", isDefault: true, sortOrder: 2 },
     { sourceLabels: ["Other sexual offenses"], label: "Other sexual offenses", shortLabel: "Other sexual", color: "#ec4899", isDefault: false, sortOrder: 3 },

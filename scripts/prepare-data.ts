@@ -580,6 +580,11 @@ function parseRollingMarchYear(value: string) {
   return endYear;
 }
 
+function parseYearFromDateText(value: string) {
+  const match = value.match(/\b(19|20)\d{2}\b/);
+  return match ? Number(match[0]) : null;
+}
+
 function parseDecimalLike(value: string | number | null | undefined) {
   if (typeof value === "number") {
     return value;
@@ -1660,94 +1665,218 @@ function extractLeadingYearPairAfterLabel(flattenedText: string, patterns: RegEx
   throw new Error(`Could not parse ${context}`);
 }
 
+const MUNICH_OFFICIAL_POPULATION_BY_YEAR: Record<number, number> = {
+  2001: 1_260_597,
+  2002: 1_264_309,
+  2010: 1_382_273,
+  2011: 1_410_741,
+  2012: 1_439_474,
+  2013: 1_464_962,
+  2014: 1_490_681,
+  2015: 1_521_678,
+  2016: 1_542_860,
+  2017: 1_526_056,
+};
+
+function toPdfLines(text: string) {
+  return text
+    .replace(/\u00ad/g, "")
+    .replace(/\r/g, "")
+    .split(/\n+/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+}
+
+function extractMunichNumericColumns(value: string) {
+  return value
+    .split(/\t+|\s{2,}/)
+    .flatMap((segment) => {
+      const trimmed = segment.trim();
+
+      if (!trimmed) {
+        return [];
+      }
+
+      if (trimmed === "-") {
+        return [0];
+      }
+
+      if (!/^-?[\d ]+$/.test(trimmed)) {
+        return [];
+      }
+
+      const chunks = trimmed.split(/\s+/);
+
+      if (chunks.length > 2 && chunks.length % 2 === 0) {
+        const values: number[] = [];
+
+        for (let index = 0; index < chunks.length; index += 2) {
+          values.push(parseCountLike(`${chunks[index]} ${chunks[index + 1]}`));
+        }
+
+        return values;
+      }
+
+      return [parseCountLike(trimmed)];
+    });
+}
+
+function tryExtractMunichLineCount(
+  lines: string[],
+  patterns: RegExp[],
+  numericTokenIndex: number,
+  preferMostColumns = false,
+) {
+  let bestMatch: { count: number; width: number } | null = null;
+
+  for (const pattern of patterns) {
+    for (let lineIndex = 0; lineIndex < lines.length; lineIndex += 1) {
+      const candidates = [
+        lines[lineIndex],
+        [lines[lineIndex], lines[lineIndex + 1]].filter(Boolean).join(" "),
+        [lines[lineIndex], lines[lineIndex + 1], lines[lineIndex + 2]].filter(Boolean).join(" "),
+      ];
+
+      for (const candidate of candidates) {
+        if (!pattern.test(candidate)) {
+          continue;
+        }
+
+        const match = candidate.match(pattern);
+
+        if (!match) {
+          continue;
+        }
+
+        const suffix = candidate.slice((match.index ?? 0) + match[0].length);
+        const tokens = extractMunichNumericColumns(suffix);
+
+        if (tokens[numericTokenIndex] !== undefined) {
+          if (!preferMostColumns) {
+            return tokens[numericTokenIndex];
+          }
+
+          if (!bestMatch || tokens.length > bestMatch.width) {
+            bestMatch = { count: tokens[numericTokenIndex], width: tokens.length };
+          }
+        }
+      }
+    }
+  }
+
+  return bestMatch?.count ?? null;
+}
+
+function extractMunichLineCount(
+  lines: string[],
+  patterns: RegExp[],
+  context: string,
+  numericTokenIndex: number,
+  preferMostColumns = false,
+) {
+  const count = tryExtractMunichLineCount(lines, patterns, numericTokenIndex, preferMostColumns);
+
+  if (count !== null) {
+    return count;
+  }
+
+  throw new Error(`Could not parse ${context}`);
+}
+
 function parseMunichArchivedCounts(text: string) {
-  const flat = flattenPdfText(text);
-  const rapeCount = extractCurrentYearCountFromPatterns(
-    flat,
-    [/Vergewaltigung\s+(\d{1,3}(?: \d{3})*)\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*\s+\d{1,3}(?: \d{3})*/i],
+  const lines = toPdfLines(text);
+  const rapeCount = extractMunichLineCount(
+    lines,
+    [/^(?:[\d*\s-]+\s+)?(?:darunter\s+)?Vergewaltigung/i],
     "Munich archived rape",
+    1,
   );
-  const vehicleTheft = extractCurrentYearCountFromPatterns(
-    flat,
+  const sexualTotal = tryExtractMunichLineCount(
+    lines,
+    [/^(?:[\d*\s-]+\s+)?Straftaten gegen die sexuelle Selbstbestimmung/i],
+    1,
+  )
+    ?? (rapeCount
+      + (tryExtractMunichLineCount(
+        lines,
+        [/^(?:[\d*\s-]+\s+)?Fˆrderung sexueller Handlungen/i],
+        1,
+      ) ?? 0)
+      + (tryExtractMunichLineCount(
+        lines,
+        [/^(?:[\d*\s-]+\s+)?Sonstige Straftaten gegen die sexuelle Selbstbestimmung/i],
+        1,
+      ) ?? 0));
+  const vehicleTheft = extractMunichLineCount(
+    lines,
     [
-      /Kraftfahrzeugdiebstahl\s+(\d{1,3}(?: \d{3})*)\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*\s+\d{1,3}(?: \d{3})*/i,
-      /Diebstahl von Kraftwagen\s+(\d{1,3}(?: \d{3})*)\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*\s+\d{1,3}(?: \d{3})*/i,
+      /^(?:[\d*\s-]+\s+)?(?:darunter\s+)?Diebstahl von Kraft(?:wagen|fahrzeugen?)/i,
+      /^(?:[\d*\s-]+\s+)?Kraftfahrzeugdiebstahl/i,
     ],
     "Munich archived vehicle theft",
+    1,
   );
-  const bicycleTheft = extractCurrentYearCountFromPatterns(
-    flat,
+  const bicycleTheft = extractMunichLineCount(
+    lines,
     [
-      /Fahrraddiebstahl\s+(\d{1,3}(?: \d{3})*)\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*\s+\d{1,3}(?: \d{3})*/i,
-      /Fahrr[aä‰]dern\s+(\d{1,3}(?: \d{3})*)\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*\s+\d{1,3}(?: \d{3})*/i,
+      /^(?:[\d*\s-]+\s+)?(?:darunter\s+)?Diebstahl von Fahrr/i,
+      /^(?:[\d*\s-]+\s+)?Fahrr/i,
     ],
     "Munich archived bicycle theft",
+    1,
   );
-  const theftTotal = flat.match(/Diebstahl insgesamt\s+(\d{1,3}(?: \d{3})*)\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*\s+\d{1,3}(?: \d{3})*/i)
-    ? extractCurrentYearCountFromPatterns(
-        flat,
-        [/Diebstahl insgesamt\s+(\d{1,3}(?: \d{3})*)\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*\s+\d{1,3}(?: \d{3})*/i],
-        "Munich archived theft",
-      )
-    : vehicleTheft +
-      bicycleTheft +
-      extractCurrentYearCountFromPatterns(
-        flat,
-        [/Sonstige Diebst[aä‰]hle\s+(\d{1,3}(?: \d{3})*)\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*\s+\d{1,3}(?: \d{3})*/i],
+  const theftTotal = tryExtractMunichLineCount(
+    lines,
+    [/^(?:[\d*\s-]+\s+)?Diebstahl insgesamt/i],
+    1,
+  )
+    ?? (vehicleTheft
+      + bicycleTheft
+      + extractMunichLineCount(
+        lines,
+        [/^(?:[\d*\s-]+\s+)?Sonstige Diebst/i],
         "Munich archived other theft",
-      );
-  const drugOffenses = extractCurrentYearCountFromPatterns(
-    flat,
+        1,
+      ));
+  const drugOffenses = extractMunichLineCount(
+    lines,
     [
-      /Rauschgiftdelikte\s+(\d{1,3}(?: \d{3})*)\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*\s+\d{1,3}(?: \d{3})*/i,
-      /BtMG[^0-9]{0,60}(\d{1,3}(?: \d{3})*)\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*\s+\d{1,3}(?: \d{3})*/i,
+      /^(?:[\d*\s-]+\s+)?Rauschgiftdelikte/i,
+      /^(?:[\d*\s-]+\s+)?Rauschgiftkriminalit/i,
+      /^(?:[\d*\s-]+\s+)?einschl/i,
     ],
     "Munich archived drug offenses",
+    1,
   );
-  const fraudAndEmbezzlement = flat.match(/Betrug und Veruntreuung\s+(\d{1,3}(?: \d{3})*)\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*\s+\d{1,3}(?: \d{3})*/i)
-    ? extractCurrentYearCountFromPatterns(
-        flat,
-        [/Betrug und Veruntreuung\s+(\d{1,3}(?: \d{3})*)\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*\s+\d{1,3}(?: \d{3})*/i],
-        "Munich archived fraud and embezzlement",
-      )
-    : extractCurrentYearCountFromPatterns(
-        flat,
-        [/Betrug\s+(\d{1,3}(?: \d{3})*)\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*\s+\d{1,3}(?: \d{3})*/i],
-        "Munich archived fraud",
-      ) +
-      extractCurrentYearCountFromPatterns(
-        flat,
-        [/Veruntreuung\s+(\d{1,3}(?: \d{3})*)\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*\s+\d{1,3}(?: \d{3})*/i],
-        "Munich archived embezzlement",
-      );
+  const combinedFraudAndEmbezzlement = tryExtractMunichLineCount(
+    lines,
+    [/^(?:[\d*\s-]+\s+)?Betrug und Veruntreuung/i],
+    1,
+  );
+  const fraudAndEmbezzlement = combinedFraudAndEmbezzlement
+    ?? (extractMunichLineCount(lines, [/^(?:[\d*\s-]+\s+)?Betrug/i], "Munich archived fraud", 1)
+      + extractMunichLineCount(lines, [/^(?:[\d*\s-]+\s+)?Veruntreuung/i], "Munich archived embezzlement", 1));
 
   return new Map<string, number>([
     [
       "Straftaten insgesamt",
-      extractCurrentYearCountFromPatterns(
-        flat,
-        [/Straftaten insgesamt\s+(\d{1,3}(?: \d{3})*)\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*\s+\d{1,3}(?: \d{3})*/i],
-        "Munich archived total offenses",
-      ),
+      extractMunichLineCount(lines, [/^(?:[\d*\s-]+\s+)?Straftaten insgesamt/i], "Munich archived total offenses", 1),
     ],
     [
       "Straftaten gegen die sexuelle Selbstbestimmung",
-      extractCurrentYearCountFromPatterns(
-        flat,
-        [/Straftaten gegen die sexuelle Selbstbestimmung\s+(\d{1,3}(?: \d{3})*)\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*\s+\d{1,3}(?: \d{3})*/i],
-        "Munich archived sexual offenses",
-      ),
+      sexualTotal,
     ],
     ["Vergewaltigung", rapeCount],
     [
       "Raub, räuberische Erpressung und räuberischer Angriff auf Kraftfahrer*innen",
-      extractCurrentYearCountFromPatterns(
-        flat,
+      extractMunichLineCount(
+        lines,
         [
-          /Raub,?\s*r[aä‰]uberische Erpressung,?\s*r[aä‰]uberischer Angriff auf K(?:raftfahrzeuge|fz)[^0-9]{0,80}(\d{1,3}(?: \d{3})*)\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*\s+\d{1,3}(?: \d{3})*/i,
-          /Raub,?\s*r[aä‰]uberische Erpressung[^0-9]{0,80}(\d{1,3}(?: \d{3})*)\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*\s+\d{1,3}(?: \d{3})*/i,
+          /^(?:[\d*\s-]+\s+)?(?:darunter\s+|und zwar\s+)?Raub,\s*r/i,
+          /^(?:[\d*\s-]+\s+)?(?:r‰uber\.\s+)?Angriff auf Kfz/i,
         ],
         "Munich archived robbery",
+        1,
       ),
     ],
     ["Diebstahl insgesamt", theftTotal],
@@ -1759,108 +1888,68 @@ function parseMunichArchivedCounts(text: string) {
 }
 
 function parseMunichCounts(text: string) {
-  const flat = flattenPdfText(text);
-  const rapeCount = extractSingleCountFromPatterns(
-    flat,
-    [
-      /Vergewaltigung[^0-9]{0,120}\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i,
-      /Vergewaltigung\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i,
-    ],
+  const lines = toPdfLines(text);
+  const rapeCount = extractMunichLineCount(
+    lines,
+    [/^(?:[\d*\s-]+\s+)?(?:darunter\s+)?Vergewaltigung/i],
     "Munich rape",
+    0,
+    true,
   );
-  const otherSexualCount =
-    flat.match(/Straftaten gegen die sexuelle Selbstbestimmung\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i)
-      ? null
-      : extractSingleCount(
-          flat,
-          /Sonstige Straftaten gegen die sexuelle Selbstbestimmung\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i,
-          "Munich other sexual offenses",
-        ) +
-        extractSingleCount(
-          flat,
-          /F[oö]rderung sexueller Handlungen Minder[\w\s.-]*\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i,
-          "Munich sexual offenses involving minors/prostitution",
-        );
-  const sexualTotal =
-    flat.match(/Straftaten gegen die sexuelle Selbstbestimmung\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i)
-      ? extractSingleCount(
-          flat,
-          /Straftaten gegen die sexuelle Selbstbestimmung\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i,
-          "Munich sexual offenses",
-        )
-      : rapeCount + (otherSexualCount ?? 0);
-  const vehicleTheft =
-    flat.match(/Diebstahl von Kraft(?:wagen|fahrzeugen?)[\w\s\)\(]*\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i)
-      ? extractSingleCount(
-          flat,
-          /Diebstahl von Kraft(?:wagen|fahrzeugen?)[\w\s\)\(]*\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i,
-          "Munich vehicle theft",
-        )
-      : extractSingleCountFromPatterns(
-          flat,
-          [
-            /Kraftfahrzeugdiebstahl\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i,
-            /Diebstahl von Kraft(?:wagen|fahrzeugen?)[\w\s\)\(]*\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i,
-          ],
-          "Munich vehicle theft",
-        );
-  const bicycleTheft =
-    flat.match(/Diebstahl von Fahrr[aä‰]dern[\w\s\)\(]*\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i)
-      ? extractSingleCount(
-          flat,
-          /Diebstahl von Fahrr[aä‰]dern[\w\s\)\(]*\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i,
-          "Munich bicycle theft",
-        )
-      : extractSingleCountFromPatterns(
-          flat,
-          [
-            /Fahrraddiebstahl\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i,
-            /Fahrrad[\wÀ-ÿ‰-]*\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i,
-            /Diebstahl von Fahrr[aä‰]dern[\w\s\)\(]*\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i,
-          ],
-          "Munich bicycle theft",
-        );
-  const theftTotal =
-    flat.match(/Diebstahl insgesamt\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i)
-      ? extractSingleCount(flat, /Diebstahl insgesamt\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i, "Munich theft")
-      : vehicleTheft +
-        bicycleTheft +
-        extractSingleCountFromPatterns(
-          flat,
-          [/Sonstige Diebst[aä‰]hle\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i],
-          "Munich other theft",
-        );
+  const sexualTotal = extractMunichLineCount(
+    lines,
+    [/^(?:[\d*\s-]+\s+)?Straftaten gegen die sexuelle Selbstbestimmung/i],
+    "Munich sexual offenses",
+    0,
+    true,
+  );
+  const vehicleTheft = extractMunichLineCount(
+    lines,
+    [/^(?:[\d*\s-]+\s+)?(?:darunter\s+)?Diebstahl von Kraft(?:wagen|fahrzeugen?)/i],
+    "Munich vehicle theft",
+    0,
+    true,
+  );
+  const bicycleTheft = extractMunichLineCount(
+    lines,
+    [/^(?:[\d*\s-]+\s+)?Diebstahl von Fahrr/i],
+    "Munich bicycle theft",
+    0,
+    true,
+  );
+  const theftTotal = extractMunichLineCount(
+    lines,
+    [/^(?:[\d*\s-]+\s+)?Diebstahl insgesamt/i],
+    "Munich theft",
+    0,
+    true,
+  );
   const fraudAndEmbezzlement =
-    flat.match(/Betrug und Veruntreuung\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i)
-      ? extractSingleCount(
-          flat,
-          /Betrug und Veruntreuung\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i,
-          "Munich fraud and embezzlement",
-        )
-      : extractSingleCount(flat, /Betrug\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i, "Munich fraud") +
-        extractSingleCount(flat, /Veruntreuung\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i, "Munich embezzlement");
-  const drugOffenses =
-    flat.match(/Rauschgiftdelikte nach dem BtMG\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i)
-      ? extractSingleCount(
-          flat,
-          /Rauschgiftdelikte nach dem BtMG\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i,
-          "Munich drug offenses",
-        )
-      : extractSingleCount(flat, /Rauschgiftdelikte\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i, "Munich drug offenses");
+    extractMunichLineCount(lines, [/^(?:[\d*\s-]+\s+)?(?:darunter\s+)?Betrug/i], "Munich fraud", 0, true) +
+    extractMunichLineCount(lines, [/^(?:[\d*\s-]+\s+)?Veruntreuung/i], "Munich embezzlement", 0, true);
+  const drugOffenses = extractMunichLineCount(
+    lines,
+    [/^(?:[\d*\s-]+\s+)?Rauschgiftdelikte(?: nach dem BtMG)?/i],
+    "Munich drug offenses",
+    0,
+    true,
+  );
 
   return new Map<string, number>([
     [
       "Straftaten insgesamt",
-      extractSingleCount(flat, /Straftaten insgesamt\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i, "Munich total offenses"),
+      extractMunichLineCount(lines, [/^(?:[\d*\s-]+\s+)?Straftaten insgesamt/i], "Munich total offenses", 0, true),
     ],
     ["Straftaten gegen die sexuelle Selbstbestimmung", sexualTotal],
     ["Vergewaltigung", rapeCount],
     [
       "Raub, räuberische Erpressung und räuberischer Angriff auf Kraftfahrer*innen",
-      extractSingleCount(
-        flat,
-        /Raub,?\s*r[aä‰]uberische Erpressung[^0-9]{0,120}\s+(\d{1,3}(?: \d{3})*)\s+\d{1,3}(?: \d{3})*/i,
+      extractMunichLineCount(
+        lines,
+        [/^(?:[\d*\s-]+\s+)?(?:darunter\s+|und zwar\s+)?Raub,\s*r/i],
         "Munich robbery",
+        0,
+        true,
       ),
     ],
     ["Diebstahl insgesamt", theftTotal],
@@ -1897,6 +1986,8 @@ async function buildMunichLocation(): Promise<LocationPayload> {
         continue;
       }
 
+      const population = MUNICH_OFFICIAL_POPULATION_BY_YEAR[year];
+
       recordsByKey.set(`${year}__${districtSlug}__${category.slug}`, {
         year,
         districtLabel,
@@ -1904,7 +1995,7 @@ async function buildMunichLocation(): Promise<LocationPayload> {
         categoryLabel: category.label,
         categorySlug: category.slug,
         count,
-        ratePer100k: null,
+        ratePer100k: population ? (count / population) * 100_000 : null,
       });
     }
   }
@@ -1922,7 +2013,7 @@ async function buildMunichLocation(): Promise<LocationPayload> {
     districts: [{ label: districtLabel, value: districtSlug }],
     categories,
     defaultCategorySlugs: categories.filter((category) => category.isDefault).map((category) => category.value),
-    cityPopulationByYear: {},
+    cityPopulationByYear: Object.fromEntries(years.map((year) => [String(year), MUNICH_OFFICIAL_POPULATION_BY_YEAR[year]])),
     records: [...recordsByKey.values()].sort((left, right) => left.year - right.year),
   };
 }
@@ -2498,6 +2589,7 @@ async function buildLondonLocation(): Promise<LocationPayload> {
     parseLondonCrimeRows(historicalCrimePath),
     parseLondonCrimeRows(recentCrimePath),
   ]);
+  const totalCategory = categoryLookup.get(normalizeSourceLabel("All recorded offenses")) ?? null;
   const boroughs = new Set(
     [...historicalCrimeRows, ...recentCrimeRows]
       .map((row) => String(row.BoroughName ?? "").trim())
@@ -2517,7 +2609,7 @@ async function buildLondonLocation(): Promise<LocationPayload> {
     const minorText = normalizeSourceLabel(String(row.MinorText ?? ""));
     const category = categoryLookup.get(minorText);
 
-    if (!category || !boroughs.has(boroughName)) {
+    if (!boroughs.has(boroughName)) {
       continue;
     }
 
@@ -2527,6 +2619,13 @@ async function buildLondonLocation(): Promise<LocationPayload> {
         continue;
       }
       const count = Number(row[monthKey] ?? 0);
+      if (totalCategory) {
+        const totalKey = `${boroughName}__${totalCategory.slug}__${year}`;
+        countsByKey.set(totalKey, (countsByKey.get(totalKey) ?? 0) + count);
+      }
+      if (!category) {
+        continue;
+      }
       const key = `${boroughName}__${category.slug}__${year}`;
       countsByKey.set(key, (countsByKey.get(key) ?? 0) + count);
     }
@@ -2792,6 +2891,7 @@ async function buildLutonLocation(): Promise<LocationPayload> {
   ]);
 
   const { options: categories, lookup: categoryLookup } = buildCategoryLookup(LUTON_LOCATION);
+  const totalCategory = categoryLookup.get(normalizeSourceLabel("All recorded offenses")) ?? null;
   const populationByYear = await parsePopulationTimeseries2001To2020(populationCsvPath, "E06000032");
   const workbook = XLSX.readFile(crimeWorkbookPath);
   const rawRows = XLSX.utils.sheet_to_json<Array<string | number | null>>(workbook.Sheets.Table, {
@@ -2824,10 +2924,11 @@ async function buildLutonLocation(): Promise<LocationPayload> {
       continue;
     }
 
-    const category = categoryLookup.get(normalizeSourceLabel(String(row[2] ?? "")));
-    if (!category) {
+    const rawCategoryLabel = String(row[2] ?? "").trim();
+    if (!rawCategoryLabel) {
       continue;
     }
+    const category = categoryLookup.get(normalizeSourceLabel(rawCategoryLabel));
 
     for (const { serial, index } of marchColumns) {
       const parsedDate = XLSX.SSF.parse_date_code(serial);
@@ -2839,6 +2940,20 @@ async function buildLutonLocation(): Promise<LocationPayload> {
       const count = Number(row[index] ?? 0);
       const population = populationByYear.get(year);
       years.add(year);
+      if (totalCategory) {
+        addOrMergeRecord(recordsByKey, {
+          year,
+          districtLabel,
+          districtSlug,
+          categoryLabel: totalCategory.label,
+          categorySlug: totalCategory.slug,
+          count,
+          ratePer100k: population ? (count / population) * 100_000 : null,
+        });
+      }
+      if (!category) {
+        continue;
+      }
       addOrMergeRecord(recordsByKey, {
         year,
         districtLabel,
@@ -2854,12 +2969,22 @@ async function buildLutonLocation(): Promise<LocationPayload> {
   const archivedRows = await parseLutonArchivedRows(archiveWorkbookPath);
   for (const archivedRow of archivedRows) {
     const category = categoryLookup.get(normalizeSourceLabel(archivedRow.sourceLabel));
+    const population = populationByYear.get(archivedRow.year) ?? null;
+    years.add(archivedRow.year);
+    if (totalCategory) {
+      addOrMergeRecord(recordsByKey, {
+        year: archivedRow.year,
+        districtLabel,
+        districtSlug,
+        categoryLabel: totalCategory.label,
+        categorySlug: totalCategory.slug,
+        count: archivedRow.count,
+        ratePer100k: population ? (archivedRow.count / population) * 100_000 : null,
+      });
+    }
     if (!category) {
       continue;
     }
-
-    const population = populationByYear.get(archivedRow.year) ?? null;
-    years.add(archivedRow.year);
     addOrMergeRecord(recordsByKey, {
       year: archivedRow.year,
       districtLabel,
@@ -2896,10 +3021,12 @@ async function buildParisLocation(): Promise<LocationPayload> {
   await ensureFile(crimePath, SOURCE_URLS.parisCrimeCommunal);
 
   const { options: categories, lookup: categoryLookup } = buildCategoryLookup(PARIS_LOCATION);
+  const totalCategory = categoryLookup.get(normalizeSourceLabel("All recorded offenses")) ?? null;
   const districtLabel = "Paris";
   const districtSlug = slugify(districtLabel);
   const years = new Set<number>();
   const records: CrimeRecord[] = [];
+  const totalByYear = new Map<number, { count: number; ratePer100k: number }>();
   const lineReader = readline.createInterface({
     input: createReadStream(crimePath).pipe(zlib.createGunzip()),
     crlfDelay: Infinity,
@@ -2931,20 +3058,48 @@ async function buildParisLocation(): Promise<LocationPayload> {
 
     const year = Number(row.annee ?? 0);
     const category = categoryLookup.get(normalizeSourceLabel(String(row.indicateur ?? "")));
-    if (!category || year < 2016 || year > 2025) {
+    if (year < 2016 || year > 2025) {
       continue;
     }
 
+    const count = Number(row.nombre ?? 0);
+    const ratePer100k = Number(String(row.taux_pour_mille ?? "0").replace(",", ".")) * 100;
+
     years.add(year);
+    if (totalCategory) {
+      const currentTotals = totalByYear.get(year) ?? { count: 0, ratePer100k: 0 };
+      totalByYear.set(year, {
+        count: currentTotals.count + count,
+        ratePer100k: currentTotals.ratePer100k + ratePer100k,
+      });
+    }
+    if (!category) {
+      continue;
+    }
+
     records.push({
       year,
       districtLabel,
       districtSlug,
       categoryLabel: category.label,
       categorySlug: category.slug,
-      count: Number(row.nombre ?? 0),
-      ratePer100k: Number(String(row.taux_pour_mille ?? "0").replace(",", ".")) * 100,
+      count,
+      ratePer100k,
     });
+  }
+
+  if (totalCategory) {
+    for (const [year, total] of totalByYear) {
+      records.push({
+        year,
+        districtLabel,
+        districtSlug,
+        categoryLabel: totalCategory.label,
+        categorySlug: totalCategory.slug,
+        count: total.count,
+        ratePer100k: total.ratePer100k,
+      });
+    }
   }
 
   return {
@@ -2971,6 +3126,7 @@ async function buildParisLocation(): Promise<LocationPayload> {
 
 async function buildNewYorkCityLocation(): Promise<LocationPayload> {
   const { options: categories, lookup: categoryLookup } = buildCategoryLookup(NEW_YORK_CITY_LOCATION);
+  const totalCategory = categories.find((category) => category.value === "all-recorded-offenses") ?? null;
   const cityPopulationByYear = await parseUsCityPopulationByYear(US_CITY_POPULATION_SOURCES["new-york-city"]);
   const [historicalRows, currentRows] = await Promise.all([
     fetchSocrataRows<NewYorkCrimeRow>(SOURCE_URLS.newYorkCrimeHistoricApi, {
@@ -2998,16 +3154,26 @@ async function buildNewYorkCityLocation(): Promise<LocationPayload> {
     const year = Number(row.year);
     const boroughName = toTitleCase(String(row.boro_nm ?? "").trim());
     const category = categoryLookup.get(normalizeSourceLabel(String(row.ofns_desc ?? "")));
+    const count = parseCountLike(row.count);
 
-    if (!boroughName || boroughName === "(Null)" || !category || !years.includes(year)) {
+    if (!boroughName || boroughName === "(Null)" || !years.includes(year)) {
       continue;
     }
 
     const districtSlug = slugify(boroughName);
     districtsByLabel.set(boroughName, { label: boroughName, value: districtSlug });
+    if (totalCategory) {
+      countsByKey.set(
+        `${year}__${districtSlug}__${totalCategory.value}`,
+        (countsByKey.get(`${year}__${districtSlug}__${totalCategory.value}`) ?? 0) + count,
+      );
+    }
+    if (!category) {
+      continue;
+    }
     countsByKey.set(
       `${year}__${districtSlug}__${category.slug}`,
-      (countsByKey.get(`${year}__${districtSlug}__${category.slug}`) ?? 0) + parseCountLike(row.count),
+      (countsByKey.get(`${year}__${districtSlug}__${category.slug}`) ?? 0) + count,
     );
   }
 
@@ -3035,6 +3201,7 @@ async function buildNewYorkCityLocation(): Promise<LocationPayload> {
 
 async function buildChicagoLocation(): Promise<LocationPayload> {
   const { options: categories, lookup: categoryLookup } = buildCategoryLookup(CHICAGO_LOCATION);
+  const totalCategory = categories.find((category) => category.value === "all-recorded-offenses") ?? null;
   const cityPopulationByYear = await parseUsCityPopulationByYear(US_CITY_POPULATION_SOURCES.chicago);
   const rows = await fetchSocrataRows<ChicagoCrimeRow>(SOURCE_URLS.chicagoCrimeApi, {
     $select: "year,district,primary_type,count(*) as count",
@@ -3052,17 +3219,27 @@ async function buildChicagoLocation(): Promise<LocationPayload> {
     const year = Number(row.year);
     const districtCode = String(row.district ?? "").trim();
     const category = categoryLookup.get(normalizeSourceLabel(String(row.primary_type ?? "")));
+    const count = parseCountLike(row.count);
 
-    if (!districtCode || !category || !years.includes(year)) {
+    if (!districtCode || !years.includes(year)) {
       continue;
     }
 
     const districtLabel = `District ${districtCode}`;
     const districtSlug = slugify(districtLabel);
     districtsByCode.set(districtCode, { label: districtLabel, value: districtSlug });
+    if (totalCategory) {
+      countsByKey.set(
+        `${year}__${districtSlug}__${totalCategory.value}`,
+        (countsByKey.get(`${year}__${districtSlug}__${totalCategory.value}`) ?? 0) + count,
+      );
+    }
+    if (!category) {
+      continue;
+    }
     countsByKey.set(
       `${year}__${districtSlug}__${category.slug}`,
-      (countsByKey.get(`${year}__${districtSlug}__${category.slug}`) ?? 0) + parseCountLike(row.count),
+      (countsByKey.get(`${year}__${districtSlug}__${category.slug}`) ?? 0) + count,
     );
   }
 
@@ -3090,6 +3267,7 @@ async function buildChicagoLocation(): Promise<LocationPayload> {
 
 async function buildLosAngelesLocation(): Promise<LocationPayload> {
   const { options: categories, lookup: categoryLookup } = buildCategoryLookup(LOS_ANGELES_LOCATION);
+  const totalCategory = categories.find((category) => category.value === "all-recorded-offenses") ?? null;
   const cityPopulationByYear = await parseUsCityPopulationByYear(US_CITY_POPULATION_SOURCES["los-angeles"]);
   const [historicalRows, currentRows] = await Promise.all([
     fetchSocrataRows<LosAngelesCrimeRow>(SOURCE_URLS.losAngelesCrimeHistoricApi, {
@@ -3116,16 +3294,26 @@ async function buildLosAngelesLocation(): Promise<LocationPayload> {
     const year = Number(row.year);
     const areaLabel = String(row.area_name ?? "").trim();
     const category = categoryLookup.get(normalizeSourceLabel(String(row.crm_cd_desc ?? "")));
+    const count = parseCountLike(row.count);
 
-    if (!areaLabel || !category || !years.includes(year)) {
+    if (!areaLabel || !years.includes(year)) {
       continue;
     }
 
     const districtSlug = slugify(areaLabel);
     districtsByLabel.set(areaLabel, { label: areaLabel, value: districtSlug });
+    if (totalCategory) {
+      countsByKey.set(
+        `${year}__${districtSlug}__${totalCategory.value}`,
+        (countsByKey.get(`${year}__${districtSlug}__${totalCategory.value}`) ?? 0) + count,
+      );
+    }
+    if (!category) {
+      continue;
+    }
     countsByKey.set(
       `${year}__${districtSlug}__${category.slug}`,
-      (countsByKey.get(`${year}__${districtSlug}__${category.slug}`) ?? 0) + parseCountLike(row.count),
+      (countsByKey.get(`${year}__${districtSlug}__${category.slug}`) ?? 0) + count,
     );
   }
 
@@ -3151,6 +3339,7 @@ async function buildLosAngelesLocation(): Promise<LocationPayload> {
 
 async function buildSanFranciscoLocation(): Promise<LocationPayload> {
   const { options: categories, lookup: categoryLookup } = buildCategoryLookup(SAN_FRANCISCO_LOCATION);
+  const totalCategory = categories.find((category) => category.value === "all-recorded-offenses") ?? null;
   const cityPopulationByYear = await parseUsCityPopulationByYear(US_CITY_POPULATION_SOURCES["san-francisco"]);
   const rows = await fetchSocrataRows<SanFranciscoCrimeRow>(SOURCE_URLS.sanFranciscoCrimeApi, {
     $select: "incident_year,police_district,incident_category,count(*) as count",
@@ -3168,16 +3357,26 @@ async function buildSanFranciscoLocation(): Promise<LocationPayload> {
     const year = Number(row.incident_year);
     const districtLabel = String(row.police_district ?? "").trim();
     const category = categoryLookup.get(normalizeSourceLabel(String(row.incident_category ?? "")));
+    const count = parseCountLike(row.count);
 
-    if (!districtLabel || !category || !years.includes(year)) {
+    if (!districtLabel || !years.includes(year)) {
       continue;
     }
 
     const districtSlug = slugify(districtLabel);
     districtsByLabel.set(districtLabel, { label: districtLabel, value: districtSlug });
+    if (totalCategory) {
+      countsByKey.set(
+        `${year}__${districtSlug}__${totalCategory.value}`,
+        (countsByKey.get(`${year}__${districtSlug}__${totalCategory.value}`) ?? 0) + count,
+      );
+    }
+    if (!category) {
+      continue;
+    }
     countsByKey.set(
       `${year}__${districtSlug}__${category.slug}`,
-      (countsByKey.get(`${year}__${districtSlug}__${category.slug}`) ?? 0) + parseCountLike(row.count),
+      (countsByKey.get(`${year}__${districtSlug}__${category.slug}`) ?? 0) + count,
     );
   }
 
@@ -3361,6 +3560,7 @@ function mapSeattleCrimeType(crimeType: string) {
 async function buildAustinLocation(): Promise<LocationPayload> {
   const { options: categories } = buildCategoryLookup(AUSTIN_LOCATION);
   const categoriesBySlug = buildCategoryOptionsMap(categories);
+  const totalCategory = categoriesBySlug.get("all-recorded-offenses") ?? null;
   const cityPopulationByYear = await parseUsCityPopulationByYear(US_CITY_POPULATION_SOURCES.austin);
   const rows = await fetchSocrataRows<AustinCrimeRow>(SOURCE_URLS.austinCrimeApi, {
     $select: "date_extract_y(occ_date) as year,district,crime_type,count(*) as count",
@@ -3378,14 +3578,21 @@ async function buildAustinLocation(): Promise<LocationPayload> {
     const year = Number(row.year);
     const districtCode = String(row.district ?? "").trim();
     const category = resolveMappedCategory(categoriesBySlug, mapAustinCrimeType(String(row.crime_type ?? "")));
-    if (!districtCode || !category || !years.includes(year)) {
+    const count = parseCountLike(row.count);
+    if (!districtCode || !years.includes(year)) {
       continue;
     }
 
     const districtLabel = `District ${districtCode}`;
     const districtSlug = slugify(districtLabel);
     districtsByCode.set(districtCode, { label: districtLabel, value: districtSlug });
-    countsByKey.set(`${year}__${districtSlug}__${category.value}`, (countsByKey.get(`${year}__${districtSlug}__${category.value}`) ?? 0) + parseCountLike(row.count));
+    if (totalCategory) {
+      countsByKey.set(`${year}__${districtSlug}__${totalCategory.value}`, (countsByKey.get(`${year}__${districtSlug}__${totalCategory.value}`) ?? 0) + count);
+    }
+    if (!category) {
+      continue;
+    }
+    countsByKey.set(`${year}__${districtSlug}__${category.value}`, (countsByKey.get(`${year}__${districtSlug}__${category.value}`) ?? 0) + count);
   }
 
   const districts = [...districtsByCode.entries()].sort((a, b) => Number(a[0]) - Number(b[0])).map(([, district]) => district);
@@ -3411,6 +3618,7 @@ async function buildAustinLocation(): Promise<LocationPayload> {
 async function buildDallasLocation(): Promise<LocationPayload> {
   const { options: categories } = buildCategoryLookup(DALLAS_LOCATION);
   const categoriesBySlug = buildCategoryOptionsMap(categories);
+  const totalCategory = categoriesBySlug.get("all-recorded-offenses") ?? null;
   const cityPopulationByYear = await parseUsCityPopulationByYear(US_CITY_POPULATION_SOURCES.dallas);
   const rows = await fetchSocrataRows<DallasCrimeRow>(SOURCE_URLS.dallasCrimeApi, {
     $select: "year1,division,nibrs_crime,count(*) as count",
@@ -3429,13 +3637,20 @@ async function buildDallasLocation(): Promise<LocationPayload> {
     const rawDivision = String(row.division ?? "").trim();
     const divisionLabel = toTitleCase(rawDivision);
     const category = resolveMappedCategory(categoriesBySlug, mapDallasCrimeType(String(row.nibrs_crime ?? "")));
-    if (!divisionLabel || !category || !years.includes(year)) {
+    const count = parseCountLike(row.count);
+    if (!divisionLabel || !years.includes(year)) {
       continue;
     }
 
     const districtSlug = slugify(divisionLabel);
     districtsByLabel.set(divisionLabel, { label: divisionLabel, value: districtSlug });
-    countsByKey.set(`${year}__${districtSlug}__${category.value}`, (countsByKey.get(`${year}__${districtSlug}__${category.value}`) ?? 0) + parseCountLike(row.count));
+    if (totalCategory) {
+      countsByKey.set(`${year}__${districtSlug}__${totalCategory.value}`, (countsByKey.get(`${year}__${districtSlug}__${totalCategory.value}`) ?? 0) + count);
+    }
+    if (!category) {
+      continue;
+    }
+    countsByKey.set(`${year}__${districtSlug}__${category.value}`, (countsByKey.get(`${year}__${districtSlug}__${category.value}`) ?? 0) + count);
   }
 
   const districts = [...districtsByLabel.values()].sort((a, b) => a.label.localeCompare(b.label));
@@ -3465,6 +3680,7 @@ async function buildPhoenixLocation(): Promise<LocationPayload> {
 
   const { options: categories } = buildCategoryLookup(PHOENIX_LOCATION);
   const categoriesBySlug = buildCategoryOptionsMap(categories);
+  const totalCategory = categoriesBySlug.get("all-recorded-offenses") ?? null;
   const cityPopulationByYear = await parseUsCityPopulationByYear(US_CITY_POPULATION_SOURCES.phoenix);
   const years = Array.from({ length: 10 }, (_, index) => 2016 + index);
   const countsByKey = new Map<string, number>();
@@ -3490,16 +3706,22 @@ async function buildPhoenixLocation(): Promise<LocationPayload> {
       return record;
     }, {});
     const occurredOn = row["OCCURRED ON"] ?? "";
-    const year = Number(occurredOn.slice(-4));
+    const year = parseYearFromDateText(occurredOn) ?? Number.NaN;
     const grid = String(row.GRID ?? "").trim();
     const category = resolveMappedCategory(categoriesBySlug, mapPhoenixCrimeType(String(row["UCR CRIME CATEGORY"] ?? "")));
-    if (!grid || !category || !years.includes(year)) {
+    if (!grid || !years.includes(year)) {
       continue;
     }
 
     const districtLabel = `Grid ${grid}`;
     const districtSlug = slugify(districtLabel);
     districtsByLabel.set(districtLabel, { label: districtLabel, value: districtSlug });
+    if (totalCategory) {
+      countsByKey.set(`${year}__${districtSlug}__${totalCategory.value}`, (countsByKey.get(`${year}__${districtSlug}__${totalCategory.value}`) ?? 0) + 1);
+    }
+    if (!category) {
+      continue;
+    }
     countsByKey.set(`${year}__${districtSlug}__${category.value}`, (countsByKey.get(`${year}__${districtSlug}__${category.value}`) ?? 0) + 1);
   }
 
@@ -3527,6 +3749,7 @@ async function buildHoustonLocation(): Promise<LocationPayload> {
   await fs.mkdir(TMP_DIR, { recursive: true });
   const { options: categories } = buildCategoryLookup(HOUSTON_LOCATION);
   const categoriesBySlug = buildCategoryOptionsMap(categories);
+  const totalCategory = categoriesBySlug.get("all-recorded-offenses") ?? null;
   const cityPopulationByYear = await parseUsCityPopulationByYear(US_CITY_POPULATION_SOURCES.houston);
   const years = Array.from({ length: 7 }, (_, index) => 2019 + index);
   const countsByKey = new Map<string, number>();
@@ -3556,14 +3779,21 @@ async function buildHoustonLocation(): Promise<LocationPayload> {
       }, {});
       const beat = String(row.Beat ?? "").trim();
       const category = resolveMappedCategory(categoriesBySlug, mapHoustonCrimeType(String(row.NIBRSDescription ?? "")));
-      if (!beat || !category) {
+      const count = parseCountLike(row.OffenseCount);
+      if (!beat) {
         continue;
       }
 
       const districtLabel = `Beat ${beat}`;
       const districtSlug = slugify(districtLabel);
       districtsByLabel.set(districtLabel, { label: districtLabel, value: districtSlug });
-      countsByKey.set(`${year}__${districtSlug}__${category.value}`, (countsByKey.get(`${year}__${districtSlug}__${category.value}`) ?? 0) + parseCountLike(row.OffenseCount));
+      if (totalCategory) {
+        countsByKey.set(`${year}__${districtSlug}__${totalCategory.value}`, (countsByKey.get(`${year}__${districtSlug}__${totalCategory.value}`) ?? 0) + count);
+      }
+      if (!category) {
+        continue;
+      }
+      countsByKey.set(`${year}__${districtSlug}__${category.value}`, (countsByKey.get(`${year}__${districtSlug}__${category.value}`) ?? 0) + count);
     }
   }
 
@@ -3590,6 +3820,7 @@ async function buildHoustonLocation(): Promise<LocationPayload> {
 async function buildSeattleLocation(): Promise<LocationPayload> {
   const { options: categories } = buildCategoryLookup(SEATTLE_LOCATION);
   const categoriesBySlug = buildCategoryOptionsMap(categories);
+  const totalCategory = categoriesBySlug.get("all-recorded-offenses") ?? null;
   const cityPopulationByYear = await parseUsCityPopulationByYear(US_CITY_POPULATION_SOURCES.seattle);
   const rows = await fetchSocrataRows<SeattleCrimeRow>(SOURCE_URLS.seattleCrimeApi, {
     $select: "date_extract_y(offense_date) as year,precinct,nibrs_offense_code_description,count(*) as count",
@@ -3607,13 +3838,20 @@ async function buildSeattleLocation(): Promise<LocationPayload> {
     const year = Number(row.year);
     const precinctLabel = toTitleCase(String(row.precinct ?? "").trim());
     const category = resolveMappedCategory(categoriesBySlug, mapSeattleCrimeType(String(row.nibrs_offense_code_description ?? "")));
-    if (!precinctLabel || !category || !years.includes(year)) {
+    const count = parseCountLike(row.count);
+    if (!precinctLabel || !years.includes(year)) {
       continue;
     }
 
     const districtSlug = slugify(precinctLabel);
     districtsByLabel.set(precinctLabel, { label: precinctLabel, value: districtSlug });
-    countsByKey.set(`${year}__${districtSlug}__${category.value}`, (countsByKey.get(`${year}__${districtSlug}__${category.value}`) ?? 0) + parseCountLike(row.count));
+    if (totalCategory) {
+      countsByKey.set(`${year}__${districtSlug}__${totalCategory.value}`, (countsByKey.get(`${year}__${districtSlug}__${totalCategory.value}`) ?? 0) + count);
+    }
+    if (!category) {
+      continue;
+    }
+    countsByKey.set(`${year}__${districtSlug}__${category.value}`, (countsByKey.get(`${year}__${districtSlug}__${category.value}`) ?? 0) + count);
   }
 
   const districts = [...districtsByLabel.values()].sort((a, b) => a.label.localeCompare(b.label));
