@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { execFileSync } from "node:child_process";
+import { execFileSync, spawn } from "node:child_process";
 import { createReadStream } from "node:fs";
 import readline from "node:readline";
 import zlib from "node:zlib";
@@ -142,7 +142,33 @@ type SeattleCrimeRow = {
 const ROOT = process.cwd();
 const prisma = new PrismaClient();
 const TMP_DIR = path.join(ROOT, "tmp_sources");
-const BERLIN_WORKBOOK_PATH = path.join(TMP_DIR, "berlin_kriminalitaetsatlas_2015_2024.xlsx");
+const BRAZIL_DIR = path.join(TMP_DIR, "brazil");
+const SAO_PAULO_DIR = path.join(BRAZIL_DIR, "sao-paulo");
+const FRANCE_DIR = path.join(TMP_DIR, "france");
+const PARIS_DIR = path.join(FRANCE_DIR, "paris");
+const GERMANY_DIR = path.join(TMP_DIR, "germany");
+const BERLIN_DIR = path.join(GERMANY_DIR, "berlin");
+const FRANKFURT_DIR = path.join(GERMANY_DIR, "frankfurt");
+const HAMBURG_DIR = path.join(GERMANY_DIR, "hamburg");
+const MUNICH_DIR = path.join(GERMANY_DIR, "munich");
+const ITALY_DIR = path.join(TMP_DIR, "italy");
+const MILAN_DIR = path.join(ITALY_DIR, "milan");
+const ROME_DIR = path.join(ITALY_DIR, "rome");
+const JAPAN_DIR = path.join(TMP_DIR, "japan");
+const TOKYO_DIR = path.join(JAPAN_DIR, "tokyo");
+const SPAIN_DIR = path.join(TMP_DIR, "spain");
+const BARCELONA_DIR = path.join(SPAIN_DIR, "barcelona");
+const VALENCIA_DIR = path.join(SPAIN_DIR, "valencia");
+const SPAIN_SHARED_DIR = path.join(SPAIN_DIR, "shared");
+const UK_DIR = path.join(TMP_DIR, "uk");
+const UK_SHARED_DIR = path.join(UK_DIR, "shared");
+const LONDON_DIR = path.join(UK_DIR, "london");
+const LUTON_DIR = path.join(UK_DIR, "luton");
+const US_DIR = path.join(TMP_DIR, "us");
+const US_SHARED_DIR = path.join(US_DIR, "shared");
+const HOUSTON_DIR = path.join(US_DIR, "houston");
+const PHOENIX_DIR = path.join(US_DIR, "phoenix");
+const BERLIN_WORKBOOK_PATH = path.join(BERLIN_DIR, "berlin_kriminalitaetsatlas_2015_2024.xlsx");
 const BERLIN_HISTORICAL_RECORDS = berlinHistoricalRecords as Array<{
   year: number;
   district: string;
@@ -526,6 +552,32 @@ function parseCountLike(value: string | number | null | undefined) {
   }
 
   return Number(String(value ?? "0").replace(/[^\d-]/g, "")) || 0;
+}
+
+function decodeXmlEntities(value: string) {
+  return value
+    .replace(/&#x([0-9a-f]+);/gi, (_match, hex) => String.fromCodePoint(Number.parseInt(hex, 16)))
+    .replace(/&#(\d+);/g, (_match, decimal) => String.fromCodePoint(Number(decimal)))
+    .replace(/&apos;/g, "'")
+    .replace(/&quot;/g, '"')
+    .replace(/&gt;/g, ">")
+    .replace(/&lt;/g, "<")
+    .replace(/&amp;/g, "&");
+}
+
+function parseRollingMarchYear(value: string) {
+  const match = value.trim().match(/^(\d{4})\/(\d{2})$/);
+  if (!match) {
+    return null;
+  }
+
+  const startYear = Number(match[1]);
+  let endYear = Math.floor(startYear / 100) * 100 + Number(match[2]);
+  if (endYear < startYear) {
+    endYear += 100;
+  }
+
+  return endYear;
 }
 
 function parseDecimalLike(value: string | number | null | undefined) {
@@ -981,16 +1033,16 @@ async function buildSpainLocation(
   const earliestSourceYear = Math.min(...annualSources.map((source) => source.year));
 
   for (const source of annualSources) {
-    let targetPath = path.join(TMP_DIR, "spain", `source_${source.year}.pdf`);
+    let targetPath = path.join(SPAIN_SHARED_DIR, `source_${source.year}.pdf`);
     await fs.mkdir(path.dirname(targetPath), { recursive: true });
 
     if (source.type === "xls") {
-      targetPath = path.join(TMP_DIR, "spain", `source_${source.year}.xls`);
+      targetPath = path.join(SPAIN_SHARED_DIR, `source_${source.year}.xls`);
       await ensureFile(targetPath, source.url);
     } else if (source.type === "pdf") {
       await ensureFile(targetPath, source.url);
     } else {
-      const zipPath = path.join(TMP_DIR, "spain", `source_${source.year}.zip`);
+      const zipPath = path.join(SPAIN_SHARED_DIR, `source_${source.year}.zip`);
       await ensureFile(zipPath, source.url);
       const pythonCode = [
         "import sys, zipfile, pathlib",
@@ -1090,7 +1142,7 @@ async function parseBarcelonaPopulationByYear(years: number[]) {
       continue;
     }
 
-    const filePath = path.join(TMP_DIR, "barcelona-population", `${year}.csv`);
+    const filePath = path.join(BARCELONA_DIR, "population", `${year}.csv`);
     await fs.mkdir(path.dirname(filePath), { recursive: true });
     await ensureFile(filePath, resource.url);
     const workbook = XLSX.readFile(filePath);
@@ -1105,7 +1157,7 @@ async function parseBarcelonaPopulationByYear(years: number[]) {
 }
 
 async function parseValenciaPopulationByYear() {
-  const filePath = path.join(TMP_DIR, "valencia_population_total.pdf");
+  const filePath = path.join(VALENCIA_DIR, "population_total.pdf");
   try {
     await fs.mkdir(path.dirname(filePath), { recursive: true });
     try {
@@ -1157,8 +1209,8 @@ function readHamburgPopulationRow(sheet: XLSX.WorkSheet) {
 }
 
 async function parseHamburgPopulationByYear() {
-  const legacyPath = path.join(TMP_DIR, "hamburg_profiles_2013_2023.xlsx");
-  const currentPath = path.join(TMP_DIR, "hamburg_profiles_2024.xlsx");
+  const legacyPath = path.join(HAMBURG_DIR, "profiles_2013_2023.xlsx");
+  const currentPath = path.join(HAMBURG_DIR, "profiles_2024.xlsx");
   await Promise.all([
     ensureFile(legacyPath, SOURCE_URLS.hamburgProfiles2013To2023),
     ensureFile(currentPath, SOURCE_URLS.hamburgProfiles2024),
@@ -1189,7 +1241,7 @@ async function parseHamburgPopulationByYear() {
 }
 
 async function parseTokyoPopulationByYear() {
-  const filePath = path.join(TMP_DIR, "tokyo_population.csv");
+  const filePath = path.join(TOKYO_DIR, "population.csv");
   await ensureFile(filePath, SOURCE_URLS.tokyoPopulationCsv);
   const workbook = XLSX.readFile(filePath, { type: "file", raw: false });
   const rows = XLSX.utils.sheet_to_json<Array<string | number | null>>(workbook.Sheets[workbook.SheetNames[0]], {
@@ -1241,9 +1293,9 @@ async function parseSaoPauloPopulationByYear() {
 
 async function parseUsCityPopulationByYear(config: (typeof US_CITY_POPULATION_SOURCES)[keyof typeof US_CITY_POPULATION_SOURCES]) {
   const output = new Map<number, number>();
-  const historicalCsvPath = path.join(TMP_DIR, "us_population_2000_2010.csv");
-  const intercensalPath = path.join(TMP_DIR, `us_population_2010_2020_${config.stateFips}.xlsx`);
-  const currentPath = path.join(TMP_DIR, `us_population_2020_2024_${config.stateFips}.xlsx`);
+  const historicalCsvPath = path.join(US_SHARED_DIR, "population_2000_2010.csv");
+  const intercensalPath = path.join(US_SHARED_DIR, `population_2010_2020_${config.stateFips}.xlsx`);
+  const currentPath = path.join(US_SHARED_DIR, `population_2020_2024_${config.stateFips}.xlsx`);
 
   await Promise.all([
     ensureFile(historicalCsvPath, SOURCE_URLS.usCityPopulation2000To2010),
@@ -1319,7 +1371,7 @@ function getTokyoSourceUrl(year: number) {
 }
 
 async function buildTokyoLocation(): Promise<LocationPayload> {
-  await fs.mkdir(path.join(TMP_DIR, "tokyo"), { recursive: true });
+  await fs.mkdir(TOKYO_DIR, { recursive: true });
 
   const years = Array.from({ length: 14 }, (_, index) => 2010 + index);
   const { options: categories, lookup: categoryLookup } = buildCategoryLookup(TOKYO_LOCATION);
@@ -1328,7 +1380,7 @@ async function buildTokyoLocation(): Promise<LocationPayload> {
   const cityPopulationByYear = await parseTokyoPopulationByYear();
 
   for (const year of years) {
-    const filePath = path.join(TMP_DIR, "tokyo", `${year}.csv`);
+    const filePath = path.join(TOKYO_DIR, `${year}.csv`);
     await ensureFile(filePath, getTokyoSourceUrl(year));
 
     const workbook = XLSX.read(await fs.readFile(filePath), { type: "buffer" });
@@ -1404,7 +1456,7 @@ function getSaoPauloSourceUrl(year: number) {
 }
 
 async function buildSaoPauloLocation(): Promise<LocationPayload> {
-  await fs.mkdir(path.join(TMP_DIR, "sao-paulo"), { recursive: true });
+  await fs.mkdir(SAO_PAULO_DIR, { recursive: true });
 
   const years = Array.from({ length: 16 }, (_, index) => 2010 + index);
   const { options: categories, lookup: categoryLookup } = buildCategoryLookup(SAO_PAULO_LOCATION);
@@ -1414,7 +1466,7 @@ async function buildSaoPauloLocation(): Promise<LocationPayload> {
   const cityPopulationByYear = await parseSaoPauloPopulationByYear();
 
   for (const year of years) {
-    const filePath = path.join(TMP_DIR, "sao-paulo", `${year}.htm`);
+    const filePath = path.join(SAO_PAULO_DIR, `${year}.htm`);
     await ensureFile(filePath, getSaoPauloSourceUrl(year));
 
     const workbook = XLSX.readFile(filePath, {
@@ -1512,8 +1564,8 @@ async function buildSaoPauloLocation(): Promise<LocationPayload> {
 }
 
 async function parseMunichResourceLinks() {
-  await fs.mkdir(path.join(TMP_DIR, "munich"), { recursive: true });
-  const pagePath = path.join(TMP_DIR, "munich", "statistics_page.html");
+  await fs.mkdir(MUNICH_DIR, { recursive: true });
+  const pagePath = path.join(MUNICH_DIR, "statistics_page.html");
   await ensureFile(pagePath, SOURCE_URLS.munichStatisticsPage);
   const html = await fs.readFile(pagePath, "utf8");
 
@@ -1820,7 +1872,7 @@ function parseMunichCounts(text: string) {
 }
 
 async function buildMunichLocation(): Promise<LocationPayload> {
-  const munichDir = path.join(TMP_DIR, "munich");
+  const munichDir = MUNICH_DIR;
   const approvedPilotYears = new Set([2001, 2002, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017]);
   const years = (await fs.readdir(munichDir))
     .map((fileName) => /^([0-9]{4})\.pdf$/i.exec(fileName)?.[1] ?? null)
@@ -1834,7 +1886,7 @@ async function buildMunichLocation(): Promise<LocationPayload> {
   const recordsByKey = new Map<string, CrimeRecord>();
 
   for (const year of years) {
-    const filePath = path.join(TMP_DIR, "munich", `${year}.pdf`);
+    const filePath = path.join(MUNICH_DIR, `${year}.pdf`);
     const counts = year < 2010
       ? parseMunichArchivedCounts(await extractPdfText(filePath))
       : parseMunichCounts(await extractPdfText(filePath));
@@ -2076,7 +2128,7 @@ async function buildHamburgLocation(): Promise<LocationPayload> {
 }
 
 async function buildRomeLocation(): Promise<LocationPayload> {
-  await fs.mkdir(path.join(TMP_DIR, "italy"), { recursive: true });
+  await fs.mkdir(ROME_DIR, { recursive: true });
 
   const years = Array.from({ length: 8 }, (_, index) => 2016 + index);
   const districtLabel = "Rome";
@@ -2085,12 +2137,12 @@ async function buildRomeLocation(): Promise<LocationPayload> {
   const recordsByKey = new Map<string, CrimeRecord>();
 
   for (const year of years) {
-    const workbookPath = path.join(TMP_DIR, "italy", `rome_${year}.xlsx`);
+    const workbookPath = path.join(ROME_DIR, `${year}.xlsx`);
 
     if (year === 2023) {
       await ensureFile(workbookPath, SOURCE_URLS.romeWorkbook2023);
     } else {
-      const zipPath = path.join(TMP_DIR, "italy", `rome_${year}.zip`);
+      const zipPath = path.join(ROME_DIR, `${year}.zip`);
       await ensureFile(zipPath, `https://www.comune.roma.it/web-resources/cms/documents/Sicurezza_urbana_${year}.zip`);
       const entry = findZipEntry(
         zipPath,
@@ -2160,10 +2212,10 @@ async function buildRomeLocation(): Promise<LocationPayload> {
 }
 
 async function buildMilanLocation(): Promise<LocationPayload> {
-  await fs.mkdir(path.join(TMP_DIR, "italy"), { recursive: true });
+  await fs.mkdir(MILAN_DIR, { recursive: true });
 
-  const crimePath = path.join(TMP_DIR, "italy", "milan_crime_2004_2023.csv");
-  const populationPath = path.join(TMP_DIR, "italy", "milan_population_1936_2023.csv");
+  const crimePath = path.join(MILAN_DIR, "crime_2004_2023.csv");
+  const populationPath = path.join(MILAN_DIR, "population_1936_2023.csv");
 
   await Promise.all([
     ensureFile(crimePath, SOURCE_URLS.milanCrimeCsv),
@@ -2429,10 +2481,10 @@ async function parseLondonPopulationCurrent(filePath: string, boroughs: Set<stri
 async function buildLondonLocation(): Promise<LocationPayload> {
   await fs.mkdir(TMP_DIR, { recursive: true });
 
-  const historicalCrimePath = path.join(TMP_DIR, "london_borough_crime_historical.csv");
-  const recentCrimePath = path.join(TMP_DIR, "london_borough_crime_recent.csv");
-  const historicalPopulationPath = path.join(TMP_DIR, "london_population_1961_2014.xls");
-  const currentPopulationPath = path.join(TMP_DIR, "ons_england_wales_population_2011_2024.xlsx");
+  const historicalCrimePath = path.join(LONDON_DIR, "borough_crime_historical.csv");
+  const recentCrimePath = path.join(LONDON_DIR, "borough_crime_recent.csv");
+  const historicalPopulationPath = path.join(LONDON_DIR, "population_1961_2014.xls");
+  const currentPopulationPath = path.join(UK_SHARED_DIR, "ons_england_wales_population_2011_2024.xlsx");
 
   await Promise.all([
     ensureFile(historicalCrimePath, SOURCE_URLS.londonCrimeHistorical),
@@ -2544,8 +2596,8 @@ async function buildLondonLocation(): Promise<LocationPayload> {
 async function buildFrankfurtLocation(): Promise<LocationPayload> {
   await fs.mkdir(TMP_DIR, { recursive: true });
 
-  const crimePath = path.join(TMP_DIR, "frankfurt_crime_by_category.csv");
-  const populationPath = path.join(TMP_DIR, "frankfurt_population_citywide.csv");
+  const crimePath = path.join(FRANKFURT_DIR, "crime_by_category.csv");
+  const populationPath = path.join(FRANKFURT_DIR, "population_citywide.csv");
 
   await Promise.all([
     ensureFile(crimePath, SOURCE_URLS.frankfurtCrimeByCategory),
@@ -2643,13 +2695,88 @@ async function parsePopulationTimeseries2001To2020(filePath: string, areaCode: s
   return populationByYear;
 }
 
+async function parseLutonArchivedRows(filePath: string) {
+  const archiveRows: Array<{ year: number; sourceLabel: string; count: number }> = [];
+  const unzipProcess = spawn("unzip", ["-p", filePath, "content.xml"], {
+    cwd: ROOT,
+    stdio: ["ignore", "pipe", "inherit"],
+  });
+
+  if (!unzipProcess.stdout) {
+    throw new Error("Could not read Luton archive workbook.");
+  }
+
+  unzipProcess.stdout.setEncoding("utf8");
+
+  const rowTerminator = "</table:table-row>";
+  let buffer = "";
+
+  const processRow = (rowXml: string) => {
+    if (!rowXml.includes("<text:p>Luton</text:p>")) {
+      return;
+    }
+
+    const values = [...rowXml.matchAll(/<text:p>([\s\S]*?)<\/text:p>/g)]
+      .map((match) => decodeXmlEntities(match[1].replace(/<[^>]+>/g, "").trim()))
+      .filter(Boolean);
+
+    if (values.length < 9 || values[3] !== "Luton") {
+      return;
+    }
+
+    const year = parseRollingMarchYear(values[0]);
+    if (!year || year < 2019) {
+      return;
+    }
+
+    archiveRows.push({
+      year,
+      sourceLabel: values[6],
+      count: parseCountLike(values.at(-1)),
+    });
+  };
+
+  for await (const chunk of unzipProcess.stdout) {
+    buffer += chunk;
+
+    while (true) {
+      const rowEndIndex = buffer.indexOf(rowTerminator);
+      if (rowEndIndex === -1) {
+        break;
+      }
+
+      processRow(buffer.slice(0, rowEndIndex));
+      buffer = buffer.slice(rowEndIndex + rowTerminator.length);
+    }
+  }
+
+  if (buffer) {
+    processRow(buffer);
+  }
+
+  await new Promise<void>((resolve, reject) => {
+    unzipProcess.on("close", (code) => {
+      if (code === 0) {
+        resolve();
+        return;
+      }
+
+      reject(new Error(`Luton archive extraction failed with exit code ${code ?? "unknown"}.`));
+    });
+    unzipProcess.on("error", reject);
+  });
+
+  return archiveRows;
+}
+
 async function buildLutonLocation(): Promise<LocationPayload> {
   await fs.mkdir(TMP_DIR, { recursive: true });
 
-  const crimeZipPath = path.join(TMP_DIR, "luton_csp_local_authority.zip");
-  const crimeWorkbookPath = path.join(TMP_DIR, "luton_csp_local_authority.xls");
-  const populationZipPath = path.join(TMP_DIR, "ons_population_timeseries_2001_2020.zip");
-  const populationCsvPath = path.join(TMP_DIR, "ons_population_timeseries_2001_2020.csv");
+  const crimeZipPath = path.join(LUTON_DIR, "csp_local_authority.zip");
+  const crimeWorkbookPath = path.join(LUTON_DIR, "csp_local_authority.xls");
+  const archiveWorkbookPath = path.join(LUTON_DIR, "csp-2016-2020.ods");
+  const populationZipPath = path.join(UK_SHARED_DIR, "ons_population_timeseries_2001_2020.zip");
+  const populationCsvPath = path.join(UK_SHARED_DIR, "ons_population_timeseries_2001_2020.csv");
 
   await Promise.all([
     ensureFile(crimeZipPath, SOURCE_URLS.lutonCrimeWorkbook),
@@ -2683,7 +2810,7 @@ async function buildLutonLocation(): Promise<LocationPayload> {
 
   const districtLabel = "Luton";
   const districtSlug = slugify(districtLabel);
-  const records: CrimeRecord[] = [];
+  const recordsByKey = new Map<string, CrimeRecord>();
   const years = new Set<number>();
   let currentCsp = "";
 
@@ -2712,7 +2839,7 @@ async function buildLutonLocation(): Promise<LocationPayload> {
       const count = Number(row[index] ?? 0);
       const population = populationByYear.get(year);
       years.add(year);
-      records.push({
+      addOrMergeRecord(recordsByKey, {
         year,
         districtLabel,
         districtSlug,
@@ -2722,6 +2849,26 @@ async function buildLutonLocation(): Promise<LocationPayload> {
         ratePer100k: population ? (count / population) * 100_000 : null,
       });
     }
+  }
+
+  const archivedRows = await parseLutonArchivedRows(archiveWorkbookPath);
+  for (const archivedRow of archivedRows) {
+    const category = categoryLookup.get(normalizeSourceLabel(archivedRow.sourceLabel));
+    if (!category) {
+      continue;
+    }
+
+    const population = populationByYear.get(archivedRow.year) ?? null;
+    years.add(archivedRow.year);
+    addOrMergeRecord(recordsByKey, {
+      year: archivedRow.year,
+      districtLabel,
+      districtSlug,
+      categoryLabel: category.label,
+      categorySlug: category.slug,
+      count: archivedRow.count,
+      ratePer100k: population ? (archivedRow.count / population) * 100_000 : null,
+    });
   }
 
   return {
@@ -2738,14 +2885,14 @@ async function buildLutonLocation(): Promise<LocationPayload> {
     categories,
     defaultCategorySlugs: categories.filter((category) => category.isDefault).map((category) => category.value),
     cityPopulationByYear: mapToObject(populationByYear),
-    records,
+    records: [...recordsByKey.values()].sort((left, right) => left.year - right.year),
   };
 }
 
 async function buildParisLocation(): Promise<LocationPayload> {
   await fs.mkdir(TMP_DIR, { recursive: true });
 
-  const crimePath = path.join(TMP_DIR, "paris_communal_crime.csv.gz");
+  const crimePath = path.join(PARIS_DIR, "communal_crime.csv.gz");
   await ensureFile(crimePath, SOURCE_URLS.parisCrimeCommunal);
 
   const { options: categories, lookup: categoryLookup } = buildCategoryLookup(PARIS_LOCATION);
@@ -3313,7 +3460,7 @@ async function buildDallasLocation(): Promise<LocationPayload> {
 
 async function buildPhoenixLocation(): Promise<LocationPayload> {
   await fs.mkdir(TMP_DIR, { recursive: true });
-  const csvPath = path.join(TMP_DIR, "phoenix-crime.csv");
+  const csvPath = path.join(PHOENIX_DIR, "crime.csv");
   await ensureFileWithCurl(csvPath, SOURCE_URLS.phoenixCrimeCsv, ["-H", "Referer: https://www.phoenixopendata.com/"]);
 
   const { options: categories } = buildCategoryLookup(PHOENIX_LOCATION);
@@ -3386,7 +3533,7 @@ async function buildHoustonLocation(): Promise<LocationPayload> {
   const districtsByLabel = new Map<string, FilterOption>();
 
   for (const year of years) {
-    const csvPath = path.join(TMP_DIR, `houston_${year}.csv`);
+    const csvPath = path.join(HOUSTON_DIR, `${year}.csv`);
     await ensureFileWithCurl(csvPath, `https://www.houstontx.gov/police/cs/xls/NIBRSPublicView${year}.csv`);
     const lineReader = readline.createInterface({
       input: createReadStream(csvPath),

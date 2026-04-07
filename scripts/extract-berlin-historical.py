@@ -234,7 +234,7 @@ def pick_best_page(reader: PdfReader, toc_page: int):
 
 
 def main():
-    base_dir = Path(__file__).resolve().parents[1] / "tmp_sources"
+    base_dir = Path(__file__).resolve().parents[1] / "tmp_sources" / "germany" / "berlin"
     records = []
 
     for filename, report in REPORTS.items():

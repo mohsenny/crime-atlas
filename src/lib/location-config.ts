@@ -488,7 +488,7 @@ export const LUTON_LOCATION: LocationDefinition = {
   areaLabelPlural: "Areas",
   chartTitle: "Luton Crime Overview",
   note:
-    "Luton uses official Community Safety Partnership and local-authority crime tables. The series is annual, based on rolling 12-month totals at the year ending each March, and it is citywide rather than neighbourhood-level.",
+    "Luton uses official Community Safety Partnership and local-authority crime tables. The series is annual, based on rolling 12-month totals at the year ending each March, and combines the current workbook with a committed archived 2016-2020 ODS release to extend citywide coverage through 2020.",
   sources: [
     {
       label: "ONS recorded crime data at Community Safety Partnership and local authority level",
