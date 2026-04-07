@@ -3,5 +3,13 @@
   "provider": "node",
   "packages": {
     "node": "20"
+  },
+  "steps": {
+    "install": {
+      "commands": [
+        "npm i -g corepack@latest && corepack enable && corepack prepare --activate",
+        "npm ci --include=dev"
+      ]
+    }
   }
 }

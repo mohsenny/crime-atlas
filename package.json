@@ -8,11 +8,11 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build": "npx prisma generate && next build",
     "start": "next start -H 0.0.0.0 -p ${PORT:-3000}",
     "lint": "eslint .",
-    "db:reset": "prisma generate && tsx scripts/reset-database.ts",
-    "data:prepare": "prisma generate && tsx scripts/reset-database.ts && tsx scripts/prepare-data.ts"
+    "db:reset": "npx prisma generate && tsx scripts/reset-database.ts",
+    "data:prepare": "npx prisma generate && tsx scripts/reset-database.ts && tsx scripts/prepare-data.ts"
   },
   "dependencies": {
     "@fontsource/manufacturing-consent": "^5.2.2",
