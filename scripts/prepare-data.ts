@@ -34,6 +34,7 @@ import {
   LOUISVILLE_LOCATION,
   LUTON_LOCATION,
   MANCHESTER_LOCATION,
+  MELBOURNE_LOCATION,
   MILAN_LOCATION,
   MINNEAPOLIS_LOCATION,
   NEW_YORK_CITY_LOCATION,
@@ -45,6 +46,7 @@ import {
   SAN_FRANCISCO_LOCATION,
   SEATTLE_LOCATION,
   SPAIN_COUNTRY_LOCATION,
+  SYDNEY_LOCATION,
   TOKYO_LOCATION,
   VALENCIA_LOCATION,
   type LocationDefinition,
@@ -204,6 +206,10 @@ const SPAIN_COUNTRY_DIR = path.join(SPAIN_DIR, "country");
 const BARCELONA_DIR = path.join(SPAIN_DIR, "barcelona");
 const VALENCIA_DIR = path.join(SPAIN_DIR, "valencia");
 const SPAIN_SHARED_DIR = path.join(SPAIN_DIR, "shared");
+const AUSTRALIA_DIR = path.join(TMP_DIR, "australia");
+const AUSTRALIA_SHARED_DIR = path.join(AUSTRALIA_DIR, "shared");
+const MELBOURNE_DIR = path.join(AUSTRALIA_DIR, "melbourne");
+const SYDNEY_DIR = path.join(AUSTRALIA_DIR, "sydney");
 const UK_DIR = path.join(TMP_DIR, "uk");
 const UK_SHARED_DIR = path.join(UK_DIR, "shared");
 const LONDON_DIR = path.join(UK_DIR, "london");
@@ -413,7 +419,19 @@ const SOURCE_URLS = {
     "https://apisidra.ibge.gov.br/values/t/761/n6/3550308/v/93/p/2010?formato=json",
   saoPauloPopulation2022:
     "https://apisidra.ibge.gov.br/values/t/4714/n6/3550308/v/93/p/2022?formato=json",
+  australiaLgaPopulation:
+    "https://www.abs.gov.au/statistics/people/population/regional-population/2024-25/32180DS0004_2001-25.xlsx",
+  sydneyCrimeWorkbook: "https://bocsarblob.blob.core.windows.net/bocsar-open-data/RCI_offencebymonth.xlsm",
 };
+
+const VICTORIA_LGA_RECORDED_OFFENCES_URL_BY_YEAR = {
+  2020: "https://files.crimestatistics.vic.gov.au/2021-07/Data_Tables_LGA_Recorded_Offences_Year_Ending_December_2020.xlsx",
+  2021: "https://files.crimestatistics.vic.gov.au/2022-03/Data_Tables_LGA_Recorded_Offences_Year_Ending_December_2021.xlsx",
+  2022: "https://files.crimestatistics.vic.gov.au/2023-03/Data_Tables_LGA_Recorded_Offences_Year_Ending_December_2022.xlsx",
+  2023: "https://files.crimestatistics.vic.gov.au/2024-06/Data_Tables_LGA_Recorded_Offences_Year_Ending_December_2023_0.xlsx",
+  2024: "https://files.crimestatistics.vic.gov.au/2025-06/Data_Tables_LGA_Recorded_Offences_Year_Ending_December_2024.xlsx",
+  2025: "https://files.crimestatistics.vic.gov.au/2026-03/Data_Tables_LGA_Recorded_Offences_Year_Ending_December_2025.xlsx",
+} satisfies Record<number, string>;
 
 const US_CITY_POPULATION_SOURCES = {
   austin: {
@@ -497,6 +515,90 @@ const VALENCIA_OFFICIAL_POPULATION_FALLBACK = {
   2023: 809_501,
   2024: 830_606,
 } satisfies Record<number, number>;
+
+const MELBOURNE_METRO_LGAS = [
+  "Banyule",
+  "Bayside",
+  "Boroondara",
+  "Brimbank",
+  "Cardinia",
+  "Casey",
+  "Darebin",
+  "Frankston",
+  "Glen Eira",
+  "Greater Dandenong",
+  "Hobsons Bay",
+  "Hume",
+  "Kingston",
+  "Knox",
+  "Manningham",
+  "Maribyrnong",
+  "Maroondah",
+  "Melbourne",
+  "Melton",
+  "Monash",
+  "Moonee Valley",
+  "Merri-bek",
+  "Mornington Peninsula",
+  "Nillumbik",
+  "Port Phillip",
+  "Stonnington",
+  "Whitehorse",
+  "Whittlesea",
+  "Wyndham",
+  "Yarra",
+  "Yarra Ranges",
+] as const;
+
+const SYDNEY_METRO_LGAS = [
+  "Bayside",
+  "Blacktown",
+  "Blue Mountains",
+  "Burwood",
+  "Camden",
+  "Campbelltown",
+  "Canada Bay",
+  "Canterbury-Bankstown",
+  "Cumberland",
+  "Fairfield",
+  "Georges River",
+  "Hawkesbury",
+  "Hornsby",
+  "Hunters Hill",
+  "Inner West",
+  "Ku-ring-gai",
+  "Lane Cove",
+  "Liverpool",
+  "Mosman",
+  "North Sydney",
+  "Northern Beaches",
+  "Parramatta",
+  "Penrith",
+  "Randwick",
+  "Ryde",
+  "Strathfield",
+  "Sutherland",
+  "Sydney",
+  "The Hills",
+  "Waverley",
+  "Willoughby",
+  "Wollondilly",
+  "Woollahra",
+] as const;
+
+const MELBOURNE_ABS_LABEL_BY_LGA = {
+  Bayside: "Bayside (Vic.)",
+  Kingston: "Kingston (Vic.)",
+} satisfies Record<string, string>;
+
+const SYDNEY_ABS_LABEL_BY_LGA = {
+  Bayside: "Bayside (NSW)",
+  Campbelltown: "Campbelltown (NSW)",
+} satisfies Record<string, string>;
+
+const MELBOURNE_CANONICAL_LGA_BY_SOURCE: Record<string, string> = {
+  Moreland: "Merri-bek",
+};
 
 const SPAIN_COUNTRY_TERRITORIES: SpainCountryTerritoryDefinition[] = [
   { slug: "andalucia", label: "Andalucía", aliases: ["ANDALUCÍA"] },
@@ -2249,6 +2351,277 @@ async function parseUsCityPopulationByYear(config: (typeof US_CITY_POPULATION_SO
   }
 
   return mapToObject(output);
+}
+
+async function parseAustraliaLgaPopulationByYear(input: {
+  districtLabels: string[];
+  absLabelByDistrict?: Record<string, string>;
+}) {
+  const workbookPath = path.join(AUSTRALIA_SHARED_DIR, "abs_lga_population_2001_2025.xlsx");
+  await fs.mkdir(AUSTRALIA_SHARED_DIR, { recursive: true });
+  await ensureFile(workbookPath, SOURCE_URLS.australiaLgaPopulation);
+
+  const workbook = XLSX.readFile(workbookPath, { dense: true });
+  const rows = XLSX.utils.sheet_to_json<Array<string | number | null>>(workbook.Sheets["Table 1"], {
+    header: 1,
+    defval: null,
+  });
+  const headerYears = rows[4] ?? [];
+  const targetDistrictByAbsLabel = new Map(
+    input.districtLabels.map((label) => [input.absLabelByDistrict?.[label] ?? label, label] satisfies [string, string]),
+  );
+  const populationByDistrict = new Map<string, Map<number, number>>();
+
+  for (const row of rows.slice(6)) {
+    const absLabel = String(row[1] ?? "").trim();
+    const districtLabel = targetDistrictByAbsLabel.get(absLabel);
+    if (!districtLabel) {
+      continue;
+    }
+
+    const populationByYear = new Map<number, number>();
+    for (let columnIndex = 2; columnIndex < headerYears.length; columnIndex += 1) {
+      const year = Number(headerYears[columnIndex] ?? 0);
+      if (!year) {
+        continue;
+      }
+
+      const population = Number(row[columnIndex] ?? 0);
+      if (population > 0) {
+        populationByYear.set(year, population);
+      }
+    }
+
+    populationByDistrict.set(districtLabel, populationByYear);
+  }
+
+  const missingDistricts = input.districtLabels.filter((label) => !populationByDistrict.has(label));
+  if (missingDistricts.length) {
+    throw new Error(`Missing ABS population rows for: ${missingDistricts.join(", ")}`);
+  }
+
+  return populationByDistrict;
+}
+
+function incrementCount(map: Map<string, number>, key: string, value: number) {
+  map.set(key, (map.get(key) ?? 0) + value);
+}
+
+function buildAustralianMetroLocationPayload(input: {
+  definition: LocationDefinition;
+  years: number[];
+  districtLabels: string[];
+  populationByDistrict: Map<string, Map<number, number>>;
+  countsByKey: Map<string, number>;
+}) {
+  const { options: categories } = buildCategoryLookup(input.definition);
+  const districts = input.districtLabels.map((label) => ({ label, value: slugify(label) }));
+  const records: CrimeRecord[] = [];
+  const cityPopulationByYear = new Map<number, number>();
+
+  for (const year of input.years) {
+    const cityPopulation = input.districtLabels.reduce(
+      (sum, districtLabel) => sum + (input.populationByDistrict.get(districtLabel)?.get(year) ?? 0),
+      0,
+    );
+    if (cityPopulation > 0) {
+      cityPopulationByYear.set(year, cityPopulation);
+    }
+  }
+
+  for (const district of districts) {
+    const populationByYear = input.populationByDistrict.get(district.label) ?? new Map<number, number>();
+    for (const category of categories) {
+      for (const year of input.years) {
+        const count = input.countsByKey.get(`${district.label}__${category.value}__${year}`) ?? 0;
+        const population = populationByYear.get(year) ?? null;
+        records.push({
+          year,
+          districtLabel: district.label,
+          districtSlug: district.value,
+          categoryLabel: category.label,
+          categorySlug: category.value,
+          count,
+          ratePer100k: population ? (count / population) * 100_000 : null,
+        });
+      }
+    }
+  }
+
+  return {
+    slug: input.definition.slug,
+    label: input.definition.label,
+    country: input.definition.country,
+    areaLabelSingular: input.definition.areaLabelSingular,
+    areaLabelPlural: input.definition.areaLabelPlural,
+    chartTitle: input.definition.chartTitle,
+    note: input.definition.note,
+    sources: input.definition.sources,
+    years: input.years,
+    districts,
+    categories,
+    defaultCategorySlugs: categories.filter((category) => category.isDefault).map((category) => category.value),
+    cityPopulationByYear: mapToObject(cityPopulationByYear),
+    records,
+  } satisfies LocationPayload;
+}
+
+async function buildSydneyLocation(): Promise<LocationPayload> {
+  await fs.mkdir(SYDNEY_DIR, { recursive: true });
+
+  const workbookPath = path.join(SYDNEY_DIR, "nsw_bocsar_offence_by_month.xlsm");
+  await ensureFile(workbookPath, SOURCE_URLS.sydneyCrimeWorkbook);
+
+  const districtLabels = [...SYDNEY_METRO_LGAS];
+  const years = Array.from({ length: 25 }, (_, index) => 2001 + index);
+  const { lookup: categoryLookup, options: categories } = buildCategoryLookup(SYDNEY_LOCATION);
+  const totalCategory = categories.find((category) => category.value === "all-recorded-offenses") ?? null;
+  const populationByDistrict = await parseAustraliaLgaPopulationByYear({
+    districtLabels,
+    absLabelByDistrict: SYDNEY_ABS_LABEL_BY_LGA,
+  });
+
+  const workbook = XLSX.readFile(workbookPath, { dense: true });
+  const rows = XLSX.utils.sheet_to_json<Array<string | number | null>>(workbook.Sheets.Data, {
+    header: 1,
+    defval: null,
+  });
+  const headerRow = rows[0] ?? [];
+  const lgaColumnIndex = headerRow.indexOf("LGA");
+  const categoryColumnIndex = headerRow.indexOf("Offence category");
+  const subcategoryColumnIndex = headerRow.indexOf("Subcategory");
+  const monthColumns = headerRow
+    .map((cell, index) => ({ serial: Number(cell ?? 0), index }))
+    .filter(({ serial, index }) => index >= 3 && Number.isFinite(serial) && serial > 0)
+    .map(({ serial, index }) => {
+      const parsedDate = XLSX.SSF.parse_date_code(serial);
+      return {
+        index,
+        year: parsedDate?.y ?? 0,
+      };
+    })
+    .filter(({ year }) => year >= 2001 && year <= 2025);
+
+  const districtSet = new Set<string>(districtLabels);
+  const seenDistricts = new Set<string>();
+  const countsByKey = new Map<string, number>();
+
+  for (const row of rows.slice(1)) {
+    const districtLabel = String(row[lgaColumnIndex] ?? "").trim();
+    if (!districtSet.has(districtLabel)) {
+      continue;
+    }
+
+    seenDistricts.add(districtLabel);
+    const sourceCategoryLabel = String(row[subcategoryColumnIndex] ?? "").trim() || String(row[categoryColumnIndex] ?? "").trim();
+    const mappedCategory = categoryLookup.get(normalizeSourceLabel(sourceCategoryLabel));
+
+    for (const { index, year } of monthColumns) {
+      const count = Number(row[index] ?? 0);
+      if (!count) {
+        continue;
+      }
+
+      if (totalCategory) {
+        incrementCount(countsByKey, `${districtLabel}__${totalCategory.value}__${year}`, count);
+      }
+
+      if (mappedCategory) {
+        incrementCount(countsByKey, `${districtLabel}__${mappedCategory.slug}__${year}`, count);
+      }
+    }
+  }
+
+  const missingDistricts = districtLabels.filter((label) => !seenDistricts.has(label));
+  if (missingDistricts.length) {
+    throw new Error(`Sydney source missing expected LGAs: ${missingDistricts.join(", ")}`);
+  }
+
+  return buildAustralianMetroLocationPayload({
+    definition: SYDNEY_LOCATION,
+    years,
+    districtLabels,
+    populationByDistrict,
+    countsByKey,
+  });
+}
+
+async function buildMelbourneLocation(): Promise<LocationPayload> {
+  await fs.mkdir(MELBOURNE_DIR, { recursive: true });
+
+  const districtLabels = [...MELBOURNE_METRO_LGAS];
+  const years: Array<keyof typeof VICTORIA_LGA_RECORDED_OFFENCES_URL_BY_YEAR> = [2020, 2021, 2022, 2023, 2024, 2025];
+  const { lookup: categoryLookup, options: categories } = buildCategoryLookup(MELBOURNE_LOCATION);
+  const totalCategory = categories.find((category) => category.value === "all-recorded-offenses") ?? null;
+  const populationByDistrict = await parseAustraliaLgaPopulationByYear({
+    districtLabels,
+    absLabelByDistrict: MELBOURNE_ABS_LABEL_BY_LGA,
+  });
+
+  const workbookPathByYear = Object.fromEntries(
+    years.map((year) => [year, path.join(MELBOURNE_DIR, `victoria_lga_recorded_offences_${year}.xlsx`)]),
+  ) as Record<number, string>;
+
+  await Promise.all(
+    years.map((year) => ensureFile(workbookPathByYear[year], VICTORIA_LGA_RECORDED_OFFENCES_URL_BY_YEAR[year])),
+  );
+
+  const districtSet = new Set<string>(districtLabels);
+  const seenDistricts = new Set<string>();
+  const countsByKey = new Map<string, number>();
+
+  for (const year of years) {
+    const workbook = XLSX.readFile(workbookPathByYear[year], { dense: true });
+    const rows = XLSX.utils.sheet_to_json<Array<string | number | null>>(workbook.Sheets["Table 02"], {
+      header: 1,
+      defval: null,
+    });
+    const headerRow = (rows[0] ?? []).map((value) => String(value ?? "").trim());
+    const lgaColumnIndex = headerRow.indexOf("Local Government Area");
+    const subgroupColumnIndex = headerRow.indexOf("Offence Subgroup");
+    const countColumnIndex = headerRow.indexOf("Offence Count");
+
+    for (const row of rows.slice(1)) {
+      if (Number(row[0] ?? 0) !== year) {
+        continue;
+      }
+
+      const sourceDistrictLabel = String(row[lgaColumnIndex] ?? "").trim();
+      const districtLabel = MELBOURNE_CANONICAL_LGA_BY_SOURCE[sourceDistrictLabel] ?? sourceDistrictLabel;
+      if (!districtSet.has(districtLabel)) {
+        continue;
+      }
+
+      seenDistricts.add(districtLabel);
+      const sourceCategoryLabel = String(row[subgroupColumnIndex] ?? "").trim();
+      const mappedCategory = categoryLookup.get(normalizeSourceLabel(sourceCategoryLabel));
+      const count = Number(row[countColumnIndex] ?? 0);
+      if (!count) {
+        continue;
+      }
+
+      if (totalCategory) {
+        incrementCount(countsByKey, `${districtLabel}__${totalCategory.value}__${year}`, count);
+      }
+
+      if (mappedCategory) {
+        incrementCount(countsByKey, `${districtLabel}__${mappedCategory.slug}__${year}`, count);
+      }
+    }
+  }
+
+  const missingDistricts = districtLabels.filter((label) => !seenDistricts.has(label));
+  if (missingDistricts.length) {
+    throw new Error(`Melbourne source missing expected LGAs: ${missingDistricts.join(", ")}`);
+  }
+
+  return buildAustralianMetroLocationPayload({
+    definition: MELBOURNE_LOCATION,
+    years,
+    districtLabels,
+    populationByDistrict,
+    countsByKey,
+  });
 }
 
 function getTokyoSourceUrl(year: number) {
@@ -5291,7 +5664,7 @@ async function main() {
   const barcelona = await buildSpainLocation(BARCELONA_LOCATION, "Barcelona", spainAnnualSources, barcelonaPopulationByYear);
   const valencia = await buildSpainLocation(VALENCIA_LOCATION, "Valencia", spainAnnualSources, valenciaPopulationByYear);
 
-  const [austin, berlin, birmingham, chicago, cleveland, dallas, franceCountry, frankfurt, germanyCountry, hamburg, houston, italyCountry, london, losAngeles, louisville, luton, manchester, milan, minneapolis, munich, newYorkCity, paris, phoenix, rome, sanFrancisco, saoPaulo, seattle, spainCountry, tokyo] =
+  const [austin, berlin, birmingham, chicago, cleveland, dallas, franceCountry, frankfurt, germanyCountry, hamburg, houston, italyCountry, london, losAngeles, louisville, luton, manchester, melbourne, milan, minneapolis, munich, newYorkCity, paris, phoenix, rome, sanFrancisco, saoPaulo, seattle, spainCountry, sydney, tokyo] =
     await Promise.all([
       buildAustinLocation(),
       buildBerlinLocation(),
@@ -5310,6 +5683,7 @@ async function main() {
       buildLouisvilleLocation(),
       buildLutonLocation(),
       buildUkLocalAuthorityLocation(MANCHESTER_LOCATION, "Manchester", "E08000003"),
+      buildMelbourneLocation(),
       buildMilanLocation(),
       buildMinneapolisLocation(),
       buildMunichLocation(),
@@ -5321,6 +5695,7 @@ async function main() {
       buildSaoPauloLocation(),
       buildSeattleLocation(),
       buildSpainCountryLocation(),
+      buildSydneyLocation(),
       buildTokyoLocation(),
     ]);
   const payload = {
@@ -5344,6 +5719,7 @@ async function main() {
       louisville,
       luton,
       manchester,
+      melbourne,
       milan,
       minneapolis,
       munich,
@@ -5355,6 +5731,7 @@ async function main() {
       sanFrancisco,
       seattle,
       spainCountry,
+      sydney,
       tokyo,
       valencia,
     ].sort((left, right) => left.label.localeCompare(right.label)),

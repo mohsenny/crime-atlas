@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeft, ArrowRightLeft } from "lucide-react";
-import Link from "next/link";
+import { ArrowRightLeft } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 import type { ComparisonData, LocationOverview } from "@/lib/dashboard-data";
@@ -12,6 +11,7 @@ import { ComparisonChart } from "@/components/comparison/comparison-chart";
 import { ComparisonMethodology } from "@/components/comparison/comparison-methodology";
 import { DashboardSources } from "@/components/dashboard/dashboard-sources";
 import { MetricToggle } from "@/components/dashboard/metric-toggle";
+import { BackLink } from "@/components/navigation/back-link";
 import { buildOverviewHref } from "@/lib/location-scope";
 import { buildCompareSearchParams } from "@/lib/view-state";
 type ComparisonPageClientProps = {
@@ -92,14 +92,7 @@ export function ComparisonPageClient({ data, initialCategorySlug, initialMetric,
       <div className="mx-auto max-w-7xl space-y-4">
         <div className="px-4 sm:px-0">
           <div className="flex items-center gap-2 sm:justify-between">
-            <Link
-              aria-label="All Cities"
-              className="-ml-1 inline-flex h-10 shrink-0 items-center gap-2 text-slate-400 transition hover:text-slate-100"
-              href={buildOverviewHref("city")}
-            >
-              <ArrowLeft className="h-4 w-4 shrink-0" />
-              <span className="hidden sm:inline text-sm font-semibold leading-none">All Cities</span>
-            </Link>
+            <BackLink href={buildOverviewHref("city")} label="All Cities" />
             <div className="flex min-w-0 flex-1 items-center justify-end gap-1.5 sm:flex-none sm:gap-2">
               <CompareCityPicker
                 className="min-w-[5.5rem] shrink-0 justify-center sm:min-w-0"

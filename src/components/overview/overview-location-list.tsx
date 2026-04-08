@@ -40,10 +40,10 @@ export function OverviewLocationList({
   const lastLetterRef = useRef<string | null>(null);
   const [alphaRailTop, setAlphaRailTop] = useState<number | null>(null);
   const activeLetters = [...new Set(locations.map((location) => getLocationInitial(location.label)))];
+  const showAlphaRail = showAlphaIndex && activeLetters.length > 1;
 
   useEffect(() => {
-    if (!showAlphaIndex || activeLetters.length <= 1) {
-      setAlphaRailTop(null);
+    if (!showAlphaRail) {
       return;
     }
 
@@ -74,7 +74,7 @@ export function OverviewLocationList({
       resizeObserver.disconnect();
       window.removeEventListener("resize", updateAlphaRailTop);
     };
-  }, [activeLetters.length, showAlphaIndex]);
+  }, [showAlphaRail, activeLetters.length]);
 
   function scrollToLetter(letter: string, behavior: ScrollBehavior = "smooth") {
     const target = document.getElementById(`overview-alpha-${letter}`);
@@ -115,8 +115,8 @@ export function OverviewLocationList({
 
   return (
     <div className="mx-auto max-w-4xl">
-      <div className={cn("relative", showAlphaIndex && activeLetters.length > 1 && "pr-6")}>
-        {showAlphaIndex && activeLetters.length > 1 ? (
+      <div className={cn("relative", showAlphaRail && "pr-6")}>
+        {showAlphaRail ? (
           <div className="pointer-events-none absolute inset-y-0 right-0 top-0 w-4">
             <div
               className="pointer-events-auto sticky flex w-full touch-none select-none flex-col items-center gap-1.5 py-1"
@@ -147,7 +147,7 @@ export function OverviewLocationList({
                 }
               }}
               ref={alphaRailRef}
-              style={alphaRailTop ? { top: `${alphaRailTop}px` } : undefined}
+              style={showAlphaRail && alphaRailTop ? { top: `${alphaRailTop}px` } : undefined}
             >
               {activeLetters.map((letter) => (
                 <button

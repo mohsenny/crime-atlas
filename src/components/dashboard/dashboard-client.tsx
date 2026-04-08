@@ -1,9 +1,8 @@
 "use client";
 
 import { startTransition, useDeferredValue, useEffect, useMemo, useState } from "react";
-import { ArrowLeft, LoaderCircle, RefreshCw } from "lucide-react";
+import { LoaderCircle, RefreshCw } from "lucide-react";
 import type { Route } from "next";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { CompareCityPicker } from "@/components/comparison/compare-city-picker";
@@ -12,6 +11,7 @@ import { DashboardSkeleton } from "@/components/dashboard/dashboard-skeleton";
 import { DashboardSources } from "@/components/dashboard/dashboard-sources";
 import { ExpandableDropdown } from "@/components/dashboard/expandable-dropdown";
 import { MetricToggle } from "@/components/dashboard/metric-toggle";
+import { BackLink } from "@/components/navigation/back-link";
 import type { ChartResponse, FilterMetadata, LocationOverview } from "@/lib/dashboard-data";
 import {
   findAllOffensesCategorySlug,
@@ -158,14 +158,7 @@ export function DashboardClient({
       <main className="relative min-h-screen overflow-hidden py-5 sm:px-6 sm:py-6 lg:px-8">
         <div className="mx-auto max-w-7xl space-y-4">
           <div className="px-4 sm:px-0">
-            <Link
-              className="inline-flex items-center gap-2 text-sm font-medium text-slate-400 transition hover:text-slate-100"
-              href={backHref as Route}
-            >
-              <ArrowLeft className="h-4 w-4" />
-              <span className="hidden sm:inline">{backLabel}</span>
-              <span className="sr-only sm:hidden">{backLabel}</span>
-            </Link>
+            <BackLink href={backHref as Route} label={backLabel} />
           </div>
           <div className="card-panel chart-panel rounded-none p-6 text-sm text-rose-200 sm:p-6">
             {error ?? "The dashboard data could not be loaded."}
@@ -183,14 +176,7 @@ export function DashboardClient({
       <div className="mx-auto max-w-7xl space-y-4">
         <div className="px-4 sm:px-0">
           <div className="flex items-center gap-2 sm:justify-between">
-            <Link
-              aria-label={backLabel}
-              className="-ml-1 inline-flex h-10 shrink-0 items-center gap-2 text-slate-400 transition hover:text-slate-100"
-              href={backHref as Route}
-            >
-              <ArrowLeft className="h-4 w-4 shrink-0" />
-              <span className="hidden sm:inline text-sm font-semibold leading-none">{backLabel}</span>
-            </Link>
+            <BackLink href={backHref as Route} label={backLabel} />
             <div className="flex min-w-0 flex-1 items-center justify-end gap-1.5 sm:flex-none sm:gap-2">
               <CompareCityPicker
                 className="min-w-[5.75rem] shrink-0 justify-center sm:min-w-0"
