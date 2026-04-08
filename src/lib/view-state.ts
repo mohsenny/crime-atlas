@@ -73,9 +73,11 @@ export function resolveCompareViewState(data: ComparisonData, searchState: Compa
     "";
 
   const resolvedMetric =
-    searchState.metric === "rate" && data.supportsRate
-      ? ("rate" as const)
-      : ("count" as const);
+    !data.supportsRate
+      ? ("count" as const)
+      : searchState.metric === "count"
+        ? ("count" as const)
+        : ("rate" as const);
 
   return {
     locations: splitParam(searchState.locations ?? searchState.cities),

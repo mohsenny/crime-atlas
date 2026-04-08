@@ -92,8 +92,8 @@ export default async function LocationPage({ params, searchParams }: LocationPag
 
   return (
     <DashboardClient
-      backHref={buildOverviewHref(meta.scope)}
-      backLabel={`All ${getScopeLabel(meta.scope, { plural: true, capitalized: true })}`}
+      backHref={buildOverviewHref("city")}
+      backLabel={`All ${getScopeLabel("city", { plural: true, capitalized: true })}`}
       initialCategorySlugs={viewState.categorySlugs}
       initialDistrictSlugs={viewState.districtSlugs}
       initialMetric={viewState.metric}

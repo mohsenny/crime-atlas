@@ -3146,7 +3146,7 @@ export const CLEVELAND_LOCATION: LocationDefinition = {
   areaLabelPlural: "Districts",
   chartTitle: "Cleveland Crime by District",
   note:
-    "Cleveland uses the official city ArcGIS crime-incidents service. The dashboard aggregates district-level incident records to calendar years using the published UCR description field.",
+    "Cleveland uses the official city ArcGIS crime-incidents service. The dashboard aggregates district-level incident records to calendar years using the published UCR description field. The source contains only sparse legacy records before 2016, so the published annual series begins in 2016 when consistent citywide coverage appears.",
   sources: [
     {
       label: "City of Cleveland Open Data: Crime Incidents",

@@ -19,8 +19,18 @@ export function MetricToggle({
   return (
     <div className="inline-flex h-10 overflow-hidden rounded-2xl border border-slate-700 bg-slate-900/70 shadow-sm">
       {[
-        { value: "count" as const, label: "Case Counts", mobileLabel: "Cases" },
-        { value: "rate" as const, label: "Rate per 100k", mobileLabel: "Rate" },
+        {
+          value: "count" as const,
+          label: "Case Counts",
+          mobileLabel: "All Cases",
+          mobileLabelLines: ["All", "Cases"],
+        },
+        {
+          value: "rate" as const,
+          label: "Rate per 100k",
+          mobileLabel: "Per 100k",
+          mobileLabelLines: ["Per", "100k"],
+        },
       ].map((option) => {
         const disabled = option.value === "rate" && !supportsRate;
 
@@ -48,12 +58,18 @@ export function MetricToggle({
           >
             {mobileLabelMode === "adaptive" ? (
               <>
-                <span className="min-[380px]:hidden sm:hidden">{option.mobileLabel}</span>
+                <span className="min-[380px]:hidden sm:hidden flex flex-col items-center justify-center text-[9px] leading-[1.02]">
+                  <span>{option.mobileLabelLines[0]}</span>
+                  <span>{option.mobileLabelLines[1]}</span>
+                </span>
                 <span className="hidden min-[380px]:inline sm:inline">{option.label}</span>
               </>
             ) : (
               <>
-                <span className="sm:hidden">{option.mobileLabel}</span>
+                <span className="sm:hidden flex flex-col items-center justify-center text-[9px] leading-[1.02]">
+                  <span>{option.mobileLabelLines[0]}</span>
+                  <span>{option.mobileLabelLines[1]}</span>
+                </span>
                 <span className="hidden sm:inline">{option.label}</span>
               </>
             )}

@@ -4914,7 +4914,7 @@ async function buildClevelandLocation(): Promise<LocationPayload> {
   const { options: categories, lookup: categoryLookup } = buildCategoryLookup(CLEVELAND_LOCATION);
   const totalCategory = categories.find((category) => category.value === "all-recorded-offenses") ?? null;
   const cityPopulationByYear = await parseUsCityPopulationByYear(US_CITY_POPULATION_SOURCES.cleveland);
-  const years = Array.from({ length: 25 }, (_, index) => 2001 + index);
+  const years = Array.from({ length: 10 }, (_, index) => 2016 + index);
   const countsByKey = new Map<string, number>();
   const districtsByLabel = new Map<string, FilterOption>();
 
