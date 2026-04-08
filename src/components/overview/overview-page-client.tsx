@@ -107,6 +107,7 @@ export function OverviewPageClient({ initialScope, locations }: OverviewPageClie
     router.push(
       `/compare?${buildCompareSearchParams({
         locations: selectedCompareSlugs,
+        metric: "rate",
         scope: selectedScope,
       }).toString()}`,
     );

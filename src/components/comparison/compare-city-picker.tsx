@@ -98,6 +98,7 @@ export function CompareCityPicker({
     router.push(
       `/compare?${buildCompareSearchParams({
         locations: selectedSlugs,
+        metric: "rate",
         scope,
       }).toString()}`,
     );
