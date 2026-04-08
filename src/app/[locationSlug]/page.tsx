@@ -56,6 +56,9 @@ export async function generateMetadata({ params, searchParams }: LocationPagePro
     metric: viewState.metric,
   }).toString()}`;
   const imagePath = `/api/og/city?${imageParams.toString()}`;
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.crime-atlas.com";
+  const imageUrl = new URL(imagePath, siteUrl).toString();
+  const imageAlt = `${meta.label} crime chart preview`;
 
   return {
     title,
@@ -64,17 +67,30 @@ export async function generateMetadata({ params, searchParams }: LocationPagePro
       canonical: canonicalPath,
     },
     openGraph: {
+      type: "website",
       title,
       description,
       url: canonicalPath,
       siteName: "Crime Atlas",
-      images: [imagePath],
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: imageAlt,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: [imagePath],
+      images: [
+        {
+          url: imageUrl,
+          alt: imageAlt,
+        },
+      ],
     },
   };
 }
