@@ -263,6 +263,7 @@ export function ComparisonChart({
                 tickMargin={12}
               />
               <Tooltip
+                allowEscapeViewBox={{ x: false, y: false }}
                 content={({ active, label, payload }) => {
                   if (!active || !payload?.length) {
                     return null;
@@ -296,6 +297,8 @@ export function ComparisonChart({
                   );
                 }}
                 cursor={{ stroke: "rgba(148,163,184,0.24)", strokeWidth: 1 }}
+                offset={14}
+                reverseDirection={{ x: true, y: true }}
               />
               {locations.map((location, index) => {
                 const focused = focusedLocationSlug === location.slug;

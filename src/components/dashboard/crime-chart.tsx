@@ -14,9 +14,10 @@ import {
 import { ChartShell } from "@/components/chart/chart-shell";
 import { useChartUi } from "@/components/chart/use-chart-ui";
 import { ChartLegendButton } from "@/components/dashboard/chart-legend-button";
-import { ChartTooltip } from "@/components/dashboard/chart-tooltip";
+import { ChartTooltip, type ChartTooltipEntry } from "@/components/dashboard/chart-tooltip";
 import { buildSeriesKey, type ChartResponse } from "@/lib/dashboard-data";
 import { cn, formatAxisTickNumber, formatInteger, formatMetricValue } from "@/lib/utils";
+import type { TooltipPayload } from "recharts/types/state/tooltipSlice";
 
 type CrimeChartProps = {
   data: ChartResponse;
@@ -60,7 +61,7 @@ export function CrimeChart({
   const [canScrollRight, setCanScrollRight] = useState(false);
   const [focusLinePoints, setFocusLinePoints] = useState<Point[]>([]);
   const [viewportWidth, setViewportWidth] = useState(0);
-  const { disableInteractiveTooltip, isMobileViewport } = useChartUi();
+  const { hasCoarsePointer, isMobileViewport } = useChartUi();
 
   const visibleCategories = useMemo(
     () => data.categories.filter((category) => !hiddenCategorySlugs.includes(category.value)),
@@ -78,14 +79,10 @@ export function CrimeChart({
   );
   const minChartWidth = Math.max(isMobileViewport ? 0 : 760, data.years.length * groupWidth);
   const chartWidth = Math.max(minChartWidth, viewportWidth);
-  const showDistrictMarkers = !isMobileViewport && data.districts.length > 1 && data.districts.length <= 16;
-  const chartTopMargin = showDistrictMarkers ? 24 : 10;
+  const chartTopMargin = 10;
   const chartBottomMargin = 8;
   const chartPlotHeight = chartHeight - chartTopMargin - chartBottomMargin - X_AXIS_HEIGHT;
-  const districtIndexBySlug = useMemo(
-    () => new Map(data.districts.map((district, index) => [district.value, index + 1])),
-    [data.districts],
-  );
+  const tooltipTrigger = hasCoarsePointer ? "click" : "hover";
 
   const axisTicks = useMemo(() => {
     const highestStack = data.chartRows.reduce((yearMax, row) => {
@@ -327,27 +324,29 @@ export function CrimeChart({
         </>
       }
       footerLeft={
-        <div className="flex flex-wrap gap-2 text-xs text-slate-400 pb-1 sm:pb-0">
-          {data.districts.map((district, index) => (
-            <button
-              className={cn(
-                "inline-flex cursor-pointer items-center gap-2 rounded-full border px-2 py-1 text-left text-[11px] transition sm:px-3 sm:py-1.5 sm:text-sm",
-                focusedDistrictSlug === null
-                  ? "border-slate-700 text-slate-400 hover:border-slate-600 hover:text-slate-200"
-                  : focusedDistrictSlug === district.value
-                    ? "border-slate-500 bg-slate-900/80 text-slate-100"
-                    : "border-slate-800 text-slate-500 opacity-55 hover:opacity-75",
-              )}
-              key={district.value}
-              onClick={() => onToggleDistrict(district.value)}
-              type="button"
-            >
-              <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[11px] font-semibold leading-none text-slate-900">
-                {index + 1}
-              </span>
-              <span className="inline-flex min-w-0 items-center leading-tight">{district.label}</span>
-            </button>
-          ))}
+        <div className="overflow-x-auto pb-1 sm:pb-0">
+          <div className="flex min-w-max flex-nowrap gap-2 text-xs text-slate-400">
+            {data.districts.map((district, index) => (
+              <button
+                className={cn(
+                  "inline-flex cursor-pointer items-center gap-2 rounded-full border px-2 py-1 text-left text-[11px] transition sm:px-3 sm:py-1.5 sm:text-sm",
+                  focusedDistrictSlug === null
+                    ? "border-slate-700 text-slate-400 hover:border-slate-600 hover:text-slate-200"
+                    : focusedDistrictSlug === district.value
+                      ? "border-slate-500 bg-slate-900/80 text-slate-100"
+                      : "border-slate-800 text-slate-500 opacity-55 hover:opacity-75",
+                )}
+                key={district.value}
+                onClick={() => onToggleDistrict(district.value)}
+                type="button"
+              >
+                <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[11px] font-semibold leading-none text-slate-900">
+                  {index + 1}
+                </span>
+                <span className="inline-flex min-w-0 items-center leading-tight">{district.label}</span>
+              </button>
+            ))}
+          </div>
         </div>
       }
       footerRight={isMobileViewport ? null : (
@@ -471,21 +470,51 @@ export function CrimeChart({
                     tickLine={false}
                     tickMargin={12}
                   />
-                  {!disableInteractiveTooltip ? (
-                    <Tooltip
-                      content={
+                  <Tooltip
+                    allowEscapeViewBox={{ x: false, y: false }}
+                    content={({ active, label, payload }) => {
+                      const stackTooltip = buildStackTooltipData({
+                        data,
+                        label,
+                        payload,
+                        visibleCategories,
+                      });
+
+                      if (!active || !stackTooltip) {
+                        return null;
+                      }
+
+                      return (
                         <ChartTooltip
-                          labelFormatter={(label) => String(label ?? "")}
-                          nameFormatter={(name) => formatSeriesName(name, data)}
+                          active
+                          highlightEntry={(entry) => String(entry.dataKey ?? "") === stackTooltip.activeSeriesKey}
+                          label={`${stackTooltip.districtLabel} • ${stackTooltip.yearLabel}`}
+                          payload={stackTooltip.payload}
                           valueFormatter={(value) => formatMetricValue(Number(value ?? 0), data.metric)}
                         />
-                      }
-                      cursor={{ fill: "rgba(148, 163, 184, 0.06)" }}
-                    />
-                  ) : null}
+                      );
+                    }}
+                    cursor={false}
+                    offset={14}
+                    reverseDirection={{ x: true, y: true }}
+                    shared={false}
+                    trigger={tooltipTrigger}
+                  />
                   {data.districts.map((district) =>
                     visibleCategories.map((category) => (
                       <Bar
+                        activeBar={(props) =>
+                          renderStackShape({
+                            props,
+                            districtSlug: district.value,
+                            categorySlug: category.value,
+                            color: category.color ?? "#94a3b8",
+                            districtOpacity:
+                              focusedDistrictSlug === null || focusedDistrictSlug === district.value ? 1 : 0.18,
+                            visibleCategories,
+                            isFocusedDistrict: focusedDistrictSlug === district.value,
+                          })
+                        }
                         barSize={isMobileViewport ? 7 : 8}
                         dataKey={buildSeriesKey(district.value, category.value)}
                         fill={category.color}
@@ -500,9 +529,7 @@ export function CrimeChart({
                             districtOpacity:
                               focusedDistrictSlug === null || focusedDistrictSlug === district.value ? 1 : 0.18,
                             visibleCategories,
-                            districtIndex: districtIndexBySlug.get(district.value) ?? 0,
                             isFocusedDistrict: focusedDistrictSlug === district.value,
-                            showDistrictMarkers,
                           })
                         }
                         stackId={district.value}
@@ -521,11 +548,62 @@ export function CrimeChart({
   );
 }
 
-function formatSeriesName(name: string, data: ChartResponse) {
-  const [districtSlug, categorySlug] = name.split("__");
+function buildStackTooltipData({
+  data,
+  label,
+  payload,
+  visibleCategories,
+}: {
+  data: ChartResponse;
+  label: unknown;
+  payload: TooltipPayload | undefined;
+  visibleCategories: ChartResponse["categories"];
+}) {
+  const activeEntry = payload?.[0];
+  const activeSeriesKey = String(activeEntry?.dataKey ?? "");
+
+  if (!activeEntry || !activeSeriesKey) {
+    return null;
+  }
+
+  const [districtSlug, activeCategorySlug] = activeSeriesKey.split("__");
+  const row = activeEntry.payload as Record<string, number | string | undefined> | undefined;
+
+  if (!districtSlug || !activeCategorySlug || !row) {
+    return null;
+  }
+
   const districtLabel = data.districts.find((district) => district.value === districtSlug)?.label ?? districtSlug;
-  const categoryLabel = data.categories.find((category) => category.value === categorySlug)?.shortLabel ?? categorySlug;
-  return `${districtLabel} • ${categoryLabel}`;
+  const yearLabel = String(label ?? row.year ?? "");
+  const tooltipPayload = [...visibleCategories]
+    .reverse()
+    .flatMap((category) => {
+      const seriesKey = buildSeriesKey(districtSlug, category.value);
+      const value = Number(row[seriesKey] ?? 0);
+
+      if (!(value > 0) && category.value !== activeCategorySlug) {
+        return [];
+      }
+
+      return [{
+        color: category.color,
+        dataKey: seriesKey,
+        name: category.shortLabel ?? category.label,
+        payload: row,
+        value,
+      } satisfies ChartTooltipEntry];
+    });
+
+  if (!tooltipPayload.length) {
+    return null;
+  }
+
+  return {
+    activeSeriesKey,
+    districtLabel,
+    yearLabel,
+    payload: tooltipPayload,
+  };
 }
 
 function buildAxisTicks(maxValue: number) {
@@ -556,9 +634,7 @@ function renderStackShape({
   color,
   districtOpacity,
   visibleCategories,
-  districtIndex,
   isFocusedDistrict,
-  showDistrictMarkers,
 }: {
   props: {
     x?: number;
@@ -566,17 +642,17 @@ function renderStackShape({
     width?: number;
     height?: number;
     payload?: Record<string, number | string>;
+    isActive?: boolean;
   };
   districtSlug: string;
   categorySlug: string;
   color: string;
   districtOpacity: number;
   visibleCategories: ChartResponse["categories"];
-  districtIndex: number;
   isFocusedDistrict: boolean;
-  showDistrictMarkers: boolean;
 }) {
   const { x, y, width, height, payload } = props;
+  const isActive = props.isActive === true;
 
   if (
     x === undefined ||
@@ -593,36 +669,34 @@ function renderStackShape({
     .reverse()
     .find((category) => Number(payload[buildSeriesKey(districtSlug, category.value)] ?? 0) > 0)?.value;
   const isTopOfStack = topCategory === categorySlug;
+  const fillOpacity = isActive ? Math.max(districtOpacity, isFocusedDistrict ? 1 : 0.74) : districtOpacity;
 
   return (
     <g>
       <rect
-        data-focus-top={isTopOfStack && isFocusedDistrict ? "true" : undefined}
-        data-year={isTopOfStack && isFocusedDistrict ? String(payload.year ?? "") : undefined}
+        data-focus-top={!isActive && isTopOfStack && isFocusedDistrict ? "true" : undefined}
+        data-year={!isActive && isTopOfStack && isFocusedDistrict ? String(payload.year ?? "") : undefined}
         fill={color}
-        fillOpacity={districtOpacity}
+        fillOpacity={fillOpacity}
         height={height}
         rx="0"
         ry="0"
+        stroke={isActive ? "rgba(248, 250, 252, 0.9)" : "none"}
+        strokeWidth={isActive ? 1 : 0}
         width={width}
         x={x}
         y={y}
       />
-      {showDistrictMarkers && isTopOfStack ? (
-        <g opacity={districtOpacity} transform={`translate(${x + width / 2}, ${y - 8})`}>
-          <text
-            dominantBaseline="central"
-            fill="#f8fafc"
-            fontSize="10"
-            fontWeight="700"
-            textAnchor="middle"
-            x="0"
-            y="0.5"
-            style={{ paintOrder: "stroke", stroke: "#0f172a", strokeWidth: 3 }}
-          >
-            {districtIndex}
-          </text>
-        </g>
+      {isActive ? (
+        <rect
+          fill="rgba(255, 255, 255, 0.12)"
+          height={height}
+          rx="0"
+          ry="0"
+          width={width}
+          x={x}
+          y={y}
+        />
       ) : null}
     </g>
   );

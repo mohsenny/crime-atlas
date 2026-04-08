@@ -1,17 +1,27 @@
 "use client";
 
 import type { ReactNode } from "react";
-import type { Payload } from "recharts/types/component/DefaultTooltipContent";
+
+import { cn } from "@/lib/utils";
 
 type ValueType = number | string;
 
+export type ChartTooltipEntry = {
+  color?: string;
+  dataKey?: string | number;
+  name?: string;
+  payload?: unknown;
+  value?: ValueType;
+};
+
 type ChartTooltipProps = {
   active?: boolean;
-  payload?: ReadonlyArray<Payload<ValueType, string>>;
+  payload?: ReadonlyArray<ChartTooltipEntry>;
   label?: unknown;
-  labelFormatter?: (label: unknown, payload?: Array<Payload<ValueType, string>>) => ReactNode;
-  nameFormatter?: (name: string, entry: Payload<ValueType, string>) => ReactNode;
-  valueFormatter?: (value: ValueType | undefined, name: string, entry: Payload<ValueType, string>) => ReactNode;
+  labelFormatter?: (label: unknown, payload?: Array<ChartTooltipEntry>) => ReactNode;
+  nameFormatter?: (name: string, entry: ChartTooltipEntry) => ReactNode;
+  valueFormatter?: (value: ValueType | undefined, name: string, entry: ChartTooltipEntry) => ReactNode;
+  highlightEntry?: (entry: ChartTooltipEntry) => boolean;
 };
 
 export function ChartTooltip({
@@ -21,13 +31,14 @@ export function ChartTooltip({
   labelFormatter,
   nameFormatter,
   valueFormatter,
+  highlightEntry,
 }: ChartTooltipProps) {
   if (!active || !payload || payload.length === 0) {
     return null;
   }
 
   const displayLabel = labelFormatter
-    ? labelFormatter(label, payload as Array<Payload<ValueType, string>>)
+    ? labelFormatter(label, payload as Array<ChartTooltipEntry>)
     : typeof label === "string" || typeof label === "number"
       ? label
       : null;
@@ -54,13 +65,23 @@ export function ChartTooltip({
             ((entry.payload as { color?: string; fill?: string } | undefined)?.color ??
               (entry.payload as { color?: string; fill?: string } | undefined)?.fill) ??
             "#94a3b8";
+          const isHighlighted = highlightEntry ? highlightEntry(entry) : false;
 
           return (
-            <div className="flex items-center gap-2 leading-tight" key={`${name}-${index}`}>
-              <span className="flex h-2 w-2 flex-shrink-0 rounded-full" style={{ backgroundColor: accentColor }} />
-              <span className="min-w-0 shrink-0 text-xs font-medium text-slate-200">{displayName}</span>
+            <div
+              className={cn(
+                "flex items-center gap-2 rounded-md px-1.5 py-1 leading-tight transition",
+                isHighlighted ? "bg-white/[0.08] ring-1 ring-white/12" : "",
+              )}
+              key={`${name}-${index}`}
+            >
+              <span
+                className={cn("flex flex-shrink-0 rounded-full", isHighlighted ? "h-2.5 w-2.5" : "h-2 w-2")}
+                style={{ backgroundColor: accentColor }}
+              />
+              <span className={cn("min-w-0 shrink-0 text-xs font-medium", isHighlighted ? "text-slate-50" : "text-slate-200")}>{displayName}</span>
               <span className="h-px flex-1 border-b border-dotted border-slate-600/80" />
-              <span className="tabular-nums text-xs font-medium text-slate-50">{displayValue}</span>
+              <span className={cn("tabular-nums text-xs font-medium", isHighlighted ? "text-white" : "text-slate-50")}>{displayValue}</span>
             </div>
           );
         })}
