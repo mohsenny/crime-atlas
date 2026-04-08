@@ -42,7 +42,7 @@ export function ComparisonChart({
   const [viewportWidth, setViewportWidth] = useState(0);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
-  const { disableInteractiveTooltip, isMobileViewport } = useChartUi();
+  const { isMobileViewport } = useChartUi();
   const chartHeight = isMobileViewport ? MOBILE_CHART_HEIGHT : DESKTOP_CHART_HEIGHT;
   const axisWidth = isMobileViewport ? MOBILE_AXIS_WIDTH : DESKTOP_AXIS_WIDTH;
   const axisChartWidth = axisWidth + (isMobileViewport ? 6 : 8);
@@ -263,7 +263,6 @@ export function ComparisonChart({
                 tickMargin={12}
               />
               <Tooltip
-                active={!disableInteractiveTooltip}
                 content={({ active, label, payload }) => {
                   if (!active || !payload?.length) {
                     return null;
