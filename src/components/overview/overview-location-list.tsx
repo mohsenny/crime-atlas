@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useRef } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
 import type { LocationOverview } from "@/lib/dashboard-data";
@@ -38,7 +38,43 @@ export function OverviewLocationList({
   const alphaRailRef = useRef<HTMLDivElement | null>(null);
   const draggingRef = useRef(false);
   const lastLetterRef = useRef<string | null>(null);
+  const [alphaRailTop, setAlphaRailTop] = useState<number | null>(null);
   const activeLetters = [...new Set(locations.map((location) => getLocationInitial(location.label)))];
+
+  useEffect(() => {
+    if (!showAlphaIndex || activeLetters.length <= 1) {
+      setAlphaRailTop(null);
+      return;
+    }
+
+    const mobileHeader = document.querySelector<HTMLElement>("[data-overview-mobile-header]");
+    const rail = alphaRailRef.current;
+    if (!rail) {
+      return;
+    }
+
+    const updateAlphaRailTop = () => {
+      const headerHeight = mobileHeader?.getBoundingClientRect().height ?? 0;
+      const railHeight = rail.getBoundingClientRect().height;
+      const viewportHeight = window.innerHeight;
+      const top = headerHeight + Math.max(20, (viewportHeight - headerHeight - railHeight) / 2);
+      setAlphaRailTop(Math.round(top));
+    };
+
+    updateAlphaRailTop();
+
+    const resizeObserver = new ResizeObserver(updateAlphaRailTop);
+    resizeObserver.observe(rail);
+    if (mobileHeader) {
+      resizeObserver.observe(mobileHeader);
+    }
+
+    window.addEventListener("resize", updateAlphaRailTop);
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", updateAlphaRailTop);
+    };
+  }, [activeLetters.length, showAlphaIndex]);
 
   function scrollToLetter(letter: string, behavior: ScrollBehavior = "smooth") {
     const target = document.getElementById(`overview-alpha-${letter}`);
@@ -47,7 +83,12 @@ export function OverviewLocationList({
     }
 
     lastLetterRef.current = letter;
-    target.scrollIntoView({ behavior, block: "start" });
+    const mobileHeader = document.querySelector<HTMLElement>("[data-overview-mobile-header]");
+    const headerOffset = mobileHeader ? mobileHeader.getBoundingClientRect().height : 0;
+    const targetTop = window.scrollY + target.getBoundingClientRect().top;
+    const nextScrollTop = Math.max(0, targetTop - headerOffset - 12);
+
+    window.scrollTo({ top: nextScrollTop, behavior });
   }
 
   function resolveLetterFromPointer(clientY: number) {
@@ -78,7 +119,7 @@ export function OverviewLocationList({
         {showAlphaIndex && activeLetters.length > 1 ? (
           <div className="pointer-events-none absolute inset-y-0 right-0 top-0 w-4">
             <div
-              className="pointer-events-auto sticky top-52 flex w-full touch-none select-none flex-col items-center gap-1.5 py-1"
+              className="pointer-events-auto sticky flex w-full touch-none select-none flex-col items-center gap-1.5 py-1"
               onPointerCancel={(event) => {
                 draggingRef.current = false;
                 lastLetterRef.current = null;
@@ -106,6 +147,7 @@ export function OverviewLocationList({
                 }
               }}
               ref={alphaRailRef}
+              style={alphaRailTop ? { top: `${alphaRailTop}px` } : undefined}
             >
               {activeLetters.map((letter) => (
                 <button
