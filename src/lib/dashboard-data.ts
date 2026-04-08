@@ -162,6 +162,10 @@ function toComparisonConfidence(value: string): ComparisonMappingConfidence {
   return value === "high" || value === "medium" || value === "partial" ? value : "partial";
 }
 
+function buildSimpleChartTitle(label: string) {
+  return `${label} Crime`;
+}
+
 type DbLocationPayload = Prisma.LocationGetPayload<{
   include: {
     sources: { orderBy: { sortOrder: "asc" } };
@@ -197,7 +201,7 @@ function mapLocationEntityToDataset(location: DbLocationPayload): LocationDatase
     country: location.country,
     areaLabelSingular: location.areaLabelSingular,
     areaLabelPlural: location.areaLabelPlural,
-    chartTitle: location.chartTitle,
+    chartTitle: buildSimpleChartTitle(location.label),
     note: location.note,
     sources: location.sources.map((source) => ({
       label: source.label,
@@ -297,7 +301,7 @@ export const getLocationSummaries = cache(async (): Promise<LocationOverview[]> 
       label: location.label,
       scope: getLocationScope(location.slug),
       country: location.country,
-      chartTitle: location.chartTitle,
+      chartTitle: buildSimpleChartTitle(location.label),
       note: location.note,
       years,
       areaLabelSingular: location.areaLabelSingular,
@@ -357,7 +361,7 @@ export const getFilterMetadata = cache(async (locationSlug: string): Promise<Fil
     label: location.label,
     scope: location.scope,
     country: location.country,
-    chartTitle: location.chartTitle,
+    chartTitle: buildSimpleChartTitle(location.label),
     note: location.note,
     sources: location.sources,
     years: location.years,
