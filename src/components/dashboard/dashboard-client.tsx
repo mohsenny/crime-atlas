@@ -198,6 +198,7 @@ export function DashboardClient({
                 locations={locations}
                 lockedSlugs={[meta.slug]}
                 mobileTriggerLabel="Compare"
+                scope={meta.scope}
                 triggerLabel="Compare"
               />
               {meta.supportsRate ? (

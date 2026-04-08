@@ -3,6 +3,7 @@ import {
   findAllOffensesCategorySlug,
   normalizeLocationCategorySlugs,
 } from "@/lib/location-category-selection";
+import type { LocationScope } from "@/lib/location-scope";
 
 type LocationSearchStateInput = {
   districts?: string;
@@ -11,9 +12,11 @@ type LocationSearchStateInput = {
 };
 
 type CompareSearchStateInput = {
+  locations?: string;
   cities?: string;
   category?: string;
   metric?: string;
+  scope?: string;
 };
 
 function unique(values: string[]) {
@@ -75,21 +78,33 @@ export function resolveCompareViewState(data: ComparisonData, searchState: Compa
       : ("count" as const);
 
   return {
-    cities: splitParam(searchState.cities),
+    locations: splitParam(searchState.locations ?? searchState.cities),
     categorySlug: resolvedCategorySlug,
     metric: resolvedMetric,
   };
 }
 
 export function buildCompareSearchParams(input: {
-  cities: string[];
-  categorySlug: string;
-  metric: Metric;
+  locations: string[];
+  categorySlug?: string;
+  metric?: Metric;
+  scope?: LocationScope;
 }) {
   const params = new URLSearchParams();
-  params.set("cities", unique(input.cities).join(","));
-  params.set("category", input.categorySlug);
-  params.set("metric", input.metric);
+  params.set("locations", unique(input.locations).join(","));
+
+  if (input.scope) {
+    params.set("scope", input.scope);
+  }
+
+  if (input.categorySlug) {
+    params.set("category", input.categorySlug);
+  }
+
+  if (input.metric) {
+    params.set("metric", input.metric);
+  }
+
   return params;
 }
 

@@ -69,8 +69,8 @@ export function CrimeChart({
   const chartHeight = isMobileViewport ? MOBILE_CHART_HEIGHT : DESKTOP_CHART_HEIGHT;
   const axisWidth = isMobileViewport ? MOBILE_AXIS_WIDTH : DESKTOP_AXIS_WIDTH;
   const axisChartWidth = axisWidth + (isMobileViewport ? 6 : 8);
-  const axisProbeSeriesKey = data.districts[0] && data.categories[0]
-    ? buildSeriesKey(data.districts[0].value, data.categories[0].value)
+  const axisProbeSeriesKey = data.districts[0] && visibleCategories[0]
+    ? buildSeriesKey(data.districts[0].value, visibleCategories[0].value)
     : null;
   const groupWidth = Math.max(
     isMobileViewport ? 42 : 50,
@@ -81,7 +81,7 @@ export function CrimeChart({
   const showDistrictMarkers = !isMobileViewport && data.districts.length > 1 && data.districts.length <= 16;
   const chartTopMargin = showDistrictMarkers ? 24 : 10;
   const chartBottomMargin = 8;
-  const chartPlotHeight = chartHeight - chartTopMargin - chartBottomMargin;
+  const chartPlotHeight = chartHeight - chartTopMargin - chartBottomMargin - X_AXIS_HEIGHT;
   const districtIndexBySlug = useMemo(
     () => new Map(data.districts.map((district, index) => [district.value, index + 1])),
     [data.districts],
@@ -166,6 +166,31 @@ export function CrimeChart({
       }
 
       const yearPositions = (() => {
+        const renderedTopRects = Array.from(
+          container.querySelectorAll<SVGRectElement>('rect[data-focus-top="true"][data-year]'),
+        )
+          .map((rect) => {
+            const year = rect.getAttribute("data-year");
+            const x = Number(rect.getAttribute("x") ?? Number.NaN);
+            const y = Number(rect.getAttribute("y") ?? Number.NaN);
+            const width = Number(rect.getAttribute("width") ?? Number.NaN);
+
+            if (!year || !Number.isFinite(x) || !Number.isFinite(y) || !Number.isFinite(width)) {
+              return null;
+            }
+
+            return {
+              year,
+              x: x + width / 2,
+              y,
+            };
+          })
+          .filter((rect): rect is { year: string; x: number; y: number } => rect !== null);
+
+        if (renderedTopRects.length > 0) {
+          return renderedTopRects;
+        }
+
         const gridLines = Array.from(
           container.querySelectorAll<SVGLineElement>(".recharts-cartesian-grid-vertical line[x1]"),
         )
@@ -178,21 +203,35 @@ export function CrimeChart({
           const interior = gridLines.filter((value) => value > 0 && value < maxGridX);
 
           if (interior.length >= data.chartRows.length) {
-            return interior.slice(0, data.chartRows.length);
+            return interior.slice(0, data.chartRows.length).map((x, index) => ({
+              year: String(data.chartRows[index]?.year ?? ""),
+              x,
+              y: Number.NaN,
+            }));
           }
         }
 
         return Array.from(
           container.querySelectorAll<SVGTextElement>(".recharts-xAxis .recharts-cartesian-axis-tick-value"),
         )
-          .map((tickNode) => Number(tickNode.getAttribute("x") ?? Number.NaN))
-          .filter((value) => Number.isFinite(value));
+          .map((tickNode, index) => ({
+            year: String(data.chartRows[index]?.year ?? ""),
+            x: Number(tickNode.getAttribute("x") ?? Number.NaN),
+            y: Number.NaN,
+          }))
+          .filter((value) => Number.isFinite(value.x));
       })();
 
-      const nextPoints = data.chartRows.flatMap((row, index) => {
-        const yearX = yearPositions[index];
+      const renderedPointByYear = new Map(yearPositions.map((point) => [point.year, point]));
 
-        if (yearX === undefined || !Number.isFinite(yearX)) {
+      const nextPoints = data.chartRows.flatMap((row) => {
+        const renderedPoint = renderedPointByYear.get(String(row.year));
+
+        if (renderedPoint && Number.isFinite(renderedPoint.y)) {
+          return [{ x: renderedPoint.x, y: renderedPoint.y }];
+        }
+
+        if (!renderedPoint || !Number.isFinite(renderedPoint.x)) {
           return [];
         }
 
@@ -208,7 +247,7 @@ export function CrimeChart({
         const ratio = yAxisMax === 0 ? 0 : total / yAxisMax;
         const y = chartTopMargin + (1 - ratio) * chartPlotHeight;
 
-        return [{ x: yearX + stackOffset, y }];
+        return [{ x: renderedPoint.x + stackOffset, y }];
       });
 
       setFocusLinePoints((current) => (pointsEqual(current, nextPoints) ? current : nextPoints));
@@ -292,7 +331,7 @@ export function CrimeChart({
           {data.districts.map((district, index) => (
             <button
               className={cn(
-                "inline-flex cursor-pointer items-start gap-2 rounded-full border px-2 py-1 text-left text-[11px] transition sm:items-center sm:px-3 sm:py-1.5 sm:text-sm",
+                "inline-flex cursor-pointer items-center gap-2 rounded-full border px-2 py-1 text-left text-[11px] transition sm:px-3 sm:py-1.5 sm:text-sm",
                 focusedDistrictSlug === null
                   ? "border-slate-700 text-slate-400 hover:border-slate-600 hover:text-slate-200"
                   : focusedDistrictSlug === district.value
@@ -306,7 +345,7 @@ export function CrimeChart({
               <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[11px] font-semibold leading-none text-slate-900">
                 {index + 1}
               </span>
-              <span className="min-w-0 leading-tight">{district.label}</span>
+              <span className="inline-flex min-w-0 items-center leading-tight">{district.label}</span>
             </button>
           ))}
         </div>
@@ -357,8 +396,10 @@ export function CrimeChart({
                   tickLine={false}
                 />
                 <YAxis
+                  allowDataOverflow
                   axisLine={false}
                   domain={[0, yAxisMax]}
+                  interval={0}
                   tick={{ fontSize: isMobileViewport ? 11 : 12, fill: "var(--chart-axis-dark)" }}
                   tickLine={false}
                   ticks={axisTicks}

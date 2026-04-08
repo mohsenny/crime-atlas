@@ -5,15 +5,18 @@ import { ArrowRight, Search, X, type LucideIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import type { LocationOverview } from "@/lib/dashboard-data";
+import { buildCompareSearchParams } from "@/lib/view-state";
 
 import { CONTROL_LABEL_TEXT_CLASS } from "@/components/dashboard/control-styles";
 import { LocationFlag } from "@/components/overview/location-flag";
+import { getScopeLabel, type LocationScope } from "@/lib/location-scope";
 import { cn } from "@/lib/utils";
 
 export const MAX_COMPARE_LOCATIONS = 3;
 
 type CompareCityPickerProps = {
   locations: LocationOverview[];
+  scope: LocationScope;
   initialSelectedSlugs?: string[];
   lockedSlugs?: string[];
   triggerLabel?: string;
@@ -25,6 +28,7 @@ type CompareCityPickerProps = {
 
 export function CompareCityPicker({
   locations,
+  scope,
   initialSelectedSlugs = [],
   lockedSlugs = [],
   triggerLabel = "Compare",
@@ -36,7 +40,6 @@ export function CompareCityPicker({
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedSlugs, setSelectedSlugs] = useState<string[]>(initialSelectedSlugs);
   const [isMobileViewport, setIsMobileViewport] = useState(false);
 
   useEffect(() => {
@@ -47,18 +50,25 @@ export function CompareCityPicker({
     return () => mediaQuery.removeEventListener("change", sync);
   }, []);
 
+  const scopedLocations = useMemo(() => locations.filter((location) => location.scope === scope), [locations, scope]);
+  const baseSelectedSlugs = useMemo(
+    () => [...new Set([...lockedSlugs, ...initialSelectedSlugs])].filter((slug) => scopedLocations.some((location) => location.slug === slug)),
+    [initialSelectedSlugs, lockedSlugs, scopedLocations],
+  );
+  const [selectedSlugs, setSelectedSlugs] = useState<string[]>(() => baseSelectedSlugs);
+
   const filteredLocations = useMemo(() => {
     const normalized = searchQuery.trim().toLowerCase();
     if (!normalized) {
-      return locations;
+      return scopedLocations;
     }
 
-    return locations.filter(
+    return scopedLocations.filter(
       (location) =>
         location.label.toLowerCase().includes(normalized) ||
         location.country.toLowerCase().includes(normalized),
     );
-  }, [locations, searchQuery]);
+  }, [scopedLocations, searchQuery]);
 
   function toggleLocation(slug: string) {
     const isLocked = lockedSlugs.includes(slug);
@@ -85,30 +95,37 @@ export function CompareCityPicker({
     }
 
     setOpen(false);
-    router.push(`/compare?cities=${selectedSlugs.join(",")}`);
+    router.push(
+      `/compare?${buildCompareSearchParams({
+        locations: selectedSlugs,
+        scope,
+      }).toString()}`,
+    );
   }
 
   function openPicker() {
     setSearchQuery("");
-    setSelectedSlugs([...initialSelectedSlugs]);
+    setSelectedSlugs(baseSelectedSlugs);
     setOpen(true);
   }
 
   function closePicker() {
     setSearchQuery("");
-    setSelectedSlugs([...initialSelectedSlugs]);
+    setSelectedSlugs(baseSelectedSlugs);
     setOpen(false);
   }
 
   const selectedCount = selectedSlugs.length;
   const resolvedMobileTriggerLabel = mobileTriggerLabel ?? triggerLabel;
+  const pluralScopeLabel = getScopeLabel(scope, { plural: true, capitalized: true });
+  const searchLabel = scope === "country" ? "Search countries" : "Search city or country";
 
   return (
     <>
       <button
         aria-label={triggerLabel}
         className={cn(
-          "inline-flex h-10 items-center gap-1.5 rounded-2xl border border-slate-700 bg-slate-900/70 px-3 text-slate-300 transition hover:text-slate-50",
+          "inline-flex h-10 items-center gap-1.5 rounded-2xl border border-slate-700 bg-slate-900/70 px-3 text-slate-300 transition hover:text-slate-50 whitespace-nowrap",
           "sm:px-4",
           CONTROL_LABEL_TEXT_CLASS,
           className,
@@ -136,7 +153,7 @@ export function CompareCityPicker({
             >
               <div className="flex items-center justify-between border-b border-white/8 px-4 py-4">
                 <div className="space-y-1">
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Compare Cities</p>
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Compare {pluralScopeLabel}</p>
                   <p className="text-sm text-slate-300">
                     {selectedCount}/{MAX_COMPARE_LOCATIONS} selected
                   </p>
@@ -156,7 +173,7 @@ export function CompareCityPicker({
                   <input
                     className="h-11 w-full border border-white/10 bg-slate-900/80 pl-10 pr-3 text-sm text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-slate-500"
                     onChange={(event) => setSearchQuery(event.target.value)}
-                    placeholder="Search city or country"
+                    placeholder={searchLabel}
                     value={searchQuery}
                   />
                 </label>
@@ -184,7 +201,7 @@ export function CompareCityPicker({
                         onClick={() => toggleLocation(location.slug)}
                         type="button"
                       >
-                        <LocationFlag slug={location.slug} variant="list" />
+                        <LocationFlag country={location.country} slug={location.slug} variant="list" />
                         <div className="min-w-0 flex-1">
                           <p className={cn("text-base font-semibold", selected ? "text-slate-950" : "text-slate-100")}>
                             {location.label}
@@ -213,7 +230,7 @@ export function CompareCityPicker({
               <div className="border-t border-white/8 px-4 py-4">
                 <button
                   className={cn(
-                    "inline-flex h-11 w-full items-center justify-center gap-2 border px-4 text-sm font-semibold transition",
+                    "inline-flex h-11 w-full items-center justify-center gap-2 border px-4 text-sm font-semibold transition whitespace-nowrap",
                     selectedCount >= 2 && selectedCount <= MAX_COMPARE_LOCATIONS
                       ? "border-slate-200 bg-slate-100 text-slate-950 hover:bg-white"
                       : "cursor-not-allowed border-white/10 bg-slate-900/70 text-slate-500",
@@ -222,7 +239,7 @@ export function CompareCityPicker({
                   onClick={submitComparison}
                   type="button"
                 >
-                  {selectedCount >= 2 ? `Compare ${selectedCount} Cities` : "Compare Cities"}
+                  {selectedCount >= 2 ? `Compare ${selectedCount} ${pluralScopeLabel}` : `Compare ${pluralScopeLabel}`}
                   <ArrowRight className="h-4 w-4" />
                 </button>
               </div>

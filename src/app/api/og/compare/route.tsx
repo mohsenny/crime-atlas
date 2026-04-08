@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 import { NextRequest } from "next/server";
 
 import { getComparisonData } from "@/lib/dashboard-data";
-import { buildCompareSearchParams, formatCrimeSelection, resolveCompareViewState, splitParam } from "@/lib/view-state";
+import { formatCrimeSelection, resolveCompareViewState, splitParam } from "@/lib/view-state";
 
 export const runtime = "nodejs";
 
@@ -18,18 +18,19 @@ function buildLinePath(points: Point[]) {
 
 export async function GET(request: NextRequest) {
   const url = new URL(request.url);
-  const cities = splitParam(url.searchParams.get("cities"));
+  const locations = splitParam(url.searchParams.get("locations") ?? url.searchParams.get("cities"));
 
-  if (cities.length < 2 || cities.length > 3) {
-    return new Response("Missing cities", { status: 400 });
+  if (locations.length < 2 || locations.length > 3) {
+    return new Response("Missing locations", { status: 400 });
   }
 
-  const data = await getComparisonData(cities);
+  const data = await getComparisonData(locations);
   if (!data) {
     return new Response("Not found", { status: 404 });
   }
 
   const viewState = resolveCompareViewState(data, {
+    locations: url.searchParams.get("locations") ?? undefined,
     cities: url.searchParams.get("cities") ?? undefined,
     category: url.searchParams.get("category") ?? undefined,
     metric: url.searchParams.get("metric") ?? undefined,

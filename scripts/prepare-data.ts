@@ -21,9 +21,12 @@ import {
   BERLIN_LOCATION,
   CHICAGO_LOCATION,
   DALLAS_LOCATION,
+  FRANCE_COUNTRY_LOCATION,
+  GERMANY_COUNTRY_LOCATION,
   FRANKFURT_LOCATION,
   HAMBURG_LOCATION,
   HOUSTON_LOCATION,
+  ITALY_COUNTRY_LOCATION,
   LONDON_LOCATION,
   LOS_ANGELES_LOCATION,
   LUTON_LOCATION,
@@ -36,6 +39,7 @@ import {
   SAO_PAULO_LOCATION,
   SAN_FRANCISCO_LOCATION,
   SEATTLE_LOCATION,
+  SPAIN_COUNTRY_LOCATION,
   TOKYO_LOCATION,
   VALENCIA_LOCATION,
   type LocationDefinition,
@@ -139,24 +143,34 @@ type SeattleCrimeRow = {
   count: string;
 };
 
+type SpainCountryTerritoryDefinition = {
+  slug: string;
+  label: string;
+  aliases: string[];
+};
+
 const ROOT = process.cwd();
 const prisma = new PrismaClient();
 const TMP_DIR = path.join(ROOT, "tmp_sources");
 const BRAZIL_DIR = path.join(TMP_DIR, "brazil");
 const SAO_PAULO_DIR = path.join(BRAZIL_DIR, "sao-paulo");
 const FRANCE_DIR = path.join(TMP_DIR, "france");
+const FRANCE_COUNTRY_DIR = path.join(FRANCE_DIR, "country");
 const PARIS_DIR = path.join(FRANCE_DIR, "paris");
 const GERMANY_DIR = path.join(TMP_DIR, "germany");
+const GERMANY_COUNTRY_DIR = path.join(GERMANY_DIR, "country");
 const BERLIN_DIR = path.join(GERMANY_DIR, "berlin");
 const FRANKFURT_DIR = path.join(GERMANY_DIR, "frankfurt");
 const HAMBURG_DIR = path.join(GERMANY_DIR, "hamburg");
 const MUNICH_DIR = path.join(GERMANY_DIR, "munich");
 const ITALY_DIR = path.join(TMP_DIR, "italy");
+const ITALY_COUNTRY_DIR = path.join(ITALY_DIR, "country");
 const MILAN_DIR = path.join(ITALY_DIR, "milan");
 const ROME_DIR = path.join(ITALY_DIR, "rome");
 const JAPAN_DIR = path.join(TMP_DIR, "japan");
 const TOKYO_DIR = path.join(JAPAN_DIR, "tokyo");
 const SPAIN_DIR = path.join(TMP_DIR, "spain");
+const SPAIN_COUNTRY_DIR = path.join(SPAIN_DIR, "country");
 const BARCELONA_DIR = path.join(SPAIN_DIR, "barcelona");
 const VALENCIA_DIR = path.join(SPAIN_DIR, "valencia");
 const SPAIN_SHARED_DIR = path.join(SPAIN_DIR, "shared");
@@ -169,6 +183,97 @@ const US_SHARED_DIR = path.join(US_DIR, "shared");
 const HOUSTON_DIR = path.join(US_DIR, "houston");
 const PHOENIX_DIR = path.join(US_DIR, "phoenix");
 const BERLIN_WORKBOOK_PATH = path.join(BERLIN_DIR, "berlin_kriminalitaetsatlas_2015_2024.xlsx");
+const FRANCE_COUNTRY_CRIME_WORKBOOK_PATH = path.join(
+  FRANCE_COUNTRY_DIR,
+  "france_monthly_department_crimes_1996_plus_tableaux_4001_ts.xlsx",
+);
+const FRANCE_COUNTRY_POPULATION_ZIP_PATH = path.join(
+  FRANCE_COUNTRY_DIR,
+  "france_populations_legales_2021.zip",
+);
+const GERMANY_COUNTRY_COUNT_WORKBOOK_BY_YEAR = {
+  2019: path.join(GERMANY_COUNTRY_DIR, "germany_2019_counts.xlsx"),
+  2020: path.join(GERMANY_COUNTRY_DIR, "germany_2020_counts.xlsx"),
+  2021: path.join(GERMANY_COUNTRY_DIR, "germany_2021_counts.xlsx"),
+  2022: path.join(GERMANY_COUNTRY_DIR, "germany_2022_counts.xlsx"),
+  2023: path.join(GERMANY_COUNTRY_DIR, "germany_2023_counts.xlsx"),
+  2024: path.join(GERMANY_COUNTRY_DIR, "germany_2024_counts.xlsx"),
+} satisfies Record<number, string>;
+const GERMANY_COUNTRY_RATE_WORKBOOK_BY_YEAR = {
+  2019: path.join(GERMANY_COUNTRY_DIR, "germany_2019_rates.xlsx"),
+  2020: path.join(GERMANY_COUNTRY_DIR, "germany_2020_rates.xlsx"),
+  2021: path.join(GERMANY_COUNTRY_DIR, "germany_2021_rates.xlsx"),
+  2022: path.join(GERMANY_COUNTRY_DIR, "germany_2022_rates.xlsx"),
+  2023: path.join(GERMANY_COUNTRY_DIR, "germany_2023_rates.xlsx"),
+  2024: path.join(GERMANY_COUNTRY_DIR, "germany_2024_rates.xlsx"),
+} satisfies Record<number, string>;
+const ITALY_COUNTRY_CRIME_XML_PATH = path.join(
+  ITALY_COUNTRY_DIR,
+  "italy_crime_73_1187_other_police_reported_offenses_2018_plus.xml",
+);
+const ITALY_COUNTRY_POPULATION_XML_PATH = path.join(
+  ITALY_COUNTRY_DIR,
+  "italy_population_22_289_resident_population_jan1_2019_plus.xml",
+);
+const SPAIN_COUNTRY_ARCHIVE_2019_PATH = path.join(SPAIN_COUNTRY_DIR, "spain_balance_criminalidad_2019.zip");
+const SPAIN_COUNTRY_ARCHIVE_2020_PATH = path.join(SPAIN_COUNTRY_DIR, "spain_balance_criminalidad_2020.zip");
+const SPAIN_COUNTRY_PDF_2025_PATH = path.join(SPAIN_COUNTRY_DIR, "spain_balance_criminalidad_q4_2025.pdf");
+const ITALY_COUNTRY_REGION_LABEL_BY_CODE = {
+  ITC1: "Piemonte",
+  ITC2: "Valle d'Aosta / Vallee d'Aoste",
+  ITC3: "Liguria",
+  ITC4: "Lombardia",
+  ITD1: "Provincia Autonoma Bolzano / Bozen",
+  ITD2: "Provincia Autonoma Trento",
+  ITD3: "Veneto",
+  ITD4: "Friuli-Venezia Giulia",
+  ITD5: "Emilia-Romagna",
+  ITE1: "Toscana",
+  ITE2: "Umbria",
+  ITE3: "Marche",
+  ITE4: "Lazio",
+  ITF1: "Abruzzo",
+  ITF2: "Molise",
+  ITF3: "Campania",
+  ITF4: "Puglia",
+  ITF5: "Basilicata",
+  ITF6: "Calabria",
+  ITG1: "Sicilia",
+  ITG2: "Sardegna",
+} satisfies Record<string, string>;
+const ITALY_COUNTRY_REGION_CODES = Object.keys(ITALY_COUNTRY_REGION_LABEL_BY_CODE) as Array<
+  keyof typeof ITALY_COUNTRY_REGION_LABEL_BY_CODE
+>;
+const ITALY_COUNTRY_CRIME_LABEL_BY_CODE: Record<string, string> = {
+  CP572: "maltrattamenti contro familiari e conviventi",
+  CP612BIS: "atti persecutori (stalking)",
+  CP612TER: "diffusione illecita di immagini o video sessualmente espliciti",
+  CP314: "peculato",
+  CP316: "peculato mediante profitto dell'errore altrui",
+  CP316BIS: "malversazione di erogazioni pubbliche",
+  CP316TER: "indebita percezione di erogazioni pubbliche",
+  CP317: "concussione",
+  CP318: "corruzione per l'esercizio della funzione",
+  CP319: "corruzione per un atto contrario ai doveri d'ufficio",
+  CP319TER: "corruzione in atti giudiziari",
+  CP319QUA: "induzione indebita a dare o promettere utilita",
+  CP319QUAC1: "induzione indebita a dare o promettere utilita (commessa dal pubblico ufficiale)",
+  CP319QUAC2: "induzione indebita a dare o promettere utilita (commessa da chi da o promette)",
+  CP320: "corruzione di persona incaricata di un pubblico servizio",
+  CP321: "pene per il corruttore",
+  CP322: "istigazione alla corruzione",
+  CP322BIS: "peculato, concussione, corruzione di membri e funzionari di organi di Comunita europee o internazionali ecc.",
+  CP323: "abuso d'ufficio",
+  CP325: "utilizzazione d'invenzioni o scoperte conosciute per ragione di ufficio",
+  CP326: "rivelazione ed utilizzazione di segreti di ufficio",
+  CP328: "rifiuto di atti d'ufficio. Omissione",
+  CP329: "rifiuto o ritardo di obbedienza commesso da un militare o da un agente della forza pubblica",
+  CP331: "interruzione d'un servizio pubblico o di pubblica necessita",
+  CP334: "sottrazione o danneggiamento di cose sottoposte a sequestro ecc.",
+  CP335: "violazione colposa di doveri inerenti alla custodia di cose sottoposte a sequestro ecc.",
+  CP583QUI: "deformazione dell'aspetto della persona mediante lesioni permanenti al viso",
+  CP558BIS: "costrizione o induzione al matrimonio",
+};
 const BERLIN_HISTORICAL_RECORDS = berlinHistoricalRecords as Array<{
   year: number;
   district: string;
@@ -327,6 +432,48 @@ const VALENCIA_OFFICIAL_POPULATION_FALLBACK = {
   2023: 809_501,
   2024: 830_606,
 } satisfies Record<number, number>;
+
+const SPAIN_COUNTRY_TERRITORIES: SpainCountryTerritoryDefinition[] = [
+  { slug: "andalucia", label: "Andalucía", aliases: ["ANDALUCÍA"] },
+  { slug: "aragon", label: "Aragón", aliases: ["ARAGÓN"] },
+  {
+    slug: "asturias",
+    label: "Principado de Asturias",
+    aliases: ["ASTURIAS (PRINCIPADO DE)", "PRINCIPADO DE ASTURIAS", "ASTURIAS"],
+  },
+  { slug: "illes-balears", label: "Illes Balears", aliases: ["BALEARS (ILLES)", "ILLES BALEARS", "BALEARES"] },
+  { slug: "canarias", label: "Canarias", aliases: ["CANARIAS"] },
+  { slug: "cantabria", label: "Cantabria", aliases: ["CANTABRIA"] },
+  { slug: "castilla-y-leon", label: "Castilla y León", aliases: ["CASTILLA Y LEÓN", "CASTILLA Y LEON"] },
+  {
+    slug: "castilla-la-mancha",
+    label: "Castilla-La Mancha",
+    aliases: ["CASTILLA - LA MANCHA", "CASTILLA -LA MANCHA", "CASTILLA-LA MANCHA", "CASTILLA LA MANCHA"],
+  },
+  { slug: "cataluna", label: "Cataluña", aliases: ["CATALUÑA"] },
+  { slug: "comunitat-valenciana", label: "Comunitat Valenciana", aliases: ["COMUNITAT VALENCIANA", "C. VALENCIANA"] },
+  { slug: "extremadura", label: "Extremadura", aliases: ["EXTREMADURA"] },
+  { slug: "galicia", label: "Galicia", aliases: ["GALICIA"] },
+  {
+    slug: "comunidad-de-madrid",
+    label: "Comunidad de Madrid",
+    aliases: ["MADRID (COMUNIDAD DE)", "COMUNIDAD DE MADRID", "C. DE MADRID", "MADRID"],
+  },
+  {
+    slug: "murcia",
+    label: "Región de Murcia",
+    aliases: ["MURCIA (REGION DE)", "REGIÓN DE MURCIA", "REGION DE MURCIA", "MURCIA"],
+  },
+  {
+    slug: "navarra",
+    label: "Comunidad Foral de Navarra",
+    aliases: ["NAVARRA (COMUNIDAD FORAL DE)", "COMUNIDAD FORAL DE NAVARRA", "NAVARRA"],
+  },
+  { slug: "pais-vasco", label: "País Vasco", aliases: ["PAÍS VASCO", "PAIS VASCO"] },
+  { slug: "la-rioja", label: "La Rioja", aliases: ["RIOJA (LA)", "LA RIOJA"] },
+  { slug: "ceuta", label: "Ceuta", aliases: ["CIUDAD AUTÓNOMA DE CEUTA", "CIUDAD AUTONOMA DE CEUTA", "CEUTA"] },
+  { slug: "melilla", label: "Melilla", aliases: ["CIUDAD AUTÓNOMA DE MELILLA", "CIUDAD AUTONOMA DE MELILLA", "MELILLA"] },
+];
 
 function buildCategoryLookup(definition: LocationDefinition) {
   const lookup = new Map(
@@ -699,6 +846,411 @@ function buildDenseCountRecords(input: {
   return records;
 }
 
+function getDenseSheetValue(
+  sheet: XLSX.WorkSheet,
+  rowIndex: number,
+  columnIndex: number,
+) {
+  const denseSheet = sheet as unknown as Array<Array<XLSX.CellObject | undefined>>;
+  const cell = denseSheet?.[rowIndex]?.[columnIndex];
+  return cell?.v ?? "";
+}
+
+function parseSdmxValueMap(section: string | undefined) {
+  const values = new Map<string, string>();
+
+  for (const match of (section ?? "").matchAll(/<generic:Value id="([^"]+)" value="([^"]*)"\s*\/>/g)) {
+    values.set(match[1], decodeXmlEntities(match[2]));
+  }
+
+  return values;
+}
+
+function isItalyCountryRegionCode(value: string): value is keyof typeof ITALY_COUNTRY_REGION_LABEL_BY_CODE {
+  return value in ITALY_COUNTRY_REGION_LABEL_BY_CODE;
+}
+
+function parseSdmxGenericSeries(xmlText: string) {
+  return [...xmlText.matchAll(/<generic:Series>([\s\S]*?)<\/generic:Series>/g)].map((match) => {
+    const seriesText = match[1];
+    const seriesKeySection = seriesText.match(/<generic:SeriesKey>([\s\S]*?)<\/generic:SeriesKey>/)?.[1];
+    const attributeSection = seriesText.match(/<generic:Attributes>([\s\S]*?)<\/generic:Attributes>/)?.[1];
+    const observations = [...seriesText.matchAll(/<generic:Obs>[\s\S]*?<generic:ObsDimension id="TIME_PERIOD" value="([^"]+)"\s*\/>[\s\S]*?<generic:ObsValue value="([^"]+)"\s*\/>[\s\S]*?<\/generic:Obs>/g)].map(
+      (observationMatch) => ({
+        timePeriod: observationMatch[1],
+        value: parseCountLike(observationMatch[2]),
+      }),
+    );
+
+    return {
+      seriesKey: parseSdmxValueMap(seriesKeySection),
+      attributes: parseSdmxValueMap(attributeSection),
+      observations,
+    };
+  });
+}
+
+async function buildFranceCountryLocation(): Promise<LocationPayload> {
+  const workbook = XLSX.readFile(FRANCE_COUNTRY_CRIME_WORKBOOK_PATH, { dense: true });
+  const summarySheet = workbook.Sheets.France_Entière;
+
+  if (!summarySheet) {
+    throw new Error("France country workbook is missing the France_Entière sheet.");
+  }
+
+  const departmentCsv = execFileSync("unzip", ["-p", FRANCE_COUNTRY_POPULATION_ZIP_PATH, "donnees_departements.csv"], {
+    cwd: ROOT,
+    encoding: "utf8",
+    maxBuffer: 32 * 1024 * 1024,
+  });
+  const departmentRows = departmentCsv.split(/\r?\n/).filter(Boolean);
+  const [, ...departmentLines] = departmentRows;
+  const departmentLabelByCode = new Map<string, string>();
+
+  for (const line of departmentLines) {
+    const [,_regionLabel, departmentCode, departmentLabel] = line.split(";").map(parseSemicolonCell);
+    if (departmentCode && departmentLabel) {
+      departmentLabelByCode.set(departmentCode, departmentLabel);
+    }
+  }
+
+  const headerColumns: Array<{ columnIndex: number; year: number; month: number }> = [];
+  const monthCountByYear = new Map<number, number>();
+  const headerRowLength = (summarySheet as unknown as Array<Array<XLSX.CellObject | undefined>>)?.[0]?.length ?? 0;
+
+  for (let columnIndex = 2; columnIndex < headerRowLength; columnIndex += 1) {
+    const rawHeader = String(getDenseSheetValue(summarySheet, 0, columnIndex) ?? "").trim();
+    const match = rawHeader.match(/^_(\d{4})_(\d{2})$/);
+    if (!match) {
+      continue;
+    }
+
+    const year = Number(match[1]);
+    const month = Number(match[2]);
+    headerColumns.push({ columnIndex, year, month });
+    monthCountByYear.set(year, (monthCountByYear.get(year) ?? 0) + 1);
+  }
+
+  const years = [...monthCountByYear.entries()]
+    .filter(([, monthCount]) => monthCount === 12)
+    .map(([year]) => year)
+    .sort((left, right) => left - right);
+  const fullYearSet = new Set(years);
+  const monthlyColumns = headerColumns.filter((column) => fullYearSet.has(column.year));
+
+  const departmentCodes = workbook.SheetNames.filter((sheetName) => departmentLabelByCode.has(sheetName));
+  const districts = departmentCodes.map((departmentCode) => ({
+    label: departmentLabelByCode.get(departmentCode) ?? departmentCode,
+    value: departmentCode,
+  }));
+  const { lookup: categoryLookup, options: categories } = buildCategoryLookup(FRANCE_COUNTRY_LOCATION);
+  const countsByKey = new Map<string, number>();
+
+  for (const departmentCode of departmentCodes) {
+    const sheet = workbook.Sheets[departmentCode];
+    if (!sheet) {
+      continue;
+    }
+
+    for (let rowIndex = 1; rowIndex <= 107; rowIndex += 1) {
+      const sourceLabel = String(getDenseSheetValue(sheet, rowIndex, 1) ?? "").trim();
+      const category = categoryLookup.get(normalizeSourceLabel(sourceLabel));
+      if (!category) {
+        continue;
+      }
+
+      for (const column of monthlyColumns) {
+        const rawCount = getDenseSheetValue(sheet, rowIndex, column.columnIndex);
+        const count = parseCountLike(typeof rawCount === "string" || typeof rawCount === "number" ? rawCount : null);
+        const key = `${column.year}__${departmentCode}__${category.slug}`;
+        countsByKey.set(key, (countsByKey.get(key) ?? 0) + count);
+      }
+    }
+  }
+
+  return {
+    slug: FRANCE_COUNTRY_LOCATION.slug,
+    label: FRANCE_COUNTRY_LOCATION.label,
+    country: FRANCE_COUNTRY_LOCATION.country,
+    areaLabelSingular: FRANCE_COUNTRY_LOCATION.areaLabelSingular,
+    areaLabelPlural: FRANCE_COUNTRY_LOCATION.areaLabelPlural,
+    chartTitle: FRANCE_COUNTRY_LOCATION.chartTitle,
+    note: FRANCE_COUNTRY_LOCATION.note,
+    sources: FRANCE_COUNTRY_LOCATION.sources,
+    years,
+    districts,
+    categories,
+    defaultCategorySlugs: categories.filter((category) => category.isDefault).map((category) => category.value),
+    cityPopulationByYear: {},
+    records: buildDenseCountRecords({ years, districts, categories, countsByKey }),
+  };
+}
+
+async function buildItalyCountryLocation(): Promise<LocationPayload> {
+  const [crimeXml, populationXml] = await Promise.all([
+    fs.readFile(ITALY_COUNTRY_CRIME_XML_PATH, "utf8"),
+    fs.readFile(ITALY_COUNTRY_POPULATION_XML_PATH, "utf8"),
+  ]);
+
+  const { lookup: categoryLookup, options: categories } = buildCategoryLookup(ITALY_COUNTRY_LOCATION);
+  const districts = ITALY_COUNTRY_REGION_CODES.map((regionCode) => ({
+    label: ITALY_COUNTRY_REGION_LABEL_BY_CODE[regionCode] ?? regionCode,
+    value: regionCode,
+  }));
+  const countsByKey = new Map<string, number>();
+  const populationByRegionYear = new Map<string, number>();
+  const countryPopulationByYear = new Map<number, number>();
+  const crimeYears = new Set<number>();
+
+  for (const series of parseSdmxGenericSeries(crimeXml)) {
+    const regionCode = series.seriesKey.get("REF_AREA");
+    if (!regionCode || !isItalyCountryRegionCode(regionCode)) {
+      continue;
+    }
+
+    if (
+      series.seriesKey.get("FREQ") !== "A" ||
+      series.seriesKey.get("DATA_TYPE") !== "CRIMEN" ||
+      series.seriesKey.get("Y_KNOWN_OFFENDER_IDEN") !== "9" ||
+      series.seriesKey.get("REFERENCE_PERIOD_CRIME") !== "YRDUR" ||
+      series.seriesKey.get("MONTH_CRIME_COMMIT") !== "YEAR"
+    ) {
+      continue;
+    }
+
+    const crimeCode = series.seriesKey.get("TYPE_CRIME");
+    const sourceLabel = crimeCode ? ITALY_COUNTRY_CRIME_LABEL_BY_CODE[crimeCode] : undefined;
+    const category = sourceLabel ? categoryLookup.get(normalizeSourceLabel(sourceLabel)) : undefined;
+    if (!category) {
+      continue;
+    }
+
+    for (const observation of series.observations) {
+      const year = Number(observation.timePeriod);
+      if (!Number.isFinite(year)) {
+        continue;
+      }
+
+      crimeYears.add(year);
+      const key = `${year}__${regionCode}__${category.slug}`;
+      countsByKey.set(key, (countsByKey.get(key) ?? 0) + observation.value);
+    }
+  }
+
+  for (const series of parseSdmxGenericSeries(populationXml)) {
+    if (
+      series.seriesKey.get("FREQ") !== "A" ||
+      series.seriesKey.get("DATA_TYPE") !== "JAN" ||
+      series.seriesKey.get("SEX") !== "9" ||
+      series.seriesKey.get("AGE") !== "TOTAL" ||
+      series.seriesKey.get("MARITAL_STATUS") !== "99"
+    ) {
+      continue;
+    }
+
+    const regionCode = series.attributes.get("NOTE_REF_AREA")?.replace(/^FILTER__/, "");
+    if (!regionCode || !isItalyCountryRegionCode(regionCode)) {
+      continue;
+    }
+
+    for (const observation of series.observations) {
+      const year = Number(observation.timePeriod);
+      if (!Number.isFinite(year)) {
+        continue;
+      }
+
+      const regionKey = `${year}__${regionCode}`;
+      populationByRegionYear.set(regionKey, (populationByRegionYear.get(regionKey) ?? 0) + observation.value);
+      countryPopulationByYear.set(year, (countryPopulationByYear.get(year) ?? 0) + observation.value);
+    }
+  }
+
+  const years = [...crimeYears]
+    .filter(
+      (year) =>
+        countryPopulationByYear.has(year) &&
+        ITALY_COUNTRY_REGION_CODES.every((regionCode) => populationByRegionYear.has(`${year}__${regionCode}`)),
+    )
+    .sort((left, right) => left - right);
+
+  const records: CrimeRecord[] = [];
+
+  for (const district of districts) {
+    for (const category of categories) {
+      for (const year of years) {
+        const count = countsByKey.get(`${year}__${district.value}__${category.value}`) ?? 0;
+        const population = populationByRegionYear.get(`${year}__${district.value}`);
+
+        records.push({
+          year,
+          districtLabel: district.label,
+          districtSlug: district.value,
+          categoryLabel: category.label,
+          categorySlug: category.value,
+          count,
+          ratePer100k: population ? (count / population) * 100_000 : null,
+        });
+      }
+    }
+  }
+
+  return {
+    slug: ITALY_COUNTRY_LOCATION.slug,
+    label: ITALY_COUNTRY_LOCATION.label,
+    country: ITALY_COUNTRY_LOCATION.country,
+    areaLabelSingular: ITALY_COUNTRY_LOCATION.areaLabelSingular,
+    areaLabelPlural: ITALY_COUNTRY_LOCATION.areaLabelPlural,
+    chartTitle: ITALY_COUNTRY_LOCATION.chartTitle,
+    note: ITALY_COUNTRY_LOCATION.note,
+    sources: ITALY_COUNTRY_LOCATION.sources,
+    years,
+    districts,
+    categories,
+    defaultCategorySlugs: categories.filter((category) => category.isDefault).map((category) => category.value),
+    cityPopulationByYear: Object.fromEntries(
+      years.map((year) => [String(year), Math.round(countryPopulationByYear.get(year) ?? 0)]),
+    ),
+    records,
+  };
+}
+
+function readGermanyCountrySheetRows(filePath: string) {
+  const workbook = XLSX.readFile(filePath, { dense: true });
+  const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+
+  if (!firstSheet) {
+    throw new Error(`Germany country workbook is missing its first sheet: ${filePath}`);
+  }
+
+  return XLSX.utils.sheet_to_json<Array<string | number | null>>(firstSheet, {
+    header: 1,
+    defval: null,
+  });
+}
+
+function getGermanyCountryRateColumnIndex(rows: Array<Array<string | number | null>>, year: number) {
+  const headers = (rows[4] ?? []).map((value) => normalizeSourceLabel(String(value ?? "")));
+  const zensus22Index = headers.findIndex((value) => /^HZ \(Zensus 22\)$/i.test(value));
+
+  if (zensus22Index !== -1) {
+    return zensus22Index;
+  }
+
+  const fallbackIndex = headers.findIndex((value) => /^HZ(?: nach Zensus)?$/i.test(value) || /^HZ \(/i.test(value));
+  if (fallbackIndex !== -1) {
+    return fallbackIndex;
+  }
+
+  throw new Error(`Could not find Germany HZ column for ${year}`);
+}
+
+function isGermanyCountryLandLabel(value: string) {
+  if (!value) {
+    return false;
+  }
+
+  return !/^Bund(?:es|\s)|^Deutschland$/i.test(value);
+}
+
+async function buildGermanyCountryLocation(): Promise<LocationPayload> {
+  const workbookYears = [2019, 2020, 2021, 2022, 2023, 2024] as const;
+  const years = [...workbookYears];
+  const { options: categories, lookup: categoryLookup } = buildCategoryLookup(GERMANY_COUNTRY_LOCATION);
+  const countsByKey = new Map<string, number>();
+  const populationByLandYear = new Map<string, number>();
+  const countryPopulationByYear = new Map<number, number>();
+  const districtLabelBySlug = new Map<string, string>();
+
+  for (const year of workbookYears) {
+    const countRows = readGermanyCountrySheetRows(GERMANY_COUNTRY_COUNT_WORKBOOK_BY_YEAR[year]!);
+    const rateRows = readGermanyCountrySheetRows(GERMANY_COUNTRY_RATE_WORKBOOK_BY_YEAR[year]!);
+    const rateColumnIndex = getGermanyCountryRateColumnIndex(rateRows, year);
+    const rateByLandAndCode = new Map<string, number>();
+
+    for (const row of rateRows) {
+      const code = String(row[0] ?? "").trim();
+      const landLabel = String(row[2] ?? "").trim();
+      if (!code || !isGermanyCountryLandLabel(landLabel)) {
+        continue;
+      }
+
+      const rate = parseDecimalLike(row[rateColumnIndex]);
+      if (rate > 0) {
+        rateByLandAndCode.set(`${landLabel}__${code}`, rate);
+      }
+    }
+
+    for (const row of countRows) {
+      const code = String(row[0] ?? "").trim();
+      const landLabel = String(row[2] ?? "").trim();
+      if (!code || !isGermanyCountryLandLabel(landLabel)) {
+        continue;
+      }
+
+      const category = categoryLookup.get(normalizeSourceLabel(code));
+      if (!category) {
+        continue;
+      }
+
+      const districtSlug = slugify(landLabel);
+      const count = parseCountLike(row[3]);
+      countsByKey.set(`${year}__${districtSlug}__${category.slug}`, count);
+      districtLabelBySlug.set(districtSlug, landLabel);
+
+      if (code === "------") {
+        const rate = rateByLandAndCode.get(`${landLabel}__${code}`) ?? 0;
+        if (rate > 0) {
+          const population = (count / rate) * 100_000;
+          populationByLandYear.set(`${year}__${districtSlug}`, population);
+          countryPopulationByYear.set(year, (countryPopulationByYear.get(year) ?? 0) + population);
+        }
+      }
+    }
+  }
+
+  const districts = [...districtLabelBySlug.entries()]
+    .sort((left, right) => left[1].localeCompare(right[1]))
+    .map(([value, label]) => ({ label, value }));
+
+  const records: CrimeRecord[] = [];
+
+  for (const district of districts) {
+    for (const category of categories) {
+      for (const year of years) {
+        const count = countsByKey.get(`${year}__${district.value}__${category.value}`) ?? 0;
+        const population = populationByLandYear.get(`${year}__${district.value}`);
+
+        records.push({
+          year,
+          districtLabel: district.label,
+          districtSlug: district.value,
+          categoryLabel: category.label,
+          categorySlug: category.value,
+          count,
+          ratePer100k: population ? (count / population) * 100_000 : null,
+        });
+      }
+    }
+  }
+
+  return {
+    slug: GERMANY_COUNTRY_LOCATION.slug,
+    label: GERMANY_COUNTRY_LOCATION.label,
+    country: GERMANY_COUNTRY_LOCATION.country,
+    areaLabelSingular: GERMANY_COUNTRY_LOCATION.areaLabelSingular,
+    areaLabelPlural: GERMANY_COUNTRY_LOCATION.areaLabelPlural,
+    chartTitle: GERMANY_COUNTRY_LOCATION.chartTitle,
+    note: GERMANY_COUNTRY_LOCATION.note,
+    sources: GERMANY_COUNTRY_LOCATION.sources,
+    years,
+    districts,
+    categories,
+    defaultCategorySlugs: categories.filter((category) => category.isDefault).map((category) => category.value),
+    cityPopulationByYear: mapToObject(countryPopulationByYear),
+    records,
+  };
+}
+
 function findSheetName(sheetNames: string[], patterns: RegExp[]) {
   for (const pattern of patterns) {
     const match = sheetNames.find((sheetName) => pattern.test(sheetName));
@@ -838,6 +1390,146 @@ function normalizeSpainText(value: string) {
 
 const SPAIN_COUNT_TOKEN_PATTERN = /^\d+(?:\.\d{3})*$/;
 
+function parseSpainInlineCounts(line: string, years: number[]) {
+  const tokens = line.split(/\s+/).filter(Boolean);
+  const countTokenIndices = tokens
+    .map((token, index) => (SPAIN_COUNT_TOKEN_PATTERN.test(token) ? index : -1))
+    .filter((index) => index !== -1);
+
+  if (countTokenIndices.length < years.length) {
+    return null;
+  }
+
+  const valueIndices = countTokenIndices.slice(-years.length);
+  const sourceLabel = normalizeSpainText(tokens.slice(0, valueIndices[0]).join(" "));
+  if (!sourceLabel) {
+    return null;
+  }
+
+  return {
+    sourceLabel,
+    countsByHeaderYear: valueIndices.map((index) => parseCountLike(tokens[index])),
+  };
+}
+
+function parseSpainTerritorySection(
+  text: string,
+  territoryAliases: string[],
+  stopHeaders: string[],
+  expectedYear: number,
+) {
+  const lines = text
+    .split(/\r?\n/)
+    .map((line) => normalizeSpainText(line))
+    .filter(Boolean);
+  const normalizedAliases = territoryAliases.map((alias) => normalizeSpainText(alias));
+  const normalizedStopHeaders = stopHeaders.map((header) => normalizeSpainText(header));
+  const startIndex = lines.findIndex((line, index) => {
+    if (!normalizedAliases.some((alias) => line === alias || line === `${alias} Acumulado enero a diciembre`)) {
+      return false;
+    }
+
+    return lines
+      .slice(index, index + 25)
+      .some((candidate) => /\b20\d{2}\b/.test(candidate) && /(Var|TIPOLOGIA|INDICADORES|Tipologia)/i.test(candidate));
+  });
+
+  if (startIndex === -1) {
+    throw new Error(`Could not find Spain territory block for ${territoryAliases[0]}`);
+  }
+
+  const block: string[] = [];
+  for (let index = startIndex; index < lines.length; index += 1) {
+    const line = lines[index];
+    if (
+      index > startIndex &&
+      (normalizedStopHeaders.some((header) => line === header || line === `${header} Acumulado enero a diciembre`) ||
+        /^Provincia\b/i.test(line) ||
+        /^Provincia de\b/i.test(line) ||
+        /^Provincia del\b/i.test(line) ||
+        /^EN EL EXTRANJERO\b/i.test(line) ||
+        /^TOTAL NACIONAL\b/i.test(line))
+    ) {
+      break;
+    }
+    block.push(line);
+  }
+
+  const headerLine =
+    block.find((line) => /\b20\d{2}\b/.test(line) && /(Var|TIPOLOGIA|INDICADORES|Tipologia)/i.test(line)) ??
+    block.find((line) => /\b20\d{2}\b/.test(line)) ??
+    "";
+  const years = [...headerLine.matchAll(/\b(20\d{2})\b/g)].map((match) => Number(match[1]));
+  const currentYear = years.includes(expectedYear) ? expectedYear : years.at(-1);
+  const previousYear = years.length > 1 ? years.at(-2) ?? null : null;
+
+  if (!currentYear) {
+    throw new Error(`Could not determine Spain balance year for ${territoryAliases[0]}`);
+  }
+
+  const rowsByYear = new Map<number, Map<string, number>>();
+  rowsByYear.set(currentYear, new Map());
+  if (previousYear) {
+    rowsByYear.set(previousYear, new Map());
+  }
+
+  const storeSpainCounts = (sourceLabel: string, countsByHeaderYear: number[]) => {
+    const currentIndex = years.lastIndexOf(currentYear);
+    if (currentIndex !== -1 && countsByHeaderYear[currentIndex] !== undefined) {
+      rowsByYear.get(currentYear)?.set(sourceLabel, countsByHeaderYear[currentIndex]!);
+    }
+
+    if (previousYear) {
+      const previousIndex = years.lastIndexOf(previousYear);
+      if (previousIndex !== -1 && countsByHeaderYear[previousIndex] !== undefined) {
+        rowsByYear.get(previousYear)?.set(sourceLabel, countsByHeaderYear[previousIndex]!);
+      }
+    }
+  };
+
+  const labelQueue: string[] = [];
+  const headerIndex = block.indexOf(headerLine);
+
+  for (let index = headerIndex + 1; index < block.length; index += 1) {
+    const line = block[index];
+    if (
+      line.startsWith("Pagina ") ||
+      line.startsWith("Página ") ||
+      line.startsWith("-- ") ||
+      line.startsWith("INFRACCIONES ") ||
+      line.startsWith("LOCALIDADES ") ||
+      line.startsWith("CON POBLACION ") ||
+      line.startsWith("(Datos") ||
+      line.startsWith("Datos pendientes") ||
+      line === "Columna1" ||
+      line === "a Columna1 Columna2 b"
+    ) {
+      continue;
+    }
+
+    const inlineCounts = parseSpainInlineCounts(line, years);
+    if (inlineCounts) {
+      storeSpainCounts(inlineCounts.sourceLabel, inlineCounts.countsByHeaderYear);
+      continue;
+    }
+
+    const splitLineCounts = parseSpainInlineCounts(`__LABEL__ ${line}`, years);
+    if (splitLineCounts && labelQueue.length > 0) {
+      const sourceLabel = labelQueue.shift()!;
+      storeSpainCounts(sourceLabel, splitLineCounts.countsByHeaderYear);
+      continue;
+    }
+
+    if (/^\d+ de \d+$/.test(line)) {
+      continue;
+    }
+
+    labelQueue.push(normalizeSpainText(line));
+  }
+
+  return { currentYear, previousYear, rowsByYear };
+}
+
 function parseSpainMunicipalityWorkbook(filePath: string, municipality: string, expectedYear: number) {
   const workbook = XLSX.readFile(filePath);
   const firstSheet = workbook.SheetNames[0];
@@ -960,28 +1652,6 @@ function parseSpainMunicipalitySection(text: string, municipality: string, expec
     }
   };
 
-  const parseSpainInlineCounts = (line: string) => {
-    const tokens = line.split(/\s+/).filter(Boolean);
-    const countTokenIndices = tokens
-      .map((token, index) => (SPAIN_COUNT_TOKEN_PATTERN.test(token) ? index : -1))
-      .filter((index) => index !== -1);
-
-    if (countTokenIndices.length < years.length) {
-      return null;
-    }
-
-    const valueIndices = countTokenIndices.slice(-years.length);
-    const sourceLabel = normalizeSpainText(tokens.slice(0, valueIndices[0]).join(" "));
-    if (!sourceLabel) {
-      return null;
-    }
-
-    return {
-      sourceLabel,
-      countsByHeaderYear: valueIndices.map((index) => parseCountLike(tokens[index])),
-    };
-  };
-
   const labelQueue: string[] = [];
   const headerIndex = block.indexOf(headerLine);
 
@@ -998,13 +1668,13 @@ function parseSpainMunicipalitySection(text: string, municipality: string, expec
       continue;
     }
 
-    const inlineCounts = parseSpainInlineCounts(line);
+    const inlineCounts = parseSpainInlineCounts(line, years);
     if (inlineCounts) {
       storeSpainCounts(inlineCounts.sourceLabel, inlineCounts.countsByHeaderYear);
       continue;
     }
 
-    const splitLineCounts = parseSpainInlineCounts(`__LABEL__ ${line}`);
+    const splitLineCounts = parseSpainInlineCounts(`__LABEL__ ${line}`, years);
     if (splitLineCounts && labelQueue.length > 0) {
       const sourceLabel = labelQueue.shift()!;
       storeSpainCounts(sourceLabel, splitLineCounts.countsByHeaderYear);
@@ -1116,6 +1786,120 @@ async function buildSpainLocation(
     defaultCategorySlugs: categories.filter((category) => category.isDefault).map((category) => category.value),
     cityPopulationByYear,
     records: [...recordsByKey.values()].sort((left, right) => left.year - right.year),
+  };
+}
+
+async function buildSpainCountryLocation(): Promise<LocationPayload> {
+  const annualSources: SpainAnnualSource[] = [
+    { year: 2019, type: "zip-pdf", url: SOURCE_URLS.spanishArchive2019, zipEntryContains: "cuarto trimestre" },
+    { year: 2020, type: "zip-pdf", url: SOURCE_URLS.spanishArchive2020, zipEntryContains: "cuarto trimestre" },
+    { year: 2021, type: "pdf", url: SOURCE_URLS.spanishBalance2021 },
+    { year: 2022, type: "pdf", url: SOURCE_URLS.spanishBalance2022 },
+    { year: 2023, type: "pdf", url: SOURCE_URLS.spanishBalance2023 },
+    { year: 2024, type: "pdf", url: SOURCE_URLS.spanishBalance2024 },
+    { year: 2025, type: "pdf", url: SOURCE_URLS.spanishBalance2025 },
+  ];
+
+  const { options: categories, lookup: categoryLookup } = buildCategoryLookup(SPAIN_COUNTRY_LOCATION);
+  const districts = SPAIN_COUNTRY_TERRITORIES.map((territory) => ({
+    label: territory.label,
+    value: territory.slug,
+  }));
+  const recordsByKey = new Map<string, CrimeRecord>();
+  const years = new Set<number>();
+  const earliestSourceYear = Math.min(...annualSources.map((source) => source.year));
+  const allStopHeaders = SPAIN_COUNTRY_TERRITORIES.flatMap((territory) => territory.aliases);
+
+  for (const source of annualSources) {
+    let targetPath = path.join(SPAIN_COUNTRY_DIR, `spain_country_${source.year}.pdf`);
+    await fs.mkdir(path.dirname(targetPath), { recursive: true });
+
+    if (source.type === "pdf") {
+      if (source.year === 2025) {
+        await ensureFile(SPAIN_COUNTRY_PDF_2025_PATH, source.url);
+        targetPath = SPAIN_COUNTRY_PDF_2025_PATH;
+      } else {
+        await ensureFile(targetPath, source.url);
+      }
+    } else {
+      const zipPath = source.year === 2019 ? SPAIN_COUNTRY_ARCHIVE_2019_PATH : SPAIN_COUNTRY_ARCHIVE_2020_PATH;
+      await ensureFile(zipPath, source.url);
+      const pythonCode = [
+        "import sys, zipfile, pathlib",
+        "zip_path, needle, out_path = sys.argv[1:]",
+        "with zipfile.ZipFile(zip_path) as zf:",
+        "    name = next((n for n in zf.namelist() if needle.lower() in n.lower() and n.lower().endswith('.pdf')), None)",
+        "    if name is None:",
+        "        raise SystemExit(f'No PDF entry found for {needle} in {zip_path}')",
+        "    pathlib.Path(out_path).write_bytes(zf.read(name))",
+      ].join("\n");
+      execFileSync("python3", ["-c", pythonCode, zipPath, source.zipEntryContains ?? "", targetPath], {
+        cwd: ROOT,
+        maxBuffer: 64 * 1024 * 1024,
+      });
+    }
+
+    const text = await extractPdfText(targetPath);
+
+    for (const territory of SPAIN_COUNTRY_TERRITORIES) {
+      const parsed = parseSpainTerritorySection(
+        text,
+        territory.aliases,
+        allStopHeaders.filter((header) => !territory.aliases.includes(header)),
+        source.year,
+      );
+
+      parsed.rowsByYear.forEach((rowsForYear, year) => {
+        if (year !== source.year && source.year !== earliestSourceYear) {
+          return;
+        }
+
+        years.add(year);
+        rowsForYear.forEach((count, sourceLabel) => {
+          const category = categoryLookup.get(normalizeSpainText(sourceLabel));
+          if (!category) {
+            return;
+          }
+
+          addOrMergeRecord(recordsByKey, {
+            year,
+            districtLabel: territory.label,
+            districtSlug: territory.slug,
+            categoryLabel: category.label,
+            categorySlug: category.slug,
+            count,
+            ratePer100k: null,
+          });
+        });
+      });
+    }
+  }
+
+  return {
+    slug: SPAIN_COUNTRY_LOCATION.slug,
+    label: SPAIN_COUNTRY_LOCATION.label,
+    country: SPAIN_COUNTRY_LOCATION.country,
+    areaLabelSingular: SPAIN_COUNTRY_LOCATION.areaLabelSingular,
+    areaLabelPlural: SPAIN_COUNTRY_LOCATION.areaLabelPlural,
+    chartTitle: SPAIN_COUNTRY_LOCATION.chartTitle,
+    note: SPAIN_COUNTRY_LOCATION.note,
+    sources: SPAIN_COUNTRY_LOCATION.sources,
+    years: [...years].sort((left, right) => left - right),
+    districts,
+    categories,
+    defaultCategorySlugs: categories.filter((category) => category.isDefault).map((category) => category.value),
+    cityPopulationByYear: {},
+    records: [...recordsByKey.values()].sort((left, right) => {
+      if (left.year !== right.year) {
+        return left.year - right.year;
+      }
+
+      if (left.districtLabel !== right.districtLabel) {
+        return left.districtLabel.localeCompare(right.districtLabel);
+      }
+
+      return left.categoryLabel.localeCompare(right.categoryLabel);
+    }),
   };
 }
 
@@ -4063,15 +4847,18 @@ async function main() {
   const barcelona = await buildSpainLocation(BARCELONA_LOCATION, "Barcelona", spainAnnualSources, barcelonaPopulationByYear);
   const valencia = await buildSpainLocation(VALENCIA_LOCATION, "Valencia", spainAnnualSources, valenciaPopulationByYear);
 
-  const [austin, berlin, chicago, dallas, frankfurt, hamburg, houston, london, losAngeles, luton, milan, munich, newYorkCity, paris, phoenix, rome, sanFrancisco, saoPaulo, seattle, tokyo] =
+  const [austin, berlin, chicago, dallas, franceCountry, frankfurt, germanyCountry, hamburg, houston, italyCountry, london, losAngeles, luton, milan, munich, newYorkCity, paris, phoenix, rome, sanFrancisco, saoPaulo, seattle, spainCountry, tokyo] =
     await Promise.all([
       buildAustinLocation(),
       buildBerlinLocation(),
       buildChicagoLocation(),
       buildDallasLocation(),
+      buildFranceCountryLocation(),
       buildFrankfurtLocation(),
+      buildGermanyCountryLocation(),
       buildHamburgLocation(),
       buildHoustonLocation(),
+      buildItalyCountryLocation(),
       buildLondonLocation(),
       buildLosAngelesLocation(),
       buildLutonLocation(),
@@ -4084,6 +4871,7 @@ async function main() {
       buildSanFranciscoLocation(),
       buildSaoPauloLocation(),
       buildSeattleLocation(),
+      buildSpainCountryLocation(),
       buildTokyoLocation(),
     ]);
   const payload = {
@@ -4094,9 +4882,12 @@ async function main() {
       berlin,
       chicago,
       dallas,
+      franceCountry,
       frankfurt,
+      germanyCountry,
       hamburg,
       houston,
+      italyCountry,
       london,
       losAngeles,
       luton,
@@ -4109,6 +4900,7 @@ async function main() {
       saoPaulo,
       sanFrancisco,
       seattle,
+      spainCountry,
       tokyo,
       valencia,
     ].sort((left, right) => left.label.localeCompare(right.label)),

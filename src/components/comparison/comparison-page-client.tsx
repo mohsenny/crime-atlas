@@ -12,6 +12,7 @@ import { ComparisonChart } from "@/components/comparison/comparison-chart";
 import { ComparisonMethodology } from "@/components/comparison/comparison-methodology";
 import { DashboardSources } from "@/components/dashboard/dashboard-sources";
 import { MetricToggle } from "@/components/dashboard/metric-toggle";
+import { buildOverviewHref, getScopeLabel } from "@/lib/location-scope";
 import { buildCompareSearchParams } from "@/lib/view-state";
 type ComparisonPageClientProps = {
   data: ComparisonData;
@@ -41,16 +42,17 @@ export function ComparisonPageClient({ data, initialCategorySlug, initialMetric,
     }
 
     const nextParams = buildCompareSearchParams({
-      cities: data.locations.map((location) => location.slug),
+      locations: data.locations.map((location) => location.slug),
       categorySlug: selectedCategorySlug,
       metric,
+      scope: data.scope,
     });
     const nextUrl = `${pathname}?${nextParams.toString()}`;
 
     if (`${window.location.pathname}${window.location.search}` !== nextUrl) {
       window.history.replaceState(null, "", nextUrl);
     }
-  }, [data.locations, metric, pathname, selectedCategorySlug]);
+  }, [data.locations, data.scope, metric, pathname, selectedCategorySlug]);
 
   const selectedCategory = data.categories.find((category) => category.value === selectedCategorySlug) ?? data.categories[0] ?? null;
 
@@ -87,22 +89,25 @@ export function ComparisonPageClient({ data, initialCategorySlug, initialMetric,
         <div className="px-4 sm:px-0">
           <div className="flex items-center gap-2 sm:justify-between">
             <Link
-              aria-label="All locations"
+              aria-label={`All ${getScopeLabel(data.scope, { plural: true, capitalized: true })}`}
               className="-ml-1 inline-flex h-10 shrink-0 items-center gap-2 text-slate-400 transition hover:text-slate-100"
-              href="/"
+              href={buildOverviewHref(data.scope)}
             >
               <ArrowLeft className="h-4 w-4 shrink-0" />
-              <span className="hidden sm:inline text-sm font-semibold leading-none">All locations</span>
+              <span className="hidden sm:inline text-sm font-semibold leading-none">
+                All {getScopeLabel(data.scope, { plural: true, capitalized: true })}
+              </span>
             </Link>
             <div className="flex min-w-0 flex-1 items-center justify-end gap-1.5 sm:flex-none sm:gap-2">
               <CompareCityPicker
                 className="min-w-[5.5rem] shrink-0 justify-center sm:min-w-0"
                 initialSelectedSlugs={data.locations.map((location) => location.slug)}
                 locations={locations}
-                mobileTriggerLabel="Cities"
+                mobileTriggerLabel="Switch"
+                scope={data.scope}
                 showTriggerLabel={true}
                 triggerIcon={ArrowRightLeft}
-                triggerLabel="Change cities"
+                triggerLabel="Switch compare"
               />
               <div className="shrink-0">
                 <MetricToggle

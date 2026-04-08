@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 
 import { DashboardClient } from "@/components/dashboard/dashboard-client";
 import { getFilterMetadata, getLocationSummaries } from "@/lib/dashboard-data";
+import { buildOverviewHref, getScopeLabel } from "@/lib/location-scope";
 import { buildLocationSearchParams, formatAreaCount, formatCrimeSelection, resolveLocationViewState } from "@/lib/view-state";
 
 type LocationPageProps = {
@@ -48,14 +49,25 @@ export async function generateMetadata({ params, searchParams }: LocationPagePro
   imageParams.set("location", meta.slug);
   const title = `${meta.label}: ${crimeSummary} across ${areaSummary}`;
   const description = `${crimeSummary} across ${areaSummary}. ${viewState.metric === "rate" ? "Rate per 100k" : "Case counts"}.`;
+  const canonicalPath = `/${meta.slug}?${buildLocationSearchParams({
+    meta,
+    districtSlugs: viewState.districtSlugs,
+    categorySlugs: viewState.categorySlugs,
+    metric: viewState.metric,
+  }).toString()}`;
   const imagePath = `/api/og/city?${imageParams.toString()}`;
 
   return {
     title,
     description,
+    alternates: {
+      canonical: canonicalPath,
+    },
     openGraph: {
       title,
       description,
+      url: canonicalPath,
+      siteName: "Crime Atlas",
       images: [imagePath],
     },
     twitter: {
@@ -80,12 +92,12 @@ export default async function LocationPage({ params, searchParams }: LocationPag
 
   return (
     <DashboardClient
-      backHref="/"
-      backLabel="All locations"
+      backHref={buildOverviewHref(meta.scope)}
+      backLabel={`All ${getScopeLabel(meta.scope, { plural: true, capitalized: true })}`}
       initialCategorySlugs={viewState.categorySlugs}
       initialDistrictSlugs={viewState.districtSlugs}
       initialMetric={viewState.metric}
-      locations={locations}
+      locations={locations.filter((location) => location.scope === meta.scope)}
       meta={meta}
     />
   );

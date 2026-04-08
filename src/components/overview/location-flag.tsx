@@ -93,14 +93,50 @@ const flagByLocationSlug: Record<string, { src: string; alt: string }> = {
   },
 };
 
+const flagByCountry: Record<string, { src: string; alt: string }> = {
+  Brazil: {
+    src: "/flags/brazil.png",
+    alt: "Flag of Brazil",
+  },
+  France: {
+    src: "/flags/france.png",
+    alt: "Flag of France",
+  },
+  Germany: {
+    src: "/flags/germany.png",
+    alt: "Flag of Germany",
+  },
+  Italy: {
+    src: "/flags/italy.png",
+    alt: "Flag of Italy",
+  },
+  Japan: {
+    src: "/flags/japan.png",
+    alt: "Flag of Japan",
+  },
+  Spain: {
+    src: "/flags/spain.png",
+    alt: "Flag of Spain",
+  },
+  "United Kingdom": {
+    src: "/flags/united-kingdom.png",
+    alt: "Flag of the United Kingdom",
+  },
+  "United States": {
+    src: "/flags/united-states.png",
+    alt: "Flag of the United States",
+  },
+};
+
 type LocationFlagProps = {
   slug: string;
+  country?: string;
   variant: "card" | "list";
   selected?: boolean;
 };
 
-export function LocationFlag({ slug, variant, selected = false }: LocationFlagProps) {
-  const flag = flagByLocationSlug[slug];
+export function LocationFlag({ slug, country, variant, selected = false }: LocationFlagProps) {
+  const flag = flagByLocationSlug[slug] ?? (country ? flagByCountry[country] : null);
 
   if (!flag) {
     return null;

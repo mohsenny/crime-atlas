@@ -35,7 +35,12 @@ export function OverviewLocationList({
             onClick={() => onSelect?.(location.slug)}
             type="button"
           >
-            <LocationFlag selected={selectedSlugs.includes(location.slug)} slug={location.slug} variant="list" />
+            <LocationFlag
+              country={location.country}
+              selected={selectedSlugs.includes(location.slug)}
+              slug={location.slug}
+              variant="list"
+            />
             <span
               className={cn(
                 "text-xl font-semibold tracking-[-0.02em] transition",
@@ -64,7 +69,7 @@ export function OverviewLocationList({
             href={`/${location.slug}`}
             key={location.slug}
           >
-            <LocationFlag slug={location.slug} variant="list" />
+            <LocationFlag country={location.country} slug={location.slug} variant="list" />
             <span className="text-xl font-semibold tracking-[-0.02em] text-slate-100 transition group-hover:text-white">
               {location.label}
             </span>

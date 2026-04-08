@@ -218,8 +218,10 @@ export function ComparisonChart({
                 tickLine={false}
               />
               <YAxis
+                allowDataOverflow
                 axisLine={false}
                 domain={[0, yAxisMax]}
+                interval={0}
                 tick={{ fontSize: isMobileViewport ? 11 : 12, fill: "#94a3b8" }}
                 tickLine={false}
                 ticks={axisTicks}

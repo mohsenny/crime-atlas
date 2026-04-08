@@ -5,7 +5,9 @@ import {
   isComparableMappingConfidence,
   type ComparisonMappingConfidence,
 } from "@/lib/comparison-taxonomy";
+import { getLocationScope } from "@/lib/location-config";
 import { getDefaultLocationCategorySlugs } from "@/lib/location-category-selection";
+import { getScopeLabel, type LocationScope } from "@/lib/location-scope";
 import { prisma } from "@/lib/prisma";
 
 export type Metric = "count" | "rate";
@@ -65,6 +67,7 @@ export type ComparisonSeriesRecord = {
 export type ComparisonLocation = {
   slug: string;
   label: string;
+  scope: LocationScope;
   country: string;
   years: number[];
   areaLabelSingular: string;
@@ -75,6 +78,7 @@ export type ComparisonLocation = {
 };
 
 export type ComparisonData = {
+  scope: LocationScope;
   locations: ComparisonLocation[];
   categories: ComparisonCategory[];
   defaultCategorySlug: string | null;
@@ -98,6 +102,7 @@ export type ComparisonData = {
 export type LocationOverview = {
   slug: string;
   label: string;
+  scope: LocationScope;
   country: string;
   chartTitle: string;
   note: string;
@@ -131,6 +136,7 @@ type LocationRecord = {
 type LocationDataset = {
   slug: string;
   label: string;
+  scope: LocationScope;
   country: string;
   areaLabelSingular: string;
   areaLabelPlural: string;
@@ -187,6 +193,7 @@ function mapLocationEntityToDataset(location: DbLocationPayload): LocationDatase
   return {
     slug: location.slug,
     label: location.label,
+    scope: getLocationScope(location.slug),
     country: location.country,
     areaLabelSingular: location.areaLabelSingular,
     areaLabelPlural: location.areaLabelPlural,
@@ -288,6 +295,7 @@ export const getLocationSummaries = cache(async (): Promise<LocationOverview[]> 
     return {
       slug: location.slug,
       label: location.label,
+      scope: getLocationScope(location.slug),
       country: location.country,
       chartTitle: location.chartTitle,
       note: location.note,
@@ -347,6 +355,7 @@ export const getFilterMetadata = cache(async (locationSlug: string): Promise<Fil
   return {
     slug: location.slug,
     label: location.label,
+    scope: location.scope,
     country: location.country,
     chartTitle: location.chartTitle,
     note: location.note,
@@ -452,6 +461,11 @@ export async function getComparisonData(locationSlugs: string[]): Promise<Compar
   const locations = await getLocationsBySlugs(locationSlugs);
 
   if (locations.length < 2 || locations.length > 3) {
+    return null;
+  }
+
+  const scope = locations[0]?.scope;
+  if (!scope || locations.some((location) => location.scope !== scope)) {
     return null;
   }
 
@@ -572,9 +586,11 @@ export async function getComparisonData(locationSlugs: string[]): Promise<Compar
     sharedCategories.find((category) => category.isDefault)?.value ?? sharedCategories[0]?.value ?? null;
 
   return {
+    scope,
     locations: locations.map((location) => ({
       slug: location.slug,
       label: location.label,
+      scope: location.scope,
       country: location.country,
       years: location.years,
       areaLabelSingular: location.areaLabelSingular,
@@ -588,7 +604,7 @@ export async function getComparisonData(locationSlugs: string[]): Promise<Compar
     years,
     supportsRate,
     note:
-      "Only canonical categories with exact or close official equivalents across all selected cities are included. Rate per 100k is enabled when every selected location has a verified official yearly city-population series for comparison.",
+      `Only canonical categories with exact or close official equivalents across all selected ${getScopeLabel(scope, { plural: true })} are included. Rate per 100k is enabled when every selected location has a verified official yearly population series for comparison.`,
     seriesByCategory,
     methodologyByCategory,
   };

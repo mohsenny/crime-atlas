@@ -63,6 +63,8 @@ const clampNumber = (value: number, min: number, max: number) => Math.min(max, M
 const valuesEqual = (left: string[], right: string[]) =>
   left.length === right.length && left.every((value, index) => value === right[index]);
 
+const DROPDOWN_TRIGGER_GRID_CLASS = "grid h-full w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-4 text-left";
+
 export function ExpandableDropdown({
   label,
   options,
@@ -421,7 +423,7 @@ function ExpandableDropdownBase({
         aria-expanded={open}
         aria-haspopup="listbox"
         className={cn(
-          "relative h-full w-full overflow-hidden rounded-2xl border border-slate-700 bg-slate-900/70 px-4 text-left shadow-sm transition-colors duration-200 focus:outline-none",
+          "h-full w-full overflow-hidden rounded-2xl border border-slate-700 bg-slate-900/70 shadow-sm transition-colors duration-200 focus:outline-none",
           open && "opacity-0",
         )}
         onClick={toggleMenu}
@@ -429,18 +431,20 @@ function ExpandableDropdownBase({
         ref={placeholderButtonRef}
         type="button"
       >
-        <span className={cn("absolute left-4 top-1/2 -translate-y-1/2 text-slate-400", CONTROL_LABEL_TEXT_CLASS)}>
-          {label}
+        <span className={DROPDOWN_TRIGGER_GRID_CLASS}>
+          <span className={cn("min-w-0 truncate text-slate-400", CONTROL_LABEL_TEXT_CLASS)} title={label}>
+            {label}
+          </span>
+          <span className="min-w-0 truncate text-right text-sm font-semibold text-slate-50" title={selectedLabel}>
+            {selectedLabel}
+          </span>
+          <ChevronDown
+            className={cn(
+              "h-4 w-4 shrink-0 text-slate-300 transition-transform duration-200",
+              open && "rotate-180",
+            )}
+          />
         </span>
-        <span className="block w-full truncate px-20 text-center text-sm font-semibold text-slate-50">
-          {selectedLabel}
-        </span>
-        <ChevronDown
-          className={cn(
-            "absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-300 transition-transform duration-200",
-            open && "rotate-180",
-          )}
-        />
       </button>
 
       {open && rect
@@ -460,17 +464,19 @@ function ExpandableDropdownBase({
               <button
                 aria-expanded={open}
                 aria-haspopup="listbox"
-                className="relative h-10 w-full overflow-hidden px-4 text-left focus:outline-none"
+                className="h-10 w-full overflow-hidden focus:outline-none"
                 onClick={() => closeMenu(true)}
                 type="button"
               >
-                <span className={cn("absolute left-4 top-1/2 -translate-y-1/2 text-slate-400", CONTROL_LABEL_TEXT_CLASS)}>
-                  {label}
+                <span className={DROPDOWN_TRIGGER_GRID_CLASS}>
+                  <span className={cn("min-w-0 truncate text-slate-400", CONTROL_LABEL_TEXT_CLASS)} title={label}>
+                    {label}
+                  </span>
+                  <span className="min-w-0 truncate text-right text-sm font-semibold text-slate-50" title={selectedLabel}>
+                    {selectedLabel}
+                  </span>
+                  <ChevronDown className="h-4 w-4 shrink-0 rotate-180 text-slate-300" />
                 </span>
-                <span className="block w-full truncate px-20 text-center text-sm font-semibold text-slate-50">
-                  {selectedLabel}
-                </span>
-                <ChevronDown className="absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 rotate-180 text-slate-300" />
               </button>
 
               <div

@@ -45,7 +45,7 @@ export function LocationOverviewCard({
         </div>
       ) : null}
 
-      <LocationFlag selected={selected} slug={location.slug} variant="card" />
+      <LocationFlag country={location.country} selected={selected} slug={location.slug} variant="card" />
 
       <div className="relative flex min-h-full w-full flex-col justify-between">
         <div className="space-y-4">
