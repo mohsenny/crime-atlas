@@ -42,12 +42,17 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
   }
 
   const viewState = resolveCompareViewState(data, { locations: rawLocations, cities, category, metric, scope: rawScope });
+  const initialMetric = data.supportsRate
+    ? metric === "count"
+      ? "count"
+      : "rate"
+    : "count";
 
   return (
     <ComparisonPageClient
       data={data}
       initialCategorySlug={viewState.categorySlug}
-      initialMetric={viewState.metric}
+      initialMetric={initialMetric}
       locations={locations.filter((location) => location.scope === data.scope)}
     />
   );

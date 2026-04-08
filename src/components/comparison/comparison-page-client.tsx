@@ -37,6 +37,10 @@ export function ComparisonPageClient({ data, initialCategorySlug, initialMetric,
   }, [resolvedInitialCategorySlug]);
 
   useEffect(() => {
+    setMetric(initialMetric);
+  }, [initialMetric]);
+
+  useEffect(() => {
     if (!selectedCategorySlug || data.locations.length === 0) {
       return;
     }
