@@ -19,7 +19,9 @@ import {
   AUSTIN_LOCATION,
   BARCELONA_LOCATION,
   BERLIN_LOCATION,
+  BIRMINGHAM_LOCATION,
   CHICAGO_LOCATION,
+  CLEVELAND_LOCATION,
   DALLAS_LOCATION,
   FRANCE_COUNTRY_LOCATION,
   GERMANY_COUNTRY_LOCATION,
@@ -29,8 +31,11 @@ import {
   ITALY_COUNTRY_LOCATION,
   LONDON_LOCATION,
   LOS_ANGELES_LOCATION,
+  LOUISVILLE_LOCATION,
   LUTON_LOCATION,
+  MANCHESTER_LOCATION,
   MILAN_LOCATION,
+  MINNEAPOLIS_LOCATION,
   NEW_YORK_CITY_LOCATION,
   PHOENIX_LOCATION,
   MUNICH_LOCATION,
@@ -141,6 +146,31 @@ type SeattleCrimeRow = {
   precinct: string;
   nibrs_offense_code_description: string;
   count: string;
+};
+type MinneapolisCrimeRow = {
+  neighborhood: string;
+  ucrDescription: string;
+  count: string | number;
+};
+type ClevelandCrimeRow = {
+  District: string;
+  UCRdesc: string;
+  count: string | number;
+};
+type LouisvilleCrimeRow = {
+  LMPD_DIVISION?: string;
+  CRIME_TYPE?: string;
+  lmpd_division?: string;
+  offense_classification?: string;
+  count: string | number;
+};
+type ArcGisFeatureResponse<T> = {
+  features?: Array<{ attributes: T }>;
+  error?: {
+    code?: number;
+    message?: string;
+    details?: string[];
+  };
 };
 
 type SpainCountryTerritoryDefinition = {
@@ -365,6 +395,10 @@ const SOURCE_URLS = {
     "https://www.phoenixopendata.com/dataset/cc08aace-9ca9-467f-b6c1-f0879ab1a358/resource/0ce3411a-2fc6-4302-a33f-167f68608a20/download/crime-data_crime-data_crimestat.csv",
   sanFranciscoCrimeApi: "https://data.sfgov.org/resource/wg3w-h783.json",
   seattleCrimeApi: "https://data.seattle.gov/resource/tazs-3rd5.json",
+  minneapolisCrimeApi:
+    "https://services.arcgis.com/afSMGVsC7QlRK1kZ/arcgis/rest/services/NEIGHBORHOOD_CRIME_STATS/FeatureServer/0",
+  clevelandCrimeApi:
+    "https://services3.arcgis.com/dty2kHktVXHrqO8i/arcgis/rest/services/Crime_Incidents/FeatureServer/0",
   barcelonaPopulationPackage:
     "https://opendata-ajuntament.barcelona.cat/data/api/action/package_show?id=16c11ddf-a783-4b64-aa68-3dc83dc70379",
   valenciaPopulationIndicator: "https://www.valencia.es/estadistica/IndSoc/F02051000.pdf",
@@ -390,6 +424,10 @@ const US_CITY_POPULATION_SOURCES = {
     stateFips: "17",
     cityName: "Chicago city, Illinois",
   },
+  cleveland: {
+    stateFips: "39",
+    cityName: "Cleveland city, Ohio",
+  },
   dallas: {
     stateFips: "48",
     cityName: "Dallas city, Texas",
@@ -410,6 +448,14 @@ const US_CITY_POPULATION_SOURCES = {
     stateFips: "06",
     cityName: "Los Angeles city, California",
   },
+  louisville: {
+    stateFips: "21",
+    cityName: "Louisville/Jefferson County metro government (balance), Kentucky",
+  },
+  minneapolis: {
+    stateFips: "27",
+    cityName: "Minneapolis city, Minnesota",
+  },
   "san-francisco": {
     stateFips: "06",
     cityName: "San Francisco city, California",
@@ -419,6 +465,25 @@ const US_CITY_POPULATION_SOURCES = {
     cityName: "Seattle city, Washington",
   },
 } as const;
+
+const LOUISVILLE_CRIME_API_BY_YEAR = {
+  2010: "https://services1.arcgis.com/79kfd2K6fskCAkyg/arcgis/rest/services/Crime_Data_2010/FeatureServer/0",
+  2011: "https://services1.arcgis.com/79kfd2K6fskCAkyg/arcgis/rest/services/Crime_Data_2011/FeatureServer/0",
+  2012: "https://services1.arcgis.com/79kfd2K6fskCAkyg/arcgis/rest/services/Crime_Data_2012/FeatureServer/0",
+  2013: "https://services1.arcgis.com/79kfd2K6fskCAkyg/arcgis/rest/services/Crime_Data_2013/FeatureServer/0",
+  2014: "https://services1.arcgis.com/79kfd2K6fskCAkyg/arcgis/rest/services/Crime_Data_2014/FeatureServer/0",
+  2015: "https://services1.arcgis.com/79kfd2K6fskCAkyg/arcgis/rest/services/Crime_Data_2015/FeatureServer/0",
+  2016: "https://services1.arcgis.com/79kfd2K6fskCAkyg/arcgis/rest/services/Crime_Data_2016/FeatureServer/0",
+  2017: "https://services1.arcgis.com/79kfd2K6fskCAkyg/arcgis/rest/services/Crime_Data_2017/FeatureServer/0",
+  2018: "https://services1.arcgis.com/79kfd2K6fskCAkyg/arcgis/rest/services/Crime_Data_2018_/FeatureServer/0",
+  2019: "https://services1.arcgis.com/79kfd2K6fskCAkyg/arcgis/rest/services/CRIME_DATA2019/FeatureServer/0",
+  2020: "https://services1.arcgis.com/79kfd2K6fskCAkyg/arcgis/rest/services/crime_2020/FeatureServer/0",
+  2021: "https://services1.arcgis.com/79kfd2K6fskCAkyg/arcgis/rest/services/Louisville_Metro_KY_Crime_Data_2021/FeatureServer/0",
+  2022: "https://services1.arcgis.com/79kfd2K6fskCAkyg/arcgis/rest/services/Louisville_Metro_KY_Crime_Data_2022/FeatureServer/0",
+  2023: "https://services1.arcgis.com/79kfd2K6fskCAkyg/arcgis/rest/services/crime_data_2023/FeatureServer/0",
+  2024: "https://services1.arcgis.com/79kfd2K6fskCAkyg/arcgis/rest/services/crimedata2024/FeatureServer/0",
+  2025: "https://services1.arcgis.com/79kfd2K6fskCAkyg/arcgis/rest/services/crime_data_2025/FeatureServer/0",
+} satisfies Record<number, string>;
 
 const VALENCIA_OFFICIAL_POPULATION_FALLBACK = {
   2015: 787_266,
@@ -609,6 +674,34 @@ async function fetchSocrataRows<T>(baseUrl: string, params: Record<string, strin
   return fetchJsonWithRetry<T[]>(buildSocrataUrl(baseUrl, params));
 }
 
+function buildArcGisUrl(baseUrl: string, params: Record<string, string>) {
+  const url = new URL(`${baseUrl}/query`);
+  for (const [key, value] of Object.entries(params)) {
+    url.searchParams.set(key, value);
+  }
+  return url.toString();
+}
+
+async function fetchArcGisRows<T extends Record<string, string | number | null | undefined>>(
+  baseUrl: string,
+  params: Record<string, string>,
+) {
+  const response = await fetchJsonWithRetry<ArcGisFeatureResponse<T>>(
+    buildArcGisUrl(baseUrl, {
+      f: "json",
+      returnGeometry: "false",
+      ...params,
+    }),
+  );
+
+  if (response.error) {
+    const details = response.error.details?.join("; ") ?? "";
+    throw new Error(`ArcGIS query failed for ${baseUrl}: ${response.error.message ?? "Unknown error"}${details ? ` (${details})` : ""}`);
+  }
+
+  return (response.features ?? []).map((feature) => feature.attributes);
+}
+
 async function parseSemicolonCsv(filePath: string) {
   const text = await fs.readFile(filePath, "utf8");
   const [headerLine, ...lines] = text.split(/\r?\n/).filter(Boolean);
@@ -746,6 +839,10 @@ function toTitleCase(value: string) {
     .replace(/\b([a-z])/g, (match) => match.toUpperCase())
     .replace(/\bNypd\b/g, "NYPD")
     .replace(/\bLapd\b/g, "LAPD");
+}
+
+function formatLouisvilleDivisionLabel(value: string) {
+  return toTitleCase(value).replace(/(\d)(St|Nd|Rd|Th)\b/g, (_match, digit, suffix) => `${digit}${String(suffix).toLowerCase()}`);
 }
 
 function mapToObject(input: Map<number, number>) {
@@ -3798,6 +3895,129 @@ async function buildLutonLocation(): Promise<LocationPayload> {
   };
 }
 
+async function buildUkLocalAuthorityLocation(
+  definition: LocationDefinition,
+  areaName: string,
+  areaCode: string,
+): Promise<LocationPayload> {
+  await fs.mkdir(TMP_DIR, { recursive: true });
+
+  const crimeZipPath = path.join(UK_SHARED_DIR, "prc-localauthority.zip");
+  const crimeWorkbookPath = path.join(UK_SHARED_DIR, "rec-crime-la-file1.xls");
+  const populationZipPath = path.join(UK_SHARED_DIR, "ons_population_timeseries_2001_2020.zip");
+  const populationCsvPath = path.join(UK_SHARED_DIR, "ons_population_timeseries_2001_2020.csv");
+
+  await Promise.all([
+    ensureFile(crimeZipPath, SOURCE_URLS.lutonCrimeWorkbook),
+    ensureFile(populationZipPath, SOURCE_URLS.populationTimeseries2001To2020),
+  ]);
+  await Promise.all([
+    extractZipFile(crimeZipPath, "rec-crime-la-file1.xls", crimeWorkbookPath),
+    extractZipFile(
+      populationZipPath,
+      "MYEB1_detailed_population_estimates_series_UK_(2020_geog21).csv",
+      populationCsvPath,
+    ),
+  ]);
+
+  const { options: categories, lookup: categoryLookup } = buildCategoryLookup(definition);
+  const totalCategory = categories.find((category) => category.value === "all-recorded-offenses") ?? null;
+  const populationByYear = await parsePopulationTimeseries2001To2020(populationCsvPath, areaCode);
+  const workbook = XLSX.readFile(crimeWorkbookPath);
+  const rawRows = XLSX.utils.sheet_to_json<Array<string | number | null>>(workbook.Sheets.Table, {
+    header: 1,
+    defval: null,
+  });
+  const dateCells = rawRows[1].slice(3).map((value) => Number(value ?? 0));
+  const marchColumns = dateCells
+    .map((serial, index) => ({ serial, index: index + 3 }))
+    .filter(({ serial }) => {
+      const parsedDate = XLSX.SSF.parse_date_code(serial);
+      return parsedDate?.m === 3 && parsedDate?.d === 31;
+    });
+
+  const districtLabel = areaName;
+  const districtSlug = slugify(districtLabel);
+  const recordsByKey = new Map<string, CrimeRecord>();
+  const years = new Set<number>();
+  let currentCsp = "";
+
+  for (const row of rawRows.slice(2)) {
+    const rowCsp = String(row[1] ?? "").trim();
+    if (rowCsp) {
+      currentCsp = rowCsp;
+    }
+
+    if (currentCsp !== areaName) {
+      continue;
+    }
+
+    const rawCategoryLabel = String(row[2] ?? "").trim();
+    if (!rawCategoryLabel) {
+      continue;
+    }
+
+    const category = categoryLookup.get(normalizeSourceLabel(rawCategoryLabel));
+
+    for (const { serial, index } of marchColumns) {
+      const parsedDate = XLSX.SSF.parse_date_code(serial);
+      const year = parsedDate?.y;
+      if (!year || year > 2018) {
+        continue;
+      }
+
+      const count = Number(row[index] ?? 0);
+      const population = populationByYear.get(year);
+      years.add(year);
+
+      if (totalCategory) {
+        addOrMergeRecord(recordsByKey, {
+          year,
+          districtLabel,
+          districtSlug,
+          categoryLabel: totalCategory.label,
+          categorySlug: totalCategory.value,
+          count,
+          ratePer100k: population ? (count / population) * 100_000 : null,
+        });
+      }
+
+      if (!category) {
+        continue;
+      }
+
+      addOrMergeRecord(recordsByKey, {
+        year,
+        districtLabel,
+        districtSlug,
+        categoryLabel: category.label,
+        categorySlug: category.slug,
+        count,
+        ratePer100k: population ? (count / population) * 100_000 : null,
+      });
+    }
+  }
+
+  const filteredPopulationByYear = new Map([...populationByYear.entries()].filter(([year]) => years.has(year)));
+
+  return {
+    slug: definition.slug,
+    label: definition.label,
+    country: definition.country,
+    areaLabelSingular: definition.areaLabelSingular,
+    areaLabelPlural: definition.areaLabelPlural,
+    chartTitle: definition.chartTitle,
+    note: definition.note,
+    sources: definition.sources,
+    years: [...years].sort((left, right) => left - right),
+    districts: [{ label: districtLabel, value: districtSlug }],
+    categories,
+    defaultCategorySlugs: categories.filter((category) => category.isDefault).map((category) => category.value),
+    cityPopulationByYear: mapToObject(filteredPopulationByYear),
+    records: [...recordsByKey.values()].sort((left, right) => left.year - right.year),
+  };
+}
+
 async function buildParisLocation(): Promise<LocationPayload> {
   await fs.mkdir(TMP_DIR, { recursive: true });
 
@@ -4305,6 +4525,37 @@ function mapHoustonCrimeType(crimeType: string) {
   return null;
 }
 
+function mapLouisvilleCrimeType(crimeType: string) {
+  const normalized = crimeType.toUpperCase();
+  if (normalized.includes("HOMICIDE") || normalized.includes("MURDER") || normalized.includes("MANSLAUGHTER")) return "Homicide";
+  if (normalized.includes("ROBBERY")) return "Robbery";
+  if (normalized.includes("ARSON")) return "Arson";
+  if (normalized.includes("WEAPON")) return "Weapons offenses";
+  if (normalized.includes("DRUG") || normalized.includes("ALCOHOL") || normalized.includes("NARCOTIC")) return "Drug and alcohol violations";
+  if (normalized.includes("SEX") || normalized.includes("RAPE") || normalized.includes("SODOMY") || normalized.includes("SEXUAL")) return "Sex crimes";
+  if (normalized.includes("BURGLARY")) return "Burglary";
+  if (normalized.includes("MOTOR VEHICLE THEFT") || normalized.includes("AUTO THEFT")) return "Motor vehicle theft";
+  if (normalized.includes("FROM MOTOR VEHICLE") || normalized.includes("FROM VEHICLE") || normalized.includes("VEHICLE BREAK")) return "Theft from vehicles";
+  if (normalized.includes("THEFT") || normalized.includes("LARCENY") || normalized.includes("SHOPLIFT")) return "Theft";
+  if (normalized.includes("ASSAULT") || normalized.includes("BATTERY")) return "Assault";
+  if (
+    normalized.includes("FRAUD") ||
+    normalized.includes("FORGERY") ||
+    normalized.includes("COUNTERFEIT") ||
+    normalized.includes("IDENTITY") ||
+    normalized.includes("EMBEZZLEMENT")
+  )
+    return "Fraud";
+  if (
+    normalized.includes("VANDALISM") ||
+    normalized.includes("CRIMINAL MISCHIEF") ||
+    normalized.includes("CRIMINAL DAMAGE") ||
+    normalized.includes("CRIMINAL DAMAGING")
+  )
+    return "Criminal damage";
+  return null;
+}
+
 function mapSeattleCrimeType(crimeType: string) {
   const normalized = crimeType.toUpperCase();
   if (normalized.includes("MURDER") || normalized.includes("MANSLAUGHTER")) return "Homicide";
@@ -4601,6 +4852,199 @@ async function buildHoustonLocation(): Promise<LocationPayload> {
   };
 }
 
+async function buildMinneapolisLocation(): Promise<LocationPayload> {
+  const { options: categories, lookup: categoryLookup } = buildCategoryLookup(MINNEAPOLIS_LOCATION);
+  const totalCategory = categories.find((category) => category.value === "all-recorded-offenses") ?? null;
+  const cityPopulationByYear = await parseUsCityPopulationByYear(US_CITY_POPULATION_SOURCES.minneapolis);
+  const years = Array.from({ length: 9 }, (_, index) => 2017 + index);
+  const countsByKey = new Map<string, number>();
+  const districtsByLabel = new Map<string, FilterOption>();
+
+  for (const year of years) {
+    const rows = await fetchArcGisRows<MinneapolisCrimeRow>(SOURCE_URLS.minneapolisCrimeApi, {
+      where: `reportYear = ${year} and neighborhood is not null and neighborhood <> '** NOT ASSIGNED **'`,
+      groupByFieldsForStatistics: "neighborhood,ucrDescription",
+      outStatistics: JSON.stringify([{ statisticType: "sum", onStatisticField: "number", outStatisticFieldName: "count" }]),
+      orderByFields: "neighborhood asc,ucrDescription asc",
+    });
+
+    for (const row of rows) {
+      const rawNeighborhood = String(row.neighborhood ?? "").trim();
+      if (!rawNeighborhood || rawNeighborhood === "** NOT ASSIGNED **") {
+        continue;
+      }
+
+      const districtLabel = toTitleCase(rawNeighborhood.replace(/\s+/g, " "));
+      const districtSlug = slugify(districtLabel);
+      const category = categoryLookup.get(normalizeSourceLabel(String(row.ucrDescription ?? "")));
+      const count = parseCountLike(row.count);
+
+      districtsByLabel.set(districtLabel, { label: districtLabel, value: districtSlug });
+      if (totalCategory) {
+        countsByKey.set(`${year}__${districtSlug}__${totalCategory.value}`, (countsByKey.get(`${year}__${districtSlug}__${totalCategory.value}`) ?? 0) + count);
+      }
+      if (!category) {
+        continue;
+      }
+      countsByKey.set(`${year}__${districtSlug}__${category.slug}`, (countsByKey.get(`${year}__${districtSlug}__${category.slug}`) ?? 0) + count);
+    }
+  }
+
+  const districts = [...districtsByLabel.values()].sort((left, right) => left.label.localeCompare(right.label));
+
+  return {
+    slug: MINNEAPOLIS_LOCATION.slug,
+    label: MINNEAPOLIS_LOCATION.label,
+    country: MINNEAPOLIS_LOCATION.country,
+    areaLabelSingular: MINNEAPOLIS_LOCATION.areaLabelSingular,
+    areaLabelPlural: MINNEAPOLIS_LOCATION.areaLabelPlural,
+    chartTitle: MINNEAPOLIS_LOCATION.chartTitle,
+    note: MINNEAPOLIS_LOCATION.note,
+    sources: MINNEAPOLIS_LOCATION.sources,
+    years,
+    districts,
+    categories,
+    defaultCategorySlugs: categories.filter((category) => category.isDefault).map((category) => category.value),
+    cityPopulationByYear,
+    records: buildDenseCountRecords({ years, districts, categories, countsByKey }),
+  };
+}
+
+async function buildClevelandLocation(): Promise<LocationPayload> {
+  const { options: categories, lookup: categoryLookup } = buildCategoryLookup(CLEVELAND_LOCATION);
+  const totalCategory = categories.find((category) => category.value === "all-recorded-offenses") ?? null;
+  const cityPopulationByYear = await parseUsCityPopulationByYear(US_CITY_POPULATION_SOURCES.cleveland);
+  const years = Array.from({ length: 25 }, (_, index) => 2001 + index);
+  const countsByKey = new Map<string, number>();
+  const districtsByLabel = new Map<string, FilterOption>();
+
+  for (const year of years) {
+    const rows = await fetchArcGisRows<ClevelandCrimeRow>(SOURCE_URLS.clevelandCrimeApi, {
+      where: `OffenseYear = ${year} and District is not null and District <> ''`,
+      groupByFieldsForStatistics: "District,UCRdesc",
+      outStatistics: JSON.stringify([{ statisticType: "count", onStatisticField: "OBJECTID", outStatisticFieldName: "count" }]),
+      orderByFields: "District asc,UCRdesc asc",
+    });
+
+    for (const row of rows) {
+      const districtLabel = String(row.District ?? "").trim();
+      if (!districtLabel) {
+        continue;
+      }
+
+      const districtSlug = slugify(districtLabel);
+      const category = categoryLookup.get(normalizeSourceLabel(String(row.UCRdesc ?? "")));
+      const count = parseCountLike(row.count);
+
+      districtsByLabel.set(districtLabel, { label: districtLabel, value: districtSlug });
+      if (totalCategory) {
+        countsByKey.set(`${year}__${districtSlug}__${totalCategory.value}`, (countsByKey.get(`${year}__${districtSlug}__${totalCategory.value}`) ?? 0) + count);
+      }
+      if (!category) {
+        continue;
+      }
+      countsByKey.set(`${year}__${districtSlug}__${category.slug}`, (countsByKey.get(`${year}__${districtSlug}__${category.slug}`) ?? 0) + count);
+    }
+  }
+
+  const districts = [...districtsByLabel.values()].sort((left, right) => left.label.localeCompare(right.label));
+
+  return {
+    slug: CLEVELAND_LOCATION.slug,
+    label: CLEVELAND_LOCATION.label,
+    country: CLEVELAND_LOCATION.country,
+    areaLabelSingular: CLEVELAND_LOCATION.areaLabelSingular,
+    areaLabelPlural: CLEVELAND_LOCATION.areaLabelPlural,
+    chartTitle: CLEVELAND_LOCATION.chartTitle,
+    note: CLEVELAND_LOCATION.note,
+    sources: CLEVELAND_LOCATION.sources,
+    years,
+    districts,
+    categories,
+    defaultCategorySlugs: categories.filter((category) => category.isDefault).map((category) => category.value),
+    cityPopulationByYear,
+    records: buildDenseCountRecords({ years, districts, categories, countsByKey }),
+  };
+}
+
+async function buildLouisvilleLocation(): Promise<LocationPayload> {
+  const { options: categories } = buildCategoryLookup(LOUISVILLE_LOCATION);
+  const categoriesBySlug = buildCategoryOptionsMap(categories);
+  const totalCategory = categories.find((category) => category.value === "all-recorded-offenses") ?? null;
+  const cityPopulationByYear = await parseUsCityPopulationByYear(US_CITY_POPULATION_SOURCES.louisville);
+  const years = Object.keys(LOUISVILLE_CRIME_API_BY_YEAR)
+    .map((value) => Number(value) as keyof typeof LOUISVILLE_CRIME_API_BY_YEAR)
+    .sort((left, right) => left - right);
+  const countsByKey = new Map<string, number>();
+  const districtsByLabel = new Map<string, FilterOption>();
+
+  for (const year of years) {
+    const isRecentSchema = year >= 2023;
+    const divisionField = isRecentSchema ? "lmpd_division" : "LMPD_DIVISION";
+    const offenseField = isRecentSchema ? "offense_classification" : "CRIME_TYPE";
+    const rows = await fetchArcGisRows<LouisvilleCrimeRow>(LOUISVILLE_CRIME_API_BY_YEAR[year], {
+      where: `${divisionField} is not null and ${divisionField} <> ''`,
+      groupByFieldsForStatistics: `${divisionField},${offenseField}`,
+      outStatistics: JSON.stringify([{ statisticType: "count", onStatisticField: "ObjectId", outStatisticFieldName: "count" }]),
+      orderByFields: `${divisionField} asc,${offenseField} asc`,
+    });
+
+    for (const row of rows) {
+      const rawDivision = String((isRecentSchema ? row.lmpd_division : row.LMPD_DIVISION) ?? "").trim();
+      if (!rawDivision) {
+        continue;
+      }
+
+      const districtLabel = formatLouisvilleDivisionLabel(rawDivision);
+      const districtSlug = slugify(districtLabel);
+      const mappedCategory = mapLouisvilleCrimeType(String((isRecentSchema ? row.offense_classification : row.CRIME_TYPE) ?? ""));
+      const category = resolveMappedCategory(categoriesBySlug, mappedCategory);
+      const count = parseCountLike(row.count);
+
+      districtsByLabel.set(districtLabel, { label: districtLabel, value: districtSlug });
+      if (totalCategory) {
+        countsByKey.set(`${year}__${districtSlug}__${totalCategory.value}`, (countsByKey.get(`${year}__${districtSlug}__${totalCategory.value}`) ?? 0) + count);
+      }
+      if (!category) {
+        continue;
+      }
+      countsByKey.set(`${year}__${districtSlug}__${category.value}`, (countsByKey.get(`${year}__${districtSlug}__${category.value}`) ?? 0) + count);
+    }
+  }
+
+  const districts = [...districtsByLabel.values()].sort((left, right) => {
+    const leftNumber = Number.parseInt(left.label, 10);
+    const rightNumber = Number.parseInt(right.label, 10);
+    if (Number.isFinite(leftNumber) && Number.isFinite(rightNumber)) {
+      return leftNumber - rightNumber;
+    }
+    if (Number.isFinite(leftNumber)) {
+      return -1;
+    }
+    if (Number.isFinite(rightNumber)) {
+      return 1;
+    }
+    return left.label.localeCompare(right.label);
+  });
+
+  return {
+    slug: LOUISVILLE_LOCATION.slug,
+    label: LOUISVILLE_LOCATION.label,
+    country: LOUISVILLE_LOCATION.country,
+    areaLabelSingular: LOUISVILLE_LOCATION.areaLabelSingular,
+    areaLabelPlural: LOUISVILLE_LOCATION.areaLabelPlural,
+    chartTitle: LOUISVILLE_LOCATION.chartTitle,
+    note: LOUISVILLE_LOCATION.note,
+    sources: LOUISVILLE_LOCATION.sources,
+    years,
+    districts,
+    categories,
+    defaultCategorySlugs: categories.filter((category) => category.isDefault).map((category) => category.value),
+    cityPopulationByYear,
+    records: buildDenseCountRecords({ years, districts, categories, countsByKey }),
+  };
+}
+
 async function buildSeattleLocation(): Promise<LocationPayload> {
   const { options: categories } = buildCategoryLookup(SEATTLE_LOCATION);
   const categoriesBySlug = buildCategoryOptionsMap(categories);
@@ -4847,11 +5291,13 @@ async function main() {
   const barcelona = await buildSpainLocation(BARCELONA_LOCATION, "Barcelona", spainAnnualSources, barcelonaPopulationByYear);
   const valencia = await buildSpainLocation(VALENCIA_LOCATION, "Valencia", spainAnnualSources, valenciaPopulationByYear);
 
-  const [austin, berlin, chicago, dallas, franceCountry, frankfurt, germanyCountry, hamburg, houston, italyCountry, london, losAngeles, luton, milan, munich, newYorkCity, paris, phoenix, rome, sanFrancisco, saoPaulo, seattle, spainCountry, tokyo] =
+  const [austin, berlin, birmingham, chicago, cleveland, dallas, franceCountry, frankfurt, germanyCountry, hamburg, houston, italyCountry, london, losAngeles, louisville, luton, manchester, milan, minneapolis, munich, newYorkCity, paris, phoenix, rome, sanFrancisco, saoPaulo, seattle, spainCountry, tokyo] =
     await Promise.all([
       buildAustinLocation(),
       buildBerlinLocation(),
+      buildUkLocalAuthorityLocation(BIRMINGHAM_LOCATION, "Birmingham", "E08000025"),
       buildChicagoLocation(),
+      buildClevelandLocation(),
       buildDallasLocation(),
       buildFranceCountryLocation(),
       buildFrankfurtLocation(),
@@ -4861,8 +5307,11 @@ async function main() {
       buildItalyCountryLocation(),
       buildLondonLocation(),
       buildLosAngelesLocation(),
+      buildLouisvilleLocation(),
       buildLutonLocation(),
+      buildUkLocalAuthorityLocation(MANCHESTER_LOCATION, "Manchester", "E08000003"),
       buildMilanLocation(),
+      buildMinneapolisLocation(),
       buildMunichLocation(),
       buildNewYorkCityLocation(),
       buildParisLocation(),
@@ -4880,7 +5329,9 @@ async function main() {
       austin,
       barcelona,
       berlin,
+      birmingham,
       chicago,
+      cleveland,
       dallas,
       franceCountry,
       frankfurt,
@@ -4890,8 +5341,11 @@ async function main() {
       italyCountry,
       london,
       losAngeles,
+      louisville,
       luton,
+      manchester,
       milan,
+      minneapolis,
       munich,
       newYorkCity,
       paris,

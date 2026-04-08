@@ -1,4 +1,6 @@
-import { Fragment } from "react";
+"use client";
+
+import { Fragment, useRef } from "react";
 import Link from "next/link";
 
 import type { LocationOverview } from "@/lib/dashboard-data";
@@ -33,23 +35,83 @@ export function OverviewLocationList({
   onSelect,
   showAlphaIndex = false,
 }: OverviewLocationListProps) {
+  const alphaRailRef = useRef<HTMLDivElement | null>(null);
+  const draggingRef = useRef(false);
+  const lastLetterRef = useRef<string | null>(null);
   const activeLetters = [...new Set(locations.map((location) => getLocationInitial(location.label)))];
 
-  function scrollToLetter(letter: string) {
+  function scrollToLetter(letter: string, behavior: ScrollBehavior = "smooth") {
     const target = document.getElementById(`overview-alpha-${letter}`);
-    target?.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (!target) {
+      return;
+    }
+
+    lastLetterRef.current = letter;
+    target.scrollIntoView({ behavior, block: "start" });
+  }
+
+  function resolveLetterFromPointer(clientY: number) {
+    const rail = alphaRailRef.current;
+    if (!rail || activeLetters.length === 0) {
+      return null;
+    }
+
+    const rect = rail.getBoundingClientRect();
+    const relativeY = Math.min(Math.max(clientY - rect.top, 0), Math.max(rect.height - 1, 0));
+    const index = Math.min(activeLetters.length - 1, Math.floor((relativeY / Math.max(rect.height, 1)) * activeLetters.length));
+
+    return activeLetters[index] ?? null;
+  }
+
+  function updateDraggedLetter(clientY: number) {
+    const letter = resolveLetterFromPointer(clientY);
+    if (!letter || lastLetterRef.current === letter) {
+      return;
+    }
+
+    scrollToLetter(letter, "auto");
   }
 
   return (
     <div className="mx-auto max-w-4xl">
-      <div className={cn("relative", showAlphaIndex && activeLetters.length > 1 && "pr-7")}>
+      <div className={cn("relative", showAlphaIndex && activeLetters.length > 1 && "pr-6")}>
         {showAlphaIndex && activeLetters.length > 1 ? (
-          <div className="pointer-events-none absolute inset-y-0 right-0 top-0 w-5">
-            <div className="pointer-events-auto sticky top-24 flex w-full flex-col items-center gap-1 rounded-full border border-white/8 bg-slate-950/35 py-2 backdrop-blur-sm">
+          <div className="pointer-events-none absolute inset-y-0 right-0 top-0 w-4">
+            <div
+              className="pointer-events-auto sticky top-52 flex w-full touch-none select-none flex-col items-center gap-1.5 py-1"
+              onPointerCancel={(event) => {
+                draggingRef.current = false;
+                lastLetterRef.current = null;
+                if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+                  event.currentTarget.releasePointerCapture(event.pointerId);
+                }
+              }}
+              onPointerDown={(event) => {
+                draggingRef.current = true;
+                event.currentTarget.setPointerCapture(event.pointerId);
+                updateDraggedLetter(event.clientY);
+              }}
+              onPointerMove={(event) => {
+                if (!draggingRef.current) {
+                  return;
+                }
+
+                updateDraggedLetter(event.clientY);
+              }}
+              onPointerUp={(event) => {
+                draggingRef.current = false;
+                lastLetterRef.current = null;
+                if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+                  event.currentTarget.releasePointerCapture(event.pointerId);
+                }
+              }}
+              ref={alphaRailRef}
+            >
               {activeLetters.map((letter) => (
                 <button
                   aria-label={`Jump to ${letter}`}
                   className="inline-flex h-4 w-full items-center justify-center text-[9px] font-semibold uppercase tracking-[0.16em] text-slate-400 transition hover:text-slate-100"
+                  data-letter={letter}
                   key={letter}
                   onClick={() => scrollToLetter(letter)}
                   type="button"
@@ -70,7 +132,10 @@ export function OverviewLocationList({
             <Fragment key={location.slug}>
               {showInitialMarker ? (
                 <div
-                  className="mb-1 pt-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500"
+                  className={cn(
+                    "text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500",
+                    previousInitial ? "mt-3 mb-1" : "mb-1 pt-1",
+                  )}
                   id={`overview-alpha-${locationInitial}`}
                 >
                   {locationInitial}
@@ -79,32 +144,23 @@ export function OverviewLocationList({
 
               {compareMode ? (
                 <button
+                  aria-checked={selectedSlugs.includes(location.slug)}
                   className={cn(
                     "group relative flex w-full items-center gap-4 px-0 py-3 text-left transition sm:py-3.5",
-                    disabledSlugs.includes(location.slug) ? "cursor-not-allowed opacity-45" : null,
-                    selectedSlugs.includes(location.slug) ? "bg-slate-100 text-slate-950" : "text-slate-100",
+                    disabledSlugs.includes(location.slug) ? "cursor-not-allowed opacity-45" : "text-slate-100",
                   )}
                   disabled={disabledSlugs.includes(location.slug)}
                   onClick={() => onSelect?.(location.slug)}
+                  role="checkbox"
                   type="button"
                 >
-                  <LocationFlag
-                    country={location.country}
-                    selected={selectedSlugs.includes(location.slug)}
-                    slug={location.slug}
-                    variant="list"
-                  />
-                  <span
-                    className={cn(
-                      "text-xl font-semibold tracking-[-0.02em] transition",
-                      selectedSlugs.includes(location.slug) ? "text-slate-950" : "text-slate-100 group-hover:text-white",
-                    )}
-                  >
+                  <LocationFlag country={location.country} slug={location.slug} variant="list" />
+                  <span className="text-xl font-semibold tracking-[-0.02em] text-slate-100 transition group-hover:text-white">
                     {location.label}
                   </span>
                   <span
                     className={cn(
-                      "ml-auto mr-3 flex h-5 w-5 shrink-0 items-center justify-center border text-xs font-semibold leading-none transition-colors",
+                      "ml-auto mr-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-[0.2rem] border text-[11px] font-semibold leading-none transition-colors",
                       selectedSlugs.includes(location.slug)
                         ? "border-slate-200 bg-slate-100 text-slate-950"
                         : "border-white/18 text-transparent",
@@ -112,9 +168,6 @@ export function OverviewLocationList({
                   >
                     ✓
                   </span>
-                  {index < locations.length - 1 ? (
-                    <span className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-white/8" />
-                  ) : null}
                 </button>
               ) : (
                 <Link
@@ -125,9 +178,6 @@ export function OverviewLocationList({
                   <span className="text-xl font-semibold tracking-[-0.02em] text-slate-100 transition group-hover:text-white">
                     {location.label}
                   </span>
-                  {index < locations.length - 1 ? (
-                    <span className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-white/8" />
-                  ) : null}
                 </Link>
               )}
             </Fragment>

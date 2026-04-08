@@ -682,6 +682,46 @@ export const LUTON_LOCATION: LocationDefinition = {
   ],
 };
 
+function createUkLocalAuthorityLocation(input: {
+  slug: string;
+  label: string;
+  chartTitle: string;
+}): LocationDefinition {
+  return {
+    slug: input.slug,
+    label: input.label,
+    country: "United Kingdom",
+    areaLabelSingular: "Area",
+    areaLabelPlural: "Areas",
+    chartTitle: input.chartTitle,
+    note:
+      `${input.label} uses the official ONS recorded-crime tables at Community Safety Partnership and local-authority level. This banked series covers rolling annual totals through 2018 and keeps the shared ONS category taxonomy used elsewhere in the UK layer.`,
+    sources: [
+      {
+        label: "ONS recorded crime data at Community Safety Partnership and local authority level",
+        url: "https://www.ons.gov.uk/peoplepopulationandcommunity/crimeandjustice/datasets/recordedcrimedataatcommunitysafetypartnershiplocalauthoritylevel/current",
+      },
+      {
+        label: "ONS population estimates detailed time series",
+        url: "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/datasets/populationestimatesforukenglandandwalesscotlandandnorthernireland%26gt",
+      },
+    ],
+    categories: LUTON_LOCATION.categories,
+  };
+}
+
+export const BIRMINGHAM_LOCATION: LocationDefinition = createUkLocalAuthorityLocation({
+  slug: "birmingham",
+  label: "Birmingham",
+  chartTitle: "Birmingham Crime Overview",
+});
+
+export const MANCHESTER_LOCATION: LocationDefinition = createUkLocalAuthorityLocation({
+  slug: "manchester",
+  label: "Manchester",
+  chartTitle: "Manchester Crime Overview",
+});
+
 export const PARIS_LOCATION: LocationDefinition = {
   slug: "paris",
   label: "Paris",
@@ -3063,6 +3103,122 @@ export const HOUSTON_LOCATION: LocationDefinition = {
   ],
 };
 
+export const MINNEAPOLIS_LOCATION: LocationDefinition = {
+  slug: "minneapolis",
+  label: "Minneapolis",
+  country: "United States",
+  areaLabelSingular: "Neighborhood",
+  areaLabelPlural: "Neighborhoods",
+  chartTitle: "Minneapolis Crime by Neighborhood",
+  note:
+    "Minneapolis uses the official city ArcGIS neighborhood crime statistics service. The dashboard aggregates published neighborhood-month rows to calendar years and keeps the city’s UCR-style offense labels.",
+  sources: [
+    {
+      label: "City of Minneapolis Open Data: Neighborhood Crime Statistics",
+      url: "https://opendata.minneapolismn.gov/datasets/cityoflakes::neighborhood-crime-stats/about",
+    },
+  ],
+  categories: [
+    {
+      sourceLabels: ["All recorded offenses"],
+      label: "All recorded offenses",
+      shortLabel: "All offenses",
+      color: "#7dd3fc",
+      isDefault: false,
+      sortOrder: 0,
+    },
+    { sourceLabels: ["Homicide"], label: "Homicide", shortLabel: "Homicide", color: "#be123c", isDefault: false, sortOrder: 1 },
+    { sourceLabels: ["Rape"], label: "Rape", shortLabel: "Rape", color: "#f472b6", isDefault: true, sortOrder: 2 },
+    { sourceLabels: ["Robbery"], label: "Robbery", shortLabel: "Robbery", color: "#f97316", isDefault: true, sortOrder: 3 },
+    { sourceLabels: ["Burglary"], label: "Burglary", shortLabel: "Burglary", color: "#ef4444", isDefault: true, sortOrder: 4 },
+    { sourceLabels: ["Larceny"], label: "Larceny theft", shortLabel: "Larceny", color: "#facc15", isDefault: true, sortOrder: 5 },
+    { sourceLabels: ["Auto Theft"], label: "Motor vehicle theft", shortLabel: "Vehicle theft", color: "#4f46e5", isDefault: true, sortOrder: 6 },
+    { sourceLabels: ["Aggravated Assault"], label: "Aggravated assault", shortLabel: "Agg. assault", color: "#0ea5e9", isDefault: true, sortOrder: 7 },
+    { sourceLabels: ["Arson"], label: "Arson", shortLabel: "Arson", color: "#f59e0b", isDefault: false, sortOrder: 8 },
+  ],
+};
+
+export const CLEVELAND_LOCATION: LocationDefinition = {
+  slug: "cleveland",
+  label: "Cleveland",
+  country: "United States",
+  areaLabelSingular: "District",
+  areaLabelPlural: "Districts",
+  chartTitle: "Cleveland Crime by District",
+  note:
+    "Cleveland uses the official city ArcGIS crime-incidents service. The dashboard aggregates district-level incident records to calendar years using the published UCR description field.",
+  sources: [
+    {
+      label: "City of Cleveland Open Data: Crime Incidents",
+      url: "https://opendata.clevelandohio.gov/datasets/clevelandohio::crime-incidents/about",
+    },
+  ],
+  categories: [
+    {
+      sourceLabels: ["All recorded offenses"],
+      label: "All recorded offenses",
+      shortLabel: "All offenses",
+      color: "#7dd3fc",
+      isDefault: false,
+      sortOrder: 0,
+    },
+    { sourceLabels: ["Homicide"], label: "Homicide", shortLabel: "Homicide", color: "#be123c", isDefault: false, sortOrder: 1 },
+    { sourceLabels: ["Rape"], label: "Rape", shortLabel: "Rape", color: "#f472b6", isDefault: true, sortOrder: 2 },
+    { sourceLabels: ["Sex Offenses"], label: "Other sexual offenses", shortLabel: "Other sexual", color: "#ec4899", isDefault: false, sortOrder: 3 },
+    { sourceLabels: ["Robbery"], label: "Robbery", shortLabel: "Robbery", color: "#f97316", isDefault: true, sortOrder: 4 },
+    { sourceLabels: ["Burglary"], label: "Burglary", shortLabel: "Burglary", color: "#ef4444", isDefault: true, sortOrder: 5 },
+    { sourceLabels: ["Theft"], label: "Theft", shortLabel: "Theft", color: "#facc15", isDefault: true, sortOrder: 6 },
+    { sourceLabels: ["GTMV"], label: "Motor vehicle theft", shortLabel: "Vehicle theft", color: "#4f46e5", isDefault: true, sortOrder: 7 },
+    { sourceLabels: ["Assault"], label: "Assault", shortLabel: "Assault", color: "#38bdf8", isDefault: true, sortOrder: 8 },
+    { sourceLabels: ["Fel Assault"], label: "Aggravated assault", shortLabel: "Agg. assault", color: "#0ea5e9", isDefault: false, sortOrder: 9 },
+    { sourceLabels: ["Drug Abuse Violations"], label: "Drug offenses", shortLabel: "Drug offenses", color: "#22c55e", isDefault: false, sortOrder: 10 },
+    { sourceLabels: ["Fraud", "Forgery & Counterfeiting", "Embezzlement", "Stolen Property"], label: "Fraud and forgery", shortLabel: "Fraud & forgery", color: "#94a3b8", isDefault: false, sortOrder: 11 },
+    { sourceLabels: ["Vandalism", "Property Damaged"], label: "Criminal damage", shortLabel: "Criminal damage", color: "#fb7185", isDefault: false, sortOrder: 12 },
+    { sourceLabels: ["Weapons"], label: "Weapons offenses", shortLabel: "Weapons", color: "#14b8a6", isDefault: false, sortOrder: 13 },
+    { sourceLabels: ["Arson"], label: "Arson", shortLabel: "Arson", color: "#f59e0b", isDefault: false, sortOrder: 14 },
+  ],
+};
+
+export const LOUISVILLE_LOCATION: LocationDefinition = {
+  slug: "louisville",
+  label: "Louisville",
+  country: "United States",
+  areaLabelSingular: "Division",
+  areaLabelPlural: "Divisions",
+  chartTitle: "Louisville Crime by Division",
+  note:
+    "Louisville uses the official Metro Government crime-data layers published through ArcGIS. The dashboard aggregates annual division-level incident records using the city’s published CRIME_TYPE field.",
+  sources: [
+    {
+      label: "Louisville Metro Government Open Data: Crime Data",
+      url: "https://data.louisvilleky.gov/datasets/louisville-metro-ky-crime-data-2025/about",
+    },
+  ],
+  categories: [
+    {
+      sourceLabels: ["All recorded offenses"],
+      label: "All recorded offenses",
+      shortLabel: "All offenses",
+      color: "#7dd3fc",
+      isDefault: false,
+      sortOrder: 0,
+    },
+    { sourceLabels: ["HOMICIDE"], label: "Homicide", shortLabel: "Homicide", color: "#be123c", isDefault: false, sortOrder: 1 },
+    { sourceLabels: ["SEX CRIMES"], label: "Sex crimes", shortLabel: "Sex crimes", color: "#ec4899", isDefault: true, sortOrder: 2 },
+    { sourceLabels: ["ROBBERY"], label: "Robbery", shortLabel: "Robbery", color: "#f97316", isDefault: true, sortOrder: 3 },
+    { sourceLabels: ["BURGLARY"], label: "Burglary", shortLabel: "Burglary", color: "#ef4444", isDefault: true, sortOrder: 4 },
+    { sourceLabels: ["THEFT/LARCENY"], label: "Theft", shortLabel: "Theft", color: "#facc15", isDefault: true, sortOrder: 5 },
+    { sourceLabels: ["VEHICLE BREAK-IN/THEFT"], label: "Theft from vehicles", shortLabel: "From vehicles", color: "#67e8f9", isDefault: false, sortOrder: 6 },
+    { sourceLabels: ["MOTOR VEHICLE THEFT"], label: "Motor vehicle theft", shortLabel: "Vehicle theft", color: "#4f46e5", isDefault: true, sortOrder: 7 },
+    { sourceLabels: ["ASSAULT"], label: "Assault", shortLabel: "Assault", color: "#38bdf8", isDefault: true, sortOrder: 8 },
+    { sourceLabels: ["DRUGS/ALCOHOL VIOLATIONS"], label: "Drug and alcohol violations", shortLabel: "Drug & alcohol", color: "#22c55e", isDefault: false, sortOrder: 9 },
+    { sourceLabels: ["FRAUD"], label: "Fraud", shortLabel: "Fraud", color: "#94a3b8", isDefault: false, sortOrder: 10 },
+    { sourceLabels: ["VANDALISM"], label: "Criminal damage", shortLabel: "Criminal damage", color: "#fb7185", isDefault: false, sortOrder: 11 },
+    { sourceLabels: ["WEAPONS"], label: "Weapons offenses", shortLabel: "Weapons", color: "#14b8a6", isDefault: false, sortOrder: 12 },
+    { sourceLabels: ["ARSON"], label: "Arson", shortLabel: "Arson", color: "#f59e0b", isDefault: false, sortOrder: 13 },
+  ],
+};
+
 export const SEATTLE_LOCATION: LocationDefinition = {
   slug: "seattle",
   label: "Seattle",
@@ -3109,16 +3265,21 @@ export const LOCATION_DEFINITIONS: LocationDefinition[] = [
   AUSTIN_LOCATION,
   BERLIN_LOCATION,
   BARCELONA_LOCATION,
+  BIRMINGHAM_LOCATION,
   CHICAGO_LOCATION,
+  CLEVELAND_LOCATION,
   DALLAS_LOCATION,
   FRANCE_COUNTRY_LOCATION,
   GERMANY_COUNTRY_LOCATION,
   FRANKFURT_LOCATION,
   LONDON_LOCATION,
   LOS_ANGELES_LOCATION,
+  LOUISVILLE_LOCATION,
   LUTON_LOCATION,
+  MANCHESTER_LOCATION,
   ITALY_COUNTRY_LOCATION,
   MILAN_LOCATION,
+  MINNEAPOLIS_LOCATION,
   NEW_YORK_CITY_LOCATION,
   PARIS_LOCATION,
   PHOENIX_LOCATION,
