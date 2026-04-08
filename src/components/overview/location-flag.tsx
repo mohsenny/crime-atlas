@@ -15,7 +15,15 @@ const flagByLocationSlug: Record<string, { src: string; alt: string }> = {
     src: "/flags/spain.png",
     alt: "Flag of Spain",
   },
+  birmingham: {
+    src: "/flags/united-kingdom.png",
+    alt: "Flag of the United Kingdom",
+  },
   chicago: {
+    src: "/flags/united-states.png",
+    alt: "Flag of the United States",
+  },
+  cleveland: {
     src: "/flags/united-states.png",
     alt: "Flag of the United States",
   },
@@ -39,6 +47,10 @@ const flagByLocationSlug: Record<string, { src: string; alt: string }> = {
     src: "/flags/united-kingdom.png",
     alt: "Flag of the United Kingdom",
   },
+  louisville: {
+    src: "/flags/united-states.png",
+    alt: "Flag of the United States",
+  },
   "los-angeles": {
     src: "/flags/united-states.png",
     alt: "Flag of the United States",
@@ -47,9 +59,21 @@ const flagByLocationSlug: Record<string, { src: string; alt: string }> = {
     src: "/flags/united-kingdom.png",
     alt: "Flag of the United Kingdom",
   },
+  manchester: {
+    src: "/flags/united-kingdom.png",
+    alt: "Flag of the United Kingdom",
+  },
   milan: {
     src: "/flags/italy.png",
     alt: "Flag of Italy",
+  },
+  melbourne: {
+    src: "/flags/australia.svg",
+    alt: "Flag of Australia",
+  },
+  minneapolis: {
+    src: "/flags/united-states.png",
+    alt: "Flag of the United States",
   },
   munich: {
     src: "/flags/germany.png",
@@ -83,6 +107,10 @@ const flagByLocationSlug: Record<string, { src: string; alt: string }> = {
     src: "/flags/united-states.png",
     alt: "Flag of the United States",
   },
+  sydney: {
+    src: "/flags/australia.svg",
+    alt: "Flag of Australia",
+  },
   tokyo: {
     src: "/flags/japan.png",
     alt: "Flag of Japan",
@@ -94,6 +122,10 @@ const flagByLocationSlug: Record<string, { src: string; alt: string }> = {
 };
 
 const flagByCountry: Record<string, { src: string; alt: string }> = {
+  Australia: {
+    src: "/flags/australia.svg",
+    alt: "Flag of Australia",
+  },
   Brazil: {
     src: "/flags/brazil.png",
     alt: "Flag of Brazil",
