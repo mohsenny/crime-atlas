@@ -9,7 +9,7 @@ import type { ComparisonCategory, ComparisonLocation } from "@/lib/dashboard-dat
 import { ChartShell } from "@/components/chart/chart-shell";
 import { useChartUi } from "@/components/chart/use-chart-ui";
 import { ChartLegendButton } from "@/components/dashboard/chart-legend-button";
-import { cn, formatInteger } from "@/lib/utils";
+import { cn, formatAxisTickNumber, formatInteger } from "@/lib/utils";
 
 type ComparisonChartProps = {
   rows: Array<Record<string, number | string | null>>;
@@ -25,7 +25,7 @@ const CITY_COLORS = ["#7dd3fc", "#f97316", "#a78bfa", "#22c55e"];
 const DESKTOP_CHART_HEIGHT = 520;
 const MOBILE_CHART_HEIGHT = 420;
 const DESKTOP_AXIS_WIDTH = 88;
-const MOBILE_AXIS_WIDTH = 52;
+const MOBILE_AXIS_WIDTH = 64;
 const X_AXIS_HEIGHT = 30;
 
 export function ComparisonChart({
@@ -223,6 +223,7 @@ export function ComparisonChart({
                 domain={[0, yAxisMax]}
                 interval={0}
                 tick={{ fontSize: isMobileViewport ? 11 : 12, fill: "#94a3b8" }}
+                tickFormatter={formatAxisTickNumber}
                 tickLine={false}
                 ticks={axisTicks}
                 type="number"

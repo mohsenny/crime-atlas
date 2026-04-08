@@ -16,7 +16,7 @@ import { useChartUi } from "@/components/chart/use-chart-ui";
 import { ChartLegendButton } from "@/components/dashboard/chart-legend-button";
 import { ChartTooltip } from "@/components/dashboard/chart-tooltip";
 import { buildSeriesKey, type ChartResponse } from "@/lib/dashboard-data";
-import { cn, formatInteger, formatMetricValue } from "@/lib/utils";
+import { cn, formatAxisTickNumber, formatInteger, formatMetricValue } from "@/lib/utils";
 
 type CrimeChartProps = {
   data: ChartResponse;
@@ -42,7 +42,7 @@ function pointsEqual(left: Point[], right: Point[]) {
 const DESKTOP_CHART_HEIGHT = 520;
 const MOBILE_CHART_HEIGHT = 420;
 const DESKTOP_AXIS_WIDTH = 88;
-const MOBILE_AXIS_WIDTH = 52;
+const MOBILE_AXIS_WIDTH = 64;
 const X_AXIS_HEIGHT = 30;
 
 export function CrimeChart({
@@ -401,6 +401,7 @@ export function CrimeChart({
                   domain={[0, yAxisMax]}
                   interval={0}
                   tick={{ fontSize: isMobileViewport ? 11 : 12, fill: "var(--chart-axis-dark)" }}
+                  tickFormatter={formatAxisTickNumber}
                   tickLine={false}
                   ticks={axisTicks}
                   type="number"

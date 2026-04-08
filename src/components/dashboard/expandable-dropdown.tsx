@@ -65,6 +65,27 @@ const valuesEqual = (left: string[], right: string[]) =>
 
 const DROPDOWN_TRIGGER_GRID_CLASS = "grid h-full w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-4 text-left";
 
+function measurePreferredOverlayWidth(measureWrap: HTMLDivElement | null) {
+  if (!measureWrap) {
+    return 0;
+  }
+
+  const labelElement = measureWrap.querySelector('[data-measure="label"]') as HTMLElement | null;
+  const selectedElement = measureWrap.querySelector('[data-measure="selected"]') as HTMLElement | null;
+  const optionElements = Array.from(measureWrap.querySelectorAll('[data-measure="option"]')) as HTMLElement[];
+
+  const labelWidth = labelElement?.offsetWidth ?? 0;
+  const selectedWidth = selectedElement?.offsetWidth ?? 0;
+  const maxOptionWidth = optionElements.reduce(
+    (accumulator, element) => Math.max(accumulator, element.offsetWidth),
+    0,
+  );
+  const headerWidth = labelWidth + Math.max(selectedWidth, maxOptionWidth) + 84;
+  const optionRowWidth = maxOptionWidth + 84;
+
+  return Math.ceil(Math.max(headerWidth, optionRowWidth));
+}
+
 export function ExpandableDropdown({
   label,
   options,
@@ -142,6 +163,7 @@ function ExpandableDropdownBase({
   const [rect, setRect] = useState<Rect | null>(null);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const [overlayWidth, setOverlayWidth] = useState<number | null>(null);
+  const [overlayLeft, setOverlayLeft] = useState<number | null>(null);
   const [pillWidth, setPillWidth] = useState<number | null>(null);
   const [draftValues, setDraftValues] = useState<string[]>(selectedValues);
   const [isNarrowViewport, setIsNarrowViewport] = useState(false);
@@ -296,20 +318,28 @@ function ExpandableDropdownBase({
     }
 
     const computeWidth = () => {
+      const viewportPadding = 16;
+      const viewportLimit = Math.max(0, window.innerWidth - viewportPadding * 2);
       const baseWidth = rect.width;
       const contentWidth = optionsRef.current?.scrollWidth ?? baseWidth;
-      const viewportLimit = Math.max(0, window.innerWidth - 32);
+      const measuredContentWidth = measurePreferredOverlayWidth(measureWrapRef.current);
       const maxAllowed = Math.min(maxOverlayAllowedWidth, viewportLimit);
-      const targetWidth = Math.min(maxAllowed, Math.max(baseWidth, contentWidth));
+      const preferredWidth = Math.max(baseWidth, contentWidth, measuredContentWidth);
+      const targetWidth = Math.min(maxAllowed, preferredWidth);
+      const maxLeft = Math.max(viewportPadding, window.innerWidth - viewportPadding - targetWidth);
+      const targetLeft = isNarrowViewport
+        ? clampNumber(rect.left + rect.width - targetWidth, viewportPadding, maxLeft)
+        : clampNumber(rect.left, viewportPadding, maxLeft);
 
       setOverlayWidth(targetWidth);
+      setOverlayLeft(targetLeft);
     };
 
     computeWidth();
     window.addEventListener("resize", computeWidth);
 
     return () => window.removeEventListener("resize", computeWidth);
-  }, [maxOverlayAllowedWidth, open, options, rect]);
+  }, [isNarrowViewport, maxOverlayAllowedWidth, open, options, rect]);
 
   useEffect(() => {
     if (!open) {
@@ -455,7 +485,7 @@ function ExpandableDropdownBase({
               style={{
                 position: "fixed",
                 top: rect.top,
-                left: rect.left,
+                left: overlayLeft ?? rect.left,
                 width: overlayWidth ?? rect.width,
                 minWidth: rect.width,
                 zIndex: 9999,

@@ -12,6 +12,17 @@ export function formatCompactNumber(value: number) {
   }).format(value);
 }
 
+export function formatAxisTickNumber(value: number) {
+  if (Math.abs(value) < 1000) {
+    return formatInteger(Math.round(value));
+  }
+
+  return new Intl.NumberFormat("en-US", {
+    notation: "compact",
+    maximumFractionDigits: 0,
+  }).format(value);
+}
+
 export function formatInteger(value: number) {
   return new Intl.NumberFormat("en-US", {
     maximumFractionDigits: 0,
