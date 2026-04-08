@@ -175,7 +175,7 @@ function ExpandableDropdownBase({
     }
 
     if (mode === "multi" && isNarrowViewport) {
-      return String(visibleValues.length);
+      return open ? `${visibleValues.length} selected` : String(visibleValues.length);
     }
 
     if (visibleValues.length === 1) {
@@ -183,7 +183,7 @@ function ExpandableDropdownBase({
     }
 
     return `${visibleValues.length} selected`;
-  }, [isNarrowViewport, mode, options, placeholder, visibleValues]);
+  }, [isNarrowViewport, mode, open, options, placeholder, visibleValues]);
 
   const minAllowedWidth = minWidth ?? MIN_PILL_WIDTH;
   const maxAllowedWidth = maxWidth ?? MAX_PILL_WIDTH;

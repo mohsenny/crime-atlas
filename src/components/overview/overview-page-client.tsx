@@ -173,10 +173,10 @@ export function OverviewPageClient({ initialScope, locations }: OverviewPageClie
       : "Try switching the country filter or return to all cities.";
 
   return (
-    <main className="min-h-screen px-4 py-7 sm:px-6 sm:py-8 lg:px-8">
+    <main className="min-h-screen px-4 py-5 sm:px-6 sm:py-8 lg:px-8">
       <div className="mx-auto max-w-[83rem]">
-        <div className="mb-8 flex flex-col gap-6 md:grid md:grid-cols-[minmax(0,1fr)_auto] md:gap-x-8 md:gap-y-3">
-          <div className="space-y-3">
+        <div className="mb-6 flex flex-col gap-4 md:grid md:grid-cols-[minmax(0,1fr)_auto] md:gap-x-8 md:gap-y-3 md:mb-8">
+          <div className="space-y-2.5 md:space-y-3">
             <h1 className="masthead-title text-5xl leading-[0.94] tracking-[0.01em] text-stone-50 sm:text-6xl md:text-[4.35rem]">
               Crime Atlas
             </h1>
@@ -230,80 +230,65 @@ export function OverviewPageClient({ initialScope, locations }: OverviewPageClie
             <OverviewScopeToggle onChange={handleScopeChange} value={selectedScope} />
           </div>
 
-          <p className="pl-1 text-sm leading-6 text-slate-300/85 sm:text-base md:col-span-2 lg:whitespace-nowrap">
+          <p className="pl-1 text-sm leading-5 text-slate-300/85 sm:text-base sm:leading-6 md:col-span-2 lg:whitespace-nowrap">
             Official dashboards built from police-recorded crime data published by public authorities for each location.
           </p>
 
-          <div
-            className={cn(
-              "grid h-10 items-stretch gap-2 md:hidden",
-              selectedScope === "country" && !compareMode
-                ? "grid-cols-[5.75rem_minmax(0,1fr)]"
-                : "grid-cols-[5.75rem_minmax(0,1fr)]",
-            )}
-          >
-            <button
-              aria-label={`Compare ${getScopeLabel(selectedScope, { plural: true })}`}
-              className={cn(
-                "inline-flex h-full w-full items-center justify-center rounded-2xl border px-3.5 text-[10px] font-semibold uppercase tracking-[0.18em] leading-none transition whitespace-nowrap",
-                compareMode
-                  ? compareButtonEnabled
-                    ? "border-slate-200 bg-slate-100 text-slate-950 hover:bg-white"
-                    : "border-slate-700 bg-slate-900/70 text-slate-500"
-                  : "border-slate-700 bg-slate-900/70 text-slate-300 hover:text-slate-50",
-              )}
-              disabled={!hasLocations}
-              onClick={handleMobileCompareButton}
-              type="button"
-            >
-              {compareButtonLabel}
-            </button>
-
+          <div className="md:hidden">
             {compareMode ? (
-              <div className="flex min-w-0 items-stretch gap-2">
+              <div className="grid h-10 grid-cols-[minmax(0,1fr)_5.75rem] items-stretch gap-1.5">
+                <div className="flex min-w-0 items-stretch gap-2">
+                  <button
+                    aria-label="Cancel compare"
+                    className="inline-flex h-full w-7 shrink-0 items-center justify-center text-slate-300 transition hover:text-slate-50"
+                    onClick={cancelCompareMode}
+                    type="button"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                  <label className="relative block min-w-0 flex-1">
+                    <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+                    <input
+                      className="h-full w-full rounded-2xl border border-slate-700 bg-slate-900/70 pl-10 pr-3 text-sm font-medium text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-slate-500"
+                      onChange={(event) => setMobileCompareQuery(event.target.value)}
+                      placeholder={`Search ${getScopeLabel(selectedScope, { plural: true })}`}
+                      type="text"
+                      value={mobileCompareQuery}
+                    />
+                  </label>
+                </div>
                 <button
-                  aria-label="Cancel compare"
-                  className="inline-flex h-full w-7 shrink-0 items-center justify-center text-slate-300 transition hover:text-slate-50"
-                  onClick={cancelCompareMode}
+                  aria-label={`Compare ${getScopeLabel(selectedScope, { plural: true })}`}
+                  className={cn(
+                    "inline-flex h-full w-full items-center justify-center rounded-2xl border px-3.5 text-[10px] font-semibold uppercase tracking-[0.18em] leading-none transition whitespace-nowrap",
+                    compareButtonEnabled
+                      ? "border-slate-200 bg-slate-100 text-slate-950 hover:bg-white"
+                      : "border-slate-700 bg-slate-900/70 text-slate-500",
+                  )}
+                  disabled={!hasLocations}
+                  onClick={handleMobileCompareButton}
                   type="button"
                 >
-                  <X className="h-4 w-4" />
+                  {compareButtonLabel}
                 </button>
-                <label className="relative block min-w-0 flex-1">
-                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
-                  <input
-                    className="h-full w-full rounded-2xl border border-slate-700 bg-slate-900/70 pl-10 pr-3 text-sm font-medium text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-slate-500"
-                    onChange={(event) => setMobileCompareQuery(event.target.value)}
-                    placeholder={`Search ${getScopeLabel(selectedScope, { plural: true })}`}
-                    type="text"
-                    value={mobileCompareQuery}
-                  />
-                </label>
               </div>
             ) : (
-              <div className="min-w-0 h-full">
-                {selectedScope === "city" ? (
-                  <SingleSelectDropdown
-                    fullWidth
-                    label="Country"
-                    maxOverlayWidth={280}
-                    maxWidth={280}
-                    minWidth={140}
-                    onChange={handleCountryChange}
-                    options={countryOptions}
-                    value={selectedCountry}
-                  />
-                ) : !compareMode ? (
-                  <OverviewScopeToggle onChange={handleScopeChange} value={selectedScope} />
-                ) : (
-                  <div className="h-full" />
-                )}
+              <div className="flex h-10 items-stretch gap-1.5">
+                <OverviewScopeToggle onChange={handleScopeChange} value={selectedScope} />
+                <button
+                  aria-label={`Compare ${getScopeLabel(selectedScope, { plural: true })}`}
+                  className={cn(
+                    "inline-flex h-full min-w-0 flex-1 items-center justify-center rounded-2xl border px-3.5 text-[10px] font-semibold uppercase tracking-[0.18em] leading-none transition whitespace-nowrap",
+                    "border-slate-700 bg-slate-900/70 text-slate-300 hover:text-slate-50",
+                  )}
+                  disabled={!hasLocations}
+                  onClick={handleMobileCompareButton}
+                  type="button"
+                >
+                  {compareButtonLabel}
+                </button>
               </div>
             )}
-          </div>
-
-          <div className={cn("mt-2 md:hidden", selectedScope === "country" && !compareMode ? "hidden" : undefined)}>
-            <OverviewScopeToggle onChange={handleScopeChange} value={selectedScope} />
           </div>
         </div>
 
@@ -339,6 +324,7 @@ export function OverviewPageClient({ initialScope, locations }: OverviewPageClie
                 locations={mobileCompareLocations}
                 onSelect={toggleCompareSelection}
                 selectedSlugs={selectedCompareSlugs}
+                showAlphaIndex={selectedScope === "city" && !compareMode}
               />
             </div>
           </>
