@@ -189,27 +189,59 @@ export function OverviewLocationList({
                   aria-checked={selectedSlugs.includes(location.slug)}
                   className={cn(
                     "group relative flex w-full items-center gap-4 px-0 py-3 text-left transition sm:py-3.5",
-                    disabledSlugs.includes(location.slug) ? "cursor-not-allowed opacity-45" : "text-slate-100",
+                    selectedSlugs.includes(location.slug) ? "text-slate-950" : "text-slate-100",
+                    disabledSlugs.includes(location.slug) ? "cursor-not-allowed opacity-45" : null,
                   )}
                   disabled={disabledSlugs.includes(location.slug)}
                   onClick={() => onSelect?.(location.slug)}
                   role="checkbox"
                   type="button"
                 >
-                  <LocationFlag country={location.country} slug={location.slug} variant="list" />
-                  <span className="text-xl font-semibold tracking-[-0.02em] text-slate-100 transition group-hover:text-white">
-                    {location.label}
-                  </span>
+                  <span
+                    aria-hidden="true"
+                    className={cn(
+                      "pointer-events-none absolute inset-x-0 inset-y-[2px] border transition-colors",
+                      selectedSlugs.includes(location.slug)
+                        ? "border-slate-100 bg-slate-100"
+                        : "border-slate-200 bg-transparent",
+                    )}
+                  />
                   <span
                     className={cn(
-                      "ml-auto mr-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-[0.2rem] border text-[11px] font-semibold leading-none transition-colors",
+                      "absolute right-0 top-[2px] z-10 flex h-6 w-6 items-center justify-center border border-slate-200 bg-slate-100 transition-colors",
                       selectedSlugs.includes(location.slug)
-                        ? "border-slate-200 bg-slate-100 text-slate-950"
-                        : "border-white/18 text-transparent",
+                        ? "border-slate-950 bg-slate-950 text-white"
+                        : "text-transparent",
                     )}
                   >
-                    ✓
+                    <svg
+                      aria-hidden="true"
+                      className="h-3.5 w-3.5"
+                      fill="none"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        d="M3.5 8.25 6.4 11.15 12.5 5.05"
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                      />
+                    </svg>
                   </span>
+                  <div className="relative z-10 flex items-center gap-4">
+                    <LocationFlag country={location.country} slug={location.slug} variant="list" />
+                    <span
+                      className={cn(
+                        "text-xl font-semibold tracking-[-0.02em] transition",
+                        selectedSlugs.includes(location.slug)
+                          ? "text-slate-950"
+                          : "text-slate-100 group-hover:text-white",
+                      )}
+                    >
+                      {location.label}
+                    </span>
+                  </div>
                 </button>
               ) : (
                 <Link

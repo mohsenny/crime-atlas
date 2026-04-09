@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { ArrowRight, Search, X, type LucideIcon } from "lucide-react";
+import { useEffect, useMemo, useState, useTransition } from "react";
+import { ArrowRight, LoaderCircle, Search, X, type LucideIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import type { LocationOverview } from "@/lib/dashboard-data";
@@ -41,6 +41,8 @@ export function CompareCityPicker({
   const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isMobileViewport, setIsMobileViewport] = useState(false);
+  const [isTriggerPending, setIsTriggerPending] = useState(false);
+  const [isSubmitPending, startSubmitTransition] = useTransition();
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 767px)");
@@ -95,18 +97,21 @@ export function CompareCityPicker({
     }
 
     setOpen(false);
-    router.push(
-      `/compare?${buildCompareSearchParams({
-        locations: selectedSlugs,
-        metric: "rate",
-        scope,
-      }).toString()}`,
-    );
+    startSubmitTransition(() => {
+      router.push(
+        `/compare?${buildCompareSearchParams({
+          locations: selectedSlugs,
+          metric: "rate",
+          scope,
+        }).toString()}`,
+      );
+    });
   }
 
   function openPicker() {
     setSearchQuery("");
     setSelectedSlugs(baseSelectedSlugs);
+    setIsTriggerPending(true);
     setOpen(true);
   }
 
@@ -120,6 +125,24 @@ export function CompareCityPicker({
   const resolvedMobileTriggerLabel = mobileTriggerLabel ?? triggerLabel;
   const pluralScopeLabel = getScopeLabel(scope, { plural: true, capitalized: true });
   const searchLabel = scope === "country" ? "Search countries" : "Search city or country";
+  const isCompareReady = selectedCount >= 2 && selectedCount <= MAX_COMPARE_LOCATIONS;
+  const triggerBusy = isTriggerPending && !open;
+
+  useEffect(() => {
+    if (!open || !isTriggerPending) {
+      return;
+    }
+
+    const frameA = window.requestAnimationFrame(() => {
+      const frameB = window.requestAnimationFrame(() => {
+        setIsTriggerPending(false);
+      });
+
+      return () => window.cancelAnimationFrame(frameB);
+    });
+
+    return () => window.cancelAnimationFrame(frameA);
+  }, [isTriggerPending, open]);
 
   return (
     <>
@@ -134,8 +157,12 @@ export function CompareCityPicker({
         onClick={openPicker}
         type="button"
       >
-        {TriggerIcon ? <TriggerIcon className="h-3.5 w-3.5" /> : null}
-        {showTriggerLabel ? (
+        {triggerBusy ? (
+          <LoaderCircle className="h-3.5 w-3.5 animate-spin" />
+        ) : TriggerIcon ? (
+          <TriggerIcon className="h-3.5 w-3.5" />
+        ) : null}
+        {showTriggerLabel && !triggerBusy ? (
           <>
             <span className="sm:hidden">{resolvedMobileTriggerLabel}</span>
             <span className="hidden sm:inline">{triggerLabel}</span>
@@ -145,14 +172,16 @@ export function CompareCityPicker({
 
       {open ? (
         <div className="fixed inset-0 z-[70] bg-slate-950/70 backdrop-blur-sm">
-          <div className={cn("flex h-full", isMobileViewport ? "items-stretch justify-stretch" : "justify-end")}>
+          <div className={cn("flex h-full", isMobileViewport ? "items-end justify-stretch px-3 pt-8" : "justify-end")}>
             <div
               className={cn(
-                "flex h-full flex-col border-l border-white/10 bg-slate-950/96 shadow-[0_28px_90px_rgba(2,6,23,0.45)]",
-                isMobileViewport ? "w-full" : "w-full max-w-[27rem]",
+                "flex flex-col bg-slate-950/96 shadow-[0_28px_90px_rgba(2,6,23,0.45)]",
+                isMobileViewport
+                  ? "w-full max-h-[calc(100vh-2rem)] rounded-t-[1.75rem] border border-white/10 border-b-0"
+                  : "h-full w-full max-w-[27rem] border-l border-white/10",
               )}
             >
-              <div className="flex items-center justify-between border-b border-white/8 px-4 py-4">
+              <div className={cn("flex items-center justify-between border-b border-white/8", isMobileViewport ? "px-5 pb-4 pt-5" : "px-4 py-4")}>
                 <div className="space-y-1">
                   <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Compare {pluralScopeLabel}</p>
                   <p className="text-sm text-slate-300">
@@ -168,11 +197,11 @@ export function CompareCityPicker({
                 </button>
               </div>
 
-              <div className="border-b border-white/8 px-4 py-4">
+              <div className={cn("border-b border-white/8", isMobileViewport ? "px-5 py-4" : "px-4 py-4")}>
                 <label className="relative block">
                   <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
                   <input
-                    className="h-11 w-full border border-white/10 bg-slate-900/80 pl-10 pr-3 text-sm text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-slate-500"
+                    className="h-11 w-full rounded-2xl border border-white/10 bg-slate-900/80 pl-10 pr-3 text-sm text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-slate-500"
                     onChange={(event) => setSearchQuery(event.target.value)}
                     placeholder={searchLabel}
                     value={searchQuery}
@@ -180,7 +209,7 @@ export function CompareCityPicker({
                 </label>
               </div>
 
-              <div className="flex-1 overflow-y-auto px-4 py-3">
+              <div className={cn("flex-1 overflow-y-auto", isMobileViewport ? "px-4 py-3" : "px-4 py-3")}>
                 <div className="space-y-2">
                   {filteredLocations.map((location) => {
                     const selected = selectedSlugs.includes(location.slug);
@@ -190,10 +219,15 @@ export function CompareCityPicker({
                     return (
                       <button
                         className={cn(
-                          "relative flex w-full items-center gap-3 px-3 py-3 text-left transition md:border",
-                          selected
-                            ? "bg-slate-100 text-slate-950 md:border-slate-200"
-                            : "bg-transparent text-slate-100 md:border-white/10 md:hover:border-white/20",
+                          "relative flex w-full items-center gap-3 text-left transition",
+                          isMobileViewport ? "px-3 py-3" : "px-3 py-3 md:border",
+                          isMobileViewport
+                            ? selected
+                              ? "text-slate-950"
+                              : "text-slate-100"
+                            : selected
+                              ? "bg-slate-100 text-slate-950 md:border-slate-200"
+                              : "bg-transparent text-slate-100 md:border-white/10 md:hover:border-white/20",
                           atLimit || locked ? "cursor-default" : "cursor-pointer",
                           atLimit ? "opacity-45" : null,
                         )}
@@ -202,8 +236,40 @@ export function CompareCityPicker({
                         onClick={() => toggleLocation(location.slug)}
                         type="button"
                       >
+                        {isMobileViewport ? (
+                          <span
+                            aria-hidden="true"
+                            className={cn(
+                              "pointer-events-none absolute inset-x-0 inset-y-[2px] border transition-colors",
+                              selected ? "border-slate-100 bg-slate-100" : "border-slate-200 bg-transparent",
+                            )}
+                          />
+                        ) : null}
+                        {isMobileViewport ? (
+                          <span
+                            className={cn(
+                              "absolute right-0 top-[2px] z-10 flex h-6 w-6 items-center justify-center border border-slate-200 bg-slate-100 transition-colors",
+                              selected ? "border-slate-950 bg-slate-950 text-white" : "text-transparent",
+                            )}
+                          >
+                            <svg
+                              aria-hidden="true"
+                              className="h-3.5 w-3.5"
+                              fill="none"
+                              viewBox="0 0 16 16"
+                            >
+                              <path
+                                d="M3.5 8.25 6.4 11.15 12.5 5.05"
+                                stroke="currentColor"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                              />
+                            </svg>
+                          </span>
+                        ) : null}
                         <LocationFlag country={location.country} slug={location.slug} variant="list" />
-                        <div className="min-w-0 flex-1">
+                        <div className={cn("min-w-0 flex-1", isMobileViewport ? "relative z-10 pr-8" : null)}>
                           <p className={cn("text-base font-semibold", selected ? "text-slate-950" : "text-slate-100")}>
                             {location.label}
                           </p>
@@ -211,37 +277,58 @@ export function CompareCityPicker({
                             {location.country}
                           </p>
                         </div>
-                        <span
-                          className={cn(
-                            "flex h-5 w-5 items-center justify-center text-xs font-semibold leading-none md:border",
-                            selected
-                              ? "bg-slate-950 text-white md:border-slate-950"
-                              : "text-transparent md:border-white/12",
-                          )}
-                        >
-                          ✓
-                        </span>
-                        <span className="pointer-events-none absolute inset-x-3 bottom-0 h-px bg-white/8 md:hidden" />
+                        {!isMobileViewport ? (
+                          <span
+                            className={cn(
+                              "flex h-5 w-5 items-center justify-center md:border",
+                              selected
+                                ? "bg-slate-950 text-white md:border-slate-950"
+                                : "text-transparent md:border-white/12",
+                            )}
+                          >
+                            <svg
+                              aria-hidden="true"
+                              className="h-3 w-3"
+                              fill="none"
+                              viewBox="0 0 16 16"
+                            >
+                              <path
+                                d="M3.5 8.25 6.4 11.15 12.5 5.05"
+                                stroke="currentColor"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                              />
+                            </svg>
+                          </span>
+                        ) : null}
+                        {!isMobileViewport ? <span className="pointer-events-none absolute inset-x-3 bottom-0 h-px bg-white/8 md:hidden" /> : null}
                       </button>
                     );
                   })}
                 </div>
               </div>
 
-              <div className="border-t border-white/8 px-4 py-4">
+              <div className={cn("border-t border-white/8 bg-slate-950/96", isMobileViewport ? "px-5 py-4" : "px-4 py-4")}>
                 <button
                   className={cn(
-                    "inline-flex h-11 w-full items-center justify-center gap-2 border px-4 text-sm font-semibold transition whitespace-nowrap",
-                    selectedCount >= 2 && selectedCount <= MAX_COMPARE_LOCATIONS
+                    "inline-flex h-11 w-full items-center justify-center gap-2 rounded-2xl border px-4 text-sm font-semibold transition whitespace-nowrap",
+                    isCompareReady
                       ? "border-slate-200 bg-slate-100 text-slate-950 hover:bg-white"
                       : "cursor-not-allowed border-white/10 bg-slate-900/70 text-slate-500",
                   )}
-                  disabled={selectedCount < 2 || selectedCount > MAX_COMPARE_LOCATIONS}
+                  disabled={!isCompareReady || isSubmitPending}
                   onClick={submitComparison}
                   type="button"
                 >
-                  {selectedCount >= 2 ? `Compare ${selectedCount} ${pluralScopeLabel}` : `Compare ${pluralScopeLabel}`}
-                  <ArrowRight className="h-4 w-4" />
+                  {isSubmitPending ? (
+                    <LoaderCircle className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <>
+                      {selectedCount >= 2 ? `Compare ${selectedCount} ${pluralScopeLabel}` : `Compare ${pluralScopeLabel}`}
+                      <ArrowRight className="h-4 w-4" />
+                    </>
+                  )}
                 </button>
               </div>
             </div>

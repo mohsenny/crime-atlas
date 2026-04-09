@@ -1,7 +1,7 @@
 "use client";
 
-import { X } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { LoaderCircle, X } from "lucide-react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 
 import type { LocationOverview } from "@/lib/dashboard-data";
@@ -26,6 +26,8 @@ export function OverviewPageClient({ initialScope, locations }: OverviewPageClie
   const [selectedCountry, setSelectedCountry] = useState("all");
   const [compareMode, setCompareMode] = useState(false);
   const [selectedCompareSlugs, setSelectedCompareSlugs] = useState<string[]>([]);
+  const [isCompareTriggerPending, setIsCompareTriggerPending] = useState(false);
+  const [isCompareNavigationPending, startCompareNavigation] = useTransition();
 
   useEffect(() => {
     const nextHref = buildOverviewHref(selectedScope);
@@ -104,17 +106,20 @@ export function OverviewPageClient({ initialScope, locations }: OverviewPageClie
       return;
     }
 
-    router.push(
-      `/compare?${buildCompareSearchParams({
-        locations: selectedCompareSlugs,
-        metric: "rate",
-        scope: selectedScope,
-      }).toString()}`,
-    );
+    startCompareNavigation(() => {
+      router.push(
+        `/compare?${buildCompareSearchParams({
+          locations: selectedCompareSlugs,
+          metric: "rate",
+          scope: selectedScope,
+        }).toString()}`,
+      );
+    });
   }
 
   function handleDesktopCompareButton() {
     if (!compareMode) {
+      setIsCompareTriggerPending(true);
       setCompareMode(true);
       setSelectedCompareSlugs([]);
       return;
@@ -125,6 +130,7 @@ export function OverviewPageClient({ initialScope, locations }: OverviewPageClie
 
   function handleMobileCompareButton() {
     if (!compareMode) {
+      setIsCompareTriggerPending(true);
       setCompareMode(true);
       setSelectedCompareSlugs([]);
       return;
@@ -135,6 +141,7 @@ export function OverviewPageClient({ initialScope, locations }: OverviewPageClie
 
   const compareButtonEnabled =
     selectedCompareSlugs.length >= 2 && selectedCompareSlugs.length <= MAX_COMPARE_LOCATIONS;
+  const compareButtonBusy = isCompareTriggerPending || isCompareNavigationPending;
   const hasLocations = filteredLocations.length > 0;
   const compareButtonLabel = !compareMode
     ? "Compare"
@@ -147,6 +154,22 @@ export function OverviewPageClient({ initialScope, locations }: OverviewPageClie
     selectedScope === "country"
       ? "No country dashboards are available in the current dataset yet. Once another normalized country dataset is added, it will appear here automatically."
       : "Try switching the country filter or return to all cities.";
+
+  useEffect(() => {
+    if (!compareMode || !isCompareTriggerPending) {
+      return;
+    }
+
+    const frameA = window.requestAnimationFrame(() => {
+      const frameB = window.requestAnimationFrame(() => {
+        setIsCompareTriggerPending(false);
+      });
+
+      return () => window.cancelAnimationFrame(frameB);
+    });
+
+    return () => window.cancelAnimationFrame(frameA);
+  }, [compareMode, isCompareTriggerPending]);
 
   return (
     <main className="min-h-screen px-4 pb-5 pt-2 sm:px-6 sm:py-8 lg:px-8">
@@ -195,11 +218,11 @@ export function OverviewPageClient({ initialScope, locations }: OverviewPageClie
                       : "cursor-default text-slate-500"
                     : "hover:text-slate-50",
                 )}
-                  disabled={!hasLocations}
+                  disabled={!hasLocations || isCompareNavigationPending}
                 onClick={handleDesktopCompareButton}
                 type="button"
               >
-                {compareButtonLabel}
+                {compareButtonBusy ? <LoaderCircle className="h-3.5 w-3.5 animate-spin" /> : compareButtonLabel}
               </button>
             </div>
 
@@ -232,11 +255,11 @@ export function OverviewPageClient({ initialScope, locations }: OverviewPageClie
                     ? "border-slate-200 bg-slate-100 text-slate-950 hover:bg-white"
                     : "border-slate-700 bg-slate-900/70 text-slate-500",
                 )}
-                disabled={!hasLocations}
+                disabled={!hasLocations || isCompareNavigationPending}
                 onClick={handleMobileCompareButton}
                 type="button"
               >
-                {compareButtonLabel}
+                {compareButtonBusy ? <LoaderCircle className="h-3.5 w-3.5 animate-spin" /> : compareButtonLabel}
               </button>
             </div>
           ) : (
@@ -250,11 +273,11 @@ export function OverviewPageClient({ initialScope, locations }: OverviewPageClie
                   "inline-flex h-full min-w-0 flex-1 items-center justify-center rounded-2xl border px-3.5 text-[10px] font-semibold uppercase tracking-[0.18em] leading-none transition whitespace-nowrap",
                   "border-slate-700 bg-slate-900/70 text-slate-300 hover:text-slate-50",
                 )}
-                disabled={!hasLocations}
+                disabled={!hasLocations || isCompareNavigationPending}
                 onClick={handleMobileCompareButton}
                 type="button"
               >
-                {compareButtonLabel}
+                {compareButtonBusy ? <LoaderCircle className="h-3.5 w-3.5 animate-spin" /> : compareButtonLabel}
               </button>
             </div>
           )}

@@ -23,9 +23,9 @@ export function LocationOverviewCard({
 }: LocationOverviewCardProps) {
   const baseClassName = cn(
     "card-panel overview-card group relative flex min-h-72 w-full max-w-[27rem] overflow-hidden rounded-none p-5 text-left md:h-72",
-    compareMode ? "overview-card--compare-mode cursor-pointer !border-white" : null,
+    compareMode ? "overview-card--compare-mode cursor-pointer !border-slate-200" : null,
     compareMode && selected
-      ? "overview-card--selected !border-white bg-slate-100 shadow-[0_22px_52px_rgba(2,6,23,0.28)] [backdrop-filter:none]"
+      ? "overview-card--selected !border-slate-200 bg-slate-100 shadow-[0_22px_52px_rgba(2,6,23,0.28)] [backdrop-filter:none]"
       : null,
     compareMode && disabled ? "cursor-not-allowed opacity-45" : null,
   );
@@ -38,10 +38,23 @@ export function LocationOverviewCard({
             "absolute right-0 top-0 z-20 flex h-5 w-5 items-center justify-center border-b border-l transition-colors",
             selected
               ? "border-slate-950 bg-slate-950 text-white"
-              : "border-slate-200 bg-slate-50 text-transparent",
+              : "border-slate-200 bg-slate-100 text-transparent",
           )}
         >
-          <span className="text-xs font-semibold leading-none">✓</span>
+          <svg
+            aria-hidden="true"
+            className="h-3 w-3"
+            fill="none"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M3.5 8.25 6.4 11.15 12.5 5.05"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+            />
+          </svg>
         </div>
       ) : null}
 
