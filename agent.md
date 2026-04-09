@@ -131,6 +131,20 @@ This is the city-specific visualization layer used on the normal city page.
 
 It maps official source categories into a location-specific dashboard taxonomy.
 
+Selection rules for this dashboard taxonomy:
+
+- `All recorded offenses` is a mutually exclusive total bucket.
+- If `All recorded offenses` is selected, every other category should be deselected.
+- If any non-total category is selected, `All recorded offenses` should be deselected.
+- The same exclusivity rule also applies to shipped parent buckets that already include their own children:
+  - `All theft` vs theft descendants such as `Theft`, `Other theft`, `Vehicle theft`, `From vehicles`, `Bike theft`, and `Burglary`
+  - `All assaults` vs `Assault` / `Aggravated assault`
+  - `All arson` / `All arson-related offenses` vs `Arson`
+  - `All damage` / `All criminal damage` vs `Criminal damage` / `Graffiti`
+- Reason:
+  - these parent buckets are already inclusive totals in the source and should not stack on top of their descendants in the public chart
+- If a future city introduces a new parent-style bucket, extend the centralized helper in `src/lib/location-category-selection.ts` instead of hardcoding page-specific behavior.
+
 ### B. Comparison category system
 
 This is the cross-city canonical layer used on `/compare`.
@@ -278,11 +292,11 @@ As of April 2026, the current generated data still has several source-cleaning i
 
 - `2006–2015` remains the riskiest source path because it is PDF-extracted.
 - A real parser bug previously produced a fake `2008` residential-burglary spike.
-- That specific case was identified, but additional suspicious historical rows still remain in early Berlin years.
-- Known examples from anomaly scans include:
-  - Reinickendorf `All recorded offenses` collapsing to very small counts and then jumping back
-  - Spandau / Treptow-Köpenick `All theft` with impossible `ratePer100k` values in `2008`
-  - isolated categories where one year appears truncated or columns shift
+- The early `2008–2009` OCR corruption is now repaired in ingestion instead of being shipped raw.
+- Current repair rule:
+  - detect rows whose count/rate combination implies an impossible district population, or whose rate structure is broken
+  - replace only those rows with a derived fill from adjacent official years for the same district/category
+- This makes Berlin much safer than before, but it still means some `2008–2009` district/category rows are derived repairs, not direct trustworthy OCR output.
 
 ### Barcelona / Valencia
 
@@ -290,8 +304,8 @@ As of April 2026, the current generated data still has several source-cleaning i
 - The app now intentionally keeps only the verified municipality-comparable years:
   - `2013`
   - `2014`
-  - `2020–2025`
-- `2015–2019` are currently excluded on purpose because they created obvious structural discontinuities when stitched into the same city-level series.
+  - `2018–2025`
+- `2015–2017` are currently excluded on purpose because they do not yet have a verified municipality-comparable official series in the same stable structure.
 - Treat this as a source-family compatibility problem, not a real crime collapse.
 - Barcelona citywide population is now sourced from the official Barcelona open-data population package and covers the shipped years cleanly.
 - Valencia citywide population comes from the official Valencia municipal indicator `F02051000` (`Población residente`), but the live PDF endpoint is intermittently blocked by a WAF in this environment.
@@ -307,6 +321,20 @@ As of April 2026, the current generated data still has several source-cleaning i
   - 2023: 809,501
   - 2024: 830,606
 - Do not replace that fallback with non-official numbers. If live access becomes reliable again, prefer the direct official PDF parse.
+- Important new finding from the April 2026 audit:
+  - the official crime portal also exposes structured PC-Axis export pages with XLS/XLSX/CSV/PX downloads
+  - example communities table:
+    - `https://estadisticasdecriminalidad.ses.mir.es/sec/jaxiPx/Tabla.htm?L=0&file=99010.px&path=%2FDatosBalanceAnt%2Fl0%2F`
+  - example export dialog:
+    - `https://estadisticasdecriminalidad.ses.mir.es/sec/jaxiPx/dlgExport.htm?path=/DatosBalanceAnt/l0/&file=99010.px`
+  - this is now the preferred Spain path and is already used for:
+    - `Spain 2018–2025` (autonomous communities)
+    - `Barcelona 2018–2025`
+    - `Valencia 2018–2025`
+  - direct April 2026 spot-checks confirmed that sampled Barcelona and Valencia all-offenses totals in `2020`, `2023`, and `2025` match the official municipality CSVs exactly
+  - keep the `2014` municipal workbook only for the older `2013–2014` Barcelona/Valencia slice
+  - do not regress Spain back to PDF text extraction for these shipped years
+  - for Spain country-level community totals, remember that the official `TOTAL NACIONAL` row includes an `EN EL EXTRANJERO` bucket; the dashboard's Spain area layer intentionally excludes that non-community bucket
 
 ### Los Angeles
 
@@ -332,6 +360,9 @@ As of April 2026, the current generated data still has several source-cleaning i
 - Current app coverage: `2010–2023`
 - Area breakdown: yes, aggregated from police-station rows to district/municipality rows
 - Citywide population is available from the official Tokyo statistical yearbook CSV `tn23qv020100.csv` and is wired for `2010–2023`
+- Important audit note:
+  - the previously flagged `Chuo-ku` `Fraud` jump is present in the official station-level CSV once summed to the district row
+  - treat sampled low-base Tokyo spikes as source-real unless a future audit finds a clear structural source change
 
 ### São Paulo
 
@@ -358,6 +389,38 @@ As of April 2026, the current generated data still has several source-cleaning i
   - comparison pages can use citywide rate calculations from these population series even when the city dashboard remains count-only because district-level population series are not wired
   - Houston annual HPD NIBRS CSV downloads are much more reliable through `curl` than through the repo's generic `fetch` helper
 
+### Cleveland
+
+- Official crime source family is wired and shipped from the city ArcGIS incidents layer.
+- Current app coverage: `2016–2025`
+- Public area layer in app: Districts `1–5`
+- Important audit note:
+  - the ArcGIS feed also exposes `District O`
+  - `District O` collapses sharply across many categories from `2018` to `2019`
+  - official Cleveland city materials consistently describe five police districts, so `District O` should be treated as a non-public or unstable bucket
+  - do not reintroduce `District O` into the public district selector unless a future official source clearly defines it as a stable public geography
+
+### Internal geography watchlist
+
+- Cleveland was not unique. A wider district-label scan surfaced other locations that may also mix public geographies with internal buckets.
+- Current watchlist:
+  - Austin: resolved in the app by trimming to stable public Districts `1–8`
+  - Houston: resolved in the app by trimming to standard HPD beat codes only
+  - Louisville: resolved in the app by trimming to the eight numbered LMPD divisions only
+  - Seattle: resolved in the app by trimming to the five public SPD precincts only
+- Rule for future agents:
+  - do not assume every district/beat/division label in an official incident feed is a public-facing geography
+  - if a feed contains unlabeled, null-like, county-like, or agency-like buckets, source-check them before shipping them in the area selector
+
+### Sydney
+
+- Official source family is wired and shipped from the NSW BOCSAR offence-by-month workbook.
+- Current app coverage: `2001–2025`
+- Area breakdown in app: `33` Greater Sydney LGAs
+- Important audit note:
+  - sampled Wollondilly `Arson` and `Drug offences` rows match the official workbook values directly
+  - treat sampled low-base Sydney spikes as source-real unless a future audit finds a workbook-structure change
+
 ### São Paulo
 
 - Official source family is now wired and shipped.
@@ -373,10 +436,10 @@ As of April 2026, the current generated data still has several source-cleaning i
 
 ### Berlin
 
-- The app now removes a small set of obviously impossible PDF-corrupted historical rows before building generated data.
-- This is a safeguard, not a full fix.
-- Current sanitizing rule lives in `scripts/prepare-data.ts` and only removes implausibly large old PDF-derived rows.
-- There are still unresolved early-year anomalies in Berlin, so treat comparison on old Berlin series as directionally useful but not fully clean.
+- The app now repairs a bounded set of obviously corrupted `2008–2009` PDF-derived rows before seeding the DB.
+- Current repair rule lives in `scripts/prepare-data.ts` and interpolates only when the OCR row is structurally invalid and adjacent official years exist.
+- This is a controlled repair, not proof that every raw PDF row is trustworthy.
+- Treat old Berlin comparison as usable, but remember that some early rows are derived repairs.
 
 ### London
 
@@ -386,9 +449,11 @@ As of April 2026, the current generated data still has several source-cleaning i
 
 ### Valencia
 
-- One anomaly still remains in the currently shipped citywide series:
-  - `Theft 2022:4507 -> 2023:24234`
-- Treat Valencia as less trustworthy than Barcelona until the remaining Spanish municipality stitching is fully revalidated.
+- The earlier PDF-driven `2023` jump was fixed by switching the shipped `2018–2025` series to the official structured municipality exports.
+- Current shipped Valencia is acceptable for the shipped years, but it still mixes:
+  - `2013–2014` from the official workbook
+  - `2018–2025` from the official PC-Axis municipality exports
+- Keep the `2015–2017` gap explicit unless a reliable official source is found.
 
 ### Rule for future agents
 
@@ -462,7 +527,7 @@ This previously produced false spikes such as Berlin `Residential burglary` in `
 
 Current guardrail:
 
-- `assertBerlinHistoricalRecordPlausibility()` in `scripts/prepare-data.ts`
+- `sanitizeBerlinHistoricalRecords()` in `scripts/prepare-data.ts`
 
 Do not remove that guardrail unless you replace it with something better.
 
@@ -489,7 +554,7 @@ If a source host is flaky or anti-bot:
 - source family: Polizei Berlin Kriminalitätsatlas + PKS archive
 - coverage in app: `2006–2024`
 - area breakdown: yes
-- risk: archived PDF parsing for early years
+- risk: archived PDF parsing for early years; a small set of `2008–2009` rows is now repaired from adjacent official years during ingestion
 
 ### London
 
@@ -555,6 +620,9 @@ If a source host is flaky or anti-bot:
 - coverage in app: `2003–2025`
 - district breakdown: yes
 - caveat: raw Austin offense labels are verbose and include family-violence / weapon qualifiers, so the mapping layer intentionally groups them into broader canonical categories
+- important area-layer note:
+  - the raw Austin feed contains many sparse stray district codes
+  - the public dashboard now keeps only stable Districts `1–8` and normalizes zero-padded duplicates such as `01`
 
 ### Dallas
 
@@ -572,7 +640,15 @@ If a source host is flaky or anti-bot:
 - source family: Houston Police Department NIBRS public annual CSVs
 - coverage in app: `2019–2025`
 - area breakdown: yes, using police beats
-- caveat: the HPD annual CSVs are large and should be downloaded with `curl`; the generic `fetch` downloader stalled repeatedly in this environment
+- caveats:
+  - the HPD annual CSVs are large and should be downloaded with `curl`; the generic `fetch` downloader stalled repeatedly in this environment
+  - the CSV header format changed in `2025`
+  - do not hardcode only the old compact header names; normalize headers so both forms work:
+    - old: `NIBRSDescription`, `OffenseCount`
+    - new: `NIBRS Description`, `Offense Count`
+  - the `2025 = 0` failure was caused by this header rename, not by bad source data
+  - the raw beat field also contains non-public or external buckets such as `HCSO`, `UH-*`, `OOJ`, `NULL`, and `HCC*`
+  - keep only standard HPD beat codes in the public area selector unless a future official source explicitly defines the other buckets as public beats
 
 ### Phoenix
 
@@ -587,6 +663,28 @@ If a source host is flaky or anti-bot:
 - coverage in app: `2008–2025`
 - precinct breakdown: yes
 - caveat: `offense_category` is too coarse for the app; use `nibrs_offense_code_description` for category mapping
+- area-layer rule:
+  - the raw source also exposes `Ooj`, but Seattle Police publicly defines only `North`, `East`, `South`, `West`, and `Southwest` precincts
+  - keep only those five public precincts in the dashboard area selector
+  - do not surface `Ooj` unless a future official source explicitly defines it as a public precinct geography
+
+### Louisville
+
+- source family: Louisville Metro Government ArcGIS annual crime layers
+- coverage in app: `2010–2025`
+- area breakdown: yes, using LMPD divisions
+- caveats:
+  - the raw division field contains the eight numbered LMPD divisions plus a long tail of tiny municipal/OOJ-style buckets such as `Metro Louisville`, `Lmpd`, `Ooj`, `Oldham`, `Anchorage`, `Shively`, `St Matthews`, and others
+  - for the public dashboard, keep only the eight numbered divisions:
+    - `1st Division`
+    - `2nd Division`
+    - `3rd Division`
+    - `4th Division`
+    - `5th Division`
+    - `6th Division`
+    - `7th Division`
+    - `8th Division`
+  - do not expose the other buckets in the area selector unless a future official methodology source clearly says they belong in the same public division layer
 
 ### Los Angeles
 
@@ -610,7 +708,7 @@ If a source host is flaky or anti-bot:
 ### Barcelona and Valencia
 
 - source family: Spanish Interior Ministry annual crime-balance releases
-- coverage in app: `2013–2025`
+- coverage in app: `2013`, `2014`, `2018–2025`
 - area breakdown in app: no
 
 Important caveat:

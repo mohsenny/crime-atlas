@@ -107,6 +107,10 @@ type SpainAnnualSource = {
   url: string;
   zipEntryContains?: string;
 };
+type SpainStructuredSource = {
+  year: number;
+  url: string;
+};
 type NewYorkCrimeRow = {
   year: string;
   boro_nm: string;
@@ -642,6 +646,31 @@ const SPAIN_COUNTRY_TERRITORIES: SpainCountryTerritoryDefinition[] = [
   { slug: "melilla", label: "Melilla", aliases: ["CIUDAD AUTÓNOMA DE MELILLA", "CIUDAD AUTONOMA DE MELILLA", "MELILLA"] },
 ];
 
+const SPAIN_STRUCTURED_COUNTRY_SOURCES: SpainStructuredSource[] = [
+  { year: 2019, url: "https://estadisticasdecriminalidad.ses.mir.es/sec/jaxiPx/files/_px/es/csv_bdsc/DatosBalanceAnt/l0/99010.csv_bdsc" },
+  { year: 2020, url: "https://estadisticasdecriminalidad.ses.mir.es/sec/jaxiPx/files/_px/es/csv_bdsc/DatosBalanceAnt/l0/1009010.csv_bdsc" },
+  { year: 2021, url: "https://estadisticasdecriminalidad.ses.mir.es/sec/jaxiPx/files/_px/es/csv_bdsc/DatosBalanceAnt/l0/1109010.csv_bdsc" },
+  { year: 2022, url: "https://estadisticasdecriminalidad.ses.mir.es/sec/jaxiPx/files/_px/es/csv_bdsc/DatosBalanceAnt/l0/1209010.csv_bdsc" },
+  { year: 2023, url: "https://estadisticasdecriminalidad.ses.mir.es/sec/jaxiPx/files/_px/es/csv_bdsc/DatosBalanceAnt/l0/1309010.csv_bdsc" },
+  { year: 2024, url: "https://estadisticasdecriminalidad.ses.mir.es/sec/jaxiPx/files/_px/es/csv_bdsc/DatosBalanceAnt/l0/1409010.csv_bdsc" },
+  { year: 2025, url: "https://estadisticasdecriminalidad.ses.mir.es/sec/jaxiPx/files/_px/es/csv_bdsc/DatosBalanceAct/l0/09010.csv_bdsc" },
+];
+
+const SPAIN_STRUCTURED_MUNICIPALITY_SOURCES: SpainStructuredSource[] = [
+  { year: 2019, url: "https://estadisticasdecriminalidad.ses.mir.es/sec/jaxiPx/files/_px/es/csv_bdsc/DatosBalanceAnt/l0/99012.csv_bdsc" },
+  { year: 2020, url: "https://estadisticasdecriminalidad.ses.mir.es/sec/jaxiPx/files/_px/es/csv_bdsc/DatosBalanceAnt/l0/1009012.csv_bdsc" },
+  { year: 2021, url: "https://estadisticasdecriminalidad.ses.mir.es/sec/jaxiPx/files/_px/es/csv_bdsc/DatosBalanceAnt/l0/1109012.csv_bdsc" },
+  { year: 2022, url: "https://estadisticasdecriminalidad.ses.mir.es/sec/jaxiPx/files/_px/es/csv_bdsc/DatosBalanceAnt/l0/1209012.csv_bdsc" },
+  { year: 2023, url: "https://estadisticasdecriminalidad.ses.mir.es/sec/jaxiPx/files/_px/es/csv_bdsc/DatosBalanceAnt/l0/1309012.csv_bdsc" },
+  { year: 2024, url: "https://estadisticasdecriminalidad.ses.mir.es/sec/jaxiPx/files/_px/es/csv_bdsc/DatosBalanceAnt/l0/1409012.csv_bdsc" },
+  { year: 2025, url: "https://estadisticasdecriminalidad.ses.mir.es/sec/jaxiPx/files/_px/es/csv_bdsc/DatosBalanceAct/l0/09012.csv_bdsc" },
+];
+
+const SPAIN_MUNICIPALITY_ALIASES: Record<string, string[]> = {
+  Barcelona: ["Municipio de Barcelona", "08019 Barcelona"],
+  Valencia: ["Municipio de Valencia", "Municipio de València", "46250 Valencia"],
+};
+
 function buildCategoryLookup(definition: LocationDefinition) {
   const lookup = new Map(
     definition.categories.flatMap((category) => {
@@ -830,7 +859,7 @@ function parseSemicolonCell(value: string) {
   return value.trim().replace(/^"(.*)"$/s, "$1");
 }
 
-function parseCsvLine(line: string) {
+function parseCsvLine(line: string, delimiter = ",") {
   const values: string[] = [];
   let current = "";
   let inQuotes = false;
@@ -848,7 +877,7 @@ function parseCsvLine(line: string) {
       continue;
     }
 
-    if (character === "," && !inQuotes) {
+    if (character === delimiter && !inQuotes) {
       values.push(current);
       current = "";
       continue;
@@ -859,6 +888,19 @@ function parseCsvLine(line: string) {
 
   values.push(current);
   return values.map((value, index) => (index === 0 ? value.replace(/^\uFEFF/, "") : value));
+}
+
+function normalizeCsvHeader(header: string) {
+  return header.replace(/^\uFEFF/, "").trim().toLowerCase().replace(/[\s_]+/g, "");
+}
+
+function buildCsvRow(headers: string[], values: string[]) {
+  return headers.reduce<Record<string, string>>((record, header, index) => {
+    const value = values[index] ?? "";
+    record[header] = value;
+    record[normalizeCsvHeader(header)] = value;
+    return record;
+  }, {});
 }
 
 async function extractZipFile(zipPath: string, entryName: string, outputPath: string) {
@@ -1587,6 +1629,55 @@ function normalizeSpainText(value: string) {
     .replace(/[\u0300-\u036f]/g, "");
 }
 
+function normalizeSpainCategoryKey(value: string) {
+  return normalizeSpainText(value)
+    .toLowerCase()
+    .replace(/^(\d+(?:\.\d+)?)\.\s*-?\s*/, "$1. ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function normalizeSpainGeographyKey(value: string) {
+  return normalizeSpainText(value).replace(/^-+\s*/, "").replace(/\s+/g, " ").trim().toLowerCase();
+}
+
+function buildSpainCategoryLookup(definition: LocationDefinition) {
+  return new Map(
+    definition.categories.flatMap((category) => {
+      const slug = slugify(category.label);
+      return category.sourceLabels.map((sourceLabel) => [
+        normalizeSpainCategoryKey(sourceLabel),
+        {
+          label: category.label,
+          shortLabel: category.shortLabel,
+          color: category.color,
+          isDefault: category.isDefault,
+          sortOrder: category.sortOrder,
+          slug,
+        },
+      ]);
+    }),
+  );
+}
+
+async function parseSpainStructuredCsv(filePath: string) {
+  const text = await fs.readFile(filePath, "utf8");
+  return text
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .slice(1)
+    .map((line) => parseCsvLine(line, ";"))
+    .map((cells) => ({
+      geography: normalizeSpainGeographyKey(cells[0] ?? ""),
+      sourceLabel: normalizeSpainText(cells[1] ?? ""),
+      year: Number((cells[2] ?? "").match(/\b(20\d{2})\b/)?.[1] ?? Number.NaN),
+      periodLabel: normalizeSpainText(cells[2] ?? ""),
+      count: parseCountLike(cells[3] ?? ""),
+    }))
+    .filter((row) => Number.isFinite(row.year) && !row.periodLabel.toLowerCase().startsWith("variacion %"));
+}
+
 const SPAIN_COUNT_TOKEN_PATTERN = /^\d+(?:\.\d{3})*$/;
 
 function parseSpainInlineCounts(line: string, years: number[]) {
@@ -1893,66 +1984,29 @@ function parseSpainMunicipalitySection(text: string, municipality: string, expec
 async function buildSpainLocation(
   definition: LocationDefinition,
   municipality: string,
-  annualSources: SpainAnnualSource[],
+  legacyAnnualSources: SpainAnnualSource[],
   cityPopulationByYear: Record<string, number>,
 ): Promise<LocationPayload> {
   await fs.mkdir(TMP_DIR, { recursive: true });
 
-  const { options: categories, lookup: categoryLookup } = buildCategoryLookup(definition);
+  const { options: categories } = buildCategoryLookup(definition);
+  const categoryLookup = buildSpainCategoryLookup(definition);
   const districtLabel = definition.label;
   const districtSlug = slugify(districtLabel);
   const recordsByKey = new Map<string, CrimeRecord>();
   const years = new Set<number>();
 
-  const earliestSourceYear = Math.min(...annualSources.map((source) => source.year));
+  const municipalityAliases = (SPAIN_MUNICIPALITY_ALIASES[municipality] ?? [municipality]).map(normalizeSpainGeographyKey);
 
-  for (const source of annualSources) {
-    let targetPath = path.join(SPAIN_SHARED_DIR, `source_${source.year}.pdf`);
-    await fs.mkdir(path.dirname(targetPath), { recursive: true });
+  for (const source of legacyAnnualSources) {
+    const targetPath = path.join(SPAIN_SHARED_DIR, `source_${source.year}.xls`);
+    await ensureFile(targetPath, source.url);
 
-    if (source.type === "xls") {
-      targetPath = path.join(SPAIN_SHARED_DIR, `source_${source.year}.xls`);
-      await ensureFile(targetPath, source.url);
-    } else if (source.type === "pdf") {
-      await ensureFile(targetPath, source.url);
-    } else {
-      const zipPath = path.join(SPAIN_SHARED_DIR, `source_${source.year}.zip`);
-      await ensureFile(zipPath, source.url);
-      const pythonCode = [
-        "import sys, zipfile, pathlib",
-        "zip_path, needle, out_path = sys.argv[1:]",
-        "with zipfile.ZipFile(zip_path) as zf:",
-        "    name = next((n for n in zf.namelist() if needle.lower() in n.lower() and n.lower().endswith('.pdf')), None)",
-        "    if name is None:",
-        "        raise SystemExit(f'No PDF entry found for {needle} in {zip_path}')",
-        "    pathlib.Path(out_path).write_bytes(zf.read(name))",
-      ].join("\n");
-      execFileSync("python3", ["-c", pythonCode, zipPath, source.zipEntryContains ?? "", targetPath], {
-        cwd: ROOT,
-        maxBuffer: 64 * 1024 * 1024,
-      });
-    }
-
-    let parsed;
-    try {
-      if (source.type === "xls") {
-        parsed = parseSpainMunicipalityWorkbook(targetPath, municipality, source.year);
-      } else {
-        const text = await extractPdfText(targetPath);
-        parsed = parseSpainMunicipalitySection(text, municipality, source.year);
-      }
-    } catch (error) {
-      throw new Error(`Spain parse failed for ${definition.slug} ${source.year}: ${error instanceof Error ? error.message : String(error)}`);
-    }
-
+    const parsed = parseSpainMunicipalityWorkbook(targetPath, municipality, source.year);
     parsed.rowsByYear.forEach((rowsForYear, year) => {
-      if (year !== source.year && source.year !== earliestSourceYear) {
-        return;
-      }
-
       years.add(year);
       rowsForYear.forEach((count, sourceLabel) => {
-        const category = categoryLookup.get(normalizeSpainText(sourceLabel));
+        const category = categoryLookup.get(normalizeSpainCategoryKey(sourceLabel));
         if (!category) {
           return;
         }
@@ -1968,6 +2022,38 @@ async function buildSpainLocation(
         });
       });
     });
+  }
+
+  for (const source of SPAIN_STRUCTURED_MUNICIPALITY_SOURCES) {
+    const targetPath = path.join(SPAIN_SHARED_DIR, `municipality_${source.year}.csv`);
+    await ensureFile(targetPath, source.url);
+    const rows = await parseSpainStructuredCsv(targetPath);
+    const allowedYears = source.year === SPAIN_STRUCTURED_MUNICIPALITY_SOURCES[0]?.year ? new Set([source.year - 1, source.year]) : new Set([source.year]);
+
+    for (const row of rows) {
+      if (!allowedYears.has(row.year)) {
+        continue;
+      }
+      if (!municipalityAliases.includes(row.geography)) {
+        continue;
+      }
+
+      const category = categoryLookup.get(normalizeSpainCategoryKey(row.sourceLabel));
+      if (!category) {
+        continue;
+      }
+
+      years.add(row.year);
+      addOrMergeRecord(recordsByKey, {
+        year: row.year,
+        districtLabel,
+        districtSlug,
+        categoryLabel: category.label,
+        categorySlug: category.slug,
+        count: row.count,
+        ratePer100k: null,
+      });
+    }
   }
 
   return {
@@ -1989,88 +2075,50 @@ async function buildSpainLocation(
 }
 
 async function buildSpainCountryLocation(): Promise<LocationPayload> {
-  const annualSources: SpainAnnualSource[] = [
-    { year: 2019, type: "zip-pdf", url: SOURCE_URLS.spanishArchive2019, zipEntryContains: "cuarto trimestre" },
-    { year: 2020, type: "zip-pdf", url: SOURCE_URLS.spanishArchive2020, zipEntryContains: "cuarto trimestre" },
-    { year: 2021, type: "pdf", url: SOURCE_URLS.spanishBalance2021 },
-    { year: 2022, type: "pdf", url: SOURCE_URLS.spanishBalance2022 },
-    { year: 2023, type: "pdf", url: SOURCE_URLS.spanishBalance2023 },
-    { year: 2024, type: "pdf", url: SOURCE_URLS.spanishBalance2024 },
-    { year: 2025, type: "pdf", url: SOURCE_URLS.spanishBalance2025 },
-  ];
-
-  const { options: categories, lookup: categoryLookup } = buildCategoryLookup(SPAIN_COUNTRY_LOCATION);
+  const { options: categories } = buildCategoryLookup(SPAIN_COUNTRY_LOCATION);
+  const categoryLookup = buildSpainCategoryLookup(SPAIN_COUNTRY_LOCATION);
   const districts = SPAIN_COUNTRY_TERRITORIES.map((territory) => ({
     label: territory.label,
     value: territory.slug,
   }));
   const recordsByKey = new Map<string, CrimeRecord>();
   const years = new Set<number>();
-  const earliestSourceYear = Math.min(...annualSources.map((source) => source.year));
-  const allStopHeaders = SPAIN_COUNTRY_TERRITORIES.flatMap((territory) => territory.aliases);
+  const normalizedTerritories = SPAIN_COUNTRY_TERRITORIES.map((territory) => ({
+    ...territory,
+    normalizedAliases: territory.aliases.map(normalizeSpainGeographyKey),
+  }));
 
-  for (const source of annualSources) {
-    let targetPath = path.join(SPAIN_COUNTRY_DIR, `spain_country_${source.year}.pdf`);
-    await fs.mkdir(path.dirname(targetPath), { recursive: true });
+  for (const source of SPAIN_STRUCTURED_COUNTRY_SOURCES) {
+    const targetPath = path.join(SPAIN_COUNTRY_DIR, `spain_country_${source.year}.csv`);
+    await ensureFile(targetPath, source.url);
+    const rows = await parseSpainStructuredCsv(targetPath);
+    const allowedYears = source.year === SPAIN_STRUCTURED_COUNTRY_SOURCES[0]?.year ? new Set([source.year - 1, source.year]) : new Set([source.year]);
 
-    if (source.type === "pdf") {
-      if (source.year === 2025) {
-        await ensureFile(SPAIN_COUNTRY_PDF_2025_PATH, source.url);
-        targetPath = SPAIN_COUNTRY_PDF_2025_PATH;
-      } else {
-        await ensureFile(targetPath, source.url);
-      }
-    } else {
-      const zipPath = source.year === 2019 ? SPAIN_COUNTRY_ARCHIVE_2019_PATH : SPAIN_COUNTRY_ARCHIVE_2020_PATH;
-      await ensureFile(zipPath, source.url);
-      const pythonCode = [
-        "import sys, zipfile, pathlib",
-        "zip_path, needle, out_path = sys.argv[1:]",
-        "with zipfile.ZipFile(zip_path) as zf:",
-        "    name = next((n for n in zf.namelist() if needle.lower() in n.lower() and n.lower().endswith('.pdf')), None)",
-        "    if name is None:",
-        "        raise SystemExit(f'No PDF entry found for {needle} in {zip_path}')",
-        "    pathlib.Path(out_path).write_bytes(zf.read(name))",
-      ].join("\n");
-      execFileSync("python3", ["-c", pythonCode, zipPath, source.zipEntryContains ?? "", targetPath], {
-        cwd: ROOT,
-        maxBuffer: 64 * 1024 * 1024,
-      });
-    }
-
-    const text = await extractPdfText(targetPath);
-
-    for (const territory of SPAIN_COUNTRY_TERRITORIES) {
-      const parsed = parseSpainTerritorySection(
-        text,
-        territory.aliases,
-        allStopHeaders.filter((header) => !territory.aliases.includes(header)),
-        source.year,
-      );
-
-      parsed.rowsByYear.forEach((rowsForYear, year) => {
-        if (year !== source.year && source.year !== earliestSourceYear) {
-          return;
+    for (const territory of normalizedTerritories) {
+      for (const row of rows) {
+        if (!allowedYears.has(row.year)) {
+          continue;
+        }
+        if (!territory.normalizedAliases.includes(row.geography)) {
+          continue;
         }
 
-        years.add(year);
-        rowsForYear.forEach((count, sourceLabel) => {
-          const category = categoryLookup.get(normalizeSpainText(sourceLabel));
-          if (!category) {
-            return;
-          }
+        const category = categoryLookup.get(normalizeSpainCategoryKey(row.sourceLabel));
+        if (!category) {
+          continue;
+        }
 
-          addOrMergeRecord(recordsByKey, {
-            year,
-            districtLabel: territory.label,
-            districtSlug: territory.slug,
-            categoryLabel: category.label,
-            categorySlug: category.slug,
-            count,
-            ratePer100k: null,
-          });
+        years.add(row.year);
+        addOrMergeRecord(recordsByKey, {
+          year: row.year,
+          districtLabel: territory.label,
+          districtSlug: territory.slug,
+          categoryLabel: category.label,
+          categorySlug: category.slug,
+          count: row.count,
+          ratePer100k: null,
         });
-      });
+      }
     }
   }
 
@@ -3690,21 +3738,112 @@ async function parseBerlinHistoricalRecords() {
 function sanitizeBerlinHistoricalRecords(
   records: Array<{ year: number; district: string; category: string; count: number; rate_per_100k: number }>,
 ) {
-  const cleaned = records.filter((record) => {
-    if (record.category === "Straftaten -insgesamt-") {
-      return record.count <= 200_000;
+  const expectedPopulationByDistrictYear = new Map<string, number>();
+
+  for (const record of records) {
+    if (record.category !== "Straftaten -insgesamt-" || record.count <= 0 || record.rate_per_100k <= 0) {
+      continue;
     }
 
-    if (record.category === "Diebstahl -insgesamt-") {
-      return record.count <= 100_000;
+    const impliedPopulation = (record.count * 100_000) / record.rate_per_100k;
+    if (impliedPopulation >= 50_000 && impliedPopulation <= 2_000_000) {
+      expectedPopulationByDistrictYear.set(`${record.district}__${record.year}`, impliedPopulation);
+    }
+  }
+
+  const invalidRecordKeys = new Set<string>();
+
+  for (const record of records) {
+    const key = `${record.district}__${record.category}__${record.year}`;
+    if (record.count < 0 || record.rate_per_100k < 0) {
+      invalidRecordKeys.add(key);
+      continue;
     }
 
-    return record.count <= 50_000;
+    if ((record.count === 0 && record.rate_per_100k > 0) || (record.count > 0 && record.rate_per_100k === 0)) {
+      invalidRecordKeys.add(key);
+      continue;
+    }
+
+    if (record.count > 0 && record.rate_per_100k > 0) {
+      const impliedPopulation = (record.count * 100_000) / record.rate_per_100k;
+      const expectedPopulation = expectedPopulationByDistrictYear.get(`${record.district}__${record.year}`);
+
+      if (impliedPopulation < 50_000 || impliedPopulation > 2_000_000) {
+        invalidRecordKeys.add(key);
+        continue;
+      }
+
+      if (expectedPopulation) {
+        const ratio = impliedPopulation / expectedPopulation;
+        if (ratio < 0.75 || ratio > 1.25) {
+          invalidRecordKeys.add(key);
+        }
+      }
+    }
+  }
+
+  const recordsBySeries = new Map<string, Array<{ year: number; district: string; category: string; count: number; rate_per_100k: number }>>();
+  for (const record of records) {
+    const seriesKey = `${record.district}__${record.category}`;
+    const series = recordsBySeries.get(seriesKey) ?? [];
+    series.push(record);
+    recordsBySeries.set(seriesKey, series);
+  }
+
+  const repairedRecords = new Map<string, { year: number; district: string; category: string; count: number; rate_per_100k: number }>();
+  let interpolatedCount = 0;
+
+  for (const [seriesKey, series] of recordsBySeries) {
+    const ordered = [...series].sort((left, right) => left.year - right.year);
+
+    for (let index = 0; index < ordered.length; index += 1) {
+      const record = ordered[index];
+      const recordKey = `${record.district}__${record.category}__${record.year}`;
+      if (!invalidRecordKeys.has(recordKey)) {
+        repairedRecords.set(recordKey, record);
+        continue;
+      }
+
+      const previousValid = [...ordered.slice(0, index)].reverse().find((candidate) => !invalidRecordKeys.has(`${candidate.district}__${candidate.category}__${candidate.year}`));
+      const nextValid = ordered.slice(index + 1).find((candidate) => !invalidRecordKeys.has(`${candidate.district}__${candidate.category}__${candidate.year}`));
+
+      if (!previousValid || !nextValid || nextValid.year === previousValid.year) {
+        continue;
+      }
+
+      const progress = (record.year - previousValid.year) / (nextValid.year - previousValid.year);
+      const interpolatedValue = Math.round(previousValid.count + (nextValid.count - previousValid.count) * progress);
+      const expectedPopulation = expectedPopulationByDistrictYear.get(`${record.district}__${record.year}`);
+      const interpolatedRate = expectedPopulation
+        ? Number(((interpolatedValue / expectedPopulation) * 100_000).toFixed(0))
+        : Math.round(previousValid.rate_per_100k + (nextValid.rate_per_100k - previousValid.rate_per_100k) * progress);
+
+      repairedRecords.set(recordKey, {
+        ...record,
+        count: interpolatedValue,
+        rate_per_100k: interpolatedRate,
+      });
+      interpolatedCount += 1;
+    }
+  }
+
+  const cleaned = [...repairedRecords.values()].sort((left, right) => {
+    if (left.year !== right.year) {
+      return left.year - right.year;
+    }
+    if (left.district !== right.district) {
+      return left.district.localeCompare(right.district);
+    }
+    return left.category.localeCompare(right.category);
   });
 
   const removedCount = records.length - cleaned.length;
+  if (interpolatedCount > 0) {
+    console.warn(`Interpolated ${interpolatedCount} Berlin historical rows whose PDF OCR values were structurally invalid.`);
+  }
   if (removedCount > 0) {
-    console.warn(`Removed ${removedCount} implausible Berlin historical rows from the PDF-derived archive extract.`);
+    console.warn(`Removed ${removedCount} Berlin historical rows that could not be repaired from adjacent official years.`);
   }
 
   return cleaned;
@@ -4981,19 +5120,28 @@ async function buildAustinLocation(): Promise<LocationPayload> {
   const years = Array.from({ length: 23 }, (_, index) => 2003 + index);
   const countsByKey = new Map<string, number>();
   const districtsByCode = new Map<string, FilterOption>();
+  const isPublicDistrictCode = (value: string) => {
+    const normalized = value.trim();
+    if (!/^\d{1,2}$/.test(normalized)) {
+      return false;
+    }
+    const districtNumber = Number(normalized);
+    return districtNumber >= 1 && districtNumber <= 8;
+  };
 
   for (const row of rows) {
     const year = Number(row.year);
     const districtCode = String(row.district ?? "").trim();
     const category = resolveMappedCategory(categoriesBySlug, mapAustinCrimeType(String(row.crime_type ?? "")));
     const count = parseCountLike(row.count);
-    if (!districtCode || !years.includes(year)) {
+    if (!districtCode || !years.includes(year) || !isPublicDistrictCode(districtCode)) {
       continue;
     }
 
-    const districtLabel = `District ${districtCode}`;
+    const normalizedDistrictCode = String(Number(districtCode));
+    const districtLabel = `District ${normalizedDistrictCode}`;
     const districtSlug = slugify(districtLabel);
-    districtsByCode.set(districtCode, { label: districtLabel, value: districtSlug });
+    districtsByCode.set(normalizedDistrictCode, { label: districtLabel, value: districtSlug });
     if (totalCategory) {
       countsByKey.set(`${year}__${districtSlug}__${totalCategory.value}`, (countsByKey.get(`${year}__${districtSlug}__${totalCategory.value}`) ?? 0) + count);
     }
@@ -5109,14 +5257,11 @@ async function buildPhoenixLocation(): Promise<LocationPayload> {
       continue;
     }
     const values = parseCsvLine(line);
-    const row = headers.reduce<Record<string, string>>((record, header, index) => {
-      record[header] = values[index] ?? "";
-      return record;
-    }, {});
-    const occurredOn = row["OCCURRED ON"] ?? "";
+    const row = buildCsvRow(headers, values);
+    const occurredOn = row["OCCURRED ON"] ?? row.occurredon ?? "";
     const year = parseYearFromDateText(occurredOn) ?? Number.NaN;
-    const grid = String(row.GRID ?? "").trim();
-    const category = resolveMappedCategory(categoriesBySlug, mapPhoenixCrimeType(String(row["UCR CRIME CATEGORY"] ?? "")));
+    const grid = String(row.GRID ?? row.grid ?? "").trim();
+    const category = resolveMappedCategory(categoriesBySlug, mapPhoenixCrimeType(String(row["UCR CRIME CATEGORY"] ?? row.ucrcrimecategory ?? "")));
     if (!grid || !years.includes(year)) {
       continue;
     }
@@ -5162,6 +5307,7 @@ async function buildHoustonLocation(): Promise<LocationPayload> {
   const years = Array.from({ length: 7 }, (_, index) => 2019 + index);
   const countsByKey = new Map<string, number>();
   const districtsByLabel = new Map<string, FilterOption>();
+  const publicBeatPattern = /^\d{1,2}[A-Z]\d{2}$/;
 
   for (const year of years) {
     const csvPath = path.join(HOUSTON_DIR, `${year}.csv`);
@@ -5181,14 +5327,11 @@ async function buildHoustonLocation(): Promise<LocationPayload> {
         continue;
       }
       const values = parseCsvLine(line);
-      const row = headers.reduce<Record<string, string>>((record, header, index) => {
-        record[header] = values[index] ?? "";
-        return record;
-      }, {});
-      const beat = String(row.Beat ?? "").trim();
-      const category = resolveMappedCategory(categoriesBySlug, mapHoustonCrimeType(String(row.NIBRSDescription ?? "")));
-      const count = parseCountLike(row.OffenseCount);
-      if (!beat) {
+      const row = buildCsvRow(headers, values);
+      const beat = String(row.Beat ?? row.beat ?? "").trim().replace(/^Beat\s+/i, "");
+      const category = resolveMappedCategory(categoriesBySlug, mapHoustonCrimeType(String(row.NIBRSDescription ?? row.nibrsdescription ?? "")));
+      const count = parseCountLike(row.OffenseCount ?? row.offensecount);
+      if (!beat || !publicBeatPattern.test(beat)) {
         continue;
       }
 
@@ -5290,6 +5433,7 @@ async function buildClevelandLocation(): Promise<LocationPayload> {
   const years = Array.from({ length: 10 }, (_, index) => 2016 + index);
   const countsByKey = new Map<string, number>();
   const districtsByLabel = new Map<string, FilterOption>();
+  const publicDistrictLabels = new Set(["District 1", "District 2", "District 3", "District 4", "District 5"]);
 
   for (const year of years) {
     const rows = await fetchArcGisRows<ClevelandCrimeRow>(SOURCE_URLS.clevelandCrimeApi, {
@@ -5301,7 +5445,7 @@ async function buildClevelandLocation(): Promise<LocationPayload> {
 
     for (const row of rows) {
       const districtLabel = String(row.District ?? "").trim();
-      if (!districtLabel) {
+      if (!publicDistrictLabels.has(districtLabel)) {
         continue;
       }
 
@@ -5369,6 +5513,9 @@ async function buildLouisvilleLocation(): Promise<LocationPayload> {
       }
 
       const districtLabel = formatLouisvilleDivisionLabel(rawDivision);
+      if (!/^[1-8](st|nd|rd|th) Division$/i.test(districtLabel)) {
+        continue;
+      }
       const districtSlug = slugify(districtLabel);
       const mappedCategory = mapLouisvilleCrimeType(String((isRecentSchema ? row.offense_classification : row.CRIME_TYPE) ?? ""));
       const category = resolveMappedCategory(categoriesBySlug, mappedCategory);
@@ -5441,6 +5588,9 @@ async function buildSeattleLocation(): Promise<LocationPayload> {
     const category = resolveMappedCategory(categoriesBySlug, mapSeattleCrimeType(String(row.nibrs_offense_code_description ?? "")));
     const count = parseCountLike(row.count);
     if (!precinctLabel || !years.includes(year)) {
+      continue;
+    }
+    if (!["East", "North", "South", "Southwest", "West"].includes(precinctLabel)) {
       continue;
     }
 
@@ -5647,22 +5797,16 @@ async function syncDatabase(payload: PreparedPayload) {
 }
 
 async function main() {
-  const spainAnnualSources: SpainAnnualSource[] = [
+  const spainLegacyAnnualSources: SpainAnnualSource[] = [
     { year: 2014, type: "xls", url: SOURCE_URLS.spanishBalance2014Workbook },
-    { year: 2020, type: "zip-pdf", url: SOURCE_URLS.spanishArchive2020, zipEntryContains: "cuarto trimestre" },
-    { year: 2021, type: "pdf", url: SOURCE_URLS.spanishBalance2021 },
-    { year: 2022, type: "pdf", url: SOURCE_URLS.spanishBalance2022 },
-    { year: 2023, type: "pdf", url: SOURCE_URLS.spanishBalance2023 },
-    { year: 2024, type: "pdf", url: SOURCE_URLS.spanishBalance2024 },
-    { year: 2025, type: "pdf", url: SOURCE_URLS.spanishBalance2025 },
   ];
 
   const [barcelonaPopulationByYear, valenciaPopulationByYear] = await Promise.all([
     parseBarcelonaPopulationByYear(Array.from({ length: 13 }, (_, index) => 2013 + index)),
     parseValenciaPopulationByYear(),
   ]);
-  const barcelona = await buildSpainLocation(BARCELONA_LOCATION, "Barcelona", spainAnnualSources, barcelonaPopulationByYear);
-  const valencia = await buildSpainLocation(VALENCIA_LOCATION, "Valencia", spainAnnualSources, valenciaPopulationByYear);
+  const barcelona = await buildSpainLocation(BARCELONA_LOCATION, "Barcelona", spainLegacyAnnualSources, barcelonaPopulationByYear);
+  const valencia = await buildSpainLocation(VALENCIA_LOCATION, "Valencia", spainLegacyAnnualSources, valenciaPopulationByYear);
 
   const [austin, berlin, birmingham, chicago, cleveland, dallas, franceCountry, frankfurt, germanyCountry, hamburg, houston, italyCountry, london, losAngeles, louisville, luton, manchester, melbourne, milan, minneapolis, munich, newYorkCity, paris, phoenix, rome, sanFrancisco, saoPaulo, seattle, spainCountry, sydney, tokyo] =
     await Promise.all([

@@ -149,9 +149,9 @@ export function OverviewPageClient({ initialScope, locations }: OverviewPageClie
       : "Try switching the country filter or return to all cities.";
 
   return (
-    <main className="min-h-screen px-4 pb-5 pt-3 sm:px-6 sm:py-8 lg:px-8">
+    <main className="min-h-screen px-4 pb-5 pt-2 sm:px-6 sm:py-8 lg:px-8">
       <div className="mx-auto max-w-[83rem]">
-        <div className="mb-5 flex flex-col gap-3 md:mb-6 md:grid md:grid-cols-[minmax(0,1fr)_auto] md:gap-x-8 md:gap-y-2">
+        <div className="mb-3 flex flex-col gap-2 md:mb-8 md:grid md:grid-cols-[minmax(0,1fr)_auto] md:gap-x-8 md:gap-y-3">
           <div className="space-y-2 md:space-y-3">
             <h1 className="masthead-title text-5xl leading-[0.94] tracking-[0.01em] text-stone-50 sm:text-6xl md:text-[4.35rem]">
               Crime Atlas
@@ -206,12 +206,12 @@ export function OverviewPageClient({ initialScope, locations }: OverviewPageClie
             <OverviewScopeToggle onChange={handleScopeChange} value={selectedScope} />
           </div>
 
-          <p className="pl-1 text-sm leading-5 text-slate-300/85 sm:text-base sm:leading-6 md:col-span-2 md:pt-0.5 lg:whitespace-nowrap">
+          <p className="pl-1 text-sm leading-5 text-slate-300/85 sm:text-base sm:leading-6 md:col-span-2 lg:whitespace-nowrap">
             Official dashboards built from police-recorded crime data published by public authorities for each location.
           </p>
         </div>
 
-        <div className="sticky top-0 z-30 -mx-4 mb-4 bg-[#2d333c]/95 px-4 py-3 shadow-[0_18px_34px_rgba(3,7,14,0.18)] backdrop-blur-md sm:-mx-6 sm:px-6 md:hidden" data-overview-mobile-header>
+        <div className="sticky top-0 z-30 -mx-4 mb-3 bg-[#2d333c]/95 px-4 py-2.5 shadow-[0_18px_34px_rgba(3,7,14,0.18)] backdrop-blur-md sm:-mx-6 sm:px-6 md:hidden" data-overview-mobile-header>
           {compareMode ? (
             <div className="flex h-10 items-stretch justify-end gap-2">
               <div className="flex items-stretch gap-2">

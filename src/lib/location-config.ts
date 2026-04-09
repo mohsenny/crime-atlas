@@ -1309,7 +1309,7 @@ export const SPAIN_COUNTRY_LOCATION: LocationDefinition = {
   ],
   categories: [
     {
-      sourceLabels: ["III. TOTAL CRIMINALIDAD", "TOTAL INFRACCIONES PENALES"],
+      sourceLabels: ["III. TOTAL CRIMINALIDAD", "III. TOTAL INFRACCIONES PENALES", "TOTAL INFRACCIONES PENALES"],
       label: "All recorded offenses",
       shortLabel: "All offenses",
       color: "#7dd3fc",
@@ -1696,7 +1696,7 @@ export const BARCELONA_LOCATION: LocationDefinition = {
   ],
   categories: [
     {
-      sourceLabels: ["III. TOTAL CRIMINALIDAD", "TOTAL INFRACCIONES PENALES", "1.-DELITOS Y FALTAS (EU)"],
+      sourceLabels: ["III. TOTAL CRIMINALIDAD", "III. TOTAL INFRACCIONES PENALES", "TOTAL INFRACCIONES PENALES", "1.-DELITOS Y FALTAS (EU)"],
       label: "All recorded offenses",
       shortLabel: "All offenses",
       color: "#7dd3fc",
@@ -2952,7 +2952,7 @@ export const AUSTIN_LOCATION: LocationDefinition = {
   areaLabelPlural: "Districts",
   chartTitle: "Austin Crime by District",
   note:
-    "Austin uses the official city crime-reports feed published by the Austin Police Department. The source records the highest-level offense per incident and is aggregated here by district and calendar year.",
+    "Austin uses the official city crime-reports feed published by the Austin Police Department. The source records the highest-level offense per incident and is aggregated here by district and calendar year. The raw feed also contains sparse non-public or stray district codes, so the public dashboard keeps the stable Districts 1 through 8 only.",
   sources: [
     {
       label: "City of Austin Open Data: Crime Reports",
@@ -3071,7 +3071,7 @@ export const HOUSTON_LOCATION: LocationDefinition = {
   areaLabelPlural: "Beats",
   chartTitle: "Houston Crime by Beat",
   note:
-    "Houston uses the official HPD public NIBRS datasets published as annual CSVs. The dashboard aggregates beat-level incident rows to calendar years using the published NIBRS description field.",
+    "Houston uses the official HPD public NIBRS datasets published as annual CSVs. The dashboard aggregates beat-level incident rows to calendar years using the published NIBRS description field. The raw files also contain external or internal buckets such as HCSO, UH police, OOJ, and NULL rows, so the public dashboard keeps only standard HPD beat codes.",
   sources: [
     {
       label: "Houston Police Department: Monthly Crime Data by Street / Neighborhood (Police Beat)",
@@ -3389,11 +3389,15 @@ export const CLEVELAND_LOCATION: LocationDefinition = {
   areaLabelPlural: "Districts",
   chartTitle: "Cleveland Crime by District",
   note:
-    "Cleveland uses the official city ArcGIS crime-incidents service. The dashboard aggregates district-level incident records to calendar years using the published UCR description field. The source contains only sparse legacy records before 2016, so the published annual series begins in 2016 when consistent citywide coverage appears.",
+    "Cleveland uses the official city ArcGIS crime-incidents service. The dashboard aggregates annual incident records for the city's five public police districts using the published UCR description field. The ArcGIS feed also contains a separate District O bucket whose meaning changes sharply after 2018, so it is excluded from the public district view. The source contains only sparse legacy records before 2016, so the published annual series begins in 2016 when consistent citywide coverage appears.",
   sources: [
     {
       label: "City of Cleveland Open Data: Crime Incidents",
       url: "https://opendata.clevelandohio.gov/datasets/clevelandohio::crime-incidents/about",
+    },
+    {
+      label: "City of Cleveland 2023 ACFR: police coverage across all five districts",
+      url: "https://www.clevelandohio.gov/sites/clevelandohio/files/finance-docs/2023ACFR.pdf",
     },
   ],
   categories: [
@@ -3430,7 +3434,7 @@ export const LOUISVILLE_LOCATION: LocationDefinition = {
   areaLabelPlural: "Divisions",
   chartTitle: "Louisville Crime by Division",
   note:
-    "Louisville uses the official Metro Government crime-data layers published through ArcGIS. The dashboard aggregates annual division-level incident records using the city’s published CRIME_TYPE field.",
+    "Louisville uses the official Metro Government crime-data layers published through ArcGIS. The dashboard aggregates annual incident records for the eight numbered LMPD divisions using the city’s published CRIME_TYPE field and excludes tiny non-division municipal/OOJ buckets from the public selector.",
   sources: [
     {
       label: "Louisville Metro Government Open Data: Crime Data",
@@ -3470,7 +3474,7 @@ export const SEATTLE_LOCATION: LocationDefinition = {
   areaLabelPlural: "Precincts",
   chartTitle: "Seattle Crime by Precinct",
   note:
-    "Seattle uses the official SPD Crime Data open-data feed, which standardizes incidents to NIBRS-style classifications across the 2008-present window. The dashboard aggregates finalized precinct-level records by year.",
+    "Seattle uses the official SPD Crime Data open-data feed, which standardizes incidents to NIBRS-style classifications across the 2008-present window. The dashboard aggregates finalized records by year across SPD's five public precincts and excludes non-precinct OOJ-style buckets from the public selector.",
   sources: [
     {
       label: "Seattle Open Data: SPD Crime Data 2008-Present",

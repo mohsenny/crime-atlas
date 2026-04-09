@@ -68,7 +68,7 @@ const flagByLocationSlug: Record<string, { src: string; alt: string }> = {
     alt: "Flag of Italy",
   },
   melbourne: {
-    src: "/flags/australia.svg",
+    src: "/flags/australia.png",
     alt: "Flag of Australia",
   },
   minneapolis: {
@@ -108,7 +108,7 @@ const flagByLocationSlug: Record<string, { src: string; alt: string }> = {
     alt: "Flag of the United States",
   },
   sydney: {
-    src: "/flags/australia.svg",
+    src: "/flags/australia.png",
     alt: "Flag of Australia",
   },
   tokyo: {
@@ -123,7 +123,7 @@ const flagByLocationSlug: Record<string, { src: string; alt: string }> = {
 
 const flagByCountry: Record<string, { src: string; alt: string }> = {
   Australia: {
-    src: "/flags/australia.svg",
+    src: "/flags/australia.png",
     alt: "Flag of Australia",
   },
   Brazil: {
