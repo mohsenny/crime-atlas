@@ -43,8 +43,10 @@ function pointsEqual(left: Point[], right: Point[]) {
 const DESKTOP_CHART_HEIGHT = 520;
 const MOBILE_CHART_HEIGHT = 420;
 const DESKTOP_AXIS_WIDTH = 88;
-const MOBILE_AXIS_WIDTH = 64;
+const MOBILE_AXIS_WIDTH = 56;
 const X_AXIS_HEIGHT = 30;
+const DESKTOP_X_AXIS_EDGE_PADDING = 18;
+const MOBILE_X_AXIS_EDGE_PADDING = 14;
 
 export function CrimeChart({
   data,
@@ -81,6 +83,8 @@ export function CrimeChart({
   const chartWidth = Math.max(minChartWidth, viewportWidth);
   const chartTopMargin = 10;
   const chartBottomMargin = 8;
+  const xAxisEdgePadding = isMobileViewport ? MOBILE_X_AXIS_EDGE_PADDING : DESKTOP_X_AXIS_EDGE_PADDING;
+  const plotRightMargin = isMobileViewport ? xAxisEdgePadding : 12;
   const chartPlotHeight = chartHeight - chartTopMargin - chartBottomMargin - X_AXIS_HEIGHT;
   const tooltipTrigger = hasCoarsePointer ? "click" : "hover";
 
@@ -457,7 +461,7 @@ export function CrimeChart({
                   barGap={2}
                   data={data.chartRows}
                   height={chartHeight}
-                  margin={{ top: chartTopMargin, right: isMobileViewport ? 0 : 12, left: 0, bottom: 8 }}
+                  margin={{ top: chartTopMargin, right: plotRightMargin, left: 0, bottom: 8 }}
                   width={chartWidth}
                 >
                   <CartesianGrid horizontal={false} stroke="var(--chart-grid-dark)" strokeDasharray="3 3" />
@@ -466,6 +470,7 @@ export function CrimeChart({
                     dataKey="year"
                     height={X_AXIS_HEIGHT}
                     interval={0}
+                    padding={{ left: xAxisEdgePadding, right: xAxisEdgePadding }}
                     tick={{ fontSize: isMobileViewport ? 11 : 12, fill: "var(--chart-axis-dark)" }}
                     tickLine={false}
                     tickMargin={12}

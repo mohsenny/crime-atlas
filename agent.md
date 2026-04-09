@@ -332,9 +332,16 @@ As of April 2026, the current generated data still has several source-cleaning i
     - `Barcelona 2018–2025`
     - `Valencia 2018–2025`
   - direct April 2026 spot-checks confirmed that sampled Barcelona and Valencia all-offenses totals in `2020`, `2023`, and `2025` match the official municipality CSVs exactly
+  - deeper spot-checks also confirmed sampled municipality category rows in `2020`, `2023`, and `2025` for:
+    - robbery
+    - burglary
+    - vehicle theft
+    - drug trafficking
+    - total offenses
   - keep the `2014` municipal workbook only for the older `2013–2014` Barcelona/Valencia slice
   - do not regress Spain back to PDF text extraction for these shipped years
   - for Spain country-level community totals, remember that the official `TOTAL NACIONAL` row includes an `EN EL EXTRANJERO` bucket; the dashboard's Spain area layer intentionally excludes that non-community bucket
+  - deeper spot-checks also confirmed sampled Spain community category rows in `2020`, `2023`, and `2025` for `Cataluña` and `Comunitat Valenciana`, including robbery, burglary, theft, vehicle theft, drug trafficking, and total offenses
 
 ### Los Angeles
 
@@ -373,7 +380,10 @@ As of April 2026, the current generated data still has several source-cleaning i
   - annual estimates table `6579` for `2011–2021`, `2024–2025`
   - 2010 Census table `761`
   - 2022 Census table `4714`
-- Important caveat: there is currently no clean official `2023` municipal population row wired in this repo, so `2023` rate views remain blank rather than interpolated
+  - 2023 IBGE DOU municipal publication XLS
+- Important caveat:
+  - the `2023` São Paulo row is an explicit official 2023 publication, but it is census-2022 based rather than a normal estimate-series row
+  - keep that methodology seam documented instead of pretending every São Paulo population year comes from the same IBGE series
 
 ### U.S. cities
 
@@ -407,7 +417,18 @@ As of April 2026, the current generated data still has several source-cleaning i
   - Austin: resolved in the app by trimming to stable public Districts `1–8`
   - Houston: resolved in the app by trimming to standard HPD beat codes only
   - Louisville: resolved in the app by trimming to the eight numbered LMPD divisions only
+  - Minneapolis: resolved in the app by removing `Z_** Not Assigned **` and normalizing the duplicated `Stevens Square - Loring Heights` label
   - Seattle: resolved in the app by trimming to the five public SPD precincts only
+
+### Overlapping Parent/Child Source Labels
+
+- Some sources intentionally reuse the same raw offense labels for both a parent bucket and a child bucket.
+- Example:
+  - Sydney `Drug offenses` should include the trafficking subcategories.
+  - Sydney `Burglary` should include the `Break and enter dwelling` slice while `Residential burglary` still exists separately.
+  - Melbourne has the same pattern for `Drug offenses` and `Drug trafficking`.
+- The ingestion layer must write those overlapping source labels into all intended categories, not just the last matching category.
+- The dashboard UI exclusivity rules then prevent deceptive stacking by making parent buckets mutually exclusive with their child buckets.
 - Rule for future agents:
   - do not assume every district/beat/division label in an official incident feed is a public-facing geography
   - if a feed contains unlabeled, null-like, county-like, or agency-like buckets, source-check them before shipping them in the area selector
@@ -443,9 +464,14 @@ As of April 2026, the current generated data still has several source-cleaning i
 
 ### London
 
-- One minor anomaly still remains in the airport special area:
-  - `London Heathrow and London City Airports__Theft from vehicles 2023:456 -> 2024:83`
-- This looks like a special-geography artifact rather than a citywide logic failure.
+- The airport special area is not a parser failure.
+- Direct source checks against the official London monthly CSVs show:
+  - `London Heathrow and London City Airports__Theft from vehicles 2023:456`
+  - `London Heathrow and London City Airports__Theft from vehicles 2024:83`
+- Those dashboard totals come from real raw London categories:
+  - `THEFT FROM A VEHICLE`
+  - `INTERFERING WITH A MOTOR VEHICLE`
+- Treat it as a special-geography caveat, not a citywide integrity problem.
 
 ### Valencia
 
@@ -578,8 +604,16 @@ If a source host is flaky or anti-bot:
 ### Munich
 
 - official source family verified
-- not fully shipped yet as a reproducible end-to-end location
-- caveat: host and document structure issues across years
+- coverage in app: `2001–2021`
+- area breakdown in app: no
+- official crime PDFs for `2003–2009` and `2018–2021` parse cleanly through the same Munich archive source family
+- important parser note:
+  - archived `2001–2002` PDFs expose previous/current count columns, while archived `2003–2009` PDFs expose current count plus rate only
+  - the archived parser must choose the count column based on row shape, not one fixed numeric index
+  - Munich `2010+` PDFs contain both a citywide summary block and later comparative table rows
+  - the parser must prefer the first citywide summary matches for category counts
+  - otherwise categories such as theft, bike theft, fraud, and robbery will be overstated by accidentally reading the later comparative rows
+- official population series for `2003–2021` comes from the Munich statistical office publication `Bevölkerung 1970 - 2022 nach Geschlecht und Staatsangehörigkeit`
 
 ### Paris
 

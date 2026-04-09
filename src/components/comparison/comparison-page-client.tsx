@@ -88,7 +88,7 @@ export function ComparisonPageClient({ data, initialCategorySlug, initialMetric,
   );
 
   return (
-    <main className="min-h-screen py-5 sm:px-6 sm:py-6 lg:px-8">
+    <main className="relative min-h-screen overflow-hidden py-5 sm:px-6 sm:py-6 lg:px-8">
       <div className="mx-auto max-w-7xl space-y-4">
         <div className="px-4 sm:px-0">
           <div className="flex items-center gap-2 sm:justify-between">

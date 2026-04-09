@@ -423,6 +423,8 @@ const SOURCE_URLS = {
     "https://apisidra.ibge.gov.br/values/t/761/n6/3550308/v/93/p/2010?formato=json",
   saoPauloPopulation2022:
     "https://apisidra.ibge.gov.br/values/t/4714/n6/3550308/v/93/p/2022?formato=json",
+  saoPauloPopulation2023:
+    "https://ftp.ibge.gov.br/Informacoes_Gerais_e_Referencia/Relacao_da_Populacao_dos_Municipios_para_publicacao_no_DOU_em_2023/POP_DOU_2023_Municipios_POP2022_Malha2023.xls",
   australiaLgaPopulation:
     "https://www.abs.gov.au/statistics/people/population/regional-population/2024-25/32180DS0004_2001-25.xlsx",
   sydneyCrimeWorkbook: "https://bocsarblob.blob.core.windows.net/bocsar-open-data/RCI_offencebymonth.xlsm",
@@ -672,22 +674,24 @@ const SPAIN_MUNICIPALITY_ALIASES: Record<string, string[]> = {
 };
 
 function buildCategoryLookup(definition: LocationDefinition) {
-  const lookup = new Map(
-    definition.categories.flatMap((category) => {
-      const slug = slugify(category.label);
-      return category.sourceLabels.map((sourceLabel) => [
-        normalizeSourceLabel(sourceLabel),
-        {
-          label: category.label,
-          shortLabel: category.shortLabel,
-          color: category.color,
-          isDefault: category.isDefault,
-          sortOrder: category.sortOrder,
-          slug,
-        },
-      ]);
-    }),
-  );
+  const entries = definition.categories.flatMap((category) => {
+    const mappedCategory = {
+      label: category.label,
+      shortLabel: category.shortLabel,
+      color: category.color,
+      isDefault: category.isDefault,
+      sortOrder: category.sortOrder,
+      slug: slugify(category.label),
+    };
+    return category.sourceLabels.map((sourceLabel) => [normalizeSourceLabel(sourceLabel), mappedCategory] as const);
+  });
+
+  const lookup = new Map(entries);
+  const lookupAll = new Map<string, Array<(typeof entries)[number][1]>>();
+
+  for (const [sourceLabel, mappedCategory] of entries) {
+    lookupAll.set(sourceLabel, [...(lookupAll.get(sourceLabel) ?? []), mappedCategory]);
+  }
 
   const options = definition.categories
     .map((category) => ({
@@ -701,7 +705,7 @@ function buildCategoryLookup(definition: LocationDefinition) {
     .sort((left, right) => left.sortOrder - right.sortOrder)
     .map(({ sortOrder: _sortOrder, ...category }) => category);
 
-  return { lookup, options };
+  return { lookup, lookupAll, options };
 }
 
 function mapSourceCategory(definition: LocationDefinition, sourceLabel: string) {
@@ -2324,6 +2328,17 @@ async function parseSaoPauloPopulationByYear() {
     }
   }
 
+  const publication2023Path = path.join(SAO_PAULO_DIR, "population_dou_2023.xls");
+  await ensureFile(publication2023Path, SOURCE_URLS.saoPauloPopulation2023);
+  const workbook = XLSX.readFile(publication2023Path);
+  const sheet = workbook.Sheets[workbook.SheetNames[0]];
+  const rows = XLSX.utils.sheet_to_json<Array<string | number | null>>(sheet, { header: 1, defval: null });
+  const publicationRow = rows.find((row) => String(row?.[0] ?? "").trim() === "SP" && String(row?.[2] ?? "").trim() === "50308");
+  const publicationPopulation = parseCountLike(publicationRow?.[4]);
+  if (publicationPopulation > 0) {
+    populationByYear.set(2023, publicationPopulation);
+  }
+
   return mapToObject(populationByYear);
 }
 
@@ -2522,7 +2537,7 @@ async function buildSydneyLocation(): Promise<LocationPayload> {
 
   const districtLabels = [...SYDNEY_METRO_LGAS];
   const years = Array.from({ length: 25 }, (_, index) => 2001 + index);
-  const { lookup: categoryLookup, options: categories } = buildCategoryLookup(SYDNEY_LOCATION);
+  const { lookupAll: categoryLookupAll, options: categories } = buildCategoryLookup(SYDNEY_LOCATION);
   const totalCategory = categories.find((category) => category.value === "all-recorded-offenses") ?? null;
   const populationByDistrict = await parseAustraliaLgaPopulationByYear({
     districtLabels,
@@ -2562,7 +2577,6 @@ async function buildSydneyLocation(): Promise<LocationPayload> {
 
     seenDistricts.add(districtLabel);
     const sourceCategoryLabel = String(row[subcategoryColumnIndex] ?? "").trim() || String(row[categoryColumnIndex] ?? "").trim();
-    const mappedCategory = categoryLookup.get(normalizeSourceLabel(sourceCategoryLabel));
 
     for (const { index, year } of monthColumns) {
       const count = Number(row[index] ?? 0);
@@ -2574,7 +2588,8 @@ async function buildSydneyLocation(): Promise<LocationPayload> {
         incrementCount(countsByKey, `${districtLabel}__${totalCategory.value}__${year}`, count);
       }
 
-      if (mappedCategory) {
+      const mappedCategories = categoryLookupAll.get(normalizeSourceLabel(sourceCategoryLabel)) ?? [];
+      for (const mappedCategory of mappedCategories) {
         incrementCount(countsByKey, `${districtLabel}__${mappedCategory.slug}__${year}`, count);
       }
     }
@@ -2599,7 +2614,7 @@ async function buildMelbourneLocation(): Promise<LocationPayload> {
 
   const districtLabels = [...MELBOURNE_METRO_LGAS];
   const years: Array<keyof typeof VICTORIA_LGA_RECORDED_OFFENCES_URL_BY_YEAR> = [2020, 2021, 2022, 2023, 2024, 2025];
-  const { lookup: categoryLookup, options: categories } = buildCategoryLookup(MELBOURNE_LOCATION);
+  const { lookupAll: categoryLookupAll, options: categories } = buildCategoryLookup(MELBOURNE_LOCATION);
   const totalCategory = categories.find((category) => category.value === "all-recorded-offenses") ?? null;
   const populationByDistrict = await parseAustraliaLgaPopulationByYear({
     districtLabels,
@@ -2642,7 +2657,6 @@ async function buildMelbourneLocation(): Promise<LocationPayload> {
 
       seenDistricts.add(districtLabel);
       const sourceCategoryLabel = String(row[subgroupColumnIndex] ?? "").trim();
-      const mappedCategory = categoryLookup.get(normalizeSourceLabel(sourceCategoryLabel));
       const count = Number(row[countColumnIndex] ?? 0);
       if (!count) {
         continue;
@@ -2652,7 +2666,8 @@ async function buildMelbourneLocation(): Promise<LocationPayload> {
         incrementCount(countsByKey, `${districtLabel}__${totalCategory.value}__${year}`, count);
       }
 
-      if (mappedCategory) {
+      const mappedCategories = categoryLookupAll.get(normalizeSourceLabel(sourceCategoryLabel)) ?? [];
+      for (const mappedCategory of mappedCategories) {
         incrementCount(countsByKey, `${districtLabel}__${mappedCategory.slug}__${year}`, count);
       }
     }
@@ -2970,6 +2985,13 @@ function extractLeadingYearPairAfterLabel(flattenedText: string, patterns: RegEx
 const MUNICH_OFFICIAL_POPULATION_BY_YEAR: Record<number, number> = {
   2001: 1_260_597,
   2002: 1_264_309,
+  2003: 1_267_813,
+  2004: 1_273_186,
+  2005: 1_288_307,
+  2006: 1_326_206,
+  2007: 1_351_445,
+  2008: 1_367_314,
+  2009: 1_364_194,
   2010: 1_382_273,
   2011: 1_410_741,
   2012: 1_439_474,
@@ -2978,6 +3000,10 @@ const MUNICH_OFFICIAL_POPULATION_BY_YEAR: Record<number, number> = {
   2015: 1_521_678,
   2016: 1_542_860,
   2017: 1_526_056,
+  2018: 1_542_211,
+  2019: 1_560_042,
+  2020: 1_562_096,
+  2021: 1_562_128,
 };
 
 function toPdfLines(text: string) {
@@ -2991,6 +3017,7 @@ function toPdfLines(text: string) {
 
 function extractMunichNumericColumns(value: string) {
   return value
+    .replace(/\b\d+\)\s*/g, " ")
     .split(/\t+|\s{2,}/)
     .flatMap((segment) => {
       const trimmed = segment.trim();
@@ -3085,62 +3112,120 @@ function extractMunichLineCount(
   throw new Error(`Could not parse ${context}`);
 }
 
+function tryExtractMunichArchivedCurrentCount(
+  lines: string[],
+  patterns: RegExp[],
+  preferMostColumns = false,
+) {
+  let bestMatch: { count: number; width: number } | null = null;
+
+  for (const [lineIndex, line] of lines.entries()) {
+    const candidates = [line];
+    const nextIndex = lineIndex + 1;
+
+    if (nextIndex < lines.length) {
+      candidates.push(`${line} ${lines[nextIndex]}`);
+    }
+
+    for (const pattern of patterns) {
+      for (const candidate of candidates) {
+        if (!pattern.test(candidate)) {
+          continue;
+        }
+
+        const match = candidate.match(pattern);
+
+        if (!match) {
+          continue;
+        }
+
+        const suffix = candidate.slice((match.index ?? 0) + match[0].length);
+        const tokens = extractMunichNumericColumns(suffix);
+
+        const count = tokens.length >= 4 ? tokens[1] : tokens[0];
+
+        if (count === undefined) {
+          continue;
+        }
+
+        if (!preferMostColumns) {
+          return count;
+        }
+
+        if (!bestMatch || tokens.length > bestMatch.width) {
+          bestMatch = { count, width: tokens.length };
+        }
+      }
+    }
+  }
+
+  return bestMatch?.count ?? null;
+}
+
+function extractMunichArchivedCurrentCount(
+  lines: string[],
+  patterns: RegExp[],
+  context: string,
+  preferMostColumns = false,
+) {
+  const count = tryExtractMunichArchivedCurrentCount(lines, patterns, preferMostColumns);
+
+  if (count !== null) {
+    return count;
+  }
+
+  throw new Error(`Could not parse ${context}`);
+}
+
 function parseMunichArchivedCounts(text: string) {
   const lines = toPdfLines(text);
-  const rapeCount = extractMunichLineCount(
+  const rapeCount = extractMunichArchivedCurrentCount(
     lines,
     [/^(?:[\d*\s-]+\s+)?(?:darunter\s+)?Vergewaltigung/i],
     "Munich archived rape",
-    1,
   );
-  const sexualTotal = tryExtractMunichLineCount(
+  const sexualTotal = tryExtractMunichArchivedCurrentCount(
     lines,
     [/^(?:[\d*\s-]+\s+)?Straftaten gegen die sexuelle Selbstbestimmung/i],
-    1,
   )
     ?? (rapeCount
-      + (tryExtractMunichLineCount(
+      + (tryExtractMunichArchivedCurrentCount(
         lines,
         [/^(?:[\d*\s-]+\s+)?Fˆrderung sexueller Handlungen/i],
-        1,
       ) ?? 0)
-      + (tryExtractMunichLineCount(
+      + (tryExtractMunichArchivedCurrentCount(
         lines,
         [/^(?:[\d*\s-]+\s+)?Sonstige Straftaten gegen die sexuelle Selbstbestimmung/i],
-        1,
       ) ?? 0));
-  const vehicleTheft = extractMunichLineCount(
+  const vehicleTheft = extractMunichArchivedCurrentCount(
     lines,
     [
+      /^(?:[\d*\s-]+\s+)?(?:darunter\s+)?Diebstahl\s+\(einschl\s+unbefugt\.\s+Gebrauch\)\s+von\s+Kraftwagen/i,
       /^(?:[\d*\s-]+\s+)?(?:darunter\s+)?Diebstahl von Kraft(?:wagen|fahrzeugen?)/i,
       /^(?:[\d*\s-]+\s+)?Kraftfahrzeugdiebstahl/i,
     ],
     "Munich archived vehicle theft",
-    1,
   );
-  const bicycleTheft = extractMunichLineCount(
+  const bicycleTheft = extractMunichArchivedCurrentCount(
     lines,
     [
       /^(?:[\d*\s-]+\s+)?(?:darunter\s+)?Diebstahl von Fahrr/i,
       /^(?:[\d*\s-]+\s+)?Fahrr/i,
     ],
     "Munich archived bicycle theft",
-    1,
   );
-  const theftTotal = tryExtractMunichLineCount(
+  const theftTotal = tryExtractMunichArchivedCurrentCount(
     lines,
     [/^(?:[\d*\s-]+\s+)?Diebstahl insgesamt/i],
-    1,
   )
     ?? (vehicleTheft
       + bicycleTheft
-      + extractMunichLineCount(
+      + extractMunichArchivedCurrentCount(
         lines,
         [/^(?:[\d*\s-]+\s+)?Sonstige Diebst/i],
         "Munich archived other theft",
-        1,
       ));
-  const drugOffenses = extractMunichLineCount(
+  const drugOffenses = extractMunichArchivedCurrentCount(
     lines,
     [
       /^(?:[\d*\s-]+\s+)?Rauschgiftdelikte/i,
@@ -3148,21 +3233,27 @@ function parseMunichArchivedCounts(text: string) {
       /^(?:[\d*\s-]+\s+)?einschl/i,
     ],
     "Munich archived drug offenses",
-    1,
   );
-  const combinedFraudAndEmbezzlement = tryExtractMunichLineCount(
+  const combinedFraudAndEmbezzlement = tryExtractMunichArchivedCurrentCount(
     lines,
     [/^(?:[\d*\s-]+\s+)?Betrug und Veruntreuung/i],
-    1,
   );
   const fraudAndEmbezzlement = combinedFraudAndEmbezzlement
-    ?? (extractMunichLineCount(lines, [/^(?:[\d*\s-]+\s+)?Betrug/i], "Munich archived fraud", 1)
-      + extractMunichLineCount(lines, [/^(?:[\d*\s-]+\s+)?Veruntreuung/i], "Munich archived embezzlement", 1));
+    ?? (extractMunichArchivedCurrentCount(
+      lines,
+      [/^(?:[\d*\s-]+\s+)?(?:darunter\s+)?Betrug/i],
+      "Munich archived fraud",
+    )
+      + extractMunichArchivedCurrentCount(lines, [/^(?:[\d*\s-]+\s+)?Veruntreuung/i], "Munich archived embezzlement"));
 
   return new Map<string, number>([
     [
       "Straftaten insgesamt",
-      extractMunichLineCount(lines, [/^(?:[\d*\s-]+\s+)?Straftaten insgesamt/i], "Munich archived total offenses", 1),
+      extractMunichArchivedCurrentCount(
+        lines,
+        [/^(?:[\d*\s-]+\s+)?Straftaten insgesamt/i],
+        "Munich archived total offenses",
+      ),
     ],
     [
       "Straftaten gegen die sexuelle Selbstbestimmung",
@@ -3171,14 +3262,13 @@ function parseMunichArchivedCounts(text: string) {
     ["Vergewaltigung", rapeCount],
     [
       "Raub, räuberische Erpressung und räuberischer Angriff auf Kraftfahrer*innen",
-      extractMunichLineCount(
+      extractMunichArchivedCurrentCount(
         lines,
         [
           /^(?:[\d*\s-]+\s+)?(?:darunter\s+|und zwar\s+)?Raub,\s*r/i,
           /^(?:[\d*\s-]+\s+)?(?:r‰uber\.\s+)?Angriff auf Kfz/i,
         ],
         "Munich archived robbery",
-        1,
       ),
     ],
     ["Diebstahl insgesamt", theftTotal],
@@ -3193,48 +3283,42 @@ function parseMunichCounts(text: string) {
   const lines = toPdfLines(text);
   const rapeCount = extractMunichLineCount(
     lines,
-    [/^(?:[\d*\s-]+\s+)?(?:darunter\s+)?Vergewaltigung/i],
+    [/^(?:[\d*\s-]+\s+)?(?:darunter\s+)?Vergewaltigung(?:\s+und\s+sexuelle\s+Nötigung\/Übergriffe)?(?:\s+im\s+bes(?:onders|\.)\s+schweren\s+Fall)?/i],
     "Munich rape",
     0,
-    true,
   );
   const sexualTotal = extractMunichLineCount(
     lines,
     [/^(?:[\d*\s-]+\s+)?Straftaten gegen die sexuelle Selbstbestimmung/i],
     "Munich sexual offenses",
     0,
-    true,
   );
   const vehicleTheft = extractMunichLineCount(
     lines,
     [/^(?:[\d*\s-]+\s+)?(?:darunter\s+)?Diebstahl von Kraft(?:wagen|fahrzeugen?)/i],
     "Munich vehicle theft",
     0,
-    true,
   );
   const bicycleTheft = extractMunichLineCount(
     lines,
     [/^(?:[\d*\s-]+\s+)?Diebstahl von Fahrr/i],
     "Munich bicycle theft",
     0,
-    true,
   );
   const theftTotal = extractMunichLineCount(
     lines,
     [/^(?:[\d*\s-]+\s+)?Diebstahl insgesamt/i],
     "Munich theft",
     0,
-    true,
   );
   const fraudAndEmbezzlement =
-    extractMunichLineCount(lines, [/^(?:[\d*\s-]+\s+)?(?:darunter\s+)?Betrug/i], "Munich fraud", 0, true) +
-    extractMunichLineCount(lines, [/^(?:[\d*\s-]+\s+)?Veruntreuung/i], "Munich embezzlement", 0, true);
+    extractMunichLineCount(lines, [/^(?:[\d*\s-]+\s+)?(?:darunter\s+)?Betrug/i], "Munich fraud", 0) +
+    extractMunichLineCount(lines, [/^(?:[\d*\s-]+\s+)?Veruntreuung/i], "Munich embezzlement", 0);
   const drugOffenses = extractMunichLineCount(
     lines,
     [/^(?:[\d*\s-]+\s+)?Rauschgiftdelikte(?: nach dem BtMG)?/i],
     "Munich drug offenses",
     0,
-    true,
   );
 
   return new Map<string, number>([
@@ -3248,10 +3332,12 @@ function parseMunichCounts(text: string) {
       "Raub, räuberische Erpressung und räuberischer Angriff auf Kraftfahrer*innen",
       extractMunichLineCount(
         lines,
-        [/^(?:[\d*\s-]+\s+)?(?:darunter\s+|und zwar\s+)?Raub,\s*r/i],
+        [
+          /^(?:[\d*\s-]+\s+)?und zwar\s+Raub,\s*r(?:ä|‰)?uberische\s+Erpressung/i,
+          /^(?:[\d*\s-]+\s+)?(?:darunter\s+|und zwar\s+)?Raub,\s*r(?:ä|‰)?uberische\s+Erpressung(?:\s+und\s+r(?:ä|‰)?uberischer\s+Angriff(?:\s+auf(?:\s+Kraftfahrer(?:\*innen|innen)?|\s+Kraftfahrer)?)?)?/i,
+        ],
         "Munich robbery",
         0,
-        true,
       ),
     ],
     ["Diebstahl insgesamt", theftTotal],
@@ -3264,7 +3350,7 @@ function parseMunichCounts(text: string) {
 
 async function buildMunichLocation(): Promise<LocationPayload> {
   const munichDir = MUNICH_DIR;
-  const approvedPilotYears = new Set([2001, 2002, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017]);
+  const approvedPilotYears = new Set(Array.from({ length: 21 }, (_, index) => 2001 + index));
   const years = (await fs.readdir(munichDir))
     .map((fileName) => /^([0-9]{4})\.pdf$/i.exec(fileName)?.[1] ?? null)
     .filter((value): value is string => value !== null)
@@ -5375,6 +5461,21 @@ async function buildMinneapolisLocation(): Promise<LocationPayload> {
   const years = Array.from({ length: 9 }, (_, index) => 2017 + index);
   const countsByKey = new Map<string, number>();
   const districtsByLabel = new Map<string, FilterOption>();
+  const normalizeNeighborhoodLabel = (value: string) => {
+    const collapsed = value.replace(/\s+/g, " ").trim();
+
+    if (/^z_\*+\s*not assigned\s*\*+$/i.test(collapsed) || /^\*+\s*not assigned\s*\*+$/i.test(collapsed)) {
+      return null;
+    }
+
+    const titleCased = toTitleCase(collapsed);
+
+    if (/^Steven'?S Square - Loring Heights$/i.test(titleCased)) {
+      return "Stevens Square - Loring Heights";
+    }
+
+    return titleCased;
+  };
 
   for (const year of years) {
     const rows = await fetchArcGisRows<MinneapolisCrimeRow>(SOURCE_URLS.minneapolisCrimeApi, {
@@ -5386,11 +5487,12 @@ async function buildMinneapolisLocation(): Promise<LocationPayload> {
 
     for (const row of rows) {
       const rawNeighborhood = String(row.neighborhood ?? "").trim();
-      if (!rawNeighborhood || rawNeighborhood === "** NOT ASSIGNED **") {
+      const districtLabel = rawNeighborhood ? normalizeNeighborhoodLabel(rawNeighborhood) : null;
+
+      if (!districtLabel) {
         continue;
       }
 
-      const districtLabel = toTitleCase(rawNeighborhood.replace(/\s+/g, " "));
       const districtSlug = slugify(districtLabel);
       const category = categoryLookup.get(normalizeSourceLabel(String(row.ucrDescription ?? "")));
       const count = parseCountLike(row.count);
@@ -5663,6 +5765,7 @@ function mergeDuplicateRecords(records: CrimeRecord[]) {
 }
 
 async function syncDatabase(payload: PreparedPayload) {
+  console.log(`[sync] syncing ${payload.locations.length} locations into prisma/crime-atlas.db`);
   await prisma.comparisonMappingSource.deleteMany();
   await prisma.comparisonMapping.deleteMany();
   await prisma.canonicalCategory.deleteMany();
@@ -5687,7 +5790,8 @@ async function syncDatabase(payload: PreparedPayload) {
   const canonicalCategories = await prisma.canonicalCategory.findMany();
   const canonicalCategoryIdByKey = new Map(canonicalCategories.map((category) => [category.key, category.id]));
 
-  for (const location of payload.locations) {
+  for (const [index, location] of payload.locations.entries()) {
+    console.log(`[sync] ${index + 1}/${payload.locations.length} ${location.label}`);
     const createdLocation = await prisma.location.create({
       data: {
         slug: location.slug,
@@ -5808,39 +5912,45 @@ async function main() {
   const barcelona = await buildSpainLocation(BARCELONA_LOCATION, "Barcelona", spainLegacyAnnualSources, barcelonaPopulationByYear);
   const valencia = await buildSpainLocation(VALENCIA_LOCATION, "Valencia", spainLegacyAnnualSources, valenciaPopulationByYear);
 
+  async function buildWithTrace<T>(label: string, buildPromise: Promise<T>) {
+    const value = await buildPromise;
+    console.log(`[build] ${label}`);
+    return value;
+  }
+
   const [austin, berlin, birmingham, chicago, cleveland, dallas, franceCountry, frankfurt, germanyCountry, hamburg, houston, italyCountry, london, losAngeles, louisville, luton, manchester, melbourne, milan, minneapolis, munich, newYorkCity, paris, phoenix, rome, sanFrancisco, saoPaulo, seattle, spainCountry, sydney, tokyo] =
     await Promise.all([
-      buildAustinLocation(),
-      buildBerlinLocation(),
-      buildUkLocalAuthorityLocation(BIRMINGHAM_LOCATION, "Birmingham", "E08000025"),
-      buildChicagoLocation(),
-      buildClevelandLocation(),
-      buildDallasLocation(),
-      buildFranceCountryLocation(),
-      buildFrankfurtLocation(),
-      buildGermanyCountryLocation(),
-      buildHamburgLocation(),
-      buildHoustonLocation(),
-      buildItalyCountryLocation(),
-      buildLondonLocation(),
-      buildLosAngelesLocation(),
-      buildLouisvilleLocation(),
-      buildLutonLocation(),
-      buildUkLocalAuthorityLocation(MANCHESTER_LOCATION, "Manchester", "E08000003"),
-      buildMelbourneLocation(),
-      buildMilanLocation(),
-      buildMinneapolisLocation(),
-      buildMunichLocation(),
-      buildNewYorkCityLocation(),
-      buildParisLocation(),
-      buildPhoenixLocation(),
-      buildRomeLocation(),
-      buildSanFranciscoLocation(),
-      buildSaoPauloLocation(),
-      buildSeattleLocation(),
-      buildSpainCountryLocation(),
-      buildSydneyLocation(),
-      buildTokyoLocation(),
+      buildWithTrace("Austin", buildAustinLocation()),
+      buildWithTrace("Berlin", buildBerlinLocation()),
+      buildWithTrace("Birmingham", buildUkLocalAuthorityLocation(BIRMINGHAM_LOCATION, "Birmingham", "E08000025")),
+      buildWithTrace("Chicago", buildChicagoLocation()),
+      buildWithTrace("Cleveland", buildClevelandLocation()),
+      buildWithTrace("Dallas", buildDallasLocation()),
+      buildWithTrace("France", buildFranceCountryLocation()),
+      buildWithTrace("Frankfurt", buildFrankfurtLocation()),
+      buildWithTrace("Germany", buildGermanyCountryLocation()),
+      buildWithTrace("Hamburg", buildHamburgLocation()),
+      buildWithTrace("Houston", buildHoustonLocation()),
+      buildWithTrace("Italy", buildItalyCountryLocation()),
+      buildWithTrace("London", buildLondonLocation()),
+      buildWithTrace("Los Angeles", buildLosAngelesLocation()),
+      buildWithTrace("Louisville", buildLouisvilleLocation()),
+      buildWithTrace("Luton", buildLutonLocation()),
+      buildWithTrace("Manchester", buildUkLocalAuthorityLocation(MANCHESTER_LOCATION, "Manchester", "E08000003")),
+      buildWithTrace("Melbourne", buildMelbourneLocation()),
+      buildWithTrace("Milan", buildMilanLocation()),
+      buildWithTrace("Minneapolis", buildMinneapolisLocation()),
+      buildWithTrace("Munich", buildMunichLocation()),
+      buildWithTrace("New York City", buildNewYorkCityLocation()),
+      buildWithTrace("Paris", buildParisLocation()),
+      buildWithTrace("Phoenix", buildPhoenixLocation()),
+      buildWithTrace("Rome", buildRomeLocation()),
+      buildWithTrace("San Francisco", buildSanFranciscoLocation()),
+      buildWithTrace("São Paulo", buildSaoPauloLocation()),
+      buildWithTrace("Seattle", buildSeattleLocation()),
+      buildWithTrace("Spain", buildSpainCountryLocation()),
+      buildWithTrace("Sydney", buildSydneyLocation()),
+      buildWithTrace("Tokyo", buildTokyoLocation()),
     ]);
   const payload = {
     generatedAt: new Date().toISOString(),

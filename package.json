@@ -12,7 +12,7 @@
     "start": "next start -H 0.0.0.0 -p ${PORT:-3000}",
     "lint": "eslint .",
     "db:reset": "npx prisma generate && tsx scripts/reset-database.ts",
-    "data:prepare": "npx prisma generate && tsx scripts/reset-database.ts && tsx scripts/prepare-data.ts"
+    "data:prepare": "tsx scripts/data-prepare.ts"
   },
   "dependencies": {
     "@fontsource/manufacturing-consent": "^5.2.2",

@@ -34,18 +34,6 @@ What it does claim:
 
 ### Confirmed issues
 
-### Coverage issues
-
-- `Munich` has a DB coverage gap:
-  - present: `2001–2002`, `2010–2017`
-  - absent: `2003–2009`
-  - This may reflect source availability, but it must be documented as a real coverage gap rather than treated as continuous history.
-
-- `São Paulo` has a population-series gap for `2023`.
-  - Crime coverage is `2010–2025`
-  - Official population coverage in DB is missing `2023`
-  - Count views are still usable; rate views for `2023` should remain blank rather than interpolated.
-
 ### Known low-base noise that is not yet a confirmed citywide failure
 
 - `Phoenix` shows many large ratio jumps in tiny grid cells such as `1 -> 64`, `15 -> 1`, etc.
@@ -58,10 +46,14 @@ What it does claim:
 ### Potential non-public geography buckets
 
 - A broader district-label scan found several feeds that may contain internal or non-public geography buckets similar to Cleveland's former `District O`.
-- Current watchlist:
-  - `Austin`: labels such as `District OOC`, `District ADM`, `District P`, `District S`, `District IDA`
-  - `Houston`: labels such as `Beat NULL`, `Beat OOJ`, `Beat UH-2PD`, `Beat UH-3PD`, `Beat HCC*`, `Beat HCSO`
-- These are not yet confirmed errors, but they should be source-checked before the related area layers are treated as fully clean public geography.
+- Resolved methodology trims now cover:
+  - `Austin`: stable public Districts `1–8` only
+  - `Houston`: standard HPD beat codes only
+  - `Cleveland`: public Districts `1–5` only
+  - `Louisville`: eight numbered LMPD divisions only
+  - `Minneapolis`: `Z_** Not Assigned **` removed and duplicate neighborhood label normalized
+  - `Seattle`: five public SPD precincts only
+- No broader scan result currently suggests another shipped area layer is exposing an obvious Cleveland-style internal bucket.
 
 ### Parent/child category overlap
 
@@ -71,6 +63,14 @@ What it does claim:
   - `All offenses` remains mutually exclusive with all other categories
   - `All theft`, `All assaults`, `All arson`, and `All damage` are mutually exclusive with their own child buckets
 - Future audits should keep watching newly added cities for additional parent-style categories that need the same treatment.
+
+### Overlapping raw-label mappings
+
+- A structural scan of `src/lib/location-config.ts` found only two shipped locations where the same raw official source label intentionally feeds both a parent bucket and a child bucket:
+  - `Sydney`
+  - `Melbourne`
+- Those locations are now handled explicitly during ingestion so the raw source label is written into every intended dashboard category.
+- No other shipped location currently has the same overlapping raw-label pattern.
 
 ## Location-by-Location Audit
 
@@ -85,6 +85,7 @@ What it does claim:
 - Findings:
   - citywide totals look directionally coherent: `397,697` in `2020` -> `458,327` in `2025`
   - no major structural break surfaced in the first anomaly pass
+  - overlapping parent/child subgroup mappings are now handled explicitly at ingestion, so parent buckets such as `Drug offenses` include the trafficking subgroup instead of silently dropping it
 - Follow-up:
   - still worth spot-checking one or two LGA/category rows directly against the workbook
 
@@ -97,7 +98,10 @@ What it does claim:
 - Findings:
   - citywide totals are broadly coherent over the full run
   - anomaly scan surfaced a handful of high-ratio changes in very small LGA/category series, e.g. `Mosman` `Drug trafficking`
-  - sampled Wollondilly rows, including `Arson` and several `Drug offences` subcategories, match the official workbook values directly
+  - direct workbook sums confirm the previously flagged Wollondilly rows are source-real:
+    - `Arson`: `13` in `2022`, `126` in `2025`
+    - `Drug offenses`: `133` in `2025`
+  - overlapping parent/child source labels are now handled explicitly at ingestion, so parent buckets such as `Burglary` and `Drug offenses` include their child slices while the UI exclusivity logic prevents deceptive stacking
 - Assessment:
   - no citywide failure found in the first pass
   - sampled low-base spikes appear to be source-real behavior rather than a parser problem
@@ -113,10 +117,11 @@ What it does claim:
 - Findings:
   - citywide totals are plausible across the full run
   - `2021–2025` growth deserves later source spot-checking but is not obviously impossible
-  - official population series is missing `2023`
+  - the previous `2023` population gap is now filled from the official IBGE DOU municipal publication
+  - `2023` population is official, but it is census-2022 based rather than a normal estimate-series row
 - Assessment:
   - crime counts look usable
-  - comparison-rate support is incomplete for the `2023` year
+  - comparison-rate support is now available across the full shipped run, with the `2023` methodology seam documented
 
 ## France
 
@@ -196,12 +201,16 @@ What it does claim:
 
 ### Munich
 
-- Status: `Moderate concern`
-- DB coverage: `2001–2002`, `2010–2017`
+- Status: `Initial pass clean`
+- DB coverage: `2001–2021`
 - Area layer: citywide only
 - Findings:
-  - values present in the DB do not look obviously impossible
-  - the coverage gap from `2003–2009` is real and must be treated as a gap, not a silent omission
+  - official committed Munich PDFs for `2003–2009` also exist and are now parsed from the same archive source family
+  - the Munich `2010+` parser was previously biased toward later comparative-table rows instead of the citywide summary block for several categories
+  - this has now been corrected so category counts prefer the first citywide summary matches
+  - the archived `2003–2009` parser now handles the older row formats correctly, including `darunter Betrug` and the pre-2004 Kraftwagen wording
+  - official city population coverage is now also continuous for `2001–2021`
+  - sampled corrected citywide rows for both archived and newer years are coherent, including the expected later-pandemic decline in total theft and overall recorded offenses
 
 ## Italy
 
@@ -243,6 +252,8 @@ What it does claim:
   - citywide totals show a long decline through `2019` and later modest rebound; this may be real
   - anomaly scan surfaced several large jumps in tiny-base categories at district level, e.g. `Counterfeiting` and `Arson`
   - the flagged `Chuo-ku` `Fraud` jump is present in the official station-level CSV when summed to the district row, so it is not a mapper artifact
+  - direct source check:
+    - `Chuo-ku Fraud 2021 = 1,996`, built from the official `Chuo`, `Hisamatsu`, `Tsukiji`, and `Tsukishima` police-station rows in the Tokyo yearbook CSV
 - Assessment:
   - no obvious citywide corruption found
   - sampled spikes appear to be source-real, not parser corruption
@@ -256,7 +267,13 @@ What it does claim:
 - Area layer: citywide only
 - Findings:
   - the earlier PDF-driven discontinuity risk has been reduced by switching `2018–2025` to the official structured PC-Axis municipality exports
-  - direct source spot-checks now match the official municipality CSV exactly for sampled totals, including `2020`, `2023`, and `2025`
+  - direct source spot-checks now match the official municipality CSV exactly for sampled totals and sampled category rows across both structured export shapes, including `2019`, `2020`, `2023`, `2024`, and `2025`
+  - sampled category matches now confirmed for:
+    - `Robbery with violence or intimidation`
+    - `Burglary and forced-entry theft`
+    - `Vehicle theft`
+    - `Drug trafficking`
+    - `All recorded offenses`
   - shipped totals now look broadly plausible, including:
     - `All recorded offenses`: `194,290` in `2018`, `200,225` in `2019`, `117,786` in `2020`, `186,014` in `2023`, `169,678` in `2025`
   - the remaining missing `2015–2017` gap should stay explicit as a real coverage gap, not be backfilled invisibly
@@ -273,10 +290,17 @@ What it does claim:
   - the rebuilt totals are continuous and plausible:
     - `All recorded offenses`: `2,116,614` in `2018`, `2,187,091` in `2019`, `1,764,403` in `2020`, `2,466,459` in `2025`
   - direct source spot-checks confirm the community rows and national total are internally consistent in the official CSVs
+  - sampled category rows also match the official community CSVs directly for `Cataluña` and `Comunitat Valenciana` in `2019`, `2020`, `2023`, `2024`, and `2025`, including:
+    - `Robbery with violence or intimidation`
+    - `Burglary and forced-entry theft`
+    - `Theft`
+    - `Vehicle theft`
+    - `Drug trafficking`
+    - `All recorded offenses`
   - the dashboard sum is intentionally below the official `TOTAL NACIONAL` row because the official file includes an `EN EL EXTRANJERO` bucket that is outside the dashboard's autonomous-community area layer
   - `2020` remains a real low year, but it now sits inside a plausible national series rather than a clearly corrupted one
 - Assessment:
-  - usable after the structured-source rebuild; region/category spot checks are still worth doing, but the main all-offenses continuity issue is resolved
+  - usable after the structured-source rebuild; the main continuity and sampled category-mapping concerns are resolved
 
 ### Valencia
 
@@ -285,7 +309,13 @@ What it does claim:
 - Area layer: citywide only
 - Findings:
   - the earlier PDF-driven `2023` discontinuity is gone after switching `2018–2025` to the official structured municipality exports
-  - direct source spot-checks now match the official municipality CSV exactly for sampled totals, including `2020`, `2023`, and `2025`
+  - direct source spot-checks now match the official municipality CSV exactly for sampled totals and sampled category rows across both structured export shapes, including `2019`, `2020`, `2023`, `2024`, and `2025`
+  - sampled category matches now confirmed for:
+    - `Robbery with violence or intimidation`
+    - `Burglary and forced-entry theft`
+    - `Vehicle theft`
+    - `Drug trafficking`
+    - `All recorded offenses`
   - current DB values now look much more coherent:
     - `Theft`: `19,863` in `2021` -> `23,226` in `2022` -> `24,234` in `2023`
     - `All recorded offenses`: `53,358` in `2021` -> `60,825` in `2022` -> `62,393` in `2023`
@@ -306,14 +336,19 @@ What it does claim:
 
 ### London
 
-- Status: `Moderate concern`
+- Status: `Initial pass clean`
 - DB coverage: `2010–2024`
 - Area layer: boroughs
 - Findings:
   - citywide totals look coherent
-  - one previously known small special-area anomaly still exists around the airport geography
+  - the previously flagged `London Heathrow and London City Airports` jump is source-real, not a parser failure
+  - the airport area only begins showing meaningful counts once that special geography appears in the official London files
+  - sampled raw monthly sums from the official London CSVs match the dashboard totals directly, including:
+    - `Theft from vehicles` `2023 = 456`, built from `THEFT FROM A VEHICLE = 350` plus `INTERFERING WITH A MOTOR VEHICLE = 106`
+    - `Theft from vehicles` `2024 = 83`, built from `70 + 13`
 - Assessment:
-  - broadly sound, with a minor special-geography caveat
+  - broadly sound
+  - the airport area remains a special geography worth documenting, but it no longer reads as a data-integrity failure
 
 ### Luton
 
@@ -435,8 +470,10 @@ What it does claim:
 - Findings:
   - anomaly scan surfaced a number of low-base neighborhood jumps, especially in `Motor vehicle theft`
   - citywide totals are still coherent
+  - the raw ArcGIS neighborhood field also leaks a non-public junk bucket (`Z_** Not Assigned **`) and a duplicate label variant (`Steven'S Square - Loring Heights`)
 - Assessment:
-  - likely usable, but not yet deeply source-checked
+  - usable after ingest normalization removes the junk bucket and collapses the duplicate Stevens Square label
+  - still not deeply source-checked beyond that cleanup
 
 ### New York City
 
@@ -483,9 +520,12 @@ What it does claim:
 
 These should be addressed before more broad comparison claims or aggressive location expansion:
 
-1. Continue spot-checking the rebuilt Spain structured-source series at region and municipality level
-2. Keep low-base Tokyo/Sydney spikes on the watchlist, but no parser changes are currently indicated
-3. Continue spot-checking newly added cities for additional parent-style categories that may need the same exclusivity treatment
+1. Keep low-base Tokyo/Sydney spikes on the watchlist, but no parser changes are currently indicated
+2. Continue occasional Spain category-level spot checks beyond the already-verified sampled rows
+3. Continue sampling newer source families for category-structure traps before calling them fully clean
+
+Recent audit note:
+- a broad district-label scan across the current DB did not surface remaining `OOJ`, `Not Assigned`, `unknown`, `null`, or similar junk geography buckets beyond the locations already cleaned explicitly
 
 ## Next Source Upgrade Candidates
 

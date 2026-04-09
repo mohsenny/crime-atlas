@@ -1453,7 +1453,7 @@ export const MUNICH_LOCATION: LocationDefinition = {
   areaLabelPlural: "Areas",
   chartTitle: "Munich Crime Overview",
   note:
-    "Munich uses official city statistics publications sourced from Polizeipräsidium München plus official annual city-population figures from the Munich statistical office. The current pilot coverage is built from committed official archive PDFs for 2001, 2002, and 2010-2017; no sub-city breakdown is wired yet.",
+    "Munich uses official city statistics publications sourced from Polizeipräsidium München plus official annual city-population figures from the Munich statistical office. Coverage is built from committed official archive PDFs for 2001-2021; no sub-city breakdown is wired yet.",
   sources: [
     {
       label: "Landeshauptstadt München: safety and crime statistics archive PDFs",
@@ -2009,6 +2009,10 @@ export const SAO_PAULO_LOCATION: LocationDefinition = {
     {
       label: "São Paulo State Public Security Secretariat quarterly statistics archive",
       url: "https://www.ssp.sp.gov.br/estatistica/dados-mensais",
+    },
+    {
+      label: "IBGE municipal population publications and estimates",
+      url: "https://www.ibge.gov.br/estatisticas/sociais/populacao/37734-relacao-da-populacao-dos-municipios-para-publicacao-no-dou.html?=&t=resultados",
     },
   ],
   categories: [

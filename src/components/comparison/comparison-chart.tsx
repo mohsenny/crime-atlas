@@ -25,8 +25,10 @@ const CITY_COLORS = ["#7dd3fc", "#f97316", "#a78bfa", "#22c55e"];
 const DESKTOP_CHART_HEIGHT = 520;
 const MOBILE_CHART_HEIGHT = 420;
 const DESKTOP_AXIS_WIDTH = 88;
-const MOBILE_AXIS_WIDTH = 64;
+const MOBILE_AXIS_WIDTH = 56;
 const X_AXIS_HEIGHT = 30;
+const DESKTOP_X_AXIS_EDGE_PADDING = 18;
+const MOBILE_X_AXIS_EDGE_PADDING = 14;
 
 export function ComparisonChart({
   rows,
@@ -50,6 +52,7 @@ export function ComparisonChart({
   const groupWidth = isMobileViewport ? 52 : 72;
   const minChartWidth = Math.max(isMobileViewport ? 0 : 760, rows.length * groupWidth);
   const chartWidth = Math.max(minChartWidth, viewportWidth);
+  const xAxisEdgePadding = isMobileViewport ? MOBILE_X_AXIS_EDGE_PADDING : DESKTOP_X_AXIS_EDGE_PADDING;
 
   const yMax = useMemo(() => {
     const values = rows.flatMap((row) =>
@@ -77,6 +80,7 @@ export function ComparisonChart({
 
   const chartTopMargin = 12;
   const chartBottomMargin = 8;
+  const plotRightMargin = isMobileViewport ? xAxisEdgePadding : 12;
   const chartPlotHeight = chartHeight - chartTopMargin - chartBottomMargin;
   const yAxisMax = axisTicks.at(-1) ?? 1;
   const visibleLocationSlugs = focusedLocationSlug ? [focusedLocationSlug] : locations.map((location) => location.slug);
@@ -198,7 +202,7 @@ export function ComparisonChart({
         </div>
       )}
     >
-      <div className="flex min-h-0 flex-1 sm:-mx-4 lg:mx-0">
+      <div className="flex min-h-0 flex-1 -mx-3 sm:-mx-4 lg:mx-0">
         <div className="flex min-h-0 min-w-0 w-full overflow-hidden">
           <div
             className="pointer-events-none relative z-[1] shrink-0 border-r border-slate-800/70"
@@ -249,7 +253,7 @@ export function ComparisonChart({
               <LineChart
                 data={rows}
                 height={chartHeight}
-                margin={{ top: chartTopMargin, right: isMobileViewport ? 0 : 12, left: 0, bottom: 8 }}
+                margin={{ top: chartTopMargin, right: plotRightMargin, left: 0, bottom: 8 }}
                 width={chartWidth}
               >
               <CartesianGrid stroke="rgba(100,116,139,0.14)" strokeDasharray="3 4" vertical={false} />
@@ -258,6 +262,7 @@ export function ComparisonChart({
                 dataKey="year"
                 height={X_AXIS_HEIGHT}
                 interval={0}
+                padding={{ left: xAxisEdgePadding, right: xAxisEdgePadding }}
                 tick={{ fill: "#94a3b8", fontSize: isMobileViewport ? 11 : 12 }}
                 tickLine={false}
                 tickMargin={12}
