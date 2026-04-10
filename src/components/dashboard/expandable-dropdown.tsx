@@ -465,7 +465,7 @@ function ExpandableDropdownBase({
           <span className={cn("min-w-0 truncate text-slate-400", CONTROL_LABEL_TEXT_CLASS)} title={label}>
             {label}
           </span>
-          <span className="min-w-0 truncate text-right text-sm font-semibold text-slate-50" title={selectedLabel}>
+          <span className="hidden min-w-0 truncate text-right text-sm font-semibold text-slate-50 md:block" title={selectedLabel}>
             {selectedLabel}
           </span>
           <ChevronDown
