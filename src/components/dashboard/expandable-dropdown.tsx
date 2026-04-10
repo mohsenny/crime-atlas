@@ -63,7 +63,7 @@ const clampNumber = (value: number, min: number, max: number) => Math.min(max, M
 const valuesEqual = (left: string[], right: string[]) =>
   left.length === right.length && left.every((value, index) => value === right[index]);
 
-const DROPDOWN_TRIGGER_GRID_CLASS = "grid h-full w-full grid-cols-[auto_auto] items-center gap-3 px-4 text-left md:grid-cols-[auto_minmax(0,1fr)_auto]";
+const DROPDOWN_TRIGGER_GRID_CLASS = "grid h-full w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-4 text-left";
 
 function measurePreferredOverlayWidth(measureWrap: HTMLDivElement | null) {
   if (!measureWrap) {
@@ -470,7 +470,7 @@ function ExpandableDropdownBase({
           </span>
           <ChevronDown
             className={cn(
-              "h-4 w-4 shrink-0 text-slate-300 transition-transform duration-200",
+              "col-start-3 h-4 w-4 shrink-0 justify-self-end text-slate-300 transition-transform duration-200",
               open && "rotate-180",
             )}
           />
@@ -505,7 +505,7 @@ function ExpandableDropdownBase({
                   <span className="min-w-0 truncate text-right text-sm font-semibold text-slate-50" title={selectedLabel}>
                     {selectedLabel}
                   </span>
-                  <ChevronDown className="h-4 w-4 shrink-0 rotate-180 text-slate-300" />
+                  <ChevronDown className="col-start-3 h-4 w-4 shrink-0 rotate-180 justify-self-end text-slate-300" />
                 </span>
               </button>
 
