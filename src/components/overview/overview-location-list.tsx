@@ -200,7 +200,7 @@ export function OverviewLocationList({
                   <span
                     aria-hidden="true"
                     className={cn(
-                      "pointer-events-none absolute inset-x-0 inset-y-[2px] border transition-colors",
+                      "pointer-events-none absolute inset-x-0 inset-y-[2px] rounded-[0.2rem] border transition-colors",
                       selectedSlugs.includes(location.slug)
                         ? "border-slate-100 bg-slate-100"
                         : "border-slate-200 bg-transparent",
@@ -208,7 +208,7 @@ export function OverviewLocationList({
                   />
                   <span
                     className={cn(
-                      "absolute right-0 top-[2px] z-10 flex h-6 w-6 items-center justify-center border border-slate-200 bg-slate-100 transition-colors",
+                      "absolute right-0 top-[2px] z-10 flex h-6 w-6 items-center justify-center rounded-tr-[0.2rem] border border-slate-200 bg-slate-100 transition-colors",
                       selectedSlugs.includes(location.slug)
                         ? "border-slate-950 bg-slate-950 text-white"
                         : "text-transparent",

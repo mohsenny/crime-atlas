@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { ArrowRight, LoaderCircle, Search, X, type LucideIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -43,6 +43,7 @@ export function CompareCityPicker({
   const [isMobileViewport, setIsMobileViewport] = useState(false);
   const [isTriggerPending, setIsTriggerPending] = useState(false);
   const [isSubmitPending, startSubmitTransition] = useTransition();
+  const drawerDragStartYRef = useRef<number | null>(null);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 767px)");
@@ -56,6 +57,10 @@ export function CompareCityPicker({
   const baseSelectedSlugs = useMemo(
     () => [...new Set([...lockedSlugs, ...initialSelectedSlugs])].filter((slug) => scopedLocations.some((location) => location.slug === slug)),
     [initialSelectedSlugs, lockedSlugs, scopedLocations],
+  );
+  const pinnedSelectedOrder = useMemo(
+    () => new Map(baseSelectedSlugs.map((slug, index) => [slug, index])),
+    [baseSelectedSlugs],
   );
   const [selectedSlugs, setSelectedSlugs] = useState<string[]>(() => baseSelectedSlugs);
 
@@ -71,6 +76,18 @@ export function CompareCityPicker({
         location.country.toLowerCase().includes(normalized),
     );
   }, [scopedLocations, searchQuery]);
+  const sortedFilteredLocations = useMemo(() => {
+    return [...filteredLocations].sort((left, right) => {
+      const leftSelectedOrder = pinnedSelectedOrder.get(left.slug);
+      const rightSelectedOrder = pinnedSelectedOrder.get(right.slug);
+
+      if (leftSelectedOrder !== undefined || rightSelectedOrder !== undefined) {
+        return (leftSelectedOrder ?? Number.POSITIVE_INFINITY) - (rightSelectedOrder ?? Number.POSITIVE_INFINITY);
+      }
+
+      return 0;
+    });
+  }, [filteredLocations, pinnedSelectedOrder]);
 
   function toggleLocation(slug: string) {
     const isLocked = lockedSlugs.includes(slug);
@@ -121,12 +138,39 @@ export function CompareCityPicker({
     setOpen(false);
   }
 
+  function startDrawerDrag(clientY: number) {
+    drawerDragStartYRef.current = clientY;
+  }
+
+  function finishDrawerDrag(clientY: number) {
+    const startY = drawerDragStartYRef.current;
+    drawerDragStartYRef.current = null;
+
+    if (startY === null) {
+      return;
+    }
+
+    if (clientY - startY > 56) {
+      closePicker();
+    }
+  }
+
   const selectedCount = selectedSlugs.length;
   const resolvedMobileTriggerLabel = mobileTriggerLabel ?? triggerLabel;
   const pluralScopeLabel = getScopeLabel(scope, { plural: true, capitalized: true });
   const searchLabel = scope === "country" ? "Search countries" : "Search city or country";
+  const searchPlaceholder = isMobileViewport
+    ? scope === "country"
+      ? "Search countries to compare..."
+      : "Search cities to compare..."
+    : searchLabel;
   const isCompareReady = selectedCount >= 2 && selectedCount <= MAX_COMPARE_LOCATIONS;
   const triggerBusy = isTriggerPending && !open;
+  const submitLabel = isCompareReady
+    ? `Compare ${selectedCount} ${pluralScopeLabel}`
+    : selectedCount > 0
+      ? `${selectedCount}/${MAX_COMPARE_LOCATIONS} selected`
+      : "Select 2+";
 
   useEffect(() => {
     if (!open || !isTriggerPending) {
@@ -172,46 +216,89 @@ export function CompareCityPicker({
 
       {open ? (
         <div className="fixed inset-0 z-[70] bg-slate-950/70 backdrop-blur-sm">
-          <div className={cn("flex h-full", isMobileViewport ? "items-end justify-stretch px-3 pt-8" : "justify-end")}>
+          <div className={cn("flex h-full", isMobileViewport ? "h-[100dvh] items-end justify-stretch px-0 pt-10" : "justify-end")}>
             <div
               className={cn(
-                "flex flex-col bg-slate-950/96 shadow-[0_28px_90px_rgba(2,6,23,0.45)]",
+                "flex min-h-0 flex-col bg-slate-950/96 shadow-[0_28px_90px_rgba(2,6,23,0.45)]",
                 isMobileViewport
-                  ? "w-full max-h-[calc(100vh-2rem)] rounded-t-[1.75rem] border border-white/10 border-b-0"
+                  ? "w-full max-h-[calc(100dvh-2.5rem)] rounded-t-[1.5rem] border-t border-white/10"
                   : "h-full w-full max-w-[27rem] border-l border-white/10",
               )}
             >
-              <div className={cn("flex items-center justify-between border-b border-white/8", isMobileViewport ? "px-5 pb-4 pt-5" : "px-4 py-4")}>
-                <div className="space-y-1">
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Compare {pluralScopeLabel}</p>
-                  <p className="text-sm text-slate-300">
-                    {selectedCount}/{MAX_COMPARE_LOCATIONS} selected
-                  </p>
+              {isMobileViewport ? (
+                <div className="border-b border-white/8 px-4 pb-3 pt-2">
+                  <button
+                    aria-label="Drag down to close compare picker"
+                    className="mb-2 flex h-5 w-full touch-none items-center justify-center"
+                    onPointerCancel={() => {
+                      drawerDragStartYRef.current = null;
+                    }}
+                    onPointerDown={(event) => {
+                      startDrawerDrag(event.clientY);
+                      event.currentTarget.setPointerCapture(event.pointerId);
+                    }}
+                    onPointerUp={(event) => {
+                      finishDrawerDrag(event.clientY);
+                      if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+                        event.currentTarget.releasePointerCapture(event.pointerId);
+                      }
+                    }}
+                    type="button"
+                  >
+                    <span className="h-1 w-11 rounded-full bg-slate-600" />
+                  </button>
+                  <div className="flex items-center gap-2">
+                    <label className="relative block min-w-0 flex-1">
+                      <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+                      <input
+                        className="h-11 w-full rounded-2xl border border-white/10 bg-slate-900/80 pl-10 pr-3 text-sm text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-slate-500"
+                        onChange={(event) => setSearchQuery(event.target.value)}
+                        placeholder={searchPlaceholder}
+                        value={searchQuery}
+                      />
+                    </label>
+                    <button
+                      aria-label="Close compare picker"
+                      className="inline-flex h-11 w-11 shrink-0 items-center justify-center text-slate-400 transition hover:text-slate-50"
+                      onClick={closePicker}
+                      type="button"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
                 </div>
-                <button
-                  className="inline-flex h-10 w-10 items-center justify-center text-slate-400 transition hover:text-slate-50"
-                  onClick={closePicker}
-                  type="button"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              </div>
+              ) : (
+                <>
+                  <div className="flex items-center justify-between border-b border-white/8 px-4 py-4">
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Compare {pluralScopeLabel}</p>
+                    </div>
+                    <button
+                      className="inline-flex h-10 w-10 items-center justify-center text-slate-400 transition hover:text-slate-50"
+                      onClick={closePicker}
+                      type="button"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
 
-              <div className={cn("border-b border-white/8", isMobileViewport ? "px-5 py-4" : "px-4 py-4")}>
-                <label className="relative block">
-                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
-                  <input
-                    className="h-11 w-full rounded-2xl border border-white/10 bg-slate-900/80 pl-10 pr-3 text-sm text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-slate-500"
-                    onChange={(event) => setSearchQuery(event.target.value)}
-                    placeholder={searchLabel}
-                    value={searchQuery}
-                  />
-                </label>
-              </div>
+                  <div className="border-b border-white/8 px-4 py-4">
+                    <label className="relative block">
+                      <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+                      <input
+                        className="h-11 w-full rounded-2xl border border-white/10 bg-slate-900/80 pl-10 pr-3 text-sm text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-slate-500"
+                        onChange={(event) => setSearchQuery(event.target.value)}
+                        placeholder={searchPlaceholder}
+                        value={searchQuery}
+                      />
+                    </label>
+                  </div>
+                </>
+              )}
 
               <div className={cn("flex-1 overflow-y-auto", isMobileViewport ? "px-4 py-3" : "px-4 py-3")}>
                 <div className="space-y-2">
-                  {filteredLocations.map((location) => {
+                  {sortedFilteredLocations.map((location) => {
                     const selected = selectedSlugs.includes(location.slug);
                     const locked = lockedSlugs.includes(location.slug);
                     const atLimit = selectedSlugs.length >= MAX_COMPARE_LOCATIONS && !selected;
@@ -240,7 +327,7 @@ export function CompareCityPicker({
                           <span
                             aria-hidden="true"
                             className={cn(
-                              "pointer-events-none absolute inset-x-0 inset-y-[2px] border transition-colors",
+                              "pointer-events-none absolute inset-x-0 inset-y-[2px] rounded-[0.2rem] border transition-colors",
                               selected ? "border-slate-100 bg-slate-100" : "border-slate-200 bg-transparent",
                             )}
                           />
@@ -248,7 +335,7 @@ export function CompareCityPicker({
                         {isMobileViewport ? (
                           <span
                             className={cn(
-                              "absolute right-0 top-[2px] z-10 flex h-6 w-6 items-center justify-center border border-slate-200 bg-slate-100 transition-colors",
+                              "absolute right-0 top-[2px] z-10 flex h-6 w-6 items-center justify-center rounded-tr-[0.2rem] border border-slate-200 bg-slate-100 transition-colors",
                               selected ? "border-slate-950 bg-slate-950 text-white" : "text-transparent",
                             )}
                           >
@@ -325,7 +412,7 @@ export function CompareCityPicker({
                     <LoaderCircle className="h-4 w-4 animate-spin" />
                   ) : (
                     <>
-                      {selectedCount >= 2 ? `Compare ${selectedCount} ${pluralScopeLabel}` : `Compare ${pluralScopeLabel}`}
+                      {submitLabel}
                       <ArrowRight className="h-4 w-4" />
                     </>
                   )}
