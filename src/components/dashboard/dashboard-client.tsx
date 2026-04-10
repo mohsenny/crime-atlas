@@ -193,7 +193,7 @@ export function DashboardClient({
                 </div>
               ) : null}
               {meta.districts.length > 1 ? (
-                <div className="min-w-0 flex-1 sm:w-80 sm:flex-none">
+                <div className="w-auto shrink-0 sm:w-80 sm:flex-none">
                   <ExpandableDropdown
                     fullWidth
                     label={meta.areaLabelPlural}

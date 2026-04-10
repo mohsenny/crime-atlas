@@ -63,7 +63,7 @@ const clampNumber = (value: number, min: number, max: number) => Math.min(max, M
 const valuesEqual = (left: string[], right: string[]) =>
   left.length === right.length && left.every((value, index) => value === right[index]);
 
-const DROPDOWN_TRIGGER_GRID_CLASS = "grid h-full w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-4 text-left";
+const DROPDOWN_TRIGGER_GRID_CLASS = "grid h-full w-full grid-cols-[auto_auto] items-center gap-3 px-4 text-left md:grid-cols-[auto_minmax(0,1fr)_auto]";
 
 function measurePreferredOverlayWidth(measureWrap: HTMLDivElement | null) {
   if (!measureWrap) {
