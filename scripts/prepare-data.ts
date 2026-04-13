@@ -5600,7 +5600,7 @@ async function getHungaryCounts() {
         if (!value) {
           continue;
         }
-        countsByKey.set(`${year}__${districtSlug}__${totalCategory.value}`, value);
+        countsByKey.set(`${year}__${districtSlug}__${totalCategory.slug}`, value);
       }
     }
 
