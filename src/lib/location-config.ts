@@ -1850,7 +1850,7 @@ export const HUNGARY_COUNTRY_LOCATION: LocationDefinition = {
   areaLabelPlural: "Counties",
   chartTitle: "Hungary Crime by County",
   note:
-    "Hungary uses the Hungarian Central Statistical Office (KSH) STADAT series for registered crimes by county. This first pass uses the official county totals and stays in count mode while a matching official population series is validated.",
+    "Hungary uses the Hungarian Central Statistical Office (KSH) STADAT series for registered crimes by county, paired with the KSH population series by county to enable rate-per-100k comparisons.",
   sources: [
     {
       label: "KSH STADAT: Registered crimes by county and region",
@@ -1859,6 +1859,10 @@ export const HUNGARY_COUNTRY_LOCATION: LocationDefinition = {
     {
       label: "KSH STADAT table (registered crimes by county and region)",
       url: "https://www.ksh.hu/stadat_files/iga/en/iga0008.html",
+    },
+    {
+      label: "KSH STADAT: Resident population by county and region",
+      url: "https://www.ksh.hu/stadat_files/nep/en/nep0034.csv",
     },
   ],
   categories: [
@@ -2594,7 +2598,7 @@ export const BUDAPEST_LOCATION: LocationDefinition = {
   areaLabelPlural: "Areas",
   chartTitle: "Budapest Crime",
   note:
-    "Budapest uses the official KSH STADAT county series for the capital. The dataset does not provide sub-city breakdowns in this feed.",
+    "Budapest uses the official KSH STADAT county series for the capital, paired with the KSH population series to enable rate-per-100k comparisons. The dataset does not provide sub-city breakdowns in this feed.",
   sources: HUNGARY_COUNTRY_LOCATION.sources,
   categories: HUNGARY_COUNTRY_LOCATION.categories,
 };

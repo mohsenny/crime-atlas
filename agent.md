@@ -264,10 +264,12 @@ Notes:
   - `https://www.ksh.hu/stadat_files/iga/en/iga0008.csv`
 - KSH STADAT table:
   - `https://www.ksh.hu/stadat_files/iga/en/iga0008.html`
+- KSH STADAT CSV: Resident population by county and region, 1 January:
+  - `https://www.ksh.hu/stadat_files/nep/en/nep0034.csv`
 
 Notes:
 - The table provides county totals and a Budapest row (capital).
-- No official population series is wired yet; rate-per-100k remains disabled.
+- Population series is sourced from the KSH county population table for rate-per-100k calculations.
 
 - some cities publish only broad umbrella categories
 - some cities split one concept into multiple subcategories

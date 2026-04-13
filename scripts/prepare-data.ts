@@ -484,6 +484,7 @@ const SOURCE_URLS = {
   malaysiaCrimeDistrictCsv: "https://storage.data.gov.my/publicsafety/crime_district.csv",
   hongKongCrimeDetailsCsv: "https://www.police.gov.hk/info/doc/crime_details.csv",
   hungaryCrimeCountyCsv: "https://www.ksh.hu/stadat_files/iga/en/iga0008.csv",
+  hungaryPopulationCountyCsv: "https://www.ksh.hu/stadat_files/nep/en/nep0034.csv",
   hamburgYearbook2024:
     "https://www.polizei.hamburg/resource/blob/1053710/30efad000cc60586a22280031dad1ea0/pks-2024-jahrbuch-do-data.pdf",
   hamburgYearbook2023:
@@ -5535,6 +5536,13 @@ let hungaryCountsPromise: Promise<{
   countsByKey: Map<string, number>;
 }> | null = null;
 
+let hungaryPopulationPromise: Promise<{
+  years: number[];
+  districts: FilterOption[];
+  populationByKey: Map<string, number>;
+  countryPopulationByYear: Map<number, number>;
+}> | null = null;
+
 async function getHungaryCounts() {
   if (hungaryCountsPromise) {
     return hungaryCountsPromise;
@@ -5603,8 +5611,116 @@ async function getHungaryCounts() {
   return hungaryCountsPromise;
 }
 
+async function getHungaryPopulationByCountyYear() {
+  if (hungaryPopulationPromise) {
+    return hungaryPopulationPromise;
+  }
+
+  hungaryPopulationPromise = (async () => {
+    await fs.mkdir(HUNGARY_COUNTRY_DIR, { recursive: true });
+    const csvPath = path.join(HUNGARY_COUNTRY_DIR, "ksh_population_county.csv");
+    await ensureFileWithCurl(csvPath, SOURCE_URLS.hungaryPopulationCountyCsv);
+
+    const file = await fs.readFile(csvPath, "utf8");
+    const lines = file.split(/\r?\n/).filter((line) => line.trim().length > 0);
+    const headerIndex = lines.findIndex((line) => line.startsWith("Name of territorial units"));
+    if (headerIndex === -1) {
+      return { years: [], districts: [], populationByKey: new Map(), countryPopulationByYear: new Map() };
+    }
+
+    const headerCells = parseCsvLine(lines[headerIndex]).map((value) => value.trim());
+    const yearCells = headerCells.slice(2).map((value) => Number(String(value).trim())).filter((value) => Number.isFinite(value));
+
+    let section = "";
+    const populationByKey = new Map<string, number>();
+    const districtsByLabel = new Map<string, FilterOption>();
+    const countryPopulationByYear = new Map<number, number>();
+
+    for (const line of lines.slice(headerIndex + 1)) {
+      const cells = parseCsvLine(line);
+      const label = String(cells[0] ?? "").trim();
+
+      if (!label) {
+        continue;
+      }
+
+      if (label === "Males" || label === "Females") {
+        section = label;
+        continue;
+      }
+
+      if (label === "Total" && cells.slice(1).every((value) => String(value ?? "").trim() === "")) {
+        section = "Total";
+        continue;
+      }
+
+      if (section !== "Total") {
+        continue;
+      }
+
+      const level = String(cells[1] ?? "").trim().toLowerCase();
+      if (level.includes("country")) {
+        yearCells.forEach((year, index) => {
+          const value = parseCountLike(cells[index + 2]);
+          if (value) {
+            countryPopulationByYear.set(year, value);
+          }
+        });
+        continue;
+      }
+
+      if (!(level.includes("county") || level.includes("capital"))) {
+        continue;
+      }
+
+      const districtLabel = toTitleCase(label);
+      const districtSlug = slugify(districtLabel);
+      districtsByLabel.set(districtLabel, { label: districtLabel, value: districtSlug });
+
+      yearCells.forEach((year, index) => {
+        const value = parseCountLike(cells[index + 2]);
+        if (!value) {
+          return;
+        }
+        populationByKey.set(`${year}__${districtSlug}`, value);
+      });
+    }
+
+    const districts = [...districtsByLabel.values()].sort((left, right) => left.label.localeCompare(right.label));
+    return { years: yearCells, districts, populationByKey, countryPopulationByYear };
+  })();
+
+  return hungaryPopulationPromise;
+}
+
 async function buildHungaryCountryLocation(): Promise<LocationPayload> {
   const { years, districts, categories, countsByKey } = await getHungaryCounts();
+  const population = await getHungaryPopulationByCountyYear();
+  const eligibleYears = years.filter((year) =>
+    districts.every((district) => population.populationByKey.has(`${year}__${district.value}`)),
+  );
+  const countryPopulationByYear = Object.fromEntries(
+    eligibleYears.map((year) => [String(year), Math.round(population.countryPopulationByYear.get(year) ?? 0)]),
+  );
+
+  const records: CrimeRecord[] = [];
+  for (const district of districts) {
+    for (const category of categories) {
+      for (const year of eligibleYears) {
+        const count = countsByKey.get(`${year}__${district.value}__${category.value}`) ?? 0;
+        const populationValue = population.populationByKey.get(`${year}__${district.value}`);
+        records.push({
+          year,
+          districtLabel: district.label,
+          districtSlug: district.value,
+          categoryLabel: category.label,
+          categorySlug: category.value,
+          count,
+          ratePer100k: populationValue ? (count / populationValue) * 100_000 : null,
+        });
+      }
+    }
+  }
 
   return {
     slug: HUNGARY_COUNTRY_LOCATION.slug,
@@ -5615,21 +5731,23 @@ async function buildHungaryCountryLocation(): Promise<LocationPayload> {
     chartTitle: HUNGARY_COUNTRY_LOCATION.chartTitle,
     note: HUNGARY_COUNTRY_LOCATION.note,
     sources: HUNGARY_COUNTRY_LOCATION.sources,
-    years,
+    years: eligibleYears,
     districts,
     categories,
     defaultCategorySlugs: categories.filter((category) => category.isDefault).map((category) => category.value),
-    cityPopulationByYear: {},
-    records: buildDenseCountRecords({ years, districts, categories, countsByKey }),
+    cityPopulationByYear: countryPopulationByYear,
+    records,
   };
 }
 
 async function buildBudapestLocation(): Promise<LocationPayload> {
   const { years, categories, countsByKey } = await getHungaryCounts();
+  const population = await getHungaryPopulationByCountyYear();
   const citywideSlug = "citywide";
   const citywideLabel = "Citywide";
   const targetSlug = slugify("Budapest");
   const cityCountsByKey = new Map<string, number>();
+  const eligibleYears = years.filter((year) => population.populationByKey.has(`${year}__${targetSlug}`));
 
   for (const [key, value] of countsByKey.entries()) {
     const [year, districtSlug, categorySlug] = key.split("__");
@@ -5650,12 +5768,14 @@ async function buildBudapestLocation(): Promise<LocationPayload> {
     chartTitle: BUDAPEST_LOCATION.chartTitle,
     note: BUDAPEST_LOCATION.note,
     sources: BUDAPEST_LOCATION.sources,
-    years,
+    years: eligibleYears,
     districts,
     categories,
     defaultCategorySlugs: categories.filter((category) => category.isDefault).map((category) => category.value),
-    cityPopulationByYear: {},
-    records: buildDenseCountRecords({ years, districts, categories, countsByKey: cityCountsByKey }),
+    cityPopulationByYear: Object.fromEntries(
+      eligibleYears.map((year) => [String(year), Math.round(population.populationByKey.get(`${year}__${targetSlug}`) ?? 0)]),
+    ),
+    records: buildDenseCountRecords({ years: eligibleYears, districts, categories, countsByKey: cityCountsByKey }),
   };
 }
 
