@@ -900,21 +900,48 @@ These are official-source candidates that have been partially verified but not y
   - the annual reports are official, but I have not yet verified a reproducible structured download path
   - if only PDF annual reports are available, this becomes a lower-priority source than Tokyo / São Paulo / CDMX
 
-## When adding a new city
+## When adding a new city or country
 
-Checklist:
+Checklist (do all steps):
 
-1. verify official source
-2. verify actual download surface
-3. determine years really usable
-4. determine whether sub-city geography exists
-5. determine whether rate data exists
-6. map source categories into dashboard taxonomy
-7. map source categories into comparison taxonomy
-8. add source notes
-9. regenerate data
-10. run anomaly checks
-11. run lint/build
+1. Official sources
+   - Identify official crime series and official population series.
+   - Prefer machine-readable CSV/XLSX; avoid PDFs unless no alternative.
+
+2. Location definition
+   - Add `LocationDefinition` in `src/lib/location-config.ts` with correct `scope`, labels, and category list.
+   - Add the location to `LOCATION_DEFINITIONS`.
+
+3. Flags
+   - Add PNG in `public/flags`.
+   - Map slug/country in `src/components/overview/location-flag.tsx`.
+
+4. Comparison mapping
+   - Add mappings in `src/lib/comparison-taxonomy.ts`.
+   - Use only `high`/`medium` for defensible mappings.
+
+5. Ingestion
+   - Wire source downloads and parsing in `scripts/prepare-data.ts`.
+   - Validate downloads (don’t accept HTML error pages).
+   - Note: KSH requires a Python UA to avoid WAF block (`Python-urllib/3.11`).
+
+6. Rate-per-100k (if population exists)
+   - Align population years to crime years.
+   - Store `cityPopulationByYear` and compute `ratePer100k`.
+
+7. Regenerate data
+   - Run `npm run data:prepare` to re-seed `prisma/crime-atlas.db`.
+   - Confirm the new location has districts, categories, and records.
+
+8. Verify UI & compare
+   - Country appears under `Countries`, city under `Cities`.
+   - Compare view shows at least one mapped category.
+
+9. Record sources
+   - Update `agent.md` and `data-audit.md` with URLs and caveats.
+
+10. Build
+   - Run `npm run build` and fix any failures before push.
 
 ## What not to do
 

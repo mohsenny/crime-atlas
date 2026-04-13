@@ -16,6 +16,23 @@ import {
   LOCATION_COMPARISON_MAPPINGS,
 } from "../src/lib/comparison-taxonomy";
 import {
+  ARGENTINA_PERSON_CODE_TO_CATEGORY,
+  ARGENTINA_PROPERTY_CODE_TO_CATEGORY,
+  ARGENTINA_PROVINCE_LABELS,
+  HONG_KONG_CATEGORY_LABELS,
+  MALAYSIA_JOHOR_BAHRU_DISTRICTS,
+  MALAYSIA_TYPE_CATEGORY_MAP,
+  SOURCE_URLS,
+  SPAIN_COUNTRY_TERRITORIES,
+  SPAIN_MUNICIPALITY_ALIASES,
+  SPAIN_STRUCTURED_COUNTRY_SOURCES,
+  SPAIN_STRUCTURED_MUNICIPALITY_SOURCES,
+  URUGUAY_DELITO_CATEGORY_MAP,
+  type SpainAnnualSource,
+  type SpainCountryTerritoryDefinition,
+  type SpainStructuredSource,
+} from "./prepare-data/sources";
+import {
   AUSTIN_LOCATION,
   BARCELONA_LOCATION,
   BERLIN_LOCATION,
@@ -111,16 +128,6 @@ type FrankfurtRow = Record<string, string>;
 type LutonCrimeRow = Record<string, string | number>;
 type ParisCrimeRow = Record<string, string>;
 type MilanCrimeRow = Record<string, string | number>;
-type SpainAnnualSource = {
-  year: number;
-  type: "pdf" | "zip-pdf" | "xls";
-  url: string;
-  zipEntryContains?: string;
-};
-type SpainStructuredSource = {
-  year: number;
-  url: string;
-};
 type NewYorkCrimeRow = {
   year: string;
   boro_nm: string;
@@ -197,100 +204,10 @@ type ArcGisFeatureResponse<T> = {
   };
 };
 
-type SpainCountryTerritoryDefinition = {
-  slug: string;
-  label: string;
-  aliases: string[];
-};
-
 type ArgentinaSeriesColumn = {
   index: number;
   provinceKey: string;
   categoryLabel: string;
-};
-
-const ARGENTINA_PROVINCE_LABELS: Record<string, string> = {
-  buenos_aires: "Buenos Aires",
-  caba: "Ciudad Autónoma de Buenos Aires",
-  catamarca: "Catamarca",
-  chaco: "Chaco",
-  chubut: "Chubut",
-  cordoba: "Córdoba",
-  corrientes: "Corrientes",
-  entre_rios: "Entre Ríos",
-  formosa: "Formosa",
-  jujuy: "Jujuy",
-  la_pampa: "La Pampa",
-  la_rioja: "La Rioja",
-  mendoza: "Mendoza",
-  misiones: "Misiones",
-  neuquen: "Neuquén",
-  rio_negro: "Río Negro",
-  salta: "Salta",
-  san_juan: "San Juan",
-  san_luis: "San Luis",
-  santa_cruz: "Santa Cruz",
-  santa_fe: "Santa Fe",
-  sgo_estero: "Santiago del Estero",
-  tierra_fuego: "Tierra del Fuego",
-  tucuman: "Tucumán",
-};
-
-const ARGENTINA_PERSON_CODE_TO_CATEGORY: Record<number, string> = {
-  1: "Homicide",
-  2: "Attempted homicide",
-  5: "Assault",
-  10: "Sexual violence",
-  11: "Other sexual offenses",
-  13: "Threats",
-};
-
-const ARGENTINA_PROPERTY_CODE_TO_CATEGORY: Record<number, string> = {
-  15: "Robbery",
-  16: "Attempted robbery",
-  17: "Robbery",
-  18: "Attempted robbery",
-  19: "Theft",
-  20: "Attempted theft",
-  21: "Other property crimes",
-};
-
-const URUGUAY_DELITO_CATEGORY_MAP: Record<string, string> = {
-  RAPINA: "Robbery",
-  HURTO: "Theft",
-  LESIONES: "Assault",
-  "VIOLENCIA DOMESTICA": "Domestic violence",
-  ABIGEATO: "Livestock theft",
-};
-const MALAYSIA_TYPE_CATEGORY_MAP: Record<string, string> = {
-  murder: "Homicide",
-  rape: "Sexual violence",
-  causing_injury: "Assault",
-  break_in: "Burglary",
-  theft_other: "Theft",
-  theft_vehicle_motorcar: "Motor vehicle theft",
-  theft_vehicle_motorcycle: "Motor vehicle theft",
-  theft_vehicle_lorry: "Motor vehicle theft",
-  robbery_gang_armed: "Robbery",
-  robbery_gang_unarmed: "Robbery",
-  robbery_solo_armed: "Robbery",
-  robbery_solo_unarmed: "Robbery",
-};
-const MALAYSIA_JOHOR_BAHRU_DISTRICTS = new Set(["Johor Bahru Selatan", "Johor Bahru Utara"]);
-const HONG_KONG_CATEGORY_LABELS: Record<string, string> = {
-  "Overall Crime": "All recorded offenses",
-  Homicide: "Homicide",
-  Robbery: "Robbery",
-  Burglary: "Burglary",
-  "Wounding and Serious Assault": "Assault",
-  Rape: "Sexual violence",
-  "All Thefts": "Theft",
-  Pickpocketing: "Personal theft",
-  "Missing Motor Vehicle": "Motor vehicle theft",
-  "Serious Drug Offences": "Drug offenses",
-  "Criminal Intimidation": "Threats and harassment",
-  Deception: "Fraud and deception",
-  "Triad Related Crime": "Public order offenses",
 };
 
 const ROOT = process.cwd();
@@ -443,126 +360,6 @@ const BERLIN_HISTORICAL_RECORDS = berlinHistoricalRecords as Array<{
   count: number;
   rate_per_100k: number;
 }>;
-
-const SOURCE_URLS = {
-  berlinHistorical: {
-    "kbr2007.pdf": "https://www.berlin.de/polizei/_assets/verschiedenes/pks/kbr2007.pdf",
-    "kriminalitaetsbelastung_2009.pdf":
-      "https://www.berlin.de/polizei/_assets/verschiedenes/pks/kriminalitaetsbelastung_2009.pdf",
-    "krimatlas2011.pdf": "https://www.berlin.de/polizei/_assets/verschiedenes/pks/krimatlas2011.pdf",
-    "kriminalitatsatlas_berlin_2013.pdf":
-      "https://www.berlin.de/polizei/_assets/verschiedenes/pks/kriminalitatsatlas_berlin_2013.pdf",
-    "kriminalitatsatlas_berlin_2015.pdf":
-      "https://www.berlin.de/polizei/_assets/verschiedenes/pks/kriminalitatsatlas_berlin_2015.pdf",
-  },
-  berlinCurrentWorkbook: "https://www.kriminalitaetsatlas.berlin.de/K-Atlas/bezirke/Fallzahlen%26HZ%202015-2024.xlsx",
-  londonCrimeHistorical:
-    "https://data.london.gov.uk/download/exy3m/6b725bdf-f863-4a7c-a1b4-c2bc15d547e1/MPS%20Borough%20Level%20Crime%20%28Historical%29.csv",
-  londonCrimeRecent:
-    "https://data.london.gov.uk/download/exy3m/f3c80ea8-c2d6-4920-80ab-6a5a478e59e7/MPS%20Borough%20Level%20Crime%20%28most%20recent%2024%20months%29.csv",
-  londonPopulationHistorical:
-    "https://data.london.gov.uk/download/vd615/20dc1341-e74a-4e20-b1ff-a01c45e9fa10/ons-mye-population-totals.xls",
-  londonPopulationCurrent:
-    "https://www.ons.gov.uk/file?uri=%2Fpeoplepopulationandcommunity%2Fpopulationandmigration%2Fpopulationestimates%2Fdatasets%2Festimatesofthepopulationforenglandandwales%2Fmid2011tomid2024detailedtimeseries%2Fmyebtablesenglandwales20112024.xlsx",
-  frankfurtCrimeByCategory:
-    "https://offenedaten.frankfurt.de/dcat/dataset/de-he-frankfurtam-straftaten_nach_art_der_straftat/content.csv",
-  frankfurtPopulation:
-    "https://offenedaten.frankfurt.de/dcat/dataset/de-he-frankfurtam-demographische_kennzahlen_gesamtstaedtisch/content.csv",
-  lutonCrimeWorkbook:
-    "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/crimeandjustice/datasets/recordedcrimedataatcommunitysafetypartnershiplocalauthoritylevel/current/prclocalauthoritytables.zip",
-  populationTimeseries2001To2020:
-    "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/populationandmigration/populationestimates/datasets/populationestimatesforukenglandandwalesscotlandandnorthernireland/mid2001tomid2020detailedtimeseries/ukdetailedtimeseries2001to2020.zip",
-  parisCrimeCommunal:
-    "https://static.data.gouv.fr/resources/bases-statistiques-communale-departementale-et-regionale-de-la-delinquance-enregistree-par-la-police-et-la-gendarmerie-nationales/20260326-124144/donnee-data.gouv-2025-geographie2025-produit-le2026-02-03.csv.gz",
-  romeStatisticsPage: "https://www.comune.roma.it/web/it/roma-statistica-legalita-e-sicurezza1.page",
-  romeWorkbook2023: "https://www.comune.roma.it/web-resources/cms/documents/15_Sicurezza_Delitti2023.xlsx",
-  milanCrimeCsv:
-    "https://dati.comune.milano.it/dataset/34e2d2af-5c3b-4768-918b-ab7e5c0d15da/resource/8b03b9f2-f2d7-4408-b439-bc6efc093cff/download/ds564_reati_denunciati_2004_2023.csv",
-  milanPopulationCsv:
-    "https://dati.comune.milano.it/dataset/2ba2e01c-51db-48c6-a330-776bb4c5a023/resource/772962a9-9e2f-49d6-8e8b-21a2e1d86cdf/download/ds73_pop_calc_res_sesso-1936-2023.csv",
-  munichStatisticsPage: "https://stadt.muenchen.de/infos/statistik-sicherheit.html",
-  malaysiaCrimeDistrictCsv: "https://storage.data.gov.my/publicsafety/crime_district.csv",
-  hongKongCrimeDetailsCsv: "https://www.police.gov.hk/info/doc/crime_details.csv",
-  hungaryCrimeCountyCsv: "https://www.ksh.hu/stadat_files/iga/en/iga0008.csv",
-  hungaryPopulationCountyCsv: "https://www.ksh.hu/stadat_files/nep/en/nep0034.csv",
-  hamburgYearbook2024:
-    "https://www.polizei.hamburg/resource/blob/1053710/30efad000cc60586a22280031dad1ea0/pks-2024-jahrbuch-do-data.pdf",
-  hamburgYearbook2023:
-    "https://www.polizei.hamburg/resource/blob/866922/0958bd62e8c4465d0012ff10cf1f6524/pks-2023-jahrbuch-do-data.pdf",
-  hamburgYearbook2022:
-    "https://www.polizei.hamburg/resource/blob/790456/7c860a879315fd0d5315d0e671ec2d50/pks-2022-jahrbuch-do-data.pdf",
-  hamburgYearbook2021:
-    "https://www.polizei.hamburg/resource/blob/790450/ae1d0bf1779164b2bad863d97e21de2f/pks-2021-jahrbuch-do-data.pdf",
-  hamburgYearbook2020:
-    "https://www.polizei.hamburg/resource/blob/928876/9d2537bc7196fd5fc36986daf9c55e45/pks-2020-jahrbuch-do-data.pdf",
-  spanishBalance2025:
-    "https://www.interior.gob.es/opencms/export/sites/default/.galleries/galeria-de-prensa/documentos-y-multimedia/balances-e-informes/2025/Balance-de-Criminalidad_Cuarto_Trimestre_2025.pdf",
-  spanishBalance2024:
-    "https://www.interior.gob.es/opencms/export/sites/default/.galleries/galeria-de-prensa/documentos-y-multimedia/balances-e-informes/2024/BALANCE-CRIMINALIDAD-CUARTO-TRIMESTRE-2024.pdf",
-  spanishBalance2023:
-    "https://www.interior.gob.es/opencms/export/sites/default/.galleries/galeria-de-prensa/documentos-y-multimedia/balances-e-informes/2023/Balance-de-Criminalidad-Cuarto-Trimestre-2023.pdf",
-  spanishBalance2022:
-    "https://www.interior.gob.es/opencms/export/sites/default/.galleries/galeria-de-prensa/documentos-y-multimedia/balances-e-informes/2022/Balance-de-Criminalidad-Cuarto-Trimestre-2022.pdf",
-  spanishBalance2021:
-    "https://www.interior.gob.es/opencms/pdf/prensa/balances-e-informes/2021/Balance-de-Criminalidad.-Cuarto-Trimestre-2021.pdf",
-  spanishBalance2014Workbook:
-    "https://www.interior.gob.es/opencms/pdf/prensa/balances-e-informes/2014/Balance-criminalidad-diciembre-2014.xls",
-  spanishBalance2015:
-    "https://www.interior.gob.es/opencms/pdf/informe-balance-2015_ene_dic_5607112.pdf",
-  spanishArchive2020:
-    "https://estadisticasdecriminalidad.ses.mir.es/publico/portalestadistico/dam/jcr%3A8b65244f-3428-46fd-8896-221c32b96d43/informes2020.zip",
-  spanishArchive2019:
-    "https://estadisticasdecriminalidad.ses.mir.es/publico/portalestadistico/dam/jcr%3A4f3bae25-ea03-409a-b0e4-7230378d6ba1/informes2019.zip",
-  spanishArchive2018:
-    "https://estadisticasdecriminalidad.ses.mir.es/publico/portalestadistico/dam/jcr%3Aed645370-ead8-4ba9-b217-a2544fe6da7b/informes2018.zip",
-  spanishArchive2017:
-    "https://estadisticasdecriminalidad.ses.mir.es/publico/portalestadistico/dam/jcr%3A3e7b5499-8efd-45f5-8cfc-92a00dd0cd2e/informes2017.zip",
-  spanishArchive2016:
-    "https://estadisticasdecriminalidad.ses.mir.es/publico/portalestadistico/dam/jcr%3A88cb5588-9ee7-4614-a7bd-06e8e59658db/informes2016.zip",
-  newYorkCrimeHistoricApi: "https://data.cityofnewyork.us/resource/qgea-i56i.json",
-  newYorkCrimeCurrentApi: "https://data.cityofnewyork.us/resource/5uac-w243.json",
-  austinCrimeApi: "https://data.austintexas.gov/resource/fdj4-gpfu.json",
-  chicagoCrimeApi: "https://data.cityofchicago.org/resource/ijzp-q8t2.json",
-  dallasCrimeApi: "https://www.dallasopendata.com/resource/qv6i-rri7.json",
-  losAngelesCrimeHistoricApi: "https://data.lacity.org/resource/63jg-8b9z.json",
-  losAngelesCrimeCurrentApi: "https://data.lacity.org/resource/2nrs-mtv8.json",
-  houstonCrimePage: "https://www.houstontx.gov/police/cs/Monthly_Crime_Data_by_Street_and_Police_Beat.htm",
-  phoenixCrimeCsv:
-    "https://www.phoenixopendata.com/dataset/cc08aace-9ca9-467f-b6c1-f0879ab1a358/resource/0ce3411a-2fc6-4302-a33f-167f68608a20/download/crime-data_crime-data_crimestat.csv",
-  sanFranciscoCrimeApi: "https://data.sfgov.org/resource/wg3w-h783.json",
-  seattleCrimeApi: "https://data.seattle.gov/resource/tazs-3rd5.json",
-  minneapolisCrimeApi:
-    "https://services.arcgis.com/afSMGVsC7QlRK1kZ/arcgis/rest/services/NEIGHBORHOOD_CRIME_STATS/FeatureServer/0",
-  clevelandCrimeApi:
-    "https://services3.arcgis.com/dty2kHktVXHrqO8i/arcgis/rest/services/Crime_Incidents/FeatureServer/0",
-  argentinaPersonsSeries:
-    "https://infra.datos.gob.ar/catalog/seguridad/dataset/2/distribution/2.6/download/snic-provincias-delitos-personas-hechos-series.csv",
-  argentinaPropertySeries:
-    "https://infra.datos.gob.ar/catalog/seguridad/dataset/2/distribution/2.7/download/snic-provincias-delitos-propiedad-hechos-series.csv",
-  uruguayOtherCrimes:
-    "https://catalogodatos.gub.uy/dataset/999f2edc-5ef5-4d41-bed7-824a5635ea8d/resource/c8c4cc18-57cf-448b-9c68-901b3752fc11/download/delitos_2013_2025tri4.csv",
-  uruguayHomicides:
-    "https://catalogodatos.gub.uy/dataset/999f2edc-5ef5-4d41-bed7-824a5635ea8d/resource/5ed98add-f127-4377-b529-aa8ad35b77e3/download/homicidios_dolosos_consumados.csv",
-  barcelonaPopulationPackage:
-    "https://opendata-ajuntament.barcelona.cat/data/api/action/package_show?id=16c11ddf-a783-4b64-aa68-3dc83dc70379",
-  valenciaPopulationIndicator: "https://www.valencia.es/estadistica/IndSoc/F02051000.pdf",
-  hamburgProfiles2013To2023: "https://www.statistik-nord.de/fileadmin/user_upload/Stadtteilprofile-Berichtsjahre-2013-2023.xlsx",
-  hamburgProfiles2024: "https://www.statistik-nord.de/fileadmin/user_upload/Stadtteilprofile2025.xlsx",
-  usCityPopulation2000To2010:
-    "https://www2.census.gov/programs-surveys/popest/datasets/2000-2010/intercensal/cities/sub-est00int.csv",
-  tokyoPopulationCsv: "https://www.toukei.metro.tokyo.lg.jp/tnenkan/2023/tn23qv020100.csv",
-  saoPauloPopulationEstimated:
-    "https://apisidra.ibge.gov.br/values/t/6579/n6/3550308/v/9324/p/all?formato=json",
-  saoPauloPopulation2010:
-    "https://apisidra.ibge.gov.br/values/t/761/n6/3550308/v/93/p/2010?formato=json",
-  saoPauloPopulation2022:
-    "https://apisidra.ibge.gov.br/values/t/4714/n6/3550308/v/93/p/2022?formato=json",
-  saoPauloPopulation2023:
-    "https://ftp.ibge.gov.br/Informacoes_Gerais_e_Referencia/Relacao_da_Populacao_dos_Municipios_para_publicacao_no_DOU_em_2023/POP_DOU_2023_Municipios_POP2022_Malha2023.xls",
-  australiaLgaPopulation:
-    "https://www.abs.gov.au/statistics/people/population/regional-population/2024-25/32180DS0004_2001-25.xlsx",
-  sydneyCrimeWorkbook: "https://bocsarblob.blob.core.windows.net/bocsar-open-data/RCI_offencebymonth.xlsm",
-};
 
 const VICTORIA_LGA_RECORDED_OFFENCES_URL_BY_YEAR = {
   2020: "https://files.crimestatistics.vic.gov.au/2021-07/Data_Tables_LGA_Recorded_Offences_Year_Ending_December_2020.xlsx",
@@ -740,72 +537,6 @@ const MELBOURNE_CANONICAL_LGA_BY_SOURCE: Record<string, string> = {
   Moreland: "Merri-bek",
 };
 
-const SPAIN_COUNTRY_TERRITORIES: SpainCountryTerritoryDefinition[] = [
-  { slug: "andalucia", label: "Andalucía", aliases: ["ANDALUCÍA"] },
-  { slug: "aragon", label: "Aragón", aliases: ["ARAGÓN"] },
-  {
-    slug: "asturias",
-    label: "Principado de Asturias",
-    aliases: ["ASTURIAS (PRINCIPADO DE)", "PRINCIPADO DE ASTURIAS", "ASTURIAS"],
-  },
-  { slug: "illes-balears", label: "Illes Balears", aliases: ["BALEARS (ILLES)", "ILLES BALEARS", "BALEARES"] },
-  { slug: "canarias", label: "Canarias", aliases: ["CANARIAS"] },
-  { slug: "cantabria", label: "Cantabria", aliases: ["CANTABRIA"] },
-  { slug: "castilla-y-leon", label: "Castilla y León", aliases: ["CASTILLA Y LEÓN", "CASTILLA Y LEON"] },
-  {
-    slug: "castilla-la-mancha",
-    label: "Castilla-La Mancha",
-    aliases: ["CASTILLA - LA MANCHA", "CASTILLA -LA MANCHA", "CASTILLA-LA MANCHA", "CASTILLA LA MANCHA"],
-  },
-  { slug: "cataluna", label: "Cataluña", aliases: ["CATALUÑA"] },
-  { slug: "comunitat-valenciana", label: "Comunitat Valenciana", aliases: ["COMUNITAT VALENCIANA", "C. VALENCIANA"] },
-  { slug: "extremadura", label: "Extremadura", aliases: ["EXTREMADURA"] },
-  { slug: "galicia", label: "Galicia", aliases: ["GALICIA"] },
-  {
-    slug: "comunidad-de-madrid",
-    label: "Comunidad de Madrid",
-    aliases: ["MADRID (COMUNIDAD DE)", "COMUNIDAD DE MADRID", "C. DE MADRID", "MADRID"],
-  },
-  {
-    slug: "murcia",
-    label: "Región de Murcia",
-    aliases: ["MURCIA (REGION DE)", "REGIÓN DE MURCIA", "REGION DE MURCIA", "MURCIA"],
-  },
-  {
-    slug: "navarra",
-    label: "Comunidad Foral de Navarra",
-    aliases: ["NAVARRA (COMUNIDAD FORAL DE)", "COMUNIDAD FORAL DE NAVARRA", "NAVARRA"],
-  },
-  { slug: "pais-vasco", label: "País Vasco", aliases: ["PAÍS VASCO", "PAIS VASCO"] },
-  { slug: "la-rioja", label: "La Rioja", aliases: ["RIOJA (LA)", "LA RIOJA"] },
-  { slug: "ceuta", label: "Ceuta", aliases: ["CIUDAD AUTÓNOMA DE CEUTA", "CIUDAD AUTONOMA DE CEUTA", "CEUTA"] },
-  { slug: "melilla", label: "Melilla", aliases: ["CIUDAD AUTÓNOMA DE MELILLA", "CIUDAD AUTONOMA DE MELILLA", "MELILLA"] },
-];
-
-const SPAIN_STRUCTURED_COUNTRY_SOURCES: SpainStructuredSource[] = [
-  { year: 2019, url: "https://estadisticasdecriminalidad.ses.mir.es/sec/jaxiPx/files/_px/es/csv_bdsc/DatosBalanceAnt/l0/99010.csv_bdsc" },
-  { year: 2020, url: "https://estadisticasdecriminalidad.ses.mir.es/sec/jaxiPx/files/_px/es/csv_bdsc/DatosBalanceAnt/l0/1009010.csv_bdsc" },
-  { year: 2021, url: "https://estadisticasdecriminalidad.ses.mir.es/sec/jaxiPx/files/_px/es/csv_bdsc/DatosBalanceAnt/l0/1109010.csv_bdsc" },
-  { year: 2022, url: "https://estadisticasdecriminalidad.ses.mir.es/sec/jaxiPx/files/_px/es/csv_bdsc/DatosBalanceAnt/l0/1209010.csv_bdsc" },
-  { year: 2023, url: "https://estadisticasdecriminalidad.ses.mir.es/sec/jaxiPx/files/_px/es/csv_bdsc/DatosBalanceAnt/l0/1309010.csv_bdsc" },
-  { year: 2024, url: "https://estadisticasdecriminalidad.ses.mir.es/sec/jaxiPx/files/_px/es/csv_bdsc/DatosBalanceAnt/l0/1409010.csv_bdsc" },
-  { year: 2025, url: "https://estadisticasdecriminalidad.ses.mir.es/sec/jaxiPx/files/_px/es/csv_bdsc/DatosBalanceAct/l0/09010.csv_bdsc" },
-];
-
-const SPAIN_STRUCTURED_MUNICIPALITY_SOURCES: SpainStructuredSource[] = [
-  { year: 2019, url: "https://estadisticasdecriminalidad.ses.mir.es/sec/jaxiPx/files/_px/es/csv_bdsc/DatosBalanceAnt/l0/99012.csv_bdsc" },
-  { year: 2020, url: "https://estadisticasdecriminalidad.ses.mir.es/sec/jaxiPx/files/_px/es/csv_bdsc/DatosBalanceAnt/l0/1009012.csv_bdsc" },
-  { year: 2021, url: "https://estadisticasdecriminalidad.ses.mir.es/sec/jaxiPx/files/_px/es/csv_bdsc/DatosBalanceAnt/l0/1109012.csv_bdsc" },
-  { year: 2022, url: "https://estadisticasdecriminalidad.ses.mir.es/sec/jaxiPx/files/_px/es/csv_bdsc/DatosBalanceAnt/l0/1209012.csv_bdsc" },
-  { year: 2023, url: "https://estadisticasdecriminalidad.ses.mir.es/sec/jaxiPx/files/_px/es/csv_bdsc/DatosBalanceAnt/l0/1309012.csv_bdsc" },
-  { year: 2024, url: "https://estadisticasdecriminalidad.ses.mir.es/sec/jaxiPx/files/_px/es/csv_bdsc/DatosBalanceAnt/l0/1409012.csv_bdsc" },
-  { year: 2025, url: "https://estadisticasdecriminalidad.ses.mir.es/sec/jaxiPx/files/_px/es/csv_bdsc/DatosBalanceAct/l0/09012.csv_bdsc" },
-];
-
-const SPAIN_MUNICIPALITY_ALIASES: Record<string, string[]> = {
-  Barcelona: ["Municipio de Barcelona", "08019 Barcelona"],
-  Valencia: ["Municipio de Valencia", "Municipio de València", "46250 Valencia"],
-};
 
 function buildCategoryLookup(definition: LocationDefinition) {
   const entries = definition.categories.flatMap((category) => {
@@ -1030,6 +761,14 @@ function parseCsvLine(line: string, delimiter = ",") {
 
 function normalizeCsvHeader(header: string) {
   return header.replace(/^\uFEFF/, "").trim().toLowerCase().replace(/[\s_]+/g, "");
+}
+
+async function ensureKshCsv(filePath: string, url: string, headerStartsWith: string) {
+  await ensureFileWithCurl(filePath, url, ["-A", "Python-urllib/3.11"]);
+  const sample = await fs.readFile(filePath, "utf8");
+  if (!sample.includes(headerStartsWith)) {
+    throw new Error(`KSH download did not include expected header "${headerStartsWith}" for ${url}`);
+  }
 }
 
 function buildCsvRow(headers: string[], values: string[]) {
@@ -5551,7 +5290,7 @@ async function getHungaryCounts() {
   hungaryCountsPromise = (async () => {
     await fs.mkdir(HUNGARY_COUNTRY_DIR, { recursive: true });
     const csvPath = path.join(HUNGARY_COUNTRY_DIR, "ksh_registered_crimes.csv");
-    await ensureFileWithCurl(csvPath, SOURCE_URLS.hungaryCrimeCountyCsv);
+    await ensureKshCsv(csvPath, SOURCE_URLS.hungaryCrimeCountyCsv, "Name of the territorial unit");
 
     const { options: categories, lookup: categoryLookup } = buildCategoryLookup(HUNGARY_COUNTRY_LOCATION);
     const countsByKey = new Map<string, number>();
@@ -5569,7 +5308,7 @@ async function getHungaryCounts() {
       return { years: [], districts: [], categories, countsByKey };
     }
 
-    const headerCells = parseCsvLine(lines[headerIndex]).map((value) => value.trim());
+    const headerCells = parseCsvLine(lines[headerIndex], ";").map((value) => value.trim());
     const yearCells = headerCells.slice(2).map((value) => Number(String(value).trim())).filter((value) => Number.isFinite(value));
     years.push(...yearCells);
 
@@ -5579,7 +5318,7 @@ async function getHungaryCounts() {
     }
 
     for (const line of lines.slice(headerIndex + 1)) {
-      const cells = parseCsvLine(line);
+      const cells = parseCsvLine(line, ";");
       const name = String(cells[0] ?? "").trim();
       const level = String(cells[1] ?? "").trim().toLowerCase();
 
@@ -5619,7 +5358,7 @@ async function getHungaryPopulationByCountyYear() {
   hungaryPopulationPromise = (async () => {
     await fs.mkdir(HUNGARY_COUNTRY_DIR, { recursive: true });
     const csvPath = path.join(HUNGARY_COUNTRY_DIR, "ksh_population_county.csv");
-    await ensureFileWithCurl(csvPath, SOURCE_URLS.hungaryPopulationCountyCsv);
+    await ensureKshCsv(csvPath, SOURCE_URLS.hungaryPopulationCountyCsv, "Name of territorial units");
 
     const file = await fs.readFile(csvPath, "utf8");
     const lines = file.split(/\r?\n/).filter((line) => line.trim().length > 0);
@@ -5628,7 +5367,7 @@ async function getHungaryPopulationByCountyYear() {
       return { years: [], districts: [], populationByKey: new Map(), countryPopulationByYear: new Map() };
     }
 
-    const headerCells = parseCsvLine(lines[headerIndex]).map((value) => value.trim());
+    const headerCells = parseCsvLine(lines[headerIndex], ";").map((value) => value.trim());
     const yearCells = headerCells.slice(2).map((value) => Number(String(value).trim())).filter((value) => Number.isFinite(value));
 
     let section = "";
@@ -5637,7 +5376,7 @@ async function getHungaryPopulationByCountyYear() {
     const countryPopulationByYear = new Map<number, number>();
 
     for (const line of lines.slice(headerIndex + 1)) {
-      const cells = parseCsvLine(line);
+      const cells = parseCsvLine(line, ";");
       const label = String(cells[0] ?? "").trim();
 
       if (!label) {
