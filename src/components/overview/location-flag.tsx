@@ -7,6 +7,10 @@ const flagByLocationSlug: Record<string, { src: string; alt: string }> = {
     src: "/flags/united-states.png",
     alt: "Flag of the United States",
   },
+  "buenos-aires": {
+    src: "/flags/argentina.png",
+    alt: "Flag of Argentina",
+  },
   berlin: {
     src: "/flags/germany.png",
     alt: "Flag of Germany",
@@ -39,9 +43,21 @@ const flagByLocationSlug: Record<string, { src: string; alt: string }> = {
     src: "/flags/germany.png",
     alt: "Flag of Germany",
   },
+  "hong-kong": {
+    src: "/flags/hong-kong.png",
+    alt: "Flag of Hong Kong",
+  },
   houston: {
     src: "/flags/united-states.png",
     alt: "Flag of the United States",
+  },
+  "johor-bahru": {
+    src: "/flags/malaysia.png",
+    alt: "Flag of Malaysia",
+  },
+  "kuala-lumpur": {
+    src: "/flags/malaysia.png",
+    alt: "Flag of Malaysia",
   },
   london: {
     src: "/flags/united-kingdom.png",
@@ -70,6 +86,10 @@ const flagByLocationSlug: Record<string, { src: string; alt: string }> = {
   melbourne: {
     src: "/flags/australia.png",
     alt: "Flag of Australia",
+  },
+  montevideo: {
+    src: "/flags/uruguay.png",
+    alt: "Flag of Uruguay",
   },
   minneapolis: {
     src: "/flags/united-states.png",
@@ -122,6 +142,10 @@ const flagByLocationSlug: Record<string, { src: string; alt: string }> = {
 };
 
 const flagByCountry: Record<string, { src: string; alt: string }> = {
+  Argentina: {
+    src: "/flags/argentina.png",
+    alt: "Flag of Argentina",
+  },
   Australia: {
     src: "/flags/australia.png",
     alt: "Flag of Australia",
@@ -146,9 +170,21 @@ const flagByCountry: Record<string, { src: string; alt: string }> = {
     src: "/flags/japan.png",
     alt: "Flag of Japan",
   },
+  Malaysia: {
+    src: "/flags/malaysia.png",
+    alt: "Flag of Malaysia",
+  },
   Spain: {
     src: "/flags/spain.png",
     alt: "Flag of Spain",
+  },
+  Uruguay: {
+    src: "/flags/uruguay.png",
+    alt: "Flag of Uruguay",
+  },
+  "Hong Kong": {
+    src: "/flags/hong-kong.png",
+    alt: "Flag of Hong Kong",
   },
   "United Kingdom": {
     src: "/flags/united-kingdom.png",

@@ -20,19 +20,25 @@ import {
   BARCELONA_LOCATION,
   BERLIN_LOCATION,
   BIRMINGHAM_LOCATION,
+  BUENOS_AIRES_LOCATION,
   CHICAGO_LOCATION,
   CLEVELAND_LOCATION,
   DALLAS_LOCATION,
+  ARGENTINA_COUNTRY_LOCATION,
   FRANCE_COUNTRY_LOCATION,
   GERMANY_COUNTRY_LOCATION,
   FRANKFURT_LOCATION,
   HAMBURG_LOCATION,
+  HONG_KONG_LOCATION,
   HOUSTON_LOCATION,
   ITALY_COUNTRY_LOCATION,
+  JOHOR_BAHRU_LOCATION,
+  KUALA_LUMPUR_LOCATION,
   LONDON_LOCATION,
   LOS_ANGELES_LOCATION,
   LOUISVILLE_LOCATION,
   LUTON_LOCATION,
+  MALAYSIA_COUNTRY_LOCATION,
   MANCHESTER_LOCATION,
   MELBOURNE_LOCATION,
   MILAN_LOCATION,
@@ -40,6 +46,7 @@ import {
   NEW_YORK_CITY_LOCATION,
   PHOENIX_LOCATION,
   MUNICH_LOCATION,
+  MONTEVIDEO_LOCATION,
   PARIS_LOCATION,
   ROME_LOCATION,
   SAO_PAULO_LOCATION,
@@ -48,6 +55,7 @@ import {
   SPAIN_COUNTRY_LOCATION,
   SYDNEY_LOCATION,
   TOKYO_LOCATION,
+  URUGUAY_COUNTRY_LOCATION,
   VALENCIA_LOCATION,
   type LocationDefinition,
 } from "../src/lib/location-config";
@@ -135,6 +143,14 @@ type DallasCrimeRow = {
   nibrs_crime: string;
   count: string;
 };
+type MalaysiaCrimeRow = {
+  state: string;
+  district: string;
+  category: string;
+  type: string;
+  date: string;
+  crimes: string;
+};
 type LosAngelesCrimeRow = {
   year: string;
   area_name: string;
@@ -185,11 +201,104 @@ type SpainCountryTerritoryDefinition = {
   aliases: string[];
 };
 
+type ArgentinaSeriesColumn = {
+  index: number;
+  provinceKey: string;
+  categoryLabel: string;
+};
+
+const ARGENTINA_PROVINCE_LABELS: Record<string, string> = {
+  buenos_aires: "Buenos Aires",
+  caba: "Ciudad Autónoma de Buenos Aires",
+  catamarca: "Catamarca",
+  chaco: "Chaco",
+  chubut: "Chubut",
+  cordoba: "Córdoba",
+  corrientes: "Corrientes",
+  entre_rios: "Entre Ríos",
+  formosa: "Formosa",
+  jujuy: "Jujuy",
+  la_pampa: "La Pampa",
+  la_rioja: "La Rioja",
+  mendoza: "Mendoza",
+  misiones: "Misiones",
+  neuquen: "Neuquén",
+  rio_negro: "Río Negro",
+  salta: "Salta",
+  san_juan: "San Juan",
+  san_luis: "San Luis",
+  santa_cruz: "Santa Cruz",
+  santa_fe: "Santa Fe",
+  sgo_estero: "Santiago del Estero",
+  tierra_fuego: "Tierra del Fuego",
+  tucuman: "Tucumán",
+};
+
+const ARGENTINA_PERSON_CODE_TO_CATEGORY: Record<number, string> = {
+  1: "Homicide",
+  2: "Attempted homicide",
+  5: "Assault",
+  10: "Sexual violence",
+  11: "Other sexual offenses",
+  13: "Threats",
+};
+
+const ARGENTINA_PROPERTY_CODE_TO_CATEGORY: Record<number, string> = {
+  15: "Robbery",
+  16: "Attempted robbery",
+  17: "Robbery",
+  18: "Attempted robbery",
+  19: "Theft",
+  20: "Attempted theft",
+  21: "Other property crimes",
+};
+
+const URUGUAY_DELITO_CATEGORY_MAP: Record<string, string> = {
+  RAPINA: "Robbery",
+  HURTO: "Theft",
+  LESIONES: "Assault",
+  "VIOLENCIA DOMESTICA": "Domestic violence",
+  ABIGEATO: "Livestock theft",
+};
+const MALAYSIA_TYPE_CATEGORY_MAP: Record<string, string> = {
+  murder: "Homicide",
+  rape: "Sexual violence",
+  causing_injury: "Assault",
+  break_in: "Burglary",
+  theft_other: "Theft",
+  theft_vehicle_motorcar: "Motor vehicle theft",
+  theft_vehicle_motorcycle: "Motor vehicle theft",
+  theft_vehicle_lorry: "Motor vehicle theft",
+  robbery_gang_armed: "Robbery",
+  robbery_gang_unarmed: "Robbery",
+  robbery_solo_armed: "Robbery",
+  robbery_solo_unarmed: "Robbery",
+};
+const MALAYSIA_JOHOR_BAHRU_DISTRICTS = new Set(["Johor Bahru Selatan", "Johor Bahru Utara"]);
+const HONG_KONG_CATEGORY_LABELS: Record<string, string> = {
+  "Overall Crime": "All recorded offenses",
+  Homicide: "Homicide",
+  Robbery: "Robbery",
+  Burglary: "Burglary",
+  "Wounding and Serious Assault": "Assault",
+  Rape: "Sexual violence",
+  "All Thefts": "Theft",
+  Pickpocketing: "Personal theft",
+  "Missing Motor Vehicle": "Motor vehicle theft",
+  "Serious Drug Offences": "Drug offenses",
+  "Criminal Intimidation": "Threats and harassment",
+  Deception: "Fraud and deception",
+  "Triad Related Crime": "Public order offenses",
+};
+
 const ROOT = process.cwd();
 const prisma = new PrismaClient();
 const TMP_DIR = path.join(ROOT, "tmp_sources");
 const BRAZIL_DIR = path.join(TMP_DIR, "brazil");
 const SAO_PAULO_DIR = path.join(BRAZIL_DIR, "sao-paulo");
+const ARGENTINA_DIR = path.join(TMP_DIR, "argentina");
+const ARGENTINA_COUNTRY_DIR = path.join(ARGENTINA_DIR, "country");
+const BUENOS_AIRES_DIR = path.join(ARGENTINA_DIR, "buenos-aires");
 const FRANCE_DIR = path.join(TMP_DIR, "france");
 const FRANCE_COUNTRY_DIR = path.join(FRANCE_DIR, "country");
 const PARIS_DIR = path.join(FRANCE_DIR, "paris");
@@ -205,11 +314,19 @@ const MILAN_DIR = path.join(ITALY_DIR, "milan");
 const ROME_DIR = path.join(ITALY_DIR, "rome");
 const JAPAN_DIR = path.join(TMP_DIR, "japan");
 const TOKYO_DIR = path.join(JAPAN_DIR, "tokyo");
+const MALAYSIA_DIR = path.join(TMP_DIR, "malaysia");
+const MALAYSIA_COUNTRY_DIR = path.join(MALAYSIA_DIR, "country");
+const KUALA_LUMPUR_DIR = path.join(MALAYSIA_DIR, "kuala-lumpur");
+const JOHOR_BAHRU_DIR = path.join(MALAYSIA_DIR, "johor-bahru");
+const HONG_KONG_DIR = path.join(TMP_DIR, "hong-kong");
 const SPAIN_DIR = path.join(TMP_DIR, "spain");
 const SPAIN_COUNTRY_DIR = path.join(SPAIN_DIR, "country");
 const BARCELONA_DIR = path.join(SPAIN_DIR, "barcelona");
 const VALENCIA_DIR = path.join(SPAIN_DIR, "valencia");
 const SPAIN_SHARED_DIR = path.join(SPAIN_DIR, "shared");
+const URUGUAY_DIR = path.join(TMP_DIR, "uruguay");
+const URUGUAY_COUNTRY_DIR = path.join(URUGUAY_DIR, "country");
+const MONTEVIDEO_DIR = path.join(URUGUAY_DIR, "montevideo");
 const AUSTRALIA_DIR = path.join(TMP_DIR, "australia");
 const AUSTRALIA_SHARED_DIR = path.join(AUSTRALIA_DIR, "shared");
 const MELBOURNE_DIR = path.join(AUSTRALIA_DIR, "melbourne");
@@ -359,6 +476,8 @@ const SOURCE_URLS = {
   milanPopulationCsv:
     "https://dati.comune.milano.it/dataset/2ba2e01c-51db-48c6-a330-776bb4c5a023/resource/772962a9-9e2f-49d6-8e8b-21a2e1d86cdf/download/ds73_pop_calc_res_sesso-1936-2023.csv",
   munichStatisticsPage: "https://stadt.muenchen.de/infos/statistik-sicherheit.html",
+  malaysiaCrimeDistrictCsv: "https://storage.data.gov.my/publicsafety/crime_district.csv",
+  hongKongCrimeDetailsCsv: "https://www.police.gov.hk/info/doc/crime_details.csv",
   hamburgYearbook2024:
     "https://www.polizei.hamburg/resource/blob/1053710/30efad000cc60586a22280031dad1ea0/pks-2024-jahrbuch-do-data.pdf",
   hamburgYearbook2023:
@@ -409,6 +528,14 @@ const SOURCE_URLS = {
     "https://services.arcgis.com/afSMGVsC7QlRK1kZ/arcgis/rest/services/NEIGHBORHOOD_CRIME_STATS/FeatureServer/0",
   clevelandCrimeApi:
     "https://services3.arcgis.com/dty2kHktVXHrqO8i/arcgis/rest/services/Crime_Incidents/FeatureServer/0",
+  argentinaPersonsSeries:
+    "https://infra.datos.gob.ar/catalog/seguridad/dataset/2/distribution/2.6/download/snic-provincias-delitos-personas-hechos-series.csv",
+  argentinaPropertySeries:
+    "https://infra.datos.gob.ar/catalog/seguridad/dataset/2/distribution/2.7/download/snic-provincias-delitos-propiedad-hechos-series.csv",
+  uruguayOtherCrimes:
+    "https://catalogodatos.gub.uy/dataset/999f2edc-5ef5-4d41-bed7-824a5635ea8d/resource/c8c4cc18-57cf-448b-9c68-901b3752fc11/download/delitos_2013_2025tri4.csv",
+  uruguayHomicides:
+    "https://catalogodatos.gub.uy/dataset/999f2edc-5ef5-4d41-bed7-824a5635ea8d/resource/5ed98add-f127-4377-b529-aa8ad35b77e3/download/homicidios_dolosos_consumados.csv",
   barcelonaPopulationPackage:
     "https://opendata-ajuntament.barcelona.cat/data/api/action/package_show?id=16c11ddf-a783-4b64-aa68-3dc83dc70379",
   valenciaPopulationIndicator: "https://www.valencia.es/estadistica/IndSoc/F02051000.pdf",
@@ -979,6 +1106,31 @@ function parseDecimalLike(value: string | number | null | undefined) {
   }
 
   return Number(String(value ?? "0").replace(/\./g, "").replace(",", ".")) || 0;
+}
+
+function normalizeDiacritics(value: string) {
+  return value.normalize("NFD").replace(/\p{Diacritic}/gu, "");
+}
+
+function normalizeUruguayDelito(value: string) {
+  return normalizeDiacritics(value).trim().toUpperCase();
+}
+
+function formatDepartmentLabel(value: string) {
+  return toTitleCase(normalizeDiacritics(value));
+}
+
+function normalizeHongKongHeader(value: string) {
+  const cleaned = value.replace(/\uFEFF/g, "").trim();
+  if (!cleaned) {
+    return "";
+  }
+  const parts = cleaned
+    .split("/")
+    .map((part) => part.trim())
+    .filter(Boolean);
+  const english = parts.length ? parts[parts.length - 1] : cleaned;
+  return english.replace(/\s+/g, " ");
 }
 
 function toTitleCase(value: string) {
@@ -4801,6 +4953,575 @@ async function buildNewYorkCityLocation(): Promise<LocationPayload> {
   };
 }
 
+let argentinaSeriesPromise: Promise<{
+  years: number[];
+  districts: FilterOption[];
+  categories: FilterOption[];
+  countsByKey: Map<string, number>;
+}> | null = null;
+
+async function getArgentinaSeriesCounts() {
+  if (argentinaSeriesPromise) {
+    return argentinaSeriesPromise;
+  }
+  argentinaSeriesPromise = (async () => {
+  await fs.mkdir(ARGENTINA_COUNTRY_DIR, { recursive: true });
+
+  const personsPath = path.join(ARGENTINA_COUNTRY_DIR, "snic-personas-hechos-series.csv");
+  const propertyPath = path.join(ARGENTINA_COUNTRY_DIR, "snic-propiedad-hechos-series.csv");
+  await ensureFile(personsPath, SOURCE_URLS.argentinaPersonsSeries);
+  await ensureFile(propertyPath, SOURCE_URLS.argentinaPropertySeries);
+
+  const { options: categories, lookup: categoryLookup } = buildCategoryLookup(ARGENTINA_COUNTRY_LOCATION);
+  const years = new Set<number>();
+  const districtsByLabel = new Map<string, FilterOption>();
+  const countsByKey = new Map<string, number>();
+
+  async function parseArgentinaSeriesFile(filePath: string, codeToCategory: Record<number, string>) {
+    const stream = createReadStream(filePath);
+    const reader = readline.createInterface({ input: stream, crlfDelay: Infinity });
+    let headers: string[] | null = null;
+    let columns: ArgentinaSeriesColumn[] = [];
+
+    for await (const line of reader) {
+      if (!headers) {
+        headers = parseCsvLine(line);
+        columns = headers
+          .map((header, index) => {
+            const match = header.match(/^delito_(\d+)_hechos_(.+)$/);
+            if (!match) {
+              return null;
+            }
+            const code = Number(match[1]);
+            const provinceKey = match[2];
+            const categoryLabel = codeToCategory[code];
+            if (!categoryLabel || !ARGENTINA_PROVINCE_LABELS[provinceKey]) {
+              return null;
+            }
+            return { index, provinceKey, categoryLabel };
+          })
+          .filter((column): column is ArgentinaSeriesColumn => Boolean(column));
+        continue;
+      }
+
+      const values = parseCsvLine(line);
+      const year = Number(values[0]);
+      if (!Number.isFinite(year)) {
+        continue;
+      }
+      years.add(year);
+
+      for (const column of columns) {
+        const value = parseCountLike(values[column.index]);
+        if (!value) {
+          continue;
+        }
+        const provinceLabel = ARGENTINA_PROVINCE_LABELS[column.provinceKey];
+        const districtSlug = slugify(provinceLabel);
+        districtsByLabel.set(provinceLabel, { label: provinceLabel, value: districtSlug });
+        const category = categoryLookup.get(normalizeSourceLabel(column.categoryLabel));
+        if (!category) {
+          continue;
+        }
+        const key = `${year}__${districtSlug}__${category.slug}`;
+        countsByKey.set(key, (countsByKey.get(key) ?? 0) + value);
+      }
+    }
+  }
+
+  await parseArgentinaSeriesFile(personsPath, ARGENTINA_PERSON_CODE_TO_CATEGORY);
+  await parseArgentinaSeriesFile(propertyPath, ARGENTINA_PROPERTY_CODE_TO_CATEGORY);
+
+  const districtLabels = Object.values(ARGENTINA_PROVINCE_LABELS).sort((left, right) => left.localeCompare(right));
+  const districts = districtLabels
+    .map((label) => districtsByLabel.get(label))
+    .filter((district): district is FilterOption => Boolean(district));
+
+  const yearList = [...years].sort((a, b) => a - b);
+
+    return {
+      years: yearList,
+      districts,
+      categories,
+      countsByKey,
+    };
+  })();
+
+  return argentinaSeriesPromise;
+}
+
+async function buildArgentinaCountryLocation(): Promise<LocationPayload> {
+  const { years, districts, categories, countsByKey } = await getArgentinaSeriesCounts();
+
+  return {
+    slug: ARGENTINA_COUNTRY_LOCATION.slug,
+    label: ARGENTINA_COUNTRY_LOCATION.label,
+    country: ARGENTINA_COUNTRY_LOCATION.country,
+    areaLabelSingular: ARGENTINA_COUNTRY_LOCATION.areaLabelSingular,
+    areaLabelPlural: ARGENTINA_COUNTRY_LOCATION.areaLabelPlural,
+    chartTitle: ARGENTINA_COUNTRY_LOCATION.chartTitle,
+    note: ARGENTINA_COUNTRY_LOCATION.note,
+    sources: ARGENTINA_COUNTRY_LOCATION.sources,
+    years,
+    districts,
+    categories,
+    defaultCategorySlugs: categories.filter((category) => category.isDefault).map((category) => category.value),
+    cityPopulationByYear: {},
+    records: buildDenseCountRecords({ years, districts, categories, countsByKey }),
+  };
+}
+
+async function buildBuenosAiresLocation(): Promise<LocationPayload> {
+  const { years, categories, countsByKey } = await getArgentinaSeriesCounts();
+  const provinceLabel = ARGENTINA_PROVINCE_LABELS.caba;
+  const provinceSlug = slugify(provinceLabel);
+  const citywideSlug = "citywide";
+  const citywideLabel = "Citywide";
+  const cityCountsByKey = new Map<string, number>();
+
+  for (const [key, value] of countsByKey.entries()) {
+    const [, districtSlug, categorySlug] = key.split("__");
+    if (districtSlug !== provinceSlug) {
+      continue;
+    }
+    const year = key.split("__")[0];
+    cityCountsByKey.set(`${year}__${citywideSlug}__${categorySlug}`, value);
+  }
+
+  const districts = [{ label: citywideLabel, value: citywideSlug }];
+
+  return {
+    slug: BUENOS_AIRES_LOCATION.slug,
+    label: BUENOS_AIRES_LOCATION.label,
+    country: BUENOS_AIRES_LOCATION.country,
+    areaLabelSingular: BUENOS_AIRES_LOCATION.areaLabelSingular,
+    areaLabelPlural: BUENOS_AIRES_LOCATION.areaLabelPlural,
+    chartTitle: BUENOS_AIRES_LOCATION.chartTitle,
+    note: BUENOS_AIRES_LOCATION.note,
+    sources: BUENOS_AIRES_LOCATION.sources,
+    years,
+    districts,
+    categories,
+    defaultCategorySlugs: categories.filter((category) => category.isDefault).map((category) => category.value),
+    cityPopulationByYear: {},
+    records: buildDenseCountRecords({ years, districts, categories, countsByKey: cityCountsByKey }),
+  };
+}
+
+let uruguayCountsPromise: Promise<{
+  years: number[];
+  districts: FilterOption[];
+  categories: FilterOption[];
+  countsByKey: Map<string, number>;
+}> | null = null;
+
+async function getUruguayCounts() {
+  if (uruguayCountsPromise) {
+    return uruguayCountsPromise;
+  }
+  uruguayCountsPromise = (async () => {
+  await fs.mkdir(URUGUAY_COUNTRY_DIR, { recursive: true });
+  const otherCrimesPath = path.join(URUGUAY_COUNTRY_DIR, "delitos_2013_2025tri4.csv");
+  const homicidesPath = path.join(URUGUAY_COUNTRY_DIR, "homicidios_dolosos_consumados.csv");
+
+  await ensureFile(otherCrimesPath, SOURCE_URLS.uruguayOtherCrimes);
+  await ensureFile(homicidesPath, SOURCE_URLS.uruguayHomicides);
+
+  const { options: categories, lookup: categoryLookup } = buildCategoryLookup(URUGUAY_COUNTRY_LOCATION);
+  const years = new Set<number>();
+  const districtsByLabel = new Map<string, FilterOption>();
+  const countsByKey = new Map<string, number>();
+
+  const otherCrimesStream = createReadStream(otherCrimesPath);
+  const otherCrimesReader = readline.createInterface({ input: otherCrimesStream, crlfDelay: Infinity });
+  let otherHeaders: string[] | null = null;
+  let otherIndex: Record<string, number> = {};
+
+  for await (const line of otherCrimesReader) {
+    if (!otherHeaders) {
+      otherHeaders = parseCsvLine(line, ";");
+      otherIndex = Object.fromEntries(otherHeaders.map((header, index) => [header, index]));
+      if (otherIndex.DELITO === undefined || otherIndex.DEPTO === undefined || otherIndex["AÑO"] === undefined) {
+        throw new Error("Uruguay crimes CSV missing expected DELITO/DEPTO/AÑO headers");
+      }
+      continue;
+    }
+
+    const values = parseCsvLine(line, ";");
+    const year = Number(values[otherIndex["AÑO"] ?? -1] ?? 0);
+    if (!Number.isFinite(year)) {
+      continue;
+    }
+    const delitoRaw = String(values[otherIndex.DELITO ?? -1] ?? "");
+    const departmentRaw = String(values[otherIndex.DEPTO ?? -1] ?? "");
+    if (!delitoRaw || !departmentRaw || departmentRaw === "SIN DATO") {
+      continue;
+    }
+
+    const delitoKey = normalizeUruguayDelito(delitoRaw);
+    const categoryLabel = URUGUAY_DELITO_CATEGORY_MAP[delitoKey];
+    if (!categoryLabel) {
+      continue;
+    }
+
+    const departmentLabel = formatDepartmentLabel(departmentRaw);
+    const districtSlug = slugify(departmentLabel);
+    districtsByLabel.set(departmentLabel, { label: departmentLabel, value: districtSlug });
+    years.add(year);
+
+    const category = categoryLookup.get(normalizeSourceLabel(categoryLabel));
+    if (!category) {
+      continue;
+    }
+    const key = `${year}__${districtSlug}__${category.slug}`;
+    countsByKey.set(key, (countsByKey.get(key) ?? 0) + 1);
+  }
+
+  const homicideStream = createReadStream(homicidesPath);
+  const homicideReader = readline.createInterface({ input: homicideStream, crlfDelay: Infinity });
+  let homicideHeaders: string[] | null = null;
+  let homicideIndex: Record<string, number> = {};
+
+  for await (const line of homicideReader) {
+    if (!homicideHeaders) {
+      homicideHeaders = parseCsvLine(line, ",");
+      homicideIndex = Object.fromEntries(homicideHeaders.map((header, index) => [header, index]));
+      if (homicideIndex.DEPARTAMENTO === undefined || homicideIndex["AÑO"] === undefined) {
+        throw new Error("Uruguay homicides CSV missing expected DEPARTAMENTO/AÑO headers");
+      }
+      continue;
+    }
+
+    const values = parseCsvLine(line, ",");
+    const year = Number(values[homicideIndex["AÑO"] ?? -1] ?? 0);
+    if (!Number.isFinite(year)) {
+      continue;
+    }
+    const departmentRaw = String(values[homicideIndex.DEPARTAMENTO ?? -1] ?? "");
+    if (!departmentRaw || departmentRaw === "SIN DATO") {
+      continue;
+    }
+
+    const departmentLabel = formatDepartmentLabel(departmentRaw);
+    const districtSlug = slugify(departmentLabel);
+    districtsByLabel.set(departmentLabel, { label: departmentLabel, value: districtSlug });
+    years.add(year);
+
+    const category = categoryLookup.get(normalizeSourceLabel("Homicide"));
+    if (!category) {
+      continue;
+    }
+    const key = `${year}__${districtSlug}__${category.slug}`;
+    countsByKey.set(key, (countsByKey.get(key) ?? 0) + 1);
+  }
+
+  const districts = [...districtsByLabel.values()].sort((left, right) => left.label.localeCompare(right.label));
+  const yearList = [...years].sort((a, b) => a - b);
+
+    return {
+      years: yearList,
+      districts,
+      categories,
+      countsByKey,
+    };
+  })();
+
+  return uruguayCountsPromise;
+}
+
+async function buildUruguayCountryLocation(): Promise<LocationPayload> {
+  const { years, districts, categories, countsByKey } = await getUruguayCounts();
+
+  return {
+    slug: URUGUAY_COUNTRY_LOCATION.slug,
+    label: URUGUAY_COUNTRY_LOCATION.label,
+    country: URUGUAY_COUNTRY_LOCATION.country,
+    areaLabelSingular: URUGUAY_COUNTRY_LOCATION.areaLabelSingular,
+    areaLabelPlural: URUGUAY_COUNTRY_LOCATION.areaLabelPlural,
+    chartTitle: URUGUAY_COUNTRY_LOCATION.chartTitle,
+    note: URUGUAY_COUNTRY_LOCATION.note,
+    sources: URUGUAY_COUNTRY_LOCATION.sources,
+    years,
+    districts,
+    categories,
+    defaultCategorySlugs: categories.filter((category) => category.isDefault).map((category) => category.value),
+    cityPopulationByYear: {},
+    records: buildDenseCountRecords({ years, districts, categories, countsByKey }),
+  };
+}
+
+async function buildMontevideoLocation(): Promise<LocationPayload> {
+  const { years, categories, countsByKey } = await getUruguayCounts();
+  const citywideSlug = "citywide";
+  const citywideLabel = "Citywide";
+  const targetDepartmentLabel = formatDepartmentLabel("MONTEVIDEO");
+  const targetSlug = slugify(targetDepartmentLabel);
+  const cityCountsByKey = new Map<string, number>();
+
+  for (const [key, value] of countsByKey.entries()) {
+    const [year, districtSlug, categorySlug] = key.split("__");
+    if (districtSlug !== targetSlug) {
+      continue;
+    }
+    cityCountsByKey.set(`${year}__${citywideSlug}__${categorySlug}`, value);
+  }
+
+  const districts = [{ label: citywideLabel, value: citywideSlug }];
+
+  return {
+    slug: MONTEVIDEO_LOCATION.slug,
+    label: MONTEVIDEO_LOCATION.label,
+    country: MONTEVIDEO_LOCATION.country,
+    areaLabelSingular: MONTEVIDEO_LOCATION.areaLabelSingular,
+    areaLabelPlural: MONTEVIDEO_LOCATION.areaLabelPlural,
+    chartTitle: MONTEVIDEO_LOCATION.chartTitle,
+    note: MONTEVIDEO_LOCATION.note,
+    sources: MONTEVIDEO_LOCATION.sources,
+    years,
+    districts,
+    categories,
+    defaultCategorySlugs: categories.filter((category) => category.isDefault).map((category) => category.value),
+    cityPopulationByYear: {},
+    records: buildDenseCountRecords({ years, districts, categories, countsByKey: cityCountsByKey }),
+  };
+}
+
+type MalaysiaParsedRow = {
+  state: string;
+  district: string;
+  districtLabel: string;
+  year: number;
+  categoryLabel: string;
+  count: number;
+};
+
+let malaysiaRowsPromise: Promise<MalaysiaParsedRow[]> | null = null;
+
+async function getMalaysiaRows() {
+  if (malaysiaRowsPromise) {
+    return malaysiaRowsPromise;
+  }
+
+  malaysiaRowsPromise = (async () => {
+    await fs.mkdir(MALAYSIA_COUNTRY_DIR, { recursive: true });
+    const csvPath = path.join(MALAYSIA_COUNTRY_DIR, "crime_district.csv");
+    await ensureFileWithCurl(csvPath, SOURCE_URLS.malaysiaCrimeDistrictCsv);
+
+    const file = await fs.readFile(csvPath, "utf8");
+    const lines = file.split(/\r?\n/).filter((line) => line.trim().length > 0);
+    if (!lines.length) {
+      return [];
+    }
+
+    const header = parseCsvLine(lines[0]).map((value) => value.trim());
+    const indexByLabel = new Map(header.map((label, index) => [label, index]));
+
+    const rawRows: Array<{
+      state: string;
+      district: string;
+      year: number;
+      categoryLabel: string;
+      count: number;
+    }> = [];
+    const districtCounts = new Map<string, number>();
+
+    for (const line of lines.slice(1)) {
+      const cells = parseCsvLine(line);
+      const state = String(cells[indexByLabel.get("state") ?? -1] ?? "").trim();
+      const district = String(cells[indexByLabel.get("district") ?? -1] ?? "").trim();
+      const type = String(cells[indexByLabel.get("type") ?? -1] ?? "").trim();
+      const dateValue = String(cells[indexByLabel.get("date") ?? -1] ?? "").trim();
+      const count = parseCountLike(cells[indexByLabel.get("crimes") ?? -1]);
+
+      if (!state || !district || !type || type === "all") {
+        continue;
+      }
+      if (state === "Malaysia" || district === "All") {
+        continue;
+      }
+
+      const categoryLabel = MALAYSIA_TYPE_CATEGORY_MAP[type];
+      if (!categoryLabel) {
+        continue;
+      }
+
+      const year = parseYearFromDateText(dateValue) ?? Number(dateValue.slice(0, 4));
+      if (!year) {
+        continue;
+      }
+
+      rawRows.push({ state, district, year, categoryLabel, count });
+      districtCounts.set(district, (districtCounts.get(district) ?? 0) + 1);
+    }
+
+    const duplicateDistricts = new Set(
+      [...districtCounts.entries()].filter(([, count]) => count > 1).map(([label]) => label),
+    );
+
+    return rawRows.map((row) => ({
+      ...row,
+      districtLabel: duplicateDistricts.has(row.district) ? `${row.district} (${row.state})` : row.district,
+    }));
+  })();
+
+  return malaysiaRowsPromise;
+}
+
+async function buildMalaysiaLocation(
+  definition: LocationDefinition,
+  filterRow: (row: MalaysiaParsedRow) => boolean,
+): Promise<LocationPayload> {
+  const { options: categories, lookup: categoryLookup } = buildCategoryLookup(definition);
+  const rows = await getMalaysiaRows();
+  const years = new Set<number>();
+  const districtsByLabel = new Map<string, FilterOption>();
+  const countsByKey = new Map<string, number>();
+
+  for (const row of rows) {
+    if (!filterRow(row)) {
+      continue;
+    }
+
+    years.add(row.year);
+    const districtLabel = row.districtLabel.trim();
+    const districtSlug = slugify(districtLabel);
+    districtsByLabel.set(districtLabel, { label: districtLabel, value: districtSlug });
+
+    const category = categoryLookup.get(normalizeSourceLabel(row.categoryLabel));
+    if (!category) {
+      continue;
+    }
+    const key = `${row.year}__${districtSlug}__${category.slug}`;
+    countsByKey.set(key, (countsByKey.get(key) ?? 0) + row.count);
+  }
+
+  const yearList = [...years].sort((a, b) => a - b);
+  const districts = [...districtsByLabel.values()].sort((left, right) => left.label.localeCompare(right.label));
+
+  return {
+    slug: definition.slug,
+    label: definition.label,
+    country: definition.country,
+    areaLabelSingular: definition.areaLabelSingular,
+    areaLabelPlural: definition.areaLabelPlural,
+    chartTitle: definition.chartTitle,
+    note: definition.note,
+    sources: definition.sources,
+    years: yearList,
+    districts,
+    categories,
+    defaultCategorySlugs: categories.filter((category) => category.isDefault).map((category) => category.value),
+    cityPopulationByYear: {},
+    records: buildDenseCountRecords({ years: yearList, districts, categories, countsByKey }),
+  };
+}
+
+async function buildMalaysiaCountryLocation(): Promise<LocationPayload> {
+  return buildMalaysiaLocation(MALAYSIA_COUNTRY_LOCATION, () => true);
+}
+
+async function buildKualaLumpurLocation(): Promise<LocationPayload> {
+  return buildMalaysiaLocation(KUALA_LUMPUR_LOCATION, (row) => row.state === "W.P. Kuala Lumpur");
+}
+
+async function buildJohorBahruLocation(): Promise<LocationPayload> {
+  return buildMalaysiaLocation(
+    JOHOR_BAHRU_LOCATION,
+    (row) => row.state === "Johor" && MALAYSIA_JOHOR_BAHRU_DISTRICTS.has(row.district),
+  );
+}
+
+let hongKongCountsPromise: Promise<{
+  years: number[];
+  districts: FilterOption[];
+  categories: FilterOption[];
+  countsByKey: Map<string, number>;
+}> | null = null;
+
+async function getHongKongCounts() {
+  if (hongKongCountsPromise) {
+    return hongKongCountsPromise;
+  }
+
+  hongKongCountsPromise = (async () => {
+    await fs.mkdir(HONG_KONG_DIR, { recursive: true });
+    const csvPath = path.join(HONG_KONG_DIR, "crime_details.csv");
+    await ensureFileWithCurl(csvPath, SOURCE_URLS.hongKongCrimeDetailsCsv);
+
+    const { options: categories, lookup: categoryLookup } = buildCategoryLookup(HONG_KONG_LOCATION);
+    const citywideSlug = "citywide";
+    const districts = [{ label: "Citywide", value: citywideSlug }];
+    const years = new Set<number>();
+    const countsByKey = new Map<string, number>();
+
+    const file = await fs.readFile(csvPath);
+    const lines = file
+      .toString("latin1")
+      .split(/\r?\n/)
+      .filter((line) => line.trim().length > 0);
+    if (!lines.length) {
+      return { years: [], districts, categories, countsByKey };
+    }
+
+    const headers = parseCsvLine(lines[0]).map((header) => normalizeHongKongHeader(header));
+    const categoryColumns = new Map<number, string>();
+
+    headers.forEach((header, index) => {
+      const mapped = HONG_KONG_CATEGORY_LABELS[header];
+      if (mapped) {
+        categoryColumns.set(index, mapped);
+      }
+    });
+
+    for (const line of lines.slice(1)) {
+      const cells = parseCsvLine(line);
+      const year = Number(cells[0]);
+      if (!year) {
+        continue;
+      }
+      years.add(year);
+
+      for (const [index, categoryLabel] of categoryColumns.entries()) {
+        const value = parseCountLike(cells[index]);
+        if (!value) {
+          continue;
+        }
+        const category = categoryLookup.get(normalizeSourceLabel(categoryLabel));
+        if (!category) {
+          continue;
+        }
+        const key = `${year}__${citywideSlug}__${category.slug}`;
+        countsByKey.set(key, (countsByKey.get(key) ?? 0) + value);
+      }
+    }
+
+    return { years: [...years].sort((a, b) => a - b), districts, categories, countsByKey };
+  })();
+
+  return hongKongCountsPromise;
+}
+
+async function buildHongKongLocation(): Promise<LocationPayload> {
+  const { years, districts, categories, countsByKey } = await getHongKongCounts();
+
+  return {
+    slug: HONG_KONG_LOCATION.slug,
+    label: HONG_KONG_LOCATION.label,
+    country: HONG_KONG_LOCATION.country,
+    areaLabelSingular: HONG_KONG_LOCATION.areaLabelSingular,
+    areaLabelPlural: HONG_KONG_LOCATION.areaLabelPlural,
+    chartTitle: HONG_KONG_LOCATION.chartTitle,
+    note: HONG_KONG_LOCATION.note,
+    sources: HONG_KONG_LOCATION.sources,
+    years,
+    districts,
+    categories,
+    defaultCategorySlugs: categories.filter((category) => category.isDefault).map((category) => category.value),
+    cityPopulationByYear: {},
+    records: buildDenseCountRecords({ years, districts, categories, countsByKey }),
+  };
+}
+
 async function buildChicagoLocation(): Promise<LocationPayload> {
   const { options: categories, lookup: categoryLookup } = buildCategoryLookup(CHICAGO_LOCATION);
   const totalCategory = categories.find((category) => category.value === "all-recorded-offenses") ?? null;
@@ -5918,20 +6639,66 @@ async function main() {
     return value;
   }
 
-  const [austin, berlin, birmingham, chicago, cleveland, dallas, franceCountry, frankfurt, germanyCountry, hamburg, houston, italyCountry, london, losAngeles, louisville, luton, manchester, melbourne, milan, minneapolis, munich, newYorkCity, paris, phoenix, rome, sanFrancisco, saoPaulo, seattle, spainCountry, sydney, tokyo] =
+  const [
+    austin,
+    berlin,
+    birmingham,
+    buenosAires,
+    chicago,
+    cleveland,
+    dallas,
+    argentinaCountry,
+    franceCountry,
+    frankfurt,
+    germanyCountry,
+    hamburg,
+    hongKong,
+    houston,
+    italyCountry,
+    johorBahru,
+    kualaLumpur,
+    malaysiaCountry,
+    london,
+    losAngeles,
+    louisville,
+    luton,
+    manchester,
+    melbourne,
+    milan,
+    minneapolis,
+    munich,
+    newYorkCity,
+    paris,
+    phoenix,
+    rome,
+    sanFrancisco,
+    saoPaulo,
+    seattle,
+    spainCountry,
+    sydney,
+    tokyo,
+    uruguayCountry,
+    montevideo,
+  ] =
     await Promise.all([
       buildWithTrace("Austin", buildAustinLocation()),
       buildWithTrace("Berlin", buildBerlinLocation()),
       buildWithTrace("Birmingham", buildUkLocalAuthorityLocation(BIRMINGHAM_LOCATION, "Birmingham", "E08000025")),
+      buildWithTrace("Buenos Aires", buildBuenosAiresLocation()),
       buildWithTrace("Chicago", buildChicagoLocation()),
       buildWithTrace("Cleveland", buildClevelandLocation()),
       buildWithTrace("Dallas", buildDallasLocation()),
+      buildWithTrace("Argentina", buildArgentinaCountryLocation()),
       buildWithTrace("France", buildFranceCountryLocation()),
       buildWithTrace("Frankfurt", buildFrankfurtLocation()),
       buildWithTrace("Germany", buildGermanyCountryLocation()),
       buildWithTrace("Hamburg", buildHamburgLocation()),
+      buildWithTrace("Hong Kong", buildHongKongLocation()),
       buildWithTrace("Houston", buildHoustonLocation()),
       buildWithTrace("Italy", buildItalyCountryLocation()),
+      buildWithTrace("Johor Bahru", buildJohorBahruLocation()),
+      buildWithTrace("Kuala Lumpur", buildKualaLumpurLocation()),
+      buildWithTrace("Malaysia", buildMalaysiaCountryLocation()),
       buildWithTrace("London", buildLondonLocation()),
       buildWithTrace("Los Angeles", buildLosAngelesLocation()),
       buildWithTrace("Louisville", buildLouisvilleLocation()),
@@ -5951,14 +6718,18 @@ async function main() {
       buildWithTrace("Spain", buildSpainCountryLocation()),
       buildWithTrace("Sydney", buildSydneyLocation()),
       buildWithTrace("Tokyo", buildTokyoLocation()),
+      buildWithTrace("Uruguay", buildUruguayCountryLocation()),
+      buildWithTrace("Montevideo", buildMontevideoLocation()),
     ]);
   const payload = {
     generatedAt: new Date().toISOString(),
     locations: [
+      argentinaCountry,
       austin,
       barcelona,
       berlin,
       birmingham,
+      buenosAires,
       chicago,
       cleveland,
       dallas,
@@ -5966,8 +6737,12 @@ async function main() {
       frankfurt,
       germanyCountry,
       hamburg,
+      hongKong,
       houston,
       italyCountry,
+      johorBahru,
+      kualaLumpur,
+      malaysiaCountry,
       london,
       losAngeles,
       louisville,
@@ -5987,6 +6762,8 @@ async function main() {
       spainCountry,
       sydney,
       tokyo,
+      uruguayCountry,
+      montevideo,
       valencia,
     ].sort((left, right) => left.label.localeCompare(right.label)),
   };

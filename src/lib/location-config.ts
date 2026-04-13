@@ -1445,6 +1445,402 @@ export const SPAIN_COUNTRY_LOCATION: LocationDefinition = {
   ],
 };
 
+export const ARGENTINA_COUNTRY_LOCATION: LocationDefinition = {
+  slug: "argentina",
+  label: "Argentina",
+  scope: "country",
+  country: "Argentina",
+  areaLabelSingular: "Province",
+  areaLabelPlural: "Provinces",
+  chartTitle: "Argentina Crime by Province",
+  note:
+    "Argentina uses the official SNIC provincial series published by the National Security Ministry. This first South America pass aggregates the SNIC yearly series for crimes against persons and property at the province level and keeps the view in count mode while we validate a matching official population series.",
+  sources: [
+    {
+      label: "SNIC provincial series (crimes against persons)",
+      url: "https://infra.datos.gob.ar/catalog/seguridad/dataset/2/distribution/2.6/download/snic-provincias-delitos-personas-hechos-series.csv",
+    },
+    {
+      label: "SNIC provincial series (crimes against property)",
+      url: "https://infra.datos.gob.ar/catalog/seguridad/dataset/2/distribution/2.7/download/snic-provincias-delitos-propiedad-hechos-series.csv",
+    },
+    {
+      label: "Argentina SNIC criminal statistics portal",
+      url: "https://www.argentina.gob.ar/seguridad/estadisticascriminales",
+    },
+  ],
+  categories: [
+    {
+      sourceLabels: ["Homicide"],
+      label: "Homicide",
+      shortLabel: "Homicide",
+      color: "#be123c",
+      isDefault: false,
+      sortOrder: 1,
+    },
+    {
+      sourceLabels: ["Attempted homicide"],
+      label: "Attempted homicide",
+      shortLabel: "Attempted homicide",
+      color: "#f97316",
+      isDefault: false,
+      sortOrder: 2,
+    },
+    {
+      sourceLabels: ["Assault"],
+      label: "Assault",
+      shortLabel: "Assault",
+      color: "#facc15",
+      isDefault: true,
+      sortOrder: 3,
+    },
+    {
+      sourceLabels: ["Sexual violence"],
+      label: "Sexual violence",
+      shortLabel: "Sexual violence",
+      color: "#ec4899",
+      isDefault: true,
+      sortOrder: 4,
+    },
+    {
+      sourceLabels: ["Other sexual offenses"],
+      label: "Other sexual offenses",
+      shortLabel: "Other sexual",
+      color: "#a78bfa",
+      isDefault: false,
+      sortOrder: 5,
+    },
+    {
+      sourceLabels: ["Threats"],
+      label: "Threats",
+      shortLabel: "Threats",
+      color: "#c084fc",
+      isDefault: false,
+      sortOrder: 6,
+    },
+    {
+      sourceLabels: ["Robbery"],
+      label: "Robbery",
+      shortLabel: "Robbery",
+      color: "#fb923c",
+      isDefault: true,
+      sortOrder: 7,
+    },
+    {
+      sourceLabels: ["Attempted robbery"],
+      label: "Attempted robbery",
+      shortLabel: "Attempted robbery",
+      color: "#f59e0b",
+      isDefault: false,
+      sortOrder: 8,
+    },
+    {
+      sourceLabels: ["Theft"],
+      label: "Theft",
+      shortLabel: "Theft",
+      color: "#60a5fa",
+      isDefault: true,
+      sortOrder: 9,
+    },
+    {
+      sourceLabels: ["Attempted theft"],
+      label: "Attempted theft",
+      shortLabel: "Attempted theft",
+      color: "#38bdf8",
+      isDefault: false,
+      sortOrder: 10,
+    },
+    {
+      sourceLabels: ["Other property crimes"],
+      label: "Other property crimes",
+      shortLabel: "Other property",
+      color: "#94a3b8",
+      isDefault: false,
+      sortOrder: 11,
+    },
+  ],
+};
+
+export const URUGUAY_COUNTRY_LOCATION: LocationDefinition = {
+  slug: "uruguay",
+  label: "Uruguay",
+  scope: "country",
+  country: "Uruguay",
+  areaLabelSingular: "Department",
+  areaLabelPlural: "Departments",
+  chartTitle: "Uruguay Crime by Department",
+  note:
+    "Uruguay uses the official Interior Ministry open-data series for reported crimes. This first pass aggregates incident-level reports by year and department and keeps the view in count mode while we validate official population series for rate calculations.",
+  sources: [
+    {
+      label: "Interior Ministry open data: Delitos denunciados en el Uruguay",
+      url: "https://catalogodatos.gub.uy/dataset/ministerio-del-interior-delitos_denunciados_en_el_uruguay",
+    },
+    {
+      label: "Interior Ministry open data: homicidios dolosos consumados",
+      url: "https://catalogodatos.gub.uy/dataset/ministerio-del-interior-delitos_denunciados_en_el_uruguay/resource/5ed98add-f127-4377-b529-aa8ad35b77e3",
+    },
+  ],
+  categories: [
+    {
+      sourceLabels: ["Homicide"],
+      label: "Homicide",
+      shortLabel: "Homicide",
+      color: "#be123c",
+      isDefault: false,
+      sortOrder: 1,
+    },
+    {
+      sourceLabels: ["Robbery"],
+      label: "Robbery",
+      shortLabel: "Robbery",
+      color: "#f97316",
+      isDefault: true,
+      sortOrder: 2,
+    },
+    {
+      sourceLabels: ["Theft"],
+      label: "Theft",
+      shortLabel: "Theft",
+      color: "#60a5fa",
+      isDefault: true,
+      sortOrder: 3,
+    },
+    {
+      sourceLabels: ["Assault"],
+      label: "Assault",
+      shortLabel: "Assault",
+      color: "#facc15",
+      isDefault: false,
+      sortOrder: 4,
+    },
+    {
+      sourceLabels: ["Domestic violence"],
+      label: "Domestic violence",
+      shortLabel: "Domestic violence",
+      color: "#f472b6",
+      isDefault: false,
+      sortOrder: 5,
+    },
+    {
+      sourceLabels: ["Livestock theft"],
+      label: "Livestock theft",
+      shortLabel: "Livestock theft",
+      color: "#14b8a6",
+      isDefault: false,
+      sortOrder: 6,
+    },
+  ],
+};
+
+export const MALAYSIA_COUNTRY_LOCATION: LocationDefinition = {
+  slug: "malaysia",
+  label: "Malaysia",
+  scope: "country",
+  country: "Malaysia",
+  areaLabelSingular: "Police district",
+  areaLabelPlural: "Police districts",
+  chartTitle: "Malaysia Crime by Police District",
+  note:
+    "Malaysia uses the Royal Malaysia Police open-data series for annual crime counts by police district. This first pass focuses on the published district totals and stays in count mode while a matching official population series is validated.",
+  sources: [
+    {
+      label: "Malaysia Open Data: Crime by district and crime type",
+      url: "https://data.gov.my/ms-MY/data-catalogue/crime_district",
+    },
+    {
+      label: "Malaysia crime district CSV download",
+      url: "https://storage.data.gov.my/publicsafety/crime_district.csv",
+    },
+  ],
+  categories: [
+    {
+      sourceLabels: ["murder"],
+      label: "Homicide",
+      shortLabel: "Homicide",
+      color: "#be123c",
+      isDefault: false,
+      sortOrder: 1,
+    },
+    {
+      sourceLabels: ["rape"],
+      label: "Sexual violence",
+      shortLabel: "Sexual violence",
+      color: "#ec4899",
+      isDefault: true,
+      sortOrder: 2,
+    },
+    {
+      sourceLabels: ["causing_injury"],
+      label: "Assault",
+      shortLabel: "Assault",
+      color: "#facc15",
+      isDefault: false,
+      sortOrder: 3,
+    },
+    {
+      sourceLabels: ["robbery_gang_armed", "robbery_gang_unarmed", "robbery_solo_armed", "robbery_solo_unarmed"],
+      label: "Robbery",
+      shortLabel: "Robbery",
+      color: "#f97316",
+      isDefault: true,
+      sortOrder: 4,
+    },
+    {
+      sourceLabels: ["break_in"],
+      label: "Burglary",
+      shortLabel: "Burglary",
+      color: "#ef4444",
+      isDefault: true,
+      sortOrder: 5,
+    },
+    {
+      sourceLabels: ["theft_other"],
+      label: "Theft",
+      shortLabel: "Theft",
+      color: "#60a5fa",
+      isDefault: true,
+      sortOrder: 6,
+    },
+    {
+      sourceLabels: ["theft_vehicle_motorcar", "theft_vehicle_motorcycle", "theft_vehicle_lorry"],
+      label: "Motor vehicle theft",
+      shortLabel: "Vehicle theft",
+      color: "#4f46e5",
+      isDefault: true,
+      sortOrder: 7,
+    },
+  ],
+};
+
+export const HONG_KONG_LOCATION: LocationDefinition = {
+  slug: "hong-kong",
+  label: "Hong Kong",
+  scope: "country",
+  country: "Hong Kong",
+  areaLabelSingular: "Area",
+  areaLabelPlural: "Areas",
+  chartTitle: "Hong Kong Crime",
+  note:
+    "Hong Kong uses the official Police Force crime statistics in detail CSV, which publishes annual territory-wide counts by offense group. This view is citywide only and does not provide district breakdowns.",
+  sources: [
+    {
+      label: "Hong Kong Police Force: Crime Statistics in Detail (CSV)",
+      url: "https://www.police.gov.hk/info/doc/crime_details.csv",
+    },
+    {
+      label: "Hong Kong Police Force: Crime statistics data dictionary",
+      url: "https://www.police.gov.hk/info/psi/meta/Data_Dictionary_for_Crime_Statistics_in_Detail_2020.pdf",
+    },
+  ],
+  categories: [
+    {
+      sourceLabels: ["Overall Crime"],
+      label: "All recorded offenses",
+      shortLabel: "All offenses",
+      color: "#7dd3fc",
+      isDefault: false,
+      sortOrder: 1,
+    },
+    {
+      sourceLabels: ["Homicide"],
+      label: "Homicide",
+      shortLabel: "Homicide",
+      color: "#be123c",
+      isDefault: false,
+      sortOrder: 2,
+    },
+    {
+      sourceLabels: ["Robbery"],
+      label: "Robbery",
+      shortLabel: "Robbery",
+      color: "#f97316",
+      isDefault: true,
+      sortOrder: 3,
+    },
+    {
+      sourceLabels: ["Burglary"],
+      label: "Burglary",
+      shortLabel: "Burglary",
+      color: "#ef4444",
+      isDefault: true,
+      sortOrder: 4,
+    },
+    {
+      sourceLabels: ["Wounding and Serious Assault"],
+      label: "Assault",
+      shortLabel: "Assault",
+      color: "#facc15",
+      isDefault: false,
+      sortOrder: 5,
+    },
+    {
+      sourceLabels: ["Rape"],
+      label: "Sexual violence",
+      shortLabel: "Sexual violence",
+      color: "#ec4899",
+      isDefault: true,
+      sortOrder: 6,
+    },
+    {
+      sourceLabels: ["All Thefts"],
+      label: "Theft",
+      shortLabel: "Theft",
+      color: "#60a5fa",
+      isDefault: true,
+      sortOrder: 7,
+    },
+    {
+      sourceLabels: ["Pickpocketing"],
+      label: "Personal theft",
+      shortLabel: "Personal theft",
+      color: "#67e8f9",
+      isDefault: false,
+      sortOrder: 8,
+    },
+    {
+      sourceLabels: ["Missing Motor Vehicle"],
+      label: "Motor vehicle theft",
+      shortLabel: "Vehicle theft",
+      color: "#4f46e5",
+      isDefault: true,
+      sortOrder: 9,
+    },
+    {
+      sourceLabels: ["Serious Drug Offences"],
+      label: "Drug offenses",
+      shortLabel: "Drug offenses",
+      color: "#22c55e",
+      isDefault: false,
+      sortOrder: 10,
+    },
+    {
+      sourceLabels: ["Criminal Intimidation"],
+      label: "Threats and harassment",
+      shortLabel: "Threats",
+      color: "#c084fc",
+      isDefault: false,
+      sortOrder: 11,
+    },
+    {
+      sourceLabels: ["Deception"],
+      label: "Fraud and deception",
+      shortLabel: "Fraud",
+      color: "#94a3b8",
+      isDefault: false,
+      sortOrder: 12,
+    },
+    {
+      sourceLabels: ["Triad Related Crime"],
+      label: "Public order offenses",
+      shortLabel: "Public order",
+      color: "#8b5cf6",
+      isDefault: false,
+      sortOrder: 13,
+    },
+  ],
+};
+
 export const MUNICH_LOCATION: LocationDefinition = {
   slug: "munich",
   label: "Munich",
@@ -2121,6 +2517,67 @@ export const SAO_PAULO_LOCATION: LocationDefinition = {
       sortOrder: 13,
     },
   ],
+};
+
+export const BUENOS_AIRES_LOCATION: LocationDefinition = {
+  slug: "buenos-aires",
+  label: "Buenos Aires",
+  country: "Argentina",
+  areaLabelSingular: "Area",
+  areaLabelPlural: "Areas",
+  chartTitle: "Buenos Aires Crime",
+  note:
+    "Buenos Aires uses the official SNIC provincial series for Ciudad Autónoma de Buenos Aires (CABA). This city view is a CABA-only slice of the national provincial series and does not have sub-district breakdowns yet.",
+  sources: [
+    {
+      label: "SNIC provincial series (crimes against persons)",
+      url: "https://infra.datos.gob.ar/catalog/seguridad/dataset/2/distribution/2.6/download/snic-provincias-delitos-personas-hechos-series.csv",
+    },
+    {
+      label: "SNIC provincial series (crimes against property)",
+      url: "https://infra.datos.gob.ar/catalog/seguridad/dataset/2/distribution/2.7/download/snic-provincias-delitos-propiedad-hechos-series.csv",
+    },
+  ],
+  categories: ARGENTINA_COUNTRY_LOCATION.categories,
+};
+
+export const MONTEVIDEO_LOCATION: LocationDefinition = {
+  slug: "montevideo",
+  label: "Montevideo",
+  country: "Uruguay",
+  areaLabelSingular: "Area",
+  areaLabelPlural: "Areas",
+  chartTitle: "Montevideo Crime",
+  note:
+    "Montevideo uses the official Interior Ministry open-data series filtered to the Montevideo department. The dataset does not provide neighborhood-level breakdowns for the city in this national feed.",
+  sources: URUGUAY_COUNTRY_LOCATION.sources,
+  categories: URUGUAY_COUNTRY_LOCATION.categories,
+};
+
+export const KUALA_LUMPUR_LOCATION: LocationDefinition = {
+  slug: "kuala-lumpur",
+  label: "Kuala Lumpur",
+  country: "Malaysia",
+  areaLabelSingular: "Police district",
+  areaLabelPlural: "Police districts",
+  chartTitle: "Kuala Lumpur Crime by Police District",
+  note:
+    "Kuala Lumpur uses the official Royal Malaysia Police open-data series filtered to W.P. Kuala Lumpur police districts. The dataset reports annual counts for each police district and crime type.",
+  sources: MALAYSIA_COUNTRY_LOCATION.sources,
+  categories: MALAYSIA_COUNTRY_LOCATION.categories,
+};
+
+export const JOHOR_BAHRU_LOCATION: LocationDefinition = {
+  slug: "johor-bahru",
+  label: "Johor Bahru",
+  country: "Malaysia",
+  areaLabelSingular: "Police district",
+  areaLabelPlural: "Police districts",
+  chartTitle: "Johor Bahru Crime by Police District",
+  note:
+    "Johor Bahru uses the official Royal Malaysia Police open-data series filtered to the Johor Bahru police districts (Utara and Selatan).",
+  sources: MALAYSIA_COUNTRY_LOCATION.sources,
+  categories: MALAYSIA_COUNTRY_LOCATION.categories,
 };
 
 export const ROME_LOCATION: LocationDefinition = {
@@ -3516,10 +3973,13 @@ export const LOCATION_DEFINITIONS: LocationDefinition[] = [
   AUSTIN_LOCATION,
   BERLIN_LOCATION,
   BARCELONA_LOCATION,
+  BUENOS_AIRES_LOCATION,
   BIRMINGHAM_LOCATION,
   CHICAGO_LOCATION,
   CLEVELAND_LOCATION,
   DALLAS_LOCATION,
+  ARGENTINA_COUNTRY_LOCATION,
+  HONG_KONG_LOCATION,
   FRANCE_COUNTRY_LOCATION,
   GERMANY_COUNTRY_LOCATION,
   FRANKFURT_LOCATION,
@@ -3529,9 +3989,12 @@ export const LOCATION_DEFINITIONS: LocationDefinition[] = [
   LUTON_LOCATION,
   MANCHESTER_LOCATION,
   MELBOURNE_LOCATION,
+  MALAYSIA_COUNTRY_LOCATION,
   ITALY_COUNTRY_LOCATION,
   MILAN_LOCATION,
   MINNEAPOLIS_LOCATION,
+  KUALA_LUMPUR_LOCATION,
+  JOHOR_BAHRU_LOCATION,
   NEW_YORK_CITY_LOCATION,
   PARIS_LOCATION,
   PHOENIX_LOCATION,
@@ -3542,8 +4005,10 @@ export const LOCATION_DEFINITIONS: LocationDefinition[] = [
   SPAIN_COUNTRY_LOCATION,
   SYDNEY_LOCATION,
   TOKYO_LOCATION,
+  URUGUAY_COUNTRY_LOCATION,
   HOUSTON_LOCATION,
   VALENCIA_LOCATION,
+  MONTEVIDEO_LOCATION,
 ];
 
 const scopeByLocationSlug = new Map(

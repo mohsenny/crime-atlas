@@ -199,6 +199,63 @@ Current UI rule:
 
 Why this exists:
 
+## South America sources (current)
+
+These are the official sources used for the first South America pass. If any of these URLs change, update both the ingestion code and the location `sources` in `src/lib/location-config.ts`.
+
+### Argentina (country + Buenos Aires/CABA)
+
+- SNIC provincial crimes against persons (yearly series CSV):
+  - `https://infra.datos.gob.ar/catalog/seguridad/dataset/2/distribution/2.6/download/snic-provincias-delitos-personas-hechos-series.csv`
+- SNIC provincial crimes against property (yearly series CSV):
+  - `https://infra.datos.gob.ar/catalog/seguridad/dataset/2/distribution/2.7/download/snic-provincias-delitos-propiedad-hechos-series.csv`
+- Official SNIC portal:
+  - `https://www.argentina.gob.ar/seguridad/estadisticascriminales`
+
+Notes:
+- The Buenos Aires city view is a CABA-only slice of the provincial series.
+- No official population series is wired yet, so rate-per-100k stays disabled until a validated official yearly series is added.
+
+### Uruguay (country + Montevideo)
+
+- Interior Ministry open-data dataset “Delitos denunciados en el Uruguay”:
+  - `https://catalogodatos.gub.uy/dataset/ministerio-del-interior-delitos_denunciados_en_el_uruguay`
+- Homicide CSV resource:
+  - `https://catalogodatos.gub.uy/dataset/999f2edc-5ef5-4d41-bed7-824a5635ea8d/resource/5ed98add-f127-4377-b529-aa8ad35b77e3`
+- Other-crimes CSV resource:
+  - `https://catalogodatos.gub.uy/dataset/999f2edc-5ef5-4d41-bed7-824a5635ea8d/resource/c8c4cc18-57cf-448b-9c68-901b3752fc11`
+
+Notes:
+- Montevideo is a department-level slice (no neighborhood breakdown in this national dataset).
+- The national feed is incident-level; ingestion aggregates to yearly counts by department and category.
+
+## East Asia sources (current)
+
+These are the official sources used for the first East Asia pass. If any of these URLs change, update both the ingestion code and the location `sources` in `src/lib/location-config.ts`.
+
+### Malaysia (country + Kuala Lumpur + Johor Bahru)
+
+- Malaysia Open Data: Crime by district and crime type (dataset page):
+  - `https://data.gov.my/ms-MY/data-catalogue/crime_district`
+- Direct CSV download:
+  - `https://storage.data.gov.my/publicsafety/crime_district.csv`
+
+Notes:
+- Kuala Lumpur uses the `W.P. Kuala Lumpur` rows (district-level).
+- Johor Bahru uses the `Johor Bahru Selatan` and `Johor Bahru Utara` police districts.
+- The dataset provides annual counts by district and crime type; no official population series is wired yet.
+
+### Hong Kong (territory-wide)
+
+- Hong Kong Police Force: Crime Statistics in Detail (CSV):
+  - `https://www.police.gov.hk/info/doc/crime_details.csv`
+- Dataset landing page:
+  - `https://data.gov.hk/en-data/dataset/hk-hkpf-stat-crm-stat-detail`
+
+Notes:
+- The CSV is territory-wide only (no district breakdown in this feed).
+- Ingestion maps the English column labels to canonical categories.
+
 - some cities publish only broad umbrella categories
 - some cities split one concept into multiple subcategories
 - some cities expose labels without full legal/statistical definitions
