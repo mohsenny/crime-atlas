@@ -31,7 +31,9 @@ import {
   HAMBURG_LOCATION,
   HONG_KONG_LOCATION,
   HOUSTON_LOCATION,
+  HUNGARY_COUNTRY_LOCATION,
   ITALY_COUNTRY_LOCATION,
+  BUDAPEST_LOCATION,
   JOHOR_BAHRU_LOCATION,
   KUALA_LUMPUR_LOCATION,
   LONDON_LOCATION,
@@ -319,6 +321,9 @@ const MALAYSIA_COUNTRY_DIR = path.join(MALAYSIA_DIR, "country");
 const KUALA_LUMPUR_DIR = path.join(MALAYSIA_DIR, "kuala-lumpur");
 const JOHOR_BAHRU_DIR = path.join(MALAYSIA_DIR, "johor-bahru");
 const HONG_KONG_DIR = path.join(TMP_DIR, "hong-kong");
+const HUNGARY_DIR = path.join(TMP_DIR, "hungary");
+const HUNGARY_COUNTRY_DIR = path.join(HUNGARY_DIR, "country");
+const BUDAPEST_DIR = path.join(HUNGARY_DIR, "budapest");
 const SPAIN_DIR = path.join(TMP_DIR, "spain");
 const SPAIN_COUNTRY_DIR = path.join(SPAIN_DIR, "country");
 const BARCELONA_DIR = path.join(SPAIN_DIR, "barcelona");
@@ -478,6 +483,7 @@ const SOURCE_URLS = {
   munichStatisticsPage: "https://stadt.muenchen.de/infos/statistik-sicherheit.html",
   malaysiaCrimeDistrictCsv: "https://storage.data.gov.my/publicsafety/crime_district.csv",
   hongKongCrimeDetailsCsv: "https://www.police.gov.hk/info/doc/crime_details.csv",
+  hungaryCrimeCountyCsv: "https://www.ksh.hu/stadat_files/iga/en/iga0008.csv",
   hamburgYearbook2024:
     "https://www.polizei.hamburg/resource/blob/1053710/30efad000cc60586a22280031dad1ea0/pks-2024-jahrbuch-do-data.pdf",
   hamburgYearbook2023:
@@ -5522,6 +5528,137 @@ async function buildHongKongLocation(): Promise<LocationPayload> {
   };
 }
 
+let hungaryCountsPromise: Promise<{
+  years: number[];
+  districts: FilterOption[];
+  categories: FilterOption[];
+  countsByKey: Map<string, number>;
+}> | null = null;
+
+async function getHungaryCounts() {
+  if (hungaryCountsPromise) {
+    return hungaryCountsPromise;
+  }
+
+  hungaryCountsPromise = (async () => {
+    await fs.mkdir(HUNGARY_COUNTRY_DIR, { recursive: true });
+    const csvPath = path.join(HUNGARY_COUNTRY_DIR, "ksh_registered_crimes.csv");
+    await ensureFileWithCurl(csvPath, SOURCE_URLS.hungaryCrimeCountyCsv);
+
+    const { options: categories, lookup: categoryLookup } = buildCategoryLookup(HUNGARY_COUNTRY_LOCATION);
+    const countsByKey = new Map<string, number>();
+    const years: number[] = [];
+    const districtsByLabel = new Map<string, FilterOption>();
+
+    const file = await fs.readFile(csvPath, "utf8");
+    const lines = file.split(/\r?\n/).filter((line) => line.trim().length > 0);
+    if (!lines.length) {
+      return { years: [], districts: [], categories, countsByKey };
+    }
+
+    const headerIndex = lines.findIndex((line) => line.startsWith("Name of the territorial unit"));
+    if (headerIndex === -1) {
+      return { years: [], districts: [], categories, countsByKey };
+    }
+
+    const headerCells = parseCsvLine(lines[headerIndex]).map((value) => value.trim());
+    const yearCells = headerCells.slice(2).map((value) => Number(String(value).trim())).filter((value) => Number.isFinite(value));
+    years.push(...yearCells);
+
+    const totalCategory = categoryLookup.get(normalizeSourceLabel("All recorded offenses"));
+    if (!totalCategory) {
+      return { years: yearCells, districts: [], categories, countsByKey };
+    }
+
+    for (const line of lines.slice(headerIndex + 1)) {
+      const cells = parseCsvLine(line);
+      const name = String(cells[0] ?? "").trim();
+      const level = String(cells[1] ?? "").trim().toLowerCase();
+
+      if (!name || name.toLowerCase().includes("total number of crimes")) {
+        continue;
+      }
+      if (!(level.includes("county") || level.includes("capital"))) {
+        continue;
+      }
+
+      const districtLabel = toTitleCase(name);
+      const districtSlug = slugify(districtLabel);
+      districtsByLabel.set(districtLabel, { label: districtLabel, value: districtSlug });
+
+      for (let index = 0; index < yearCells.length; index += 1) {
+        const year = yearCells[index];
+        const value = parseCountLike(cells[index + 2]);
+        if (!value) {
+          continue;
+        }
+        countsByKey.set(`${year}__${districtSlug}__${totalCategory.value}`, value);
+      }
+    }
+
+    const districts = [...districtsByLabel.values()].sort((left, right) => left.label.localeCompare(right.label));
+    return { years: yearCells, districts, categories, countsByKey };
+  })();
+
+  return hungaryCountsPromise;
+}
+
+async function buildHungaryCountryLocation(): Promise<LocationPayload> {
+  const { years, districts, categories, countsByKey } = await getHungaryCounts();
+
+  return {
+    slug: HUNGARY_COUNTRY_LOCATION.slug,
+    label: HUNGARY_COUNTRY_LOCATION.label,
+    country: HUNGARY_COUNTRY_LOCATION.country,
+    areaLabelSingular: HUNGARY_COUNTRY_LOCATION.areaLabelSingular,
+    areaLabelPlural: HUNGARY_COUNTRY_LOCATION.areaLabelPlural,
+    chartTitle: HUNGARY_COUNTRY_LOCATION.chartTitle,
+    note: HUNGARY_COUNTRY_LOCATION.note,
+    sources: HUNGARY_COUNTRY_LOCATION.sources,
+    years,
+    districts,
+    categories,
+    defaultCategorySlugs: categories.filter((category) => category.isDefault).map((category) => category.value),
+    cityPopulationByYear: {},
+    records: buildDenseCountRecords({ years, districts, categories, countsByKey }),
+  };
+}
+
+async function buildBudapestLocation(): Promise<LocationPayload> {
+  const { years, categories, countsByKey } = await getHungaryCounts();
+  const citywideSlug = "citywide";
+  const citywideLabel = "Citywide";
+  const targetSlug = slugify("Budapest");
+  const cityCountsByKey = new Map<string, number>();
+
+  for (const [key, value] of countsByKey.entries()) {
+    const [year, districtSlug, categorySlug] = key.split("__");
+    if (districtSlug !== targetSlug) {
+      continue;
+    }
+    cityCountsByKey.set(`${year}__${citywideSlug}__${categorySlug}`, value);
+  }
+
+  const districts = [{ label: citywideLabel, value: citywideSlug }];
+
+  return {
+    slug: BUDAPEST_LOCATION.slug,
+    label: BUDAPEST_LOCATION.label,
+    country: BUDAPEST_LOCATION.country,
+    areaLabelSingular: BUDAPEST_LOCATION.areaLabelSingular,
+    areaLabelPlural: BUDAPEST_LOCATION.areaLabelPlural,
+    chartTitle: BUDAPEST_LOCATION.chartTitle,
+    note: BUDAPEST_LOCATION.note,
+    sources: BUDAPEST_LOCATION.sources,
+    years,
+    districts,
+    categories,
+    defaultCategorySlugs: categories.filter((category) => category.isDefault).map((category) => category.value),
+    cityPopulationByYear: {},
+    records: buildDenseCountRecords({ years, districts, categories, countsByKey: cityCountsByKey }),
+  };
+}
+
 async function buildChicagoLocation(): Promise<LocationPayload> {
   const { options: categories, lookup: categoryLookup } = buildCategoryLookup(CHICAGO_LOCATION);
   const totalCategory = categories.find((category) => category.value === "all-recorded-offenses") ?? null;
@@ -6654,7 +6791,9 @@ async function main() {
     hamburg,
     hongKong,
     houston,
+    hungaryCountry,
     italyCountry,
+    budapest,
     johorBahru,
     kualaLumpur,
     malaysiaCountry,
@@ -6695,7 +6834,9 @@ async function main() {
       buildWithTrace("Hamburg", buildHamburgLocation()),
       buildWithTrace("Hong Kong", buildHongKongLocation()),
       buildWithTrace("Houston", buildHoustonLocation()),
+      buildWithTrace("Hungary", buildHungaryCountryLocation()),
       buildWithTrace("Italy", buildItalyCountryLocation()),
+      buildWithTrace("Budapest", buildBudapestLocation()),
       buildWithTrace("Johor Bahru", buildJohorBahruLocation()),
       buildWithTrace("Kuala Lumpur", buildKualaLumpurLocation()),
       buildWithTrace("Malaysia", buildMalaysiaCountryLocation()),
@@ -6739,7 +6880,9 @@ async function main() {
       hamburg,
       hongKong,
       houston,
+      hungaryCountry,
       italyCountry,
+      budapest,
       johorBahru,
       kualaLumpur,
       malaysiaCountry,

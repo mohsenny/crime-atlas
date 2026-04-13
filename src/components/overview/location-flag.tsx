@@ -19,6 +19,10 @@ const flagByLocationSlug: Record<string, { src: string; alt: string }> = {
     src: "/flags/spain.png",
     alt: "Flag of Spain",
   },
+  budapest: {
+    src: "/flags/hungary.png",
+    alt: "Flag of Hungary",
+  },
   birmingham: {
     src: "/flags/united-kingdom.png",
     alt: "Flag of the United Kingdom",
@@ -169,6 +173,10 @@ const flagByCountry: Record<string, { src: string; alt: string }> = {
   Japan: {
     src: "/flags/japan.png",
     alt: "Flag of Japan",
+  },
+  Hungary: {
+    src: "/flags/hungary.png",
+    alt: "Flag of Hungary",
   },
   Malaysia: {
     src: "/flags/malaysia.png",

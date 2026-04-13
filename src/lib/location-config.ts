@@ -1841,6 +1841,38 @@ export const HONG_KONG_LOCATION: LocationDefinition = {
   ],
 };
 
+export const HUNGARY_COUNTRY_LOCATION: LocationDefinition = {
+  slug: "hungary",
+  label: "Hungary",
+  scope: "country",
+  country: "Hungary",
+  areaLabelSingular: "County",
+  areaLabelPlural: "Counties",
+  chartTitle: "Hungary Crime by County",
+  note:
+    "Hungary uses the Hungarian Central Statistical Office (KSH) STADAT series for registered crimes by county. This first pass uses the official county totals and stays in count mode while a matching official population series is validated.",
+  sources: [
+    {
+      label: "KSH STADAT: Registered crimes by county and region",
+      url: "https://www.ksh.hu/stadat_files/iga/en/iga0008.csv",
+    },
+    {
+      label: "KSH STADAT table (registered crimes by county and region)",
+      url: "https://www.ksh.hu/stadat_files/iga/en/iga0008.html",
+    },
+  ],
+  categories: [
+    {
+      sourceLabels: ["All recorded offenses", "Total number of crimes"],
+      label: "All recorded offenses",
+      shortLabel: "All offenses",
+      color: "#7dd3fc",
+      isDefault: true,
+      sortOrder: 1,
+    },
+  ],
+};
+
 export const MUNICH_LOCATION: LocationDefinition = {
   slug: "munich",
   label: "Munich",
@@ -2552,6 +2584,19 @@ export const MONTEVIDEO_LOCATION: LocationDefinition = {
     "Montevideo uses the official Interior Ministry open-data series filtered to the Montevideo department. The dataset does not provide neighborhood-level breakdowns for the city in this national feed.",
   sources: URUGUAY_COUNTRY_LOCATION.sources,
   categories: URUGUAY_COUNTRY_LOCATION.categories,
+};
+
+export const BUDAPEST_LOCATION: LocationDefinition = {
+  slug: "budapest",
+  label: "Budapest",
+  country: "Hungary",
+  areaLabelSingular: "Area",
+  areaLabelPlural: "Areas",
+  chartTitle: "Budapest Crime",
+  note:
+    "Budapest uses the official KSH STADAT county series for the capital. The dataset does not provide sub-city breakdowns in this feed.",
+  sources: HUNGARY_COUNTRY_LOCATION.sources,
+  categories: HUNGARY_COUNTRY_LOCATION.categories,
 };
 
 export const KUALA_LUMPUR_LOCATION: LocationDefinition = {
@@ -3973,6 +4018,7 @@ export const LOCATION_DEFINITIONS: LocationDefinition[] = [
   AUSTIN_LOCATION,
   BERLIN_LOCATION,
   BARCELONA_LOCATION,
+  BUDAPEST_LOCATION,
   BUENOS_AIRES_LOCATION,
   BIRMINGHAM_LOCATION,
   CHICAGO_LOCATION,
@@ -3990,6 +4036,7 @@ export const LOCATION_DEFINITIONS: LocationDefinition[] = [
   MANCHESTER_LOCATION,
   MELBOURNE_LOCATION,
   MALAYSIA_COUNTRY_LOCATION,
+  HUNGARY_COUNTRY_LOCATION,
   ITALY_COUNTRY_LOCATION,
   MILAN_LOCATION,
   MINNEAPOLIS_LOCATION,

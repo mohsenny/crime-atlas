@@ -592,6 +592,12 @@ export const LOCATION_COMPARISON_MAPPINGS: Record<string, LocationComparisonMapp
     { canonicalKey: "public_order", sourceLabels: ["Public order offenses"], confidence: "medium" },
     { canonicalKey: "stalking_harassment", sourceLabels: ["Threats and harassment"], confidence: "medium" },
   ],
+  hungary: [
+    { canonicalKey: "total_offenses", sourceLabels: ["All recorded offenses"], confidence: "high" },
+  ],
+  budapest: [
+    { canonicalKey: "total_offenses", sourceLabels: ["All recorded offenses"], confidence: "high" },
+  ],
   valencia: [
     { canonicalKey: "total_offenses", sourceLabels: ["All recorded offenses"], confidence: "high" },
     { canonicalKey: "assault", sourceLabels: ["Assaults and disorder"], confidence: "medium" },

@@ -256,6 +256,19 @@ Notes:
 - The CSV is territory-wide only (no district breakdown in this feed).
 - Ingestion maps the English column labels to canonical categories.
 
+## Central Europe sources (current)
+
+### Hungary (country + Budapest)
+
+- KSH STADAT CSV: Registered crimes by county and region:
+  - `https://www.ksh.hu/stadat_files/iga/en/iga0008.csv`
+- KSH STADAT table:
+  - `https://www.ksh.hu/stadat_files/iga/en/iga0008.html`
+
+Notes:
+- The table provides county totals and a Budapest row (capital).
+- No official population series is wired yet; rate-per-100k remains disabled.
+
 - some cities publish only broad umbrella categories
 - some cities split one concept into multiple subcategories
 - some cities expose labels without full legal/statistical definitions
