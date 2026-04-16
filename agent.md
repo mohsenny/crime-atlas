@@ -271,6 +271,39 @@ Notes:
 - The table provides county totals and a Budapest row (capital).
 - Population series is sourced from the KSH county population table for rate-per-100k calculations.
 
+### Sweden (country + Stockholm + Malmö + Gothenburg)
+
+- Brå municipality indicator page:
+  - `https://bra.se/statistik/indikatorer-for-kommuners-lagesbild`
+- Brå indicator definitions workbook:
+  - `https://bra.se/download/18.3b6b697b19d24d83762160d0/1774873163437/Indikatorer%20f%C3%B6r%20anm%C3%A4lda%20brott.xlsx`
+- Brå Stockholm workbook:
+  - `https://bra.se/download/18.3b6b697b19d24d8376215fe6/1774872866083/Stockholm.xlsx`
+- Brå Malmö workbook:
+  - `https://bra.se/download/18.3b6b697b19d24d8376215f89/1774872840096/Malm%C3%B6.xlsx`
+- Brå Gothenburg workbook:
+  - `https://bra.se/download/18.3b6b697b19d24d8376215f2e/1774872795771/G%C3%B6teborg.xlsx`
+
+Notes:
+- The relevant crime sheets currently used are:
+  - `Totalt (anmälda)`
+  - `Skadegörelsebrott (anmälda)`
+  - `Narkotikabrott (anmälda)`
+  - `Våld utomhus vuxna (anmälda)`
+  - `Personrån barn (anmälda)`
+  - `Stöldbrott (anmälda)`
+  - `Bilbrott (anmälda)`
+  - `Bostadsinbrott (anmälda)`
+- Each workbook includes three geography rows:
+  - municipality
+  - county
+  - `Hela Riket`
+- Current app behavior:
+  - Stockholm, Malmö, and Gothenburg are citywide-only locations from the municipality row
+  - Sweden country is a national-only location built from the `Hela Riket` row
+  - do not pretend this source gives a full county breakdown unless that is actually wired from a broader official feed
+- Population is derived from the workbook’s own official `Antal` and `Antal per 100 000 inv` columns. That is acceptable because both values are in the same official table for the same geography-year pair.
+
 - some cities publish only broad umbrella categories
 - some cities split one concept into multiple subcategories
 - some cities expose labels without full legal/statistical definitions
@@ -316,6 +349,58 @@ That means exposing:
 - why some categories are missing
 
 The current comparison methodology UI is the beginning of that and should be preserved.
+
+## Required checklist for every new city or country
+
+Do not add a location unless this whole checklist is satisfied.
+
+1. Source discovery
+
+- find the official publisher
+- verify the file is actually downloadable
+- verify the geography and year range
+- verify whether it is citywide, regional, or national
+
+2. Crime extraction
+
+- extract yearly counts
+- extract area/district rows if they exist
+- preserve official labels in the ingestion layer
+- do not silently drop odd years or changed labels without documenting why
+
+3. Population extraction
+
+- find an official yearly population series for the same geography
+- if the source itself publishes both counts and official per-100k rates, population may be derived from those two official values
+- if no official yearly population exists, keep rate mode off
+
+4. Frontend/runtime wiring
+
+- add the location definition in `src/lib/location-config.ts`
+- add visible source links there
+- add the flag asset and `src/components/overview/location-flag.tsx` mapping if country fallback is not enough
+- add ingestion in `scripts/prepare-data.ts` and any helper modules
+- verify the location appears in overview, detail page, and compare picker
+
+5. Comparison wiring
+
+- add `LOCATION_COMPARISON_MAPPINGS` entries in `src/lib/comparison-taxonomy.ts`
+- make sure the mapped source labels match the final dashboard category labels exactly
+- test at least one same-scope comparison that should obviously work
+- if a location only has one defensible comparable category, document that honestly
+
+6. Validation
+
+- run `npm run data:prepare`
+- run `npm run lint`
+- run `npm run build`
+- inspect the DB if something does not show up in the UI before assuming the source is missing
+
+7. Documentation
+
+- update this file with the official source family and quirks
+- if a location has known limitations, state them explicitly
+- never use invisible backup sources; if a source materially supports the displayed data, surface it in the UI sources list
 
 ## Database expectations
 
@@ -379,7 +464,8 @@ As of April 2026, the current generated data still has several source-cleaning i
   - `2018–2025`
 - `2015–2017` are currently excluded on purpose because they do not yet have a verified municipality-comparable official series in the same stable structure.
 - Treat this as a source-family compatibility problem, not a real crime collapse.
-- Barcelona citywide population is now sourced from the official Barcelona open-data population package and covers the shipped years cleanly.
+- Barcelona citywide population comes from the official Barcelona open-data population package when that package resolves normally.
+- The live package currently 404s intermittently in this environment, so the generator also keeps a verified official fallback series for the shipped years.
 - Valencia citywide population comes from the official Valencia municipal indicator `F02051000` (`Población residente`), but the live PDF endpoint is intermittently blocked by a WAF in this environment.
 - Because of that instability, the generator keeps a verified official fallback series for `2015–2024` extracted from the official PDF:
   - 2015: 787,266
@@ -456,6 +542,7 @@ As of April 2026, the current generated data still has several source-cleaning i
 - Important caveat:
   - the `2023` São Paulo row is an explicit official 2023 publication, but it is census-2022 based rather than a normal estimate-series row
   - keep that methodology seam documented instead of pretending every São Paulo population year comes from the same IBGE series
+  - if the live IBGE / Seade endpoints block or 403, the generator currently falls back to a verified official series already checked into the repo rather than silently dropping rate support
 
 ### U.S. cities
 
@@ -481,6 +568,7 @@ As of April 2026, the current generated data still has several source-cleaning i
   - `District O` collapses sharply across many categories from `2018` to `2019`
   - official Cleveland city materials consistently describe five police districts, so `District O` should be treated as a non-public or unstable bucket
   - do not reintroduce `District O` into the public district selector unless a future official source clearly defines it as a stable public geography
+  - if the ArcGIS query endpoint rejects requests, the generator currently uses a verified official fallback snapshot exported from the last good official pull
 
 ### Internal geography watchlist
 
@@ -491,6 +579,9 @@ As of April 2026, the current generated data still has several source-cleaning i
   - Louisville: resolved in the app by trimming to the eight numbered LMPD divisions only
   - Minneapolis: resolved in the app by removing `Z_** Not Assigned **` and normalizing the duplicated `Stevens Square - Loring Heights` label
   - Seattle: resolved in the app by trimming to the five public SPD precincts only
+- Additional Minneapolis note:
+  - the old ArcGIS GeoJSON query path can 404 in this environment
+  - the generator therefore keeps a verified official fallback snapshot so reseeds do not fail when that legacy endpoint is down
 
 ### Overlapping Parent/Child Source Labels
 

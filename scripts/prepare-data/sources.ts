@@ -209,6 +209,15 @@ export const SOURCE_URLS = {
   hongKongCrimeDetailsCsv: "https://www.police.gov.hk/info/doc/crime_details.csv",
   hungaryCrimeCountyCsv: "https://www.ksh.hu/stadat_files/iga/en/iga0008.csv",
   hungaryPopulationCountyCsv: "https://www.ksh.hu/stadat_files/nep/en/nep0034.csv",
+  swedenIndicatorsPage: "https://bra.se/statistik/indikatorer-for-kommuners-lagesbild",
+  swedenDefinitionsWorkbook:
+    "https://bra.se/download/18.3b6b697b19d24d83762160d0/1774873163437/Indikatorer%20f%C3%B6r%20anm%C3%A4lda%20brott.xlsx",
+  swedenStockholmWorkbook:
+    "https://bra.se/download/18.3b6b697b19d24d8376215fe6/1774872866083/Stockholm.xlsx",
+  swedenMalmoWorkbook:
+    "https://bra.se/download/18.3b6b697b19d24d8376215f89/1774872840096/Malm%C3%B6.xlsx",
+  swedenGothenburgWorkbook:
+    "https://bra.se/download/18.3b6b697b19d24d8376215f2e/1774872795771/G%C3%B6teborg.xlsx",
   argentinaPersonsSeries:
     "https://infra.datos.gob.ar/catalog/seguridad/dataset/2/distribution/2.6/download/snic-provincias-delitos-personas-hechos-series.csv",
   argentinaPropertySeries:

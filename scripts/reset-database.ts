@@ -7,7 +7,11 @@ const DB_PATH = path.join(ROOT, "prisma", "crime-atlas.db");
 
 async function main() {
   await fs.mkdir(path.dirname(DB_PATH), { recursive: true });
-  await fs.rm(DB_PATH, { force: true });
+  await Promise.all([
+    fs.rm(DB_PATH, { force: true }),
+    fs.rm(`${DB_PATH}-wal`, { force: true }),
+    fs.rm(`${DB_PATH}-shm`, { force: true }),
+  ]);
 
   const schemaSql = execFileSync(
     "npx",

@@ -1877,6 +1877,98 @@ export const HUNGARY_COUNTRY_LOCATION: LocationDefinition = {
   ],
 };
 
+export const SWEDEN_COUNTRY_LOCATION: LocationDefinition = {
+  slug: "sweden",
+  label: "Sweden",
+  scope: "country",
+  country: "Sweden",
+  areaLabelSingular: "Area",
+  areaLabelPlural: "Areas",
+  chartTitle: "Sweden Crime",
+  note:
+    "Sweden uses Brå's official municipal indicator workbooks for reported crime. This first pass wires the national totals from the published 'Hela Riket' series and keeps the national view citywide-only rather than implying a county breakdown not present in this feed.",
+  sources: [
+    {
+      label: "Brå: indicators for municipalities overview",
+      url: "https://bra.se/statistik/indikatorer-for-kommuners-lagesbild",
+    },
+    {
+      label: "Brå indicator definitions workbook",
+      url: "https://bra.se/download/18.3b6b697b19d24d83762160d0/1774873163437/Indikatorer%20f%C3%B6r%20anm%C3%A4lda%20brott.xlsx",
+    },
+    {
+      label: "Brå municipal workbook used for national series extraction",
+      url: "https://bra.se/download/18.3b6b697b19d24d8376215fe6/1774872866083/Stockholm.xlsx",
+    },
+  ],
+  categories: [
+    {
+      sourceLabels: ["Totalt (anmälda)"],
+      label: "All recorded offenses",
+      shortLabel: "All offenses",
+      color: "#7dd3fc",
+      isDefault: false,
+      sortOrder: 1,
+    },
+    {
+      sourceLabels: ["Våld utomhus vuxna (anmälda)"],
+      label: "Assault",
+      shortLabel: "Assault",
+      color: "#38bdf8",
+      isDefault: true,
+      sortOrder: 2,
+    },
+    {
+      sourceLabels: ["Personrån barn (anmälda)"],
+      label: "Robbery",
+      shortLabel: "Robbery",
+      color: "#f97316",
+      isDefault: true,
+      sortOrder: 3,
+    },
+    {
+      sourceLabels: ["Stöldbrott (anmälda)"],
+      label: "Theft",
+      shortLabel: "Theft",
+      color: "#60a5fa",
+      isDefault: true,
+      sortOrder: 4,
+    },
+    {
+      sourceLabels: ["Bilbrott (anmälda)"],
+      label: "Motor vehicle theft",
+      shortLabel: "Vehicle theft",
+      color: "#4f46e5",
+      isDefault: false,
+      sortOrder: 5,
+    },
+    {
+      sourceLabels: ["Bostadsinbrott (anmälda)"],
+      label: "Residential burglary",
+      shortLabel: "Burglary",
+      color: "#ef4444",
+      isDefault: true,
+      sortOrder: 6,
+    },
+    {
+      sourceLabels: ["Narkotikabrott (anmälda)"],
+      label: "Drug offenses",
+      shortLabel: "Drug offenses",
+      color: "#22c55e",
+      isDefault: false,
+      sortOrder: 7,
+    },
+    {
+      sourceLabels: ["Skadegörelsebrott (anmälda)"],
+      label: "Criminal damage",
+      shortLabel: "Criminal damage",
+      color: "#f59e0b",
+      isDefault: false,
+      sortOrder: 8,
+    },
+  ],
+};
+
 export const MUNICH_LOCATION: LocationDefinition = {
   slug: "munich",
   label: "Munich",
@@ -2601,6 +2693,84 @@ export const BUDAPEST_LOCATION: LocationDefinition = {
     "Budapest uses the official KSH STADAT county series for the capital, paired with the KSH population series to enable rate-per-100k comparisons. The dataset does not provide sub-city breakdowns in this feed.",
   sources: HUNGARY_COUNTRY_LOCATION.sources,
   categories: HUNGARY_COUNTRY_LOCATION.categories,
+};
+
+export const STOCKHOLM_LOCATION: LocationDefinition = {
+  slug: "stockholm",
+  label: "Stockholm",
+  country: "Sweden",
+  areaLabelSingular: "Area",
+  areaLabelPlural: "Areas",
+  chartTitle: "Stockholm Crime",
+  note:
+    "Stockholm uses Brå's official municipal indicators workbook for reported crime. This feed is citywide only in this app and uses the annual counts plus official per-100k rates published for the municipality.",
+  sources: [
+    {
+      label: "Brå: indicators for municipalities overview",
+      url: "https://bra.se/statistik/indikatorer-for-kommuners-lagesbild",
+    },
+    {
+      label: "Brå Stockholm municipal crime workbook",
+      url: "https://bra.se/download/18.3b6b697b19d24d8376215fe6/1774872866083/Stockholm.xlsx",
+    },
+    {
+      label: "Brå indicator definitions workbook",
+      url: "https://bra.se/download/18.3b6b697b19d24d83762160d0/1774873163437/Indikatorer%20f%C3%B6r%20anm%C3%A4lda%20brott.xlsx",
+    },
+  ],
+  categories: SWEDEN_COUNTRY_LOCATION.categories,
+};
+
+export const MALMO_LOCATION: LocationDefinition = {
+  slug: "malmo",
+  label: "Malmö",
+  country: "Sweden",
+  areaLabelSingular: "Area",
+  areaLabelPlural: "Areas",
+  chartTitle: "Malmö Crime",
+  note:
+    "Malmö uses Brå's official municipal indicators workbook for reported crime. This feed is citywide only in this app and uses the annual counts plus official per-100k rates published for the municipality.",
+  sources: [
+    {
+      label: "Brå: indicators for municipalities overview",
+      url: "https://bra.se/statistik/indikatorer-for-kommuners-lagesbild",
+    },
+    {
+      label: "Brå Malmö municipal crime workbook",
+      url: "https://bra.se/download/18.3b6b697b19d24d8376215f89/1774872840096/Malm%C3%B6.xlsx",
+    },
+    {
+      label: "Brå indicator definitions workbook",
+      url: "https://bra.se/download/18.3b6b697b19d24d83762160d0/1774873163437/Indikatorer%20f%C3%B6r%20anm%C3%A4lda%20brott.xlsx",
+    },
+  ],
+  categories: SWEDEN_COUNTRY_LOCATION.categories,
+};
+
+export const GOTHENBURG_LOCATION: LocationDefinition = {
+  slug: "gothenburg",
+  label: "Gothenburg",
+  country: "Sweden",
+  areaLabelSingular: "Area",
+  areaLabelPlural: "Areas",
+  chartTitle: "Gothenburg Crime",
+  note:
+    "Gothenburg uses Brå's official municipal indicators workbook for reported crime. This feed is citywide only in this app and uses the annual counts plus official per-100k rates published for the municipality.",
+  sources: [
+    {
+      label: "Brå: indicators for municipalities overview",
+      url: "https://bra.se/statistik/indikatorer-for-kommuners-lagesbild",
+    },
+    {
+      label: "Brå Gothenburg municipal crime workbook",
+      url: "https://bra.se/download/18.3b6b697b19d24d8376215f2e/1774872795771/G%C3%B6teborg.xlsx",
+    },
+    {
+      label: "Brå indicator definitions workbook",
+      url: "https://bra.se/download/18.3b6b697b19d24d83762160d0/1774873163437/Indikatorer%20f%C3%B6r%20anm%C3%A4lda%20brott.xlsx",
+    },
+  ],
+  categories: SWEDEN_COUNTRY_LOCATION.categories,
 };
 
 export const KUALA_LUMPUR_LOCATION: LocationDefinition = {
@@ -4032,6 +4202,7 @@ export const LOCATION_DEFINITIONS: LocationDefinition[] = [
   HONG_KONG_LOCATION,
   FRANCE_COUNTRY_LOCATION,
   GERMANY_COUNTRY_LOCATION,
+  GOTHENBURG_LOCATION,
   FRANKFURT_LOCATION,
   LONDON_LOCATION,
   LOS_ANGELES_LOCATION,
@@ -4054,12 +4225,15 @@ export const LOCATION_DEFINITIONS: LocationDefinition[] = [
   SAN_FRANCISCO_LOCATION,
   SEATTLE_LOCATION,
   SPAIN_COUNTRY_LOCATION,
+  STOCKHOLM_LOCATION,
+  SWEDEN_COUNTRY_LOCATION,
   SYDNEY_LOCATION,
   TOKYO_LOCATION,
   URUGUAY_COUNTRY_LOCATION,
   HOUSTON_LOCATION,
   VALENCIA_LOCATION,
   MONTEVIDEO_LOCATION,
+  MALMO_LOCATION,
 ];
 
 const scopeByLocationSlug = new Map(
