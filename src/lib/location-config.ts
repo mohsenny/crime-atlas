@@ -4056,7 +4056,14 @@ export const SYDNEY_LOCATION: LocationDefinition = {
     { sourceLabels: ["Malicious damage to property"], label: "Criminal damage", shortLabel: "Criminal damage", color: "#fb7185", isDefault: false, sortOrder: 17 },
     { sourceLabels: ["Arson"], label: "Arson", shortLabel: "Arson", color: "#f59e0b", isDefault: false, sortOrder: 18 },
     { sourceLabels: ["Prohibited and regulated weapons offences"], label: "Weapons offenses", shortLabel: "Weapons", color: "#14b8a6", isDefault: false, sortOrder: 19 },
-    { sourceLabels: ["Disorderly conduct"], label: "Public order offenses", shortLabel: "Public order", color: "#8b5cf6", isDefault: false, sortOrder: 20 },
+    {
+      sourceLabels: ["Disorderly conduct", "Criminal intent", "Offensive conduct", "Offensive language", "Trespass"],
+      label: "Public order offenses",
+      shortLabel: "Public order",
+      color: "#8b5cf6",
+      isDefault: false,
+      sortOrder: 20,
+    },
     { sourceLabels: ["Intimidation, stalking and harassment"], label: "Stalking, harassment and threats", shortLabel: "Threats & stalking", color: "#c084fc", isDefault: false, sortOrder: 21 },
   ],
 };

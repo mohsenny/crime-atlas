@@ -53,8 +53,8 @@ export const ARGENTINA_PERSON_CODE_TO_CATEGORY: Record<number, string> = {
 };
 
 export const ARGENTINA_PROPERTY_CODE_TO_CATEGORY: Record<number, string> = {
-  14: "Robbery",
-  15: "Attempted robbery",
+  15: "Robbery",
+  16: "Attempted robbery",
   19: "Theft",
   20: "Attempted theft",
   21: "Other property crimes",

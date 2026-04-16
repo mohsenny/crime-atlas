@@ -617,7 +617,9 @@ function buildCategoryLookup(definition: LocationDefinition) {
     .sort((left, right) => left.sortOrder - right.sortOrder)
     .map(({ sortOrder: _sortOrder, ...category }) => category);
 
-  return { lookup, lookupAll, options };
+  const labelLookup = new Map(options.map((category) => [normalizeSourceLabel(category.label), category] as const));
+
+  return { lookup, lookupAll, labelLookup, options };
 }
 
 function mapSourceCategory(definition: LocationDefinition, sourceLabel: string) {
@@ -4786,7 +4788,7 @@ async function getArgentinaSeriesCounts() {
   await ensureFile(personsPath, SOURCE_URLS.argentinaPersonsSeries);
   await ensureFile(propertyPath, SOURCE_URLS.argentinaPropertySeries);
 
-  const { options: categories, lookup: categoryLookup } = buildCategoryLookup(ARGENTINA_COUNTRY_LOCATION);
+  const { options: categories, labelLookup: categoryLabelLookup } = buildCategoryLookup(ARGENTINA_COUNTRY_LOCATION);
   const years = new Set<number>();
   const districtsByLabel = new Map<string, FilterOption>();
   const countsByKey = new Map<string, number>();
@@ -4833,11 +4835,11 @@ async function getArgentinaSeriesCounts() {
         const provinceLabel = ARGENTINA_PROVINCE_LABELS[column.provinceKey];
         const districtSlug = slugify(provinceLabel);
         districtsByLabel.set(provinceLabel, { label: provinceLabel, value: districtSlug });
-        const category = categoryLookup.get(normalizeSourceLabel(column.categoryLabel));
+        const category = categoryLabelLookup.get(normalizeSourceLabel(column.categoryLabel));
         if (!category) {
           continue;
         }
-        const key = `${year}__${districtSlug}__${category.slug}`;
+        const key = `${year}__${districtSlug}__${category.value}`;
         countsByKey.set(key, (countsByKey.get(key) ?? 0) + value);
       }
     }
@@ -4941,7 +4943,7 @@ async function getUruguayCounts() {
   await ensureFile(otherCrimesPath, SOURCE_URLS.uruguayOtherCrimes);
   await ensureFile(homicidesPath, SOURCE_URLS.uruguayHomicides);
 
-  const { options: categories, lookup: categoryLookup } = buildCategoryLookup(URUGUAY_COUNTRY_LOCATION);
+  const { options: categories, labelLookup: categoryLabelLookup } = buildCategoryLookup(URUGUAY_COUNTRY_LOCATION);
   const years = new Set<number>();
   const districtsByLabel = new Map<string, FilterOption>();
   const countsByKey = new Map<string, number>();
@@ -4983,11 +4985,11 @@ async function getUruguayCounts() {
     districtsByLabel.set(departmentLabel, { label: departmentLabel, value: districtSlug });
     years.add(year);
 
-    const category = categoryLookup.get(normalizeSourceLabel(categoryLabel));
+    const category = categoryLabelLookup.get(normalizeSourceLabel(categoryLabel));
     if (!category) {
       continue;
     }
-    const key = `${year}__${districtSlug}__${category.slug}`;
+    const key = `${year}__${districtSlug}__${category.value}`;
     countsByKey.set(key, (countsByKey.get(key) ?? 0) + 1);
   }
 
@@ -5021,11 +5023,11 @@ async function getUruguayCounts() {
     districtsByLabel.set(departmentLabel, { label: departmentLabel, value: districtSlug });
     years.add(year);
 
-    const category = categoryLookup.get(normalizeSourceLabel("Homicide"));
+    const category = categoryLabelLookup.get(normalizeSourceLabel("Homicide"));
     if (!category) {
       continue;
     }
-    const key = `${year}__${districtSlug}__${category.slug}`;
+    const key = `${year}__${districtSlug}__${category.value}`;
     countsByKey.set(key, (countsByKey.get(key) ?? 0) + 1);
   }
 
@@ -5185,7 +5187,7 @@ async function buildMalaysiaLocation(
   definition: LocationDefinition,
   filterRow: (row: MalaysiaParsedRow) => boolean,
 ): Promise<LocationPayload> {
-  const { options: categories, lookup: categoryLookup } = buildCategoryLookup(definition);
+  const { options: categories, labelLookup: categoryLabelLookup } = buildCategoryLookup(definition);
   const rows = await getMalaysiaRows();
   const years = new Set<number>();
   const districtsByLabel = new Map<string, FilterOption>();
@@ -5201,11 +5203,11 @@ async function buildMalaysiaLocation(
     const districtSlug = slugify(districtLabel);
     districtsByLabel.set(districtLabel, { label: districtLabel, value: districtSlug });
 
-    const category = categoryLookup.get(normalizeSourceLabel(row.categoryLabel));
+    const category = categoryLabelLookup.get(normalizeSourceLabel(row.categoryLabel));
     if (!category) {
       continue;
     }
-    const key = `${row.year}__${districtSlug}__${category.slug}`;
+    const key = `${row.year}__${districtSlug}__${category.value}`;
     countsByKey.set(key, (countsByKey.get(key) ?? 0) + row.count);
   }
 
@@ -5262,7 +5264,7 @@ async function getHongKongCounts() {
     const csvPath = path.join(HONG_KONG_DIR, "crime_details.csv");
     await ensureFileWithCurl(csvPath, SOURCE_URLS.hongKongCrimeDetailsCsv);
 
-    const { options: categories, lookup: categoryLookup } = buildCategoryLookup(HONG_KONG_LOCATION);
+    const { options: categories, labelLookup: categoryLabelLookup } = buildCategoryLookup(HONG_KONG_LOCATION);
     const citywideSlug = "citywide";
     const districts = [{ label: "Citywide", value: citywideSlug }];
     const years = new Set<number>();
@@ -5300,11 +5302,11 @@ async function getHongKongCounts() {
         if (!value) {
           continue;
         }
-        const category = categoryLookup.get(normalizeSourceLabel(categoryLabel));
+        const category = categoryLabelLookup.get(normalizeSourceLabel(categoryLabel));
         if (!category) {
           continue;
         }
-        const key = `${year}__${citywideSlug}__${category.slug}`;
+        const key = `${year}__${citywideSlug}__${category.value}`;
         countsByKey.set(key, (countsByKey.get(key) ?? 0) + value);
       }
     }
