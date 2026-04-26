@@ -190,6 +190,10 @@ const flagByCountry: Record<string, { src: string; alt: string }> = {
     src: "/flags/sweden.png",
     alt: "Flag of Sweden",
   },
+  Switzerland: {
+    src: "/flags/switzerland.svg",
+    alt: "Flag of Switzerland",
+  },
   Uruguay: {
     src: "/flags/uruguay.png",
     alt: "Flag of Uruguay",

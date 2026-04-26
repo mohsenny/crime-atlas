@@ -218,6 +218,8 @@ export const SOURCE_URLS = {
     "https://bra.se/download/18.3b6b697b19d24d8376215f89/1774872840096/Malm%C3%B6.xlsx",
   swedenGothenburgWorkbook:
     "https://bra.se/download/18.3b6b697b19d24d8376215f2e/1774872795771/G%C3%B6teborg.xlsx",
+  switzerlandPoliceCrimePxWeb:
+    "https://www.pxweb.bfs.admin.ch/api/v1/en/px-x-1903020100_101/px-x-1903020100_101.px",
   argentinaPersonsSeries:
     "https://infra.datos.gob.ar/catalog/seguridad/dataset/2/distribution/2.6/download/snic-provincias-delitos-personas-hechos-series.csv",
   argentinaPropertySeries:

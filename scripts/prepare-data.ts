@@ -78,6 +78,7 @@ import {
   SPAIN_COUNTRY_LOCATION,
   STOCKHOLM_LOCATION,
   SWEDEN_COUNTRY_LOCATION,
+  SWITZERLAND_COUNTRY_LOCATION,
   SYDNEY_LOCATION,
   TOKYO_LOCATION,
   URUGUAY_COUNTRY_LOCATION,
@@ -215,6 +216,29 @@ type ArgentinaSeriesColumn = {
   index: number;
   provinceKey: string;
   categoryLabel: string;
+};
+
+type PxWebJsonStatResponse = {
+  id: string[];
+  size: number[];
+  dimension: Record<
+    string,
+    {
+      category: {
+        index: Record<string, number>;
+        label: Record<string, string>;
+      };
+    }
+  >;
+  value: Array<number | null>;
+};
+
+type PxWebMetadataResponse = {
+  variables: Array<{
+    code: string;
+    values: string[];
+    valueTexts: string[];
+  }>;
 };
 
 const ROOT = process.cwd();
@@ -709,6 +733,36 @@ async function fetchJsonWithRetry<T>(url: string): Promise<T> {
   }
 
   throw lastError instanceof Error ? lastError : new Error(`Failed to fetch ${url}`);
+}
+
+async function postJsonWithRetry<T>(url: string, body: unknown): Promise<T> {
+  let lastError: unknown;
+  for (let attempt = 1; attempt <= 3; attempt += 1) {
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          "user-agent": "Mozilla/5.0",
+        },
+        body: JSON.stringify(body),
+        signal: AbortSignal.timeout(90_000),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to post ${url}: ${response.status} ${response.statusText}`);
+      }
+
+      return (await response.json()) as T;
+    } catch (error) {
+      lastError = error;
+      if (attempt < 3) {
+        await new Promise((resolve) => setTimeout(resolve, attempt * 1_500));
+      }
+    }
+  }
+
+  throw lastError instanceof Error ? lastError : new Error(`Failed to post ${url}`);
 }
 
 function buildSocrataUrl(baseUrl: string, params: Record<string, string>) {
@@ -5708,6 +5762,117 @@ async function buildSwedenCountryLocation(): Promise<LocationPayload> {
   });
 }
 
+async function buildSwitzerlandCountryLocation(): Promise<LocationPayload> {
+  const offenceCodeBySourceLabel = new Map([
+    ["Offence - total", "311.00.T0"],
+    ["Homicides (art. 111 - 113/116)", "311.00.111.00"],
+    ["Rape (art. 190)", "311.00.190.00"],
+    ["Robbery (art. 140)", "311.00.140.00"],
+    ["Burglary (art. 139)", "311.00.139.10"],
+    ["Serious assault (art. 122)", "311.00.122.00"],
+    ["Common assault (art. 123)", "311.00.123.00"],
+    ["Acts of aggression (art. 126)", "311.00.126.00"],
+    ["Theft (art. 139)", "311.00.139.00"],
+    ["Vehicle theft (art. 139)", "311.00.139.81"],
+    ["Theft from/ out of a vehicle (art. 139)", "311.00.139.82"],
+    ["Criminal damage (art. 144)", "311.00.144.00"],
+    ["Arson (art. 221)", "311.00.221.00"],
+    ["Fraud (art. 146)", "311.00.146.00"],
+    ["Threatening behaviour (art. 180)", "311.00.180.00"],
+  ]);
+  const offenceCodes = SWITZERLAND_COUNTRY_LOCATION.categories.flatMap((category) =>
+    category.sourceLabels.map((sourceLabel) => {
+      const code = offenceCodeBySourceLabel.get(sourceLabel);
+      if (!code) {
+        throw new Error(`Swiss offence code not mapped: ${sourceLabel}`);
+      }
+      return code;
+    }),
+  );
+  const metadata = await fetchJsonWithRetry<PxWebMetadataResponse>(SOURCE_URLS.switzerlandPoliceCrimePxWeb);
+  const cantonVariable = metadata.variables.find((variable) => variable.code === "Kanton");
+  const yearVariable = metadata.variables.find((variable) => variable.code === "Jahr");
+  if (!cantonVariable || !yearVariable) {
+    throw new Error("Swiss PX-Web metadata did not include canton and year variables");
+  }
+  const cantonCodes = cantonVariable.values.filter((code) => code !== "8100");
+  const yearCodes = yearVariable.values;
+  const response = await postJsonWithRetry<PxWebJsonStatResponse>(SOURCE_URLS.switzerlandPoliceCrimePxWeb, {
+    query: [
+      { code: "Straftat", selection: { filter: "item", values: offenceCodes } },
+      { code: "Kanton", selection: { filter: "item", values: cantonCodes } },
+      { code: "Ausführungsgrad", selection: { filter: "item", values: ["0"] } },
+      { code: "Aufklärungsgrad", selection: { filter: "item", values: ["0"] } },
+      { code: "Jahr", selection: { filter: "item", values: yearCodes } },
+    ],
+    response: { format: "JSON-stat2" },
+  });
+
+  const sizeByDimension = new Map(response.id.map((dimension, index) => [dimension, response.size[index]]));
+  const indexInDimension = (dimension: string, code: string) => response.dimension[dimension].category.index[code];
+  const readValue = (offenceCode: string, cantonCode: string, yearCode: string) => {
+    const coordinateByDimension: Record<string, number> = {
+      Straftat: indexInDimension("Straftat", offenceCode),
+      Kanton: indexInDimension("Kanton", cantonCode),
+      Ausführungsgrad: 0,
+      Aufklärungsgrad: 0,
+      Jahr: indexInDimension("Jahr", yearCode),
+    };
+    let index = 0;
+    for (const dimension of response.id) {
+      index = index * (sizeByDimension.get(dimension) ?? 1) + coordinateByDimension[dimension];
+    }
+    return response.value[index] ?? 0;
+  };
+
+  const districts = cantonCodes.map((code) => {
+    const label = response.dimension.Kanton.category.label[code];
+    return { label, value: slugify(label) };
+  });
+  const districtSlugByCode = new Map(cantonCodes.map((code, index) => [code, districts[index].value]));
+  const records: CrimeRecord[] = [];
+
+  for (const category of SWITZERLAND_COUNTRY_LOCATION.categories) {
+    const mappedCategory = mapSourceCategory(SWITZERLAND_COUNTRY_LOCATION, category.sourceLabels[0]);
+    for (const sourceLabel of category.sourceLabels) {
+      const offenceCode = offenceCodeBySourceLabel.get(sourceLabel)!;
+      for (const cantonCode of cantonCodes) {
+        for (const yearCode of yearCodes) {
+          const districtLabel = response.dimension.Kanton.category.label[cantonCode];
+          records.push({
+            year: Number(yearCode),
+            districtLabel,
+            districtSlug: districtSlugByCode.get(cantonCode)!,
+            categoryLabel: mappedCategory.label,
+            categorySlug: mappedCategory.slug,
+            count: readValue(offenceCode, cantonCode, yearCode),
+            ratePer100k: null,
+          });
+        }
+      }
+    }
+  }
+
+  const categories = buildCategoryLookup(SWITZERLAND_COUNTRY_LOCATION).options;
+
+  return {
+    slug: SWITZERLAND_COUNTRY_LOCATION.slug,
+    label: SWITZERLAND_COUNTRY_LOCATION.label,
+    country: SWITZERLAND_COUNTRY_LOCATION.country,
+    areaLabelSingular: SWITZERLAND_COUNTRY_LOCATION.areaLabelSingular,
+    areaLabelPlural: SWITZERLAND_COUNTRY_LOCATION.areaLabelPlural,
+    chartTitle: SWITZERLAND_COUNTRY_LOCATION.chartTitle,
+    note: SWITZERLAND_COUNTRY_LOCATION.note,
+    sources: SWITZERLAND_COUNTRY_LOCATION.sources,
+    years: yearCodes.map(Number),
+    districts,
+    categories,
+    defaultCategorySlugs: categories.filter((category) => category.isDefault).map((category) => category.value),
+    cityPopulationByYear: {},
+    records,
+  };
+}
+
 async function buildStockholmLocation(): Promise<LocationPayload> {
   return buildSwedenLocation(STOCKHOLM_LOCATION, {
     workbook: "stockholm",
@@ -6723,8 +6888,44 @@ function mergeDuplicateRecords(records: CrimeRecord[]) {
   return [...merged.values()];
 }
 
+function validateComparisonMappings(payload: PreparedPayload) {
+  const canonicalKeys = new Set(CANONICAL_COMPARISON_CATEGORIES.map((category) => category.key));
+  const errors: string[] = [];
+
+  for (const location of payload.locations) {
+    const mappings = LOCATION_COMPARISON_MAPPINGS[location.slug] ?? [];
+    const categoryLabels = new Set(location.categories.map((category) => category.label));
+
+    if (mappings.length === 0) {
+      errors.push(`${location.slug}: no comparison mappings`);
+      continue;
+    }
+
+    if (!mappings.some((mapping) => mapping.confidence === "high" || mapping.confidence === "medium")) {
+      errors.push(`${location.slug}: no comparable high/medium mappings`);
+    }
+
+    for (const mapping of mappings) {
+      if (!canonicalKeys.has(mapping.canonicalKey)) {
+        errors.push(`${location.slug}: unknown canonical key ${mapping.canonicalKey}`);
+      }
+
+      const missingLabels = mapping.sourceLabels.filter((label) => !categoryLabels.has(label));
+      if (missingLabels.length) {
+        errors.push(`${location.slug}: ${mapping.canonicalKey} missing source labels ${missingLabels.join(", ")}`);
+      }
+    }
+  }
+
+  if (errors.length) {
+    throw new Error(`Invalid comparison mappings:\n${errors.join("\n")}`);
+  }
+}
+
 async function syncDatabase(payload: PreparedPayload) {
   console.log(`[sync] syncing ${payload.locations.length} locations into prisma/crime-atlas.db`);
+  validateComparisonMappings(payload);
+
   await prisma.comparisonMappingSource.deleteMany();
   await prisma.comparisonMapping.deleteMany();
   await prisma.canonicalCategory.deleteMany();
@@ -6829,7 +7030,7 @@ async function syncDatabase(payload: PreparedPayload) {
     for (const mapping of LOCATION_COMPARISON_MAPPINGS[location.slug] ?? []) {
       const canonicalCategoryId = canonicalCategoryIdByKey.get(mapping.canonicalKey);
       if (!canonicalCategoryId) {
-        continue;
+        throw new Error(`${location.slug}: unknown canonical comparison key ${mapping.canonicalKey}`);
       }
 
       const sourceCategoryIds = mapping.sourceLabels
@@ -6837,7 +7038,7 @@ async function syncDatabase(payload: PreparedPayload) {
         .filter((value): value is number => Boolean(value));
 
       if (sourceCategoryIds.length !== mapping.sourceLabels.length) {
-        continue;
+        throw new Error(`${location.slug}: missing comparison source category for ${mapping.canonicalKey}`);
       }
 
       const createdMapping = await prisma.comparisonMapping.create({
@@ -6918,6 +7119,7 @@ async function main() {
     spainCountry,
     stockholm,
     swedenCountry,
+    switzerlandCountry,
     sydney,
     tokyo,
     uruguayCountry,
@@ -6965,6 +7167,7 @@ async function main() {
       buildWithTrace("Spain", buildSpainCountryLocation()),
       buildWithTrace("Stockholm", buildStockholmLocation()),
       buildWithTrace("Sweden", buildSwedenCountryLocation()),
+      buildWithTrace("Switzerland", buildSwitzerlandCountryLocation()),
       buildWithTrace("Sydney", buildSydneyLocation()),
       buildWithTrace("Tokyo", buildTokyoLocation()),
       buildWithTrace("Uruguay", buildUruguayCountryLocation()),
@@ -7015,6 +7218,7 @@ async function main() {
       spainCountry,
       stockholm,
       swedenCountry,
+      switzerlandCountry,
       sydney,
       tokyo,
       uruguayCountry,
